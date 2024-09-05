@@ -21,7 +21,7 @@ void setup() {
   back2.loadPixels();
   for(int i=0;i<1000;i++){
     for(int j=0;j<1000;j++){
-      back2.pixels[i*1000+j] = color(20,((186-(i/4))/2)+186,((200-(i/7))/2)+200);
+      back2.pixels[i*1000+j] = color(20,186-((186-(i/4))/2),200-((200-(i/7))/2));
     }
   }
   back2.updatePixels();
