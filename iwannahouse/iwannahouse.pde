@@ -2,9 +2,10 @@
 |* Author: Louie Wang *|
 |* Description: Ohyay *|
 |* aratanogakunendesu *|
-\*_Date:Sept.5,2024___*/
+\*_Date:Sept.5-9,2024_*/
 
 PImage back, back2; //im so used to using -- for comments in lua waaaaa anyways this is the background
+PGraphics moon; //tsugi ga kirei desune
 float turn = 0;
 
 void setup() {
@@ -41,8 +42,29 @@ void draw() {
   rotate(turn*PI);
   fill(255,255,0);
   circle(sin((turn+0.7)*PI)*400+(width/2),sin((turn+0.7)*PI-HALF_PI)*300+400,100);
+  fill(242,235,94);
+  circle(sin((turn-0.3)*PI)*400+(width/2),sin((turn-0.3)*PI-HALF_PI)*300+400,100);
   fill(30,210-abs((((turn+0.1)%2)-1)*100)-1,40);
   rect(0,height*4/5,width,height/5);
   fill(203,65,84);
   rect(300,250,200,175);
 }
+//YIKES! I FORGOT ABOUT THE PHIGHTING PHESTIVAL THAT JUST STARTED YESTERDAY!
+//oh yeah, and this section of yap too i guess...
+//oh man, course changes are crazy. 4 hours aint worth it just to get no math.
+//at least i have frenchx2 now instead of calc 12 followed by pre calc 12.
+//for those of you who are curious about tophat turmoil(name still pending),
+//first off, congratulations on uncovering my github account.
+//i am workin on it currently. by it i mean the second prequel
+//which is actually the middle game and oh hold on a second im using //s
+/*ahh, that's much better. i actually forgot the art of commenting, heh.
+  anyways, the progress is completely stalled. i just cant seem to want to do anything.
+  i gotta finish the special moves mechanic and make the test level more
+  polished and make a better character select than just typing in chat and
+  make testbot actually capable of hurting the player and so many gui things
+  and i got school and rest of real life and stuff and now the phestival
+  
+  yow. i kinda just let it out huh. i hope my yap will be more organized later
+  
+  my back #^$#$^@*& hurts from standing for almost 5 hours straight.
+*/
