@@ -10,8 +10,8 @@ float turn = 0;
 void setup() {
   back = createImage(1000,1000,RGB);
   back2 = createImage(1000,1000,RGB);
-  //size(640,480);
-  size(1440,900);//debugging display goooo!
+  size(640,480);
+  //size(1440,900);//debugging display goooo!
   back.loadPixels();
   for(int i=0;i<1000;i++){
     for(int j=0;j<1000;j++){
@@ -30,8 +30,8 @@ void setup() {
 
 void draw() {
   background(0);
-  scale(0.1);
-  translate(3000,3000);
+  //scale(0.1);
+  //translate(3000,3000);
   turn += 0.005;
   rotate(0-turn*PI);
   image(back2,0,0,1000,1000);
@@ -40,7 +40,7 @@ void draw() {
   image(back,0,0,-1000,-1000);
   rotate(turn*PI);
   fill(255,255,0);
-  //make the sun here and the moon too doofus
+  circle(sin(turn*PI)*400+(width/2),sin(turn*PI-HALF_PI)*300+400,100);
   fill(30,210-abs((((turn+0.1)%2)-1)*100)-1,40);
   rect(0,height*4/5,width,height/5);
   fill(203,65,84);
