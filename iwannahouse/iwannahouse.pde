@@ -27,6 +27,7 @@ void setup() {
     }
   }
   back2.updatePixels();
+  
 }
 
 void draw() {
@@ -41,9 +42,9 @@ void draw() {
   image(back,0,0,-1000,-1000);
   rotate(turn*PI);
   fill(255,255,0);
-  circle(sin((turn+0.7)*PI)*400+(width/2),sin((turn+0.7)*PI-HALF_PI)*300+400,100);
+  circle(sin((turn+0.8)*PI)*400+(width/2),sin((turn+0.8)*PI-HALF_PI)*300+400,100);
   fill(242,235,94);
-  circle(sin((turn-0.3)*PI)*400+(width/2),sin((turn-0.3)*PI-HALF_PI)*300+400,100);
+  circle(sin((turn-0.2)*PI)*400+(width/2),sin((turn-0.2)*PI-HALF_PI)*300+400,100);
   fill(30,210-abs((((turn+0.1)%2)-1)*100)-1,40);
   rect(0,height*4/5,width,height/5);
   fill(203,65,84);
