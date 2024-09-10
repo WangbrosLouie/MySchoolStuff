@@ -2,7 +2,7 @@
 |* Author: Louie Wang *|
 |* Description: Ohyay *|
 |* aratanogakunendesu *|
-\*_Date:Sept.5-9,2024_*/
+\*_Date:Sept.5-10,2024*/
 
 PImage back, back2; //im so used to using -- for comments in lua waaaaa anyways this is the background
 PGraphics moon; //tsugi ga kirei desune
@@ -31,14 +31,26 @@ void setup() {
   moon.beginDraw();
   moon.fill(0,0,0);
   moon.circle(60,50,80);
+  int[] moonArray = {};
   for(int i=0;i<moon.width*moon.height;i++) {
-    moon.get(i%moon.width,i/moon.height);
+    color colly = moon.get(i%moon.width,i/moon.height);
+    if(red(colly)+green(colly)+blue(colly)>30) {
+      int data = (i/moon.width)*0xFFFF+(i%moon.height);
+      moonArray = append(moonArray,data);
+    }
     //check if the pixel is like transparent enough and stuff because if it is record it into an int array as encoded data
     //encoded data bein high 16 bits number 1 low 16 bits number 2
   }
-  moon.background(#00000000);
+  moon.endDraw();
+  moon = createGraphics(100,100);
+  moon.beginDraw();
   moon.fill(242,235,94);
   moon.circle(50,50,100);
+  for(int i=0;i<moonArray.length;i++){
+    int Xs = moonArray[i]/1000;
+    int Ys = moonArray[i]%1000;
+    moon.set(Xs,Ys,color(255,255,255,255));
+  }
   //loop through the encoded int array and clear every pixel described in the array
   moon.endDraw();
 }
@@ -61,6 +73,7 @@ void draw() {
   rect(0,height*4/5,width,height/5);
   fill(203,65,84);
   rect(300,250,200,175);
+  image(moon,200,200);
 }
 //YIKES! I FORGOT ABOUT THE PHIGHTING PHESTIVAL THAT JUST STARTED YESTERDAY!
 //oh yeah, and this section of yap too i guess...
@@ -83,4 +96,5 @@ void draw() {
   
   waaaaah i didnt get to play the phestival today because i was too busy procrastinating
   man i suck at life. maybe i should just k- ⚡ (no unicode in processing? unifont fixed that?)
+  
 */
