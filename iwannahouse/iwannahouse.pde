@@ -29,29 +29,32 @@ void setup() {
   back2.updatePixels();
   moon = createGraphics(100,100);
   moon.beginDraw();
-  moon.fill(0,0,0);
-  moon.circle(60,50,80);
+  moon.fill(255);
+  moon.noStroke();
+  moon.circle(70,50,90);
   int[] moonArray = {};
+  moon.loadPixels();
   for(int i=0;i<moon.width*moon.height;i++) {
-    color colly = moon.get(i%moon.width,i/moon.height);
-    if(red(colly)+green(colly)+blue(colly)>30) {
-      int data = (i/moon.width)*0xFFFF+(i%moon.height);
-      moonArray = append(moonArray,data);
+    color colly = moon.pixels[i];
+    if(red(colly)+green(colly)+blue(colly)>50) {
+      moonArray = append(moonArray,i);
     }
     //check if the pixel is like transparent enough and stuff because if it is record it into an int array as encoded data
     //encoded data bein high 16 bits number 1 low 16 bits number 2
   }
+  moon.updatePixels();
   moon.endDraw();
+  println(moonArray);
   moon = createGraphics(100,100);
   moon.beginDraw();
   moon.fill(242,235,94);
   moon.circle(50,50,100);
+  moon.loadPixels();
   for(int i=0;i<moonArray.length;i++){
-    int Xs = moonArray[i]/1000;
-    int Ys = moonArray[i]%1000;
-    moon.set(Xs,Ys,color(255,255,255,255));
+    moon.pixels[moonArray[i]] = color(0,0);
   }
   //loop through the encoded int array and clear every pixel described in the array
+  moon.updatePixels();
   moon.endDraw();
 }
 
@@ -67,13 +70,12 @@ void draw() {
   image(back,0,0,-1000,-1000);
   rotate(turn*PI);
   fill(255,255,0);
-  circle(sin((turn+0.8)*PI)*400+(width/2),sin((turn+0.8)*PI-HALF_PI)*300+400,100);
-  circle(sin((turn-0.2)*PI)*400+(width/2),sin((turn-0.2)*PI-HALF_PI)*300+400,100);
+  circle(sin((turn+0.8)*PI)*400+(width/2),sin((turn+0.8)*PI-HALF_PI)*300+400,100);//sun
+  image(moon,sin((turn-0.2)*PI)*400+(width/2),sin((turn-0.2)*PI-HALF_PI)*300+350);//moon
   fill(30,210-abs((((turn+0.1)%2)-1)*100)-1,40);
   rect(0,height*4/5,width,height/5);
   fill(203,65,84);
   rect(300,250,200,175);
-  image(moon,200,200);
 }
 //YIKES! I FORGOT ABOUT THE PHIGHTING PHESTIVAL THAT JUST STARTED YESTERDAY!
 //oh yeah, and this section of yap too i guess...
@@ -97,4 +99,5 @@ void draw() {
   waaaaah i didnt get to play the phestival today because i was too busy procrastinating
   man i suck at life. maybe i should just k- ⚡ (no unicode in processing? unifont fixed that?)
   
+  im just gonna polish up the house later and focus on the iwannadrawkitta.
 */
