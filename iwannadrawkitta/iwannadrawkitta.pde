@@ -18,13 +18,13 @@ void setup() {
 
 void draw() {
   //graphics buffer writing stuff goes here
-  background(100);
-  head(0,150,0,100,100);
-  eye(0,0,0,50,75,#3FDFEF,#000000);
-  eye(0,0,0,50,75,#3FDFEF,#000000);
-  nose(0,150,0,100,100);
-  //arm(0,100,100,-40,200);
-  leg(0,100,100,40,200);
+  background(0);
+  head(0,150,50,100,100);
+  arm(0,135,160,-40,180);
+  arm(0,265,160,40,180);
+  leg(0,130,305,50,180);
+  leg(0,205,305,50,180);
+  body(0,130,145,140,180);
 }
 
 //individual parts of kitta go here
@@ -32,10 +32,11 @@ void head(int rot, int X, int Y, int Sx, int Sy) {
   push();
   translate(X, Y);
   rotate(rot);
-  //kitta's face is divided into 9ths vertically
-  //2 blank 2 eyes 1 blank 2 eyes 2 blank for top half of face
-  //too much effort? not for my favourite robot cat.
+  fill(240);
   rect(0,0,Sx,Sy,Sy/3);
+  eye(0,Sx/15*8,Sy/15*3,-Sx/15*5,Sy/15*7,KittasCanonEyeColour,#000000);
+  eye(0,Sx/15*9,Sy/15*3,Sx/15*5,Sy/15*7,KittasCanonEyeColour,#000000);
+  nose(0,Sx/15*7,Sy/15*10,Sx/15*3,Sy/15);
   pop();
 }
 
@@ -45,9 +46,13 @@ void eye(int rot, int X, int Y, int Sx, int Sy, color BCol, color ECol) {
   rotate(rot);
   noStroke();
   fill(BCol);
-  rect(0,0,Sx,Sy,(Sx+Sy)/8,(Sx+Sy)/4,(Sx+Sy)/8,abs(Sx+Sy)/8);
+  if(Sx>0){
+    rect(0,0,Sx,Sy,(abs(Sx)+abs(Sy))/8,(abs(Sx+Sy))/4,(abs(Sx)+abs(Sy))/8,(abs(Sx)+abs(Sy))/8);
+  }else{
+    rect(0,0,Sx,Sy,(abs(Sx)+abs(Sy))/4,(abs(Sx)+abs(Sy))/8,(abs(Sx)+abs(Sy))/8,(abs(Sx)+abs(Sy))/8);
+  }
   fill(ECol);
-  rect(Sx/5,Sy/5,Sx/5*2,Sy/5*3,abs(Sx+Sy)/8);
+  rect(Sx/5,Sy/5,Sx/5*2,Sy/5*3,(abs(Sx)+abs(Sy))/8);
   pop();
 }
 
@@ -63,20 +68,37 @@ void nose(int rot, int X, int Y, int Sx, int Sy) {
 }
 
 void arm(float rot, int X, int Y, int Sx, int Sy) {//(rot)ation, (X)-coordinate, (Y)-coordinate, (S)ize (x), (S)ize (y)
+  push();
   translate(X, Y);
   rotate(rot/360*TAU);
+  fill(240);
   rect(0,0,Sx,(Sy-(1.3*abs(Sx))+(abs(Sx)/10))/2,abs(Sx/2),abs(Sx/2),abs(Sx/4),abs(Sx/4));
   rect(0,(Sy-(1.3*abs(Sx))+(abs(Sx)/20))/2,Sx,(Sy-(1.3*abs(Sx))+(abs(Sx)/10))/2,abs(Sx/4),abs(Sx/4),abs(Sx/4),abs(Sx/4));
   rect(0,Sy-(0.6*abs(Sx))-(abs(Sx)/30),Sx,0.6*abs(Sx)+(abs(Sx)/15),abs(Sx/8),abs(Sx/8),abs(Sx/3),abs(Sx/3));
   rect(0,Sy-(1.3*abs(Sx))-(abs(Sx)/30),Sx,0.7*abs(Sx)+(abs(Sx)/15),abs(Sx/8),abs(Sx/8),abs(Sx/8),abs(Sx/8));
+  pop();
 }
 
 void leg(float rot, int X, int Y, int Sx, int Sy) {//(rot)ation, (X)-coordinate, (Y)-coordinate, (S)ize (x), (S)ize (y)
+  push();
   translate(X, Y);
   rotate(rot/360*PI);
+  fill(240);
   rect(0,0,Sx,(Sy-(0.7*abs(Sx))+(abs(Sx)/10))/2,abs(Sx/8),abs(Sx/8),abs(Sx/8),abs(Sx/8));
   rect(0,(Sy-(0.7*abs(Sx))+(abs(Sx)/20))/2,Sx,(Sy-(0.7*abs(Sx))+(abs(Sx)/10))/2,abs(Sx/8),abs(Sx/8),abs(Sx/8),abs(Sx/8));
   rect(-Sx*0.15,Sy-(0.7*abs(Sx))-(abs(Sx)/30),Sx*1.3,0.7*abs(Sx)+(abs(Sx)/15),abs(Sx/4),abs(Sx/4),abs(Sx/8),abs(Sx/8));
+  pop();
+}
+
+void body(float rot, int X, int Y, int Sx, int Sy) {
+  push();
+  translate(X, Y);
+  rotate(rot/360*PI);
+  fill(240);
+  rect(0,0,Sx,Sy,(abs(Sx)+abs(Sy))/8);
+  fill(200);
+  rect(0,Sy/3*2,Sx,Sy/3,0,0,(abs(Sx)+abs(Sy))/8,(abs(Sx)+abs(Sy))/8);
+  pop();
 }
 
 /*yap section(also obligatory)
@@ -147,5 +169,18 @@ void leg(float rot, int X, int Y, int Sx, int Sy) {//(rot)ation, (X)-coordinate,
   My answer is as good as any, and that is "I just don't care."
   Oh well, I think that, 141 lines later, I am done ranting for the day.
   I guess I will further pad this file uselessly tomorrow. Ashita ni.
-  P.S. I can't wait for all my game details to leak through these rants.
+  P.S. I can't wait for all my game details to leak through these rants..
+  
+  Oh wahoo, another programming class. I'm so thrilled(I actually am).
+  But seriously, today actually is the(prob?)only day that
+  I get to play twoplayergames.org for inspiration for a project.
+  Of course, I actually want to work because I like programming.
+  Soccer Random, a childhood game, is very fun though.
+  I would make it, but I would need to learn a physics lib first.
+  Y'know, I actually forgot the existence of Ctrl+T.
+  I never, NEVER use autoformat because I'm stupid and stubborn.
+  I like to write my code in my own stupid little style and stick with it.
+  However, feel free to suggest the use of Ctrl+T if it doesn't look good.
+  Or instead, you could just download the source code and processing
+  then just Ctrl+T it yourself.
 */
