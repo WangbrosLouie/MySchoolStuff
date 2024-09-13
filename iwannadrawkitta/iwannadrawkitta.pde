@@ -9,6 +9,7 @@
 //PPS those cat whatevers too
 
 //variables go here (do i even need variables?)
+color KittasCanonEyeColour = #3FDFEF; //yuh huh i do  Yesiree, this is Kitta's canon eye colour.
 
 void setup() {
   size(400,640);
@@ -19,7 +20,8 @@ void draw() {
   //graphics buffer writing stuff goes here
   background(0);
   head(0,150,0,100,100);
-  eye(0,0,0,50,75,#307fFF,#000000);
+  eye(0,0,0,50,75,#3FDFEF,#000000);
+  eye(0,0,0,50,75,#3FDFEF,#000000);
   //arm(0,100,100,-40,200);
   leg(0,100,100,40,200);
 }
@@ -39,7 +41,17 @@ void eye(int rot, int X, int Y, int Sx, int Sy, color BCol, color ECol) {
   fill(BCol);
   rect(0,0,Sx,Sy,(Sx+Sy)/8,(Sx+Sy)/4,(Sx+Sy)/8,abs(Sx+Sy)/8);
   fill(ECol);
-  rect(Sx/11*3,Sy/5,Sx/9*5,Sy/5*3,abs(Sx+Sy)/8);
+  rect(Sx/5,Sy/5,Sx/5*2,Sy/5*3,abs(Sx+Sy)/8);
+  pop();
+}
+
+void nose(int rot, int X, int Y, int Sx, int Sy) {
+  push();
+  translate(X, Y);
+  rotate(rot);
+  noStroke();
+  fill(0);
+  triangle(0,0,Sx,0,0,Sy);
   pop();
 }
 
@@ -84,4 +96,49 @@ void leg(float rot, int X, int Y, int Sx, int Sy) {//(rot)ation, (X)-coordinate,
   whole 68k instruction set, Add Binary Coded Decimal (ABCD)
   and besides, a lot easier to understand than
   10-bit 3 digit numbers (do those even exist?)
+  
+  Man, I miss the days when I would just have the largest rant sections.
+  I used to write at least 100 lines of pure nothing every project.
+  It was kind of like my day to day diary of sorts, because
+  I wrote a lot of stuff that was happening in my life around those times.
+  I guess there's nothing stopping me right now...
+  ...other than how this is probably supposed to be more professional.
+  (I mean like I'm uploading this to my GitHub for everyone to see.)
+  Oh well, like I actually will ever be professional. To heck with it.
+  Hoo boy, this phestival sure opened my eyes like never before.
+  I knew I was terrible at Phighting (the 1-2-4 KDA says it all) but
+  I thought that I would have at least been a little better.
+  I'm playing casual lobbies (because I am not a stinkin' pro) and
+  I'm still getting destroyed. 2 games I got a <1 KDR, and those were
+  played as non-support characters. I actually did better with support.
+  Oh right, I almost forgot about the new character Coil.
+  I knew there was gonna be a Coil before Vine Staff was added,
+  because the 4 coils were one of the cornerstones of OG Roblox,
+  and even Roblox today. (Although the Speed and Grav coils are most known.)
+  Coil is cool, but what I don't like is how you reload to change coils.
+  Just like when Sword got up/downgraded when he got the sword meter
+  (and lost his old 5 shield gain per hit!), you need to press R.
+  I know if it was bound to something like RMB (like Scythe),
+  Coil's moveset would be a lot more barren, but still, I like to whine.
+  I don't know how Coil actually plays though, following my habit of
+  not playing new characters since Vine Staff. I just know basic Coil.
+  The only good games I've bowled this phestival are with Sword,
+  Rocket, Skate(board) and Subby(Subspace T. Mine).
+  I always come in 2nd place, and justifiably so.
+  In fact, if I ever MVP I will consider that a disgrace because
+  that would mean that I stole so many kills (cause I suck) that
+  I got to the top of the scoreboard. In my words, "I would never live it down."
+  But enough about my poor performance in Phighting, you say.
+  What about my own game Tophat Turmoil? My answer is "SHUT-"
+  I have done approximately zero about Team Storymode 2.rbxl.
+  I will do basically nothing until I catch up on my schoolwork.
+  I can't catch up on my schoolwork until I stop procrastinating.
+  I can't stop procrastinating until I have destressed myself.
+  I can't destress myself until I finish all my schoolwork,
+  as well as my online schoolwork, my game and my volunteer work.
+  Well golly, you say, why the dingus do you not just get therapy?
+  My answer is as good as any, and that is "I just don't care."
+  Oh well, I think that, 141 lines later, I am done ranting for the day.
+  I guess I will further pad this file uselessly tomorrow. Ashita ni.
+  P.S. I can't wait for all my game details to leak through these rants.
 */
