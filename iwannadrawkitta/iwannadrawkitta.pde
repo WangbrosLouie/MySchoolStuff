@@ -18,19 +18,25 @@ void setup() {
 
 void draw() {
   //graphics buffer writing stuff goes here
-  background(0);
+  background(100);
   head(0,150,0,100,100);
   eye(0,0,0,50,75,#3FDFEF,#000000);
   eye(0,0,0,50,75,#3FDFEF,#000000);
+  nose(0,150,0,100,100);
   //arm(0,100,100,-40,200);
   leg(0,100,100,40,200);
 }
 
 //individual parts of kitta go here
 void head(int rot, int X, int Y, int Sx, int Sy) {
+  push();
   translate(X, Y);
   rotate(rot);
+  //kitta's face is divided into 9ths vertically
+  //2 blank 2 eyes 1 blank 2 eyes 2 blank for top half of face
+  //too much effort? not for my favourite robot cat.
   rect(0,0,Sx,Sy,Sy/3);
+  pop();
 }
 
 void eye(int rot, int X, int Y, int Sx, int Sy, color BCol, color ECol) {
@@ -48,10 +54,11 @@ void eye(int rot, int X, int Y, int Sx, int Sy, color BCol, color ECol) {
 void nose(int rot, int X, int Y, int Sx, int Sy) {
   push();
   translate(X, Y);
+  println(X);
   rotate(rot);
   noStroke();
   fill(0);
-  triangle(0,0,Sx,0,0,Sy);
+  triangle(0,0,Sx,0,Sx/2,Sy);
   pop();
 }
 
