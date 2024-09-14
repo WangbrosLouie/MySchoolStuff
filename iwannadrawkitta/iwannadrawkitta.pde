@@ -22,8 +22,8 @@ void draw() {
   head(0,150,50,100,100);
   arm(0,135,160,-40,180);
   arm(0,265,160,40,180);
-  leg(0,130,305,50,180);
-  leg(0,205,305,50,180);
+  leg(0,135,305,50,180);
+  leg(0,265,305,-50,180);
   body(0,130,145,140,180);
 }
 
@@ -59,7 +59,6 @@ void eye(int rot, int X, int Y, int Sx, int Sy, color BCol, color ECol) {
 void nose(int rot, int X, int Y, int Sx, int Sy) {
   push();
   translate(X, Y);
-  println(X);
   rotate(rot);
   noStroke();
   fill(0);
@@ -97,7 +96,7 @@ void body(float rot, int X, int Y, int Sx, int Sy) {
   fill(240);
   rect(0,0,Sx,Sy,(abs(Sx)+abs(Sy))/8);
   fill(200);
-  rect(0,Sy/3*2,Sx,Sy/3,0,0,(abs(Sx)+abs(Sy))/8,(abs(Sx)+abs(Sy))/8);
+  rect(0,Sy/3*2,Sx,Sy/3,0,0,(abs(Sx)+abs(Sy))/16,(abs(Sx)+abs(Sy))/16);
   pop();
 }
 
