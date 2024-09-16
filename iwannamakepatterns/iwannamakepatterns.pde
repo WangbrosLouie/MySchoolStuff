@@ -29,15 +29,14 @@ void draw() {
     }else{
       Longest = height;
     }
-    PPC = Longest;
-    PPC = PPC / (SV2-1);
+    PPC = Longest / (SV2-1);
     for(float i=0;i<SV2;i++) {
       for(float j=0;j<SV1;j++) {
         float Angle = j/SV1*TAU; //who here uses TWO_PI anyways? Also this is wrong but it works, so if it aint broke don't fix it?
         push();
         colorMode(HSB);
         rotate(Angle);//see, I could just rotate this by a fixed value by moving the pushpop to the outside of this nested for(){} nightmare
-        float Yoff = PPC/SV1*i+j; //Y-offset
+        float Yoff = PPC*(j/SV1+i); //Y-offset
         fill((frameCount+(i*SV1+j))%255,255,255);
         rect(-Longest/2,Yoff,Longest,Longest);
         pop();
