@@ -10,7 +10,7 @@
 
 //vegetables
 int Mode = 0;
-int SV1 = 10;
+int SV1 = 16;
 int SV2 = 12;
 
 void setup() {
@@ -30,13 +30,13 @@ void draw() {
       Longest = height;
     }
     PPC = Longest / (SV2-1);
-    for(float i=0;i<SV2;i++) {
+    for(float i=-1;i<SV2;i++) {
       for(float j=0;j<SV1;j++) {
         float Angle = j/SV1*TAU; //who here uses TWO_PI anyways? Also this is wrong but it works, so if it aint broke don't fix it?
         push();
         colorMode(HSB);
         rotate(Angle);//see, I could just rotate this by a fixed value by moving the pushpop to the outside of this nested for(){} nightmare
-        float Yoff = PPC*(j/SV1+i); //Y-offset
+        float Yoff = (i==-1)?0:PPC*(j/SV1+i); //Y-offset
         fill((frameCount+(i*SV1+j))%255,255,255);
         rect(-Longest/2,Yoff,Longest,Longest);
         pop();
@@ -56,9 +56,11 @@ void draw() {
   golf game for the twoplayergames thingy.
   It's gonna be like the EA golf games on the GB.
   
+  <<<HEAD
   Okay, so maybe I will do a twoplayergames game.
   I actually don't think the golf game will be
   fitting of the criteria.
+  >>>origin/main
 
   Ok, even though this isnt the file with the yap,
   I'm going to record my thoughts on the Phestival,
@@ -249,5 +251,11 @@ void draw() {
   Then the last(planned)game is now called Tophat Tournament,
   previously Tophat Turmoil. It is now at least 1 month after all
   of that, and Mr. God believes that he has found the cure to his
-  seemingly endless boredom.
-*/
+  seemingly endless boredom. He hosts the •-+{(Magic Game²)}+-•,
+  which pits clones of the characters against each other,
+  doing various team gamemodes of shooting each other.
+  That is the current abridged Tophat Timeline.
+  Yipers, I really have wrote too much.
+  I think I'll end it off at that.
+  
+  Till the next project.*/
