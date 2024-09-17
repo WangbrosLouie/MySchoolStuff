@@ -127,4 +127,21 @@ void draw() {
   It is just more useful and stuff because
   I don't have to rely on OneDrive's version history.
   I mean, it deletes them after 90 days, so I should git.
+  
+  Okay, now that I have learned how to merge,
+  naturally a rant follows.
+  The whole merge business happened because somehow,
+  I managed to have time travelled or something,
+  as 2 days ago, my computer had the version that
+  I thought was gone, but then just this morning,
+  I yapped about phighting in this file on the same
+  PC, the SAME PC that I used to make the original one,
+  but somehow the changes weren't here when I was yapping.
+  Then come afterschool, I decide to do a git pl
+  since I thought that the original file was kaput,
+  but then it told me that there were conflicts,
+  and alakazam, the original file somehow reappears here?
+  Mind you that I edited the SAME file on the SAME PC
+  and this happens somehow. Crazy business.
+  Anyhoo, I have english homework to attend to, so 'til next line.
 */
