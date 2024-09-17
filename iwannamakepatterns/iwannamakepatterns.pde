@@ -12,13 +12,18 @@
 int Mode = 0;
 int SV1 = 10;
 int SV2 = 12;
-
+int[] Buttons = {50,height/2,25,1,width-50,height/2,25,2};; 
+boolean wasPressed = false;
+boolean DrawButs = true; //draw buttons
+boolean Outlines = true;
 void setup() {
   size(640,480);
+//  Buttons 
 }
 
 void draw() {
   //draw the patterns here and the buttons to
+  push();
   switch(Mode){//why the dingus does processing autoformat the switch case to be so hard to read? do people actually write them that way? OG Comment: seriously, why don't people write switch cases like this? It's so much easier to read.
   case 0://rectanglopulous; SV1 = number of rects per ring, SV2 = number of rings OG Comment: image 1: coloured rect whirlpool thingy
   translate(width/2,height/2);
@@ -30,14 +35,15 @@ void draw() {
       Longest = height;
     }
     PPC = Longest / (SV2-1);
-    for(float i=0;i<SV2;i++) {
+    if(Outlines)stroke(0);else noStroke();
+    for(float i=-1;i<SV2;i++) {
       for(float j=0;j<SV1;j++) {
         float Angle = j/SV1*TAU; //who here uses TWO_PI anyways? Also this is wrong but it works, so if it aint broke don't fix it?
         push();
         colorMode(HSB);
         rotate(Angle);//see, I could just rotate this by a fixed value by moving the pushpop to the outside of this nested for(){} nightmare
         float Yoff = PPC*(j/SV1+i); //Y-offset
-        fill((frameCount+(i*SV1+j))%255,255,255);
+        fill((frameCount+(i*SV1+j))%127*2,255,255);
         rect(-Longest/2,Yoff,Longest,Longest);
         pop();
       }
@@ -45,6 +51,61 @@ void draw() {
     break;
   case 1:
     break;
+  }
+  pop();
+  processButtons(Buttons);
+}
+
+void keyPressed() {
+  println(keyCode);
+  switch(keyCode){
+  case 38:
+    SV1++;
+    break;
+  case 40:
+    if(SV1>1)SV1--;
+    break;
+  case 37:
+    if(SV2>2)SV2--;
+    break;
+  case 39:
+    SV2++;
+    break;
+  case 32:
+    Outlines = !Outlines;
+    break;
+  }
+}
+
+void processButtons(int[] Btns) { //simple button processor
+  if(mousePressed&&!wasPressed) {
+    for(int i=0;i<Btns.length/4;i++) {
+      if(dist(mouseX,mouseY,Btns[i*4],Btns[i*4+1])<Btns[i*4+2]) {
+        switch(Btns[i*4+3]){
+        case 1:
+          Mode=(Mode<=1)?3:Mode-1;
+          break;
+        case 2:
+          Mode=(Mode>=3)?1:Mode+1;
+          break;
+        }
+        fill(127);
+      } else fill(255);
+      push();
+      ellipseMode(CENTER);
+      circle(Btns[i*4],Btns[i*4+1],Btns[i*4+2]);
+      pop();
+    }
+  wasPressed = true;
+  } else {
+    fill(255);
+    push();
+    ellipseMode(CENTER);
+    for(int i=0;i<Btns.length/4;i++){circle(Btns[i*4],Btns[i*4+1],Btns[i*4+2]);println(Btns[i*4],Btns[i*4+1],Btns[i*4+2]);}
+    pop();
+    if (!mousePressed&&wasPressed) {
+      wasPressed = false;
+    }
   }
 }
 
