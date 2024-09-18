@@ -12,17 +12,20 @@
 int Mode = 0;
 int SV1 = 16;
 int SV2 = 12;
-int[] Buttons = {50,height/2,25,1,width-50,height/2,25,2};; 
+int[] Buttons; 
+boolean coolMode = false; //self explanatory B3 (B3 is a combo of :3 and "B)")
 boolean wasPressed = false;
 boolean DrawButs = true; //draw buttons
 boolean Outlines = true;
 void setup() {
   size(640,480);
-//  Buttons 
+   int[] temp = {50,height/2,25,1,width-50,height/2,25,2};
+   Buttons = temp;
 }
 
 void draw() {
   //draw the patterns here and the buttons to
+  println(Mode);
   push();
   switch(Mode){//why the dingus does processing autoformat the switch case to be so hard to read? do people actually write them that way? OG Comment: seriously, why don't people write switch cases like this? It's so much easier to read.
   case 0://rectanglopulous; SV1 = number of rects per ring, SV2 = number of rings OG Comment: image 1: coloured rect whirlpool thingy
@@ -43,13 +46,18 @@ void draw() {
         colorMode(HSB);
         rotate(Angle);//see, I could just rotate this by a fixed value by moving the pushpop to the outside of this nested for(){} nightmare
         float Yoff = PPC*(j/SV1+i); //Y-offset
-        fill((frameCount+(i*SV1+j))%127*2,255,255);
+        if(coolMode)fill((frameCount+(i*SV1+j))%127*2,255,255,200);else fill((frameCount+(i*SV1+j))%127*2,255,255); 
         rect(-Longest/2,Yoff,Longest,Longest);
         pop();
       }
     }
     break;
-  case 1:
+  case 1: //dragons scales, colors can go diagonally or horizontally, depending on coolMode
+    
+    break;
+  case 2: //cat heads:  |\___/|        ,_,
+                      //| O O | . o O {Nya}
+                      // \_W_/         ` `
     break;
   }
   pop();
@@ -83,10 +91,10 @@ void processButtons(int[] Btns) { //simple button processor
       if(dist(mouseX,mouseY,Btns[i*4],Btns[i*4+1])<Btns[i*4+2]) {
         switch(Btns[i*4+3]){
         case 1:
-          Mode=(Mode<=1)?3:Mode-1;
+          Mode=(Mode<=0)?2:Mode-1;
           break;
         case 2:
-          Mode=(Mode>=3)?1:Mode+1;
+          Mode=(Mode>=2)?0:Mode+1;
           break;
         }
         fill(127);
@@ -101,7 +109,7 @@ void processButtons(int[] Btns) { //simple button processor
     fill(255);
     push();
     ellipseMode(CENTER);
-    for(int i=0;i<Btns.length/4;i++){circle(Btns[i*4],Btns[i*4+1],Btns[i*4+2]);println(Btns[i*4],Btns[i*4+1],Btns[i*4+2]);}
+    for(int i=0;i<Btns.length/4;i++)circle(Btns[i*4],Btns[i*4+1],Btns[i*4+2]);
     pop();
     if (!mousePressed&&wasPressed) {
       wasPressed = false;
@@ -116,11 +124,11 @@ void processButtons(int[] Btns) { //simple button processor
   I just want to note down that I want to make a
   golf game for the twoplayergames thingy.
   It's gonna be like the EA golf games on the GB.
-  
+  ///HEAD
   Okay, so maybe I will do a twoplayergames game.
   I actually don't think the golf game will be
   fitting of the criteria.
-
+  ///origin/main
   Ok, even though this isnt the file with the yap,
   I'm going to record my thoughts on the Phestival,
   just so I can learn to merge changes and so I
