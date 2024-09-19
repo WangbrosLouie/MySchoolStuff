@@ -30,6 +30,19 @@ void draw() {
 /* yoplar yaplar
 you ain't a rappa you a yappa
 
+  Oh, but before I get more into Snowballer,
+  I gotta do the planning up here.
+  After all, I always plan at the top,
+  and yap at the bottom.
+  The game takes place in 3 dimensions,
+  with a bird's eye view.
+  The ball has gravity, and the hoops have height.
+  The ball has to have a certain height and position
+  for a basket to be scored.
+  The players are circles, and when they touch the ball,
+  the ball gains upward velocity,
+  in addition to bouncing off the playerq.
+  
   I think this one is a perfect place to discuss
   Snowballer, the resident winter spirit of the
   Tophat Turmoil world.
