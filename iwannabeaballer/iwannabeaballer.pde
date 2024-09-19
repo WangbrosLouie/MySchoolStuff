@@ -41,7 +41,7 @@ you ain't a rappa you a yappa
   for a basket to be scored.
   The players are circles, and when they touch the ball,
   the ball gains upward velocity,
-  in addition to bouncing off the playerq.
+  in addition to bouncing off the player.
   
   I think this one is a perfect place to discuss
   Snowballer, the resident winter spirit of the
