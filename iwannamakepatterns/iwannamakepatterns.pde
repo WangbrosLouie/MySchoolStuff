@@ -53,7 +53,18 @@ void draw() {
     }
     break;
   case 1: //dragons scales, colors can go diagonally or horizontally, depending on coolMode
-    
+    ellipseMode(CENTER);
+    for(int i=0;i<SV2;i++) {
+      for(int j=0;j<SV1;j++) {
+        push();
+        float x = SV1;
+        float y = SV2;
+        translate(x/width,y/height);
+        fill(255);
+        circle(0,0,x/width);
+        pop();
+      }
+    }
     break;
   case 2: //cat heads:  |\___/|        ,_,
                       //| O O | . o O {Nya}
