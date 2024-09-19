@@ -29,7 +29,9 @@ void draw() {
   push();
   switch(Mode){//why the dingus does processing autoformat the switch case to be so hard to read? do people actually write them that way? OG Comment: seriously, why don't people write switch cases like this? It's so much easier to read.
   case 0://rectanglopulous; SV1 = number of rects per ring, SV2 = number of rings OG Comment: image 1: coloured rect whirlpool thingy
-  translate(width/2,height/2);
+    if(SV1<1)SV1=1;
+    if(SV2<2)SV2=2;
+    translate(width/2,height/2);
     float PPC; //Pixels Per Circle, not PowerPC
     int Longest;
     if(width>height){
@@ -66,9 +68,27 @@ void draw() {
       }
     }
     break;
-  case 2: //cat heads:  |\___/|        ,_,
-                      //| O O | . o O {Nya}
-                      // \_W_/         ` `
+  case 2: //cat heads:                    |\___/|        ,_,
+    if(coolMode) {//move tiles            | O O | . o O {Nya}
+      for(int i=-1;i<50+height/50;i++) {// \_W_/         ` `
+        for(int j=-1;j<50+width/50;j++) {
+          meow((j*50)+(SV2%50)-10,(i*50)-(SV1%50)-12,50,50,#FF7F00);
+        }
+      }
+    } else {//scale tiles
+    if(SV1<1)SV1=1;
+    if(SV2<1)SV2=1;
+      for(int i=-1;i<SV2+1;i++) {
+        for(int j=0;j<SV1;j++) {
+          float Xs = width/SV1;
+          float Ys = height/SV2;
+          int Xsize = round(Xs);
+          int Ysize = round(Ys);
+          meow(Xsize*j,Ysize*i,Xsize,Ysize,#FF7F00);
+        }
+      }
+    }
+    println();
     break;
   }
   pop();
@@ -82,16 +102,19 @@ void keyPressed() {
     SV1++;
     break;
   case 40:
-    if(SV1>1)SV1--;
+    SV1--;
     break;
   case 37:
-    if(SV2>2)SV2--;
+    SV2--;
     break;
   case 39:
     SV2++;
     break;
   case 32:
     Outlines = !Outlines;
+    break;
+  case 10:
+    coolMode = !coolMode;
     break;
   }
 }
@@ -126,6 +149,16 @@ void processButtons(int[] Btns) { //simple button processor
       wasPressed = false;
     }
   }
+}
+
+void meow(int X, int Y, int wid, int hei, color col) {
+  push();
+  translate(X,Y);
+  fill(col);
+  beginShape();//vertices go brrrrr
+  vertex(0,0);vertex(0,hei*5/4);vertex(wid,hei*5/4);vertex(wid,0);vertex(wid*3/4,hei/4);vertex(wid/4,hei/4);
+  endShape(CLOSE);
+  pop();
 }
 
 /* yup section
