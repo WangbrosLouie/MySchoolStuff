@@ -25,7 +25,6 @@ void setup() {
 
 void draw() {
   //draw the patterns here and the buttons to
-  println(Mode);
   push();
   switch(Mode){//why the dingus does processing autoformat the switch case to be so hard to read? do people actually write them that way? OG Comment: seriously, why don't people write switch cases like this? It's so much easier to read.
   case 0://rectanglopulous; SV1 = number of rects per ring, SV2 = number of rings OG Comment: image 1: coloured rect whirlpool thingy
