@@ -16,22 +16,27 @@ import org.gamecontrolplus.*;
 import org.gamecontrolplus.gui.*;
 
 //vegetas
-int P1Pos;//you know how it goes
-int P2Pos;//top bits columns, bottom bits rows
+int P1Pos = width/2*0x10000+(height/4*3);//you know how it goes
+int P2Pos = width/2*0x10000+(height/4);//top bits columns, bottom bits rows
 int BPos;// for the ball too
-byte BHeight;//except theres height.
-PVector BMove;//ball movement
-byte BHMove; //ball gravity
+int BHeight;//except theres height.
+PVector BMove = new PVector(0,0);//ball movement
+byte BHMove = 10; //ball gravity
 int PWidth = 30;
 int BWidth = 25;
 int HoopWidth = 50;
-int Score;//compressed score; top bits P1, bottom bits P2
+int Score = 0;//compressed score; top bits P1, bottom bits P2
 int MaxHeight = 255;//max ball height
 int HoopHeight = 100;
+int PHight = 80;//hmm i wonder what this is a reference to
+boolean[] Keys = new boolean[10];
 
 
 void setup() {
     size(480,640);
+    for(int i=0;i<Keys.length;i++) {
+      Keys[i] = false;
+    }
 }
 
 void draw() {
@@ -43,13 +48,31 @@ void draw() {
   BHMove--;
   boolean P1Hit = dist(P1Pos/0x10000,P1Pos%0x10000,BPos/0x10000,BPos%0x10000)>PWidth+BWidth;
   boolean P2Hit = dist(P2Pos/0x10000,P2Pos%0x10000,BPos/0x10000,BPos%0x10000)>PWidth+BWidth;
+  if(P1Hit&&P2Hit) {//double collision
+    BHeight = PHight;
+  }else if(P1Hit) {
+    
+  }else if(P2Hit) {
+    
+  }
   //calculate collisions
 }
 
 
 float getInput(boolean Player) {
   if (Player) {//player 1
-    
+    if(Keys[0]==true) {
+      
+    }
+    if(Keys[1]==true) {
+      
+    }
+    if(Keys[2]==true) {
+      
+    }
+    if(Keys[3]==true) {
+      
+    }
   } else {//player 2
     
   }
@@ -113,4 +136,86 @@ you ain't a rappa you a yappa
   She then was found by a certain other spirit,
   and she stopped being a hermit and went back
   to living in a society.
+  She then met Fireballer, the summer spirit,
+  and he promptly started a rivalry.
+  Emphasis on "he", because Snowballer didn't care.
+  She then adopted [name TBD] for a [TBD] reason.
+  And that's about it for her history.
+  
+  Now time for the actual usual flavoured yap.
+  I haven't coded in Java in quite some time,
+  so I kinda forgot ints were 32 bits and not 8.
+  That 68k assembly be kicking my brain I just wanna
+  move.l #'SEGA', $A14000
+  although I guess that's more Genesis specific.
+  On the good old 68k, there's a stack.
+  I like using the stack because it is useful.
+  However, to my knowledge, Java does not come
+  with a stack, so I made my own.
+  It's simply an int array that I push and pop from.
+  So in Java, it would be Stack[SP]=Var1;SP--; to pop,
+  and Stack=append(Stack,Var1);SP++; to push.
+  In 68k assembly, for example,
+  it's just move.l d0,--(sp) to push,
+  and move.l (sp)++,d0 to pop.
+  That pushes and pops d0 to and from stack.
+  You can also pushpop 8 bits and 16 bits,
+  or as it is known on the 68k, a byte, and a word.
+  l stands for long-word, or a double-word.
+  The pushpop can actually use any address pointer,
+  as sp is just a7, the last address pointer.
+  You can even pushpop from and to memory,
+  but that is slower, and also unneccesary,
+  because if it's in the stack it's being processed.
+  The stack should not be used for long term stores,
+  because that's what the main RAM is for.
+  That's my own two cents on the stack.
+  I also made a mistake while writing the 68k code,
+  because since I was trying to do anything on
+  the Sega Genesis, I also learned Z80 assembly.
+  Oh, what a waste of time that was.
+  In 68k assembly, when you execute an instruction
+  requiring 2 things, the operation goes like
+  Thing1 >modifies> Thing2
+  since that is just a lot more logical.
+  For example, moveq #69,d0 moves #69 INTO d0.
+  However, on the Z80, it is reversed, such as
+  Thing1 <is modified by< Thing2
+  which is weird, because for example
+  add a,#69 (a is a register)
+  you would see this and think
+  "I'm, adding a into #69? That's not an address!"
+  but it is actually adding a WITH #69.
+  So over some days, I came up with an easy way
+  to remember that the Z80 is backwards.
+  On the 68k, I think I moveq #69 INTO d0,
+  and on the Z80, I think I ld a WITH #69.
+  (ld is the LoaD instruction by the way)
+  However, there are niceities to the Z80.
+  There is an entire other set of registers,
+  that you can swap out to use.
+  The bytecode for the Z80 is also easier to read,
+  way, WAY easier than the 68k's.
+  The Z80 uses 1 or 2 bytes to define instruction,
+  and the bytes that follow as operands.
+  They are also in order.
+  The 68k uses a whole mishmash of bits
+  and is just so hard to read.
+  As if I was reading it though,
+  I only do it so I don't have to use
+  a hex editor to manually insert my Z80 code
+  as raw hex so it can load with the 68k.
+  I remember making a small, small demo
+  for the Sega Genesis that I wrote myself.
+  I didn't follow a demo making tutorial.
+  It was simply moving a crosshair around
+  with the D-Pad, while the buttons control speed.
+  The Start button changed background colour
+  every frame, so it looked like a seizure.
+  Nowadays, I wouldn't try to make a Genesis game.
+  However, I love making chiptunes.
+  But ho! I have wrote too much for now.
+  I will save that for next time.
+  Look forwards to hearing about Rhythmgunner's
+  past as well! Till next time.
 */
