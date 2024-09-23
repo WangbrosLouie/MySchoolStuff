@@ -41,18 +41,21 @@ void setup() {
 }
 
 void draw() {
+  PVector P1P = new PVector(P1Pos/0x10000,P1Pos%0x10000);//hooray for redundancy?
+  PVector P2P = new PVector(P2Pos/0x10000,P2Pos%0x10000);//next time ill just merge vars
+  PVector BP = new PVector(BPos/0x10000,BPos%0x10000);//smooth 12 am brain aint dealin with this
   //background with wood boards image and other stuff
   //get player inputs
   //calculate ball movements
   boolean goIn = BHeight>HoopHeight;//if the ball can go in the hoop
   BMove.mult(0.9);
   BHMove--;
-  boolean P1Hit = dist(P1Pos/0x10000,P1Pos%0x10000,BPos/0x10000,BPos%0x10000)>PWidth+BWidth;
-  boolean P2Hit = dist(P2Pos/0x10000,P2Pos%0x10000,BPos/0x10000,BPos%0x10000)>PWidth+BWidth;
+  boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)>PWidth+BWidth;
+  boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)>PWidth+BWidth;
   if(P1Hit&&P2Hit) {//double collision
     BHeight = PHight;
-  }else if(P1Hit) {
-    
+  }else if(P1Hit) { //oh dear i do not miss angle calculations
+    //make a bmove pvector that moves in the direction of the impact please im too tired
   }else if(P2Hit) {
     
   }
@@ -219,4 +222,14 @@ you ain't a rappa you a yappa
   I will save that for next time.
   Look forwards to hearing about Rhythmgunner's
   past as well! Till next time.
+  
+  Personal bit here,
+  I swear I will stop fooling around in my code.
+  This is actually gonna make me go insane or smth.
+  I have so much in my code that is just useless.
+  So now I think I will be moving this stuff
+  to a new special folder in the repo
+  for rants and stuff like this
+  just like in my roblox games.
+  Hooray for bored me.
 */
