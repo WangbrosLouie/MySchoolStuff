@@ -52,6 +52,7 @@ void draw() {
   BHMove--;
   boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)>PWidth+BWidth;
   boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)>PWidth+BWidth;
+  boolean WlHit = (BP.x<BWidth)||(BP.x>width-BWidth);//hit wall make the vertical one too
   if(P1Hit&&P2Hit) {//double collision
     BHeight = PHight;
   }else if(P1Hit) { //oh dear i do not miss angle calculations
