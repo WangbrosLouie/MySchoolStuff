@@ -17,13 +17,15 @@ import org.gamecontrolplus.*;
 import org.gamecontrolplus.gui.*;
 
 //vegetas
-int P1Pos = width/2*0x10000+(height/4*3);//you know how it goes
-int P2Pos = width/2*0x10000+(height/4);//top bits columns, bottom bits rows
-int BPos;// for the ball too
+int P1Pos;
+int P2Pos;
+int BPos;
 int BHeight;//except theres height.
 PVector BMove = new PVector(0,0);//ball movement
-byte BHMove = 10; //ball gravity
-int PWidth = 30;
+byte BHMove = 0; //ball movement
+byte Grav = -3; //Gravity
+byte Bounce = 10; //how much the ball bounces off the floor or hoop or player
+int PWidth = 100;
 int BWidth = 25;
 int HoopWidth = 50;
 int Score = 0;//compressed score; top bits P1, bottom bits P2
@@ -38,50 +40,100 @@ void setup() {
     for(int i=0;i<Keys.length;i++) {
       Keys[i] = false;
     }
+    P1Pos = width/2*0x10000+(height/4*3);//you know how it goes
+    P2Pos = width/2*0x10000+(height/4);//top bits columns, bottom bits rows
+    BPos = width/2*0x10000+(height/2);// for the ball too
 }
 
 void draw() {
   PVector P1P = new PVector(P1Pos/0x10000,P1Pos%0x10000);//hooray for redundancy?
   PVector P2P = new PVector(P2Pos/0x10000,P2Pos%0x10000);//next time ill just merge vars
   PVector BP = new PVector(BPos/0x10000,BPos%0x10000);//smooth 12 am brain aint dealin with this
+  boolean goIn = BHeight>HoopHeight && (dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth||dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth);//if the ball can go in the hoop
+  boolean goP1 = dist(P1P.x,P1P.y,BP.x,BP.y)<PWidth; //can it bounce
+  boolean goP2 = dist(P2P.x,P2P.y,BP.x,BP.y)<PWidth; //on my skull
   //background with wood boards image and other stuff
   //get player inputs
+  P1P.add(getInput(true));
+  println(getInput(true));//why wont this work :sob:
+  P2P.add(getInput(false));
   //calculate ball movements
-  boolean goIn = BHeight>HoopHeight;//if the ball can go in the hoop
+  BP.add(BMove);
   BMove.mult(0.9);
-  BHMove--;
+  BHMove -= Grav;
   boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)>PWidth+BWidth;
   boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)>PWidth+BWidth;
   boolean WlHit = (BP.x<BWidth)||(BP.x>width-BWidth);//hit wall make the vertical one too
   if(P1Hit&&P2Hit) {//double collision
     BHeight = PHight;
   }else if(P1Hit) { //oh dear i do not miss angle calculations
-    //make a bmove pvector that moves in the direction of the impact please im too tired
+    BMove = PVector.fromAngle(PVector.sub(BP,P1P).heading());
+    BHMove = Bounce;
   }else if(P2Hit) {
     
   }
+  circle(P1P.x,P1P.y,PWidth);
+  circle(P2P.x,P2P.y,PWidth);
+  circle(BP.x,BP.y,BWidth);
   //calculate collisions
+  P1Pos = (int)(P1P.x)*0x10000+(int)(P1P.y);
+  P2Pos = (int)(P2P.x)*0x10000+(int)(P2P.y);
 }
 
 
-float getInput(boolean Player) {
+PVector getInput(boolean Player) {
+  PVector move = new PVector(0,0);
   if (Player) {//player 1
     if(Keys[0]==true) {
-      
+      move.y--;
     }
     if(Keys[1]==true) {
-      
+      move.x--;
     }
     if(Keys[2]==true) {
-      
+      move.y++;
     }
     if(Keys[3]==true) {
-      
+      move.x++;
     }
   } else {//player 2
     
   }
-  return 0;
+  return move.limit(1);
+}
+
+void keyPressed() {
+  switch(key){
+  case 'w':
+    Keys[0] = true;
+    break;
+  case 'a':
+    Keys[1] = true;
+    break;
+  case 's':
+    Keys[2] = true;
+    break;
+  case 'd':
+    Keys[3] = true;
+    break;
+  }
+}
+
+void keyReleased() {
+  switch(key){
+  case 'w':
+    Keys[0] = false;
+    break;
+  case 'a':
+    Keys[1] = false;
+    break;
+  case 's':
+    Keys[2] = false;
+    break;
+  case 'd':
+    Keys[3] = false;
+    break;
+  }
 }
 
 /* yoplar yaplar
@@ -114,6 +166,12 @@ you ain't a rappa you a yappa
   it bounces off of it like the floor or a player.
   The players are shorter than the hoop,
   like how it is most of the time in real life.
+  Every collision cycle follows this order
+  Check if ball is above hoop or player
+  Move ball and players
+  Check if single/double player collision
+  If not hit player check if bounce off floor or hoop
+  Draw things
   
   I think this one is a perfect place to discuss
   Snowballer, the resident winter spirit of the
