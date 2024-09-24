@@ -49,37 +49,54 @@ void setup() {
 }
 
 void draw() {
-  //PVector P1P = new PVector((short)(P1Pos/0x10000%0x10000)-0x7FFF,(short)(P1Pos%0x10000)-0x7FFF);//hooray for redundancy?
-  //PVector P2P = new PVector((P2Pos/0x10000)-0x7FFF,(P2Pos%0x10000)-0x7FFF);//next time ill just merge vars
-  //PVector BP = new PVector(BPos/0x10000,BPos%0x10000);//smooth 12 am brain aint dealin with this
   boolean goIn = BHeight>HoopHeight && (dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth||dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth);//if the ball can go in the hoop
-  boolean goP1 = dist(P1P.x,P1P.y,BP.x,BP.y)<PWidth; //can it bounce
-  boolean goP2 = dist(P2P.x,P2P.y,BP.x,BP.y)<PWidth; //on my skull
   background(200);
   //background with wood boards image and other stuff
-  //get player inputs
-  P1P.add(getInput(true));
-  P2P.add(getInput(false));//it was the rounding of the ints hooray for needless compression
-  //calculate ball movements
+  P1P.add(getInput(true));     //calculate movements
+  P2P.add(getInput(false));
   BP.add(BMove);
   BHeight += BHMove;
-  if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;}
+  boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //calculate collisions
+  boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
+  boolean goP1 = BHeight>PHight && P1Hit; //can it bounce
+  boolean goP2 = BHeight>PHight && P2Hit; //on my skull
+  boolean HWHit = (BP.y<BWidth/2)||(BP.y>height-BWidth/2);//hit horizontal walls (the top and bottom)
+  boolean VWHit = (BP.x<BWidth/2)||(BP.x>width-BWidth/2);//hit vertical walls (the sides)
+  if(P1Hit&&P2Hit) {//double collision
+    if(goP1||goP2){
+      if(BHeight<=PHight) {
+        BHeight=PHight;
+        BHMove=abs(BHMove)/2;
+      }
+    } else {
+      BHeight = PHight;
+      BHMove = Bounce;
+    }
+  }else if(P1Hit) { //oh dear i do not miss angle calculations
+    if(goP1){
+      if(BHeight<=PHight) {
+        BHeight=PHight;
+        BHMove=abs(BHMove)/2;
+      }
+    } else {
+      BMove = PVector.fromAngle(PVector.sub(BP,P1P).heading()).normalize().mult(Bounce);
+      BHMove = Bounce;
+    }
+  }else if(P2Hit) {
+    if(goP2){
+      if(BHeight<=PHight) {
+        BHeight=PHight;
+        BHMove=abs(BHMove)/2;
+      }
+    } else {
+      BMove = PVector.fromAngle(PVector.sub(BP,P2P).heading()).normalize().mult(Bounce);
+      BHMove = Bounce;
+    }
+  } else {
+    if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;} //deceleration of ball
+  }
   BMove.mult(0.97);
   BHMove += Grav;
-  boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
-  boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
-  boolean HWHit = (BP.y<BWidth/2)||(BP.y>height-BWidth/2);//hit horizontal walls
-  boolean VWHit = (BP.x<BWidth/2)||(BP.x>width-BWidth/2);//hit vertical walls
-  if(P1Hit&&P2Hit) {//double collision
-    BHeight = PHight;
-    BMove = BMove.normalize().mult(Bounce);
-  }else if(P1Hit) { //oh dear i do not miss angle calculations
-    BMove = PVector.fromAngle(PVector.sub(BP,P1P).heading()).normalize().mult(Bounce);
-    BHMove = Bounce;
-  }else if(P2Hit) {
-    BMove = PVector.fromAngle(PVector.sub(BP,P2P).heading()).normalize().mult(Bounce);
-    BHMove = Bounce;
-  }
   if(HWHit) {
     BMove.y = -BMove.y;
   }
@@ -93,9 +110,6 @@ void draw() {
   fill(0);
   text(BHeight,BP.x,BP.y);
   pop();
-  //calculate collisions
-  //P1Pos = round(P1P.x+0x7FFF)*0x10000+round(P1P.y+0x7FFF);
-  //P2Pos = round(P2P.x+0x7FFF)*0x10000+round(P2P.y+0x7FFF);
 }
 
 
