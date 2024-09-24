@@ -50,6 +50,8 @@ void setup() {
 
 void draw() {
   boolean goIn = BHeight>HoopHeight && (dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth||dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth);//if the ball can go in the hoop
+  boolean goP1 = BHeight>=PHight && dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //can it bounce
+  boolean goP2 = BHeight>=PHight && dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //on my skull
   background(200);
   //background with wood boards image and other stuff
   P1P.add(getInput(true));     //calculate movements
@@ -58,8 +60,6 @@ void draw() {
   BHeight += BHMove;
   boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //calculate collisions
   boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
-  boolean goP1 = BHeight>PHight && P1Hit; //can it bounce
-  boolean goP2 = BHeight>PHight && P2Hit; //on my skull
   boolean HWHit = (BP.y<BWidth/2)||(BP.y>height-BWidth/2);//hit horizontal walls (the top and bottom)
   boolean VWHit = (BP.x<BWidth/2)||(BP.x>width-BWidth/2);//hit vertical walls (the sides)
   if(P1Hit&&P2Hit) {//double collision
@@ -81,6 +81,7 @@ void draw() {
     } else {
       BMove = PVector.fromAngle(PVector.sub(BP,P1P).heading()).normalize().mult(Bounce);
       BHMove = Bounce;
+      println("bounced",frameCount, goP1);
     }
   }else if(P2Hit) {
     if(goP2){
