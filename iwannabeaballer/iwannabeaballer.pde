@@ -1,4 +1,3 @@
-
 /* Title: Iwannabeaballer *\
 |* Author: Louie Wang     *|
 |* Description: I wanna   *|
@@ -17,24 +16,24 @@ import org.gamecontrolplus.*;
 import org.gamecontrolplus.gui.*;
 
 //vegetas
-int P1Pos;
-int P2Pos;
-int BPos;
-int BHeight;//except theres height.
+PVector P1P;
+PVector P2P;
+PVector BP;
+float BHeight;//except theres height.
 PVector BMove = new PVector(0,0);//ball movement
-byte BHMove = 0; //ball movement
-byte Grav = -3; //Gravity
-byte Bounce = 10; //how much the ball bounces off the floor or hoop or player
+float BHMove = 0; //ball movement
+float Grav = -0.1; //Gravity
+float Bounce = 5; //how much the ball bounces off the floor or hoop or player
 int PWidth = 100;
-int BWidth = 25;
+int BWidth = 50;
 int HoopWidth = 50;
 int Score = 0;//compressed score; top bits P1, bottom bits P2
 int MaxHeight = 255;//max ball height
 int HoopHeight = 100;
 int PHight = 80;//hmm i wonder what this is a reference to
 boolean[] Keys = new boolean[10];
-int P1S = 2;//ensitivity
-int P2S = 2;//ensitivity
+int P1S = 5;//ensitivity
+int P2S = 5;//ensitivity
 
 
 void setup() {
@@ -42,44 +41,61 @@ void setup() {
     for(int i=0;i<Keys.length;i++) {
       Keys[i] = false;
     }
-    P1Pos = width/2*0x10000+(height/4*3);//you know how it goes
-    P2Pos = width/2*0x10000+(height/4);//top bits columns, bottom bits rows
-    BPos = width/2*0x10000+(height/2);// for the ball too
+    //P1Pos = ((width/2)+0x7FFF)*0x10000+(height/4*3)+0x7FFF;//you know how it goes
+    //P2Pos = ((width/2)+0x7FFF)*0x10000+(height/4)+0x7FFF;//top bits columns, bottom bits rows
+    P1P = new PVector(width/2,height/4*3);
+    P2P = new PVector(width/2,height/4);
+    BP = new PVector(width/2,height/2);// for the ball too
 }
 
 void draw() {
-  PVector P1P = new PVector(P1Pos/0x10000,P1Pos%0x10000);//hooray for redundancy?
-  PVector P2P = new PVector(P2Pos/0x10000,P2Pos%0x10000);//next time ill just merge vars
-  PVector BP = new PVector(BPos/0x10000,BPos%0x10000);//smooth 12 am brain aint dealin with this
+  //PVector P1P = new PVector((short)(P1Pos/0x10000%0x10000)-0x7FFF,(short)(P1Pos%0x10000)-0x7FFF);//hooray for redundancy?
+  //PVector P2P = new PVector((P2Pos/0x10000)-0x7FFF,(P2Pos%0x10000)-0x7FFF);//next time ill just merge vars
+  //PVector BP = new PVector(BPos/0x10000,BPos%0x10000);//smooth 12 am brain aint dealin with this
   boolean goIn = BHeight>HoopHeight && (dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth||dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth);//if the ball can go in the hoop
   boolean goP1 = dist(P1P.x,P1P.y,BP.x,BP.y)<PWidth; //can it bounce
   boolean goP2 = dist(P2P.x,P2P.y,BP.x,BP.y)<PWidth; //on my skull
+  background(200);
   //background with wood boards image and other stuff
   //get player inputs
-  P1P = PVector.add(P1P,getInput(true));
-  println(getInput(true));//why wont this work :sob:
-  P2P.add(getInput(false));
+  P1P.add(getInput(true));
+  P2P.add(getInput(false));//it was the rounding of the ints hooray for needless compression
   //calculate ball movements
   BP.add(BMove);
-  BMove.mult(0.9);
-  BHMove -= Grav;
-  boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)>PWidth+BWidth;
-  boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)>PWidth+BWidth;
-  boolean WlHit = (BP.x<BWidth)||(BP.x>width-BWidth);//hit wall make the vertical one too
+  BHeight += BHMove;
+  if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;}
+  BMove.mult(0.97);
+  BHMove += Grav;
+  boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
+  boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
+  boolean HWHit = (BP.y<BWidth/2)||(BP.y>height-BWidth/2);//hit horizontal walls
+  boolean VWHit = (BP.x<BWidth/2)||(BP.x>width-BWidth/2);//hit vertical walls
   if(P1Hit&&P2Hit) {//double collision
     BHeight = PHight;
+    BMove = BMove.normalize().mult(Bounce);
   }else if(P1Hit) { //oh dear i do not miss angle calculations
-    BMove = PVector.fromAngle(PVector.sub(BP,P1P).heading());
+    BMove = PVector.fromAngle(PVector.sub(BP,P1P).heading()).normalize().mult(Bounce);
     BHMove = Bounce;
   }else if(P2Hit) {
-    
+    BMove = PVector.fromAngle(PVector.sub(BP,P2P).heading()).normalize().mult(Bounce);
+    BHMove = Bounce;
+  }
+  if(HWHit) {
+    BMove.y = -BMove.y;
+  }
+  if(VWHit) {
+    BMove.x = -BMove.x;
   }
   circle(P1P.x,P1P.y,PWidth);
   circle(P2P.x,P2P.y,PWidth);
   circle(BP.x,BP.y,BWidth);
+  push();
+  fill(0);
+  text(BHeight,BP.x,BP.y);
+  pop();
   //calculate collisions
-  P1Pos = round(P1P.x)*0x10000+round(P1P.y);
-  P2Pos = round(P2P.x)*0x10000+round(P2P.y);
+  //P1Pos = round(P1P.x+0x7FFF)*0x10000+round(P1P.y+0x7FFF);
+  //P2Pos = round(P2P.x+0x7FFF)*0x10000+round(P2P.y+0x7FFF);
 }
 
 
@@ -87,21 +103,34 @@ PVector getInput(boolean Player) {
   PVector move = new PVector(0,0);
   if (Player) {//player 1
     if(Keys[0]==true) {
-      move.y-=P1S;
+      move.y-=1;
     }
     if(Keys[1]==true) {
-      move.x-=P1S;
+      move.x-=1;
     }
     if(Keys[2]==true) {
-      move.y+=P1S;
+      move.y+=1;
     }
     if(Keys[3]==true) {
-      move.x+=P1S;
+      move.x+=1;
     }
+    move = move.normalize().mult(P1S);
   } else {//player 2
-    
+    if(Keys[4]==true) {
+      move.y-=1;
+    }
+    if(Keys[5]==true) {
+      move.x-=1;
+    }
+    if(Keys[6]==true) {
+      move.y+=1;
+    }
+    if(Keys[7]==true) {
+      move.x+=1;
+    }
+    move = move.normalize().mult(P2S);
   }
-  return move.normalize();
+  return move;
 }
 
 void keyPressed() {
