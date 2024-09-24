@@ -33,6 +33,8 @@ int MaxHeight = 255;//max ball height
 int HoopHeight = 100;
 int PHight = 80;//hmm i wonder what this is a reference to
 boolean[] Keys = new boolean[10];
+int P1S = 2;//ensitivity
+int P2S = 2;//ensitivity
 
 
 void setup() {
@@ -54,7 +56,7 @@ void draw() {
   boolean goP2 = dist(P2P.x,P2P.y,BP.x,BP.y)<PWidth; //on my skull
   //background with wood boards image and other stuff
   //get player inputs
-  P1P.add(getInput(true));
+  P1P = PVector.add(P1P,getInput(true));
   println(getInput(true));//why wont this work :sob:
   P2P.add(getInput(false));
   //calculate ball movements
@@ -76,8 +78,8 @@ void draw() {
   circle(P2P.x,P2P.y,PWidth);
   circle(BP.x,BP.y,BWidth);
   //calculate collisions
-  P1Pos = (int)(P1P.x)*0x10000+(int)(P1P.y);
-  P2Pos = (int)(P2P.x)*0x10000+(int)(P2P.y);
+  P1Pos = round(P1P.x)*0x10000+round(P1P.y);
+  P2Pos = round(P2P.x)*0x10000+round(P2P.y);
 }
 
 
@@ -85,21 +87,21 @@ PVector getInput(boolean Player) {
   PVector move = new PVector(0,0);
   if (Player) {//player 1
     if(Keys[0]==true) {
-      move.y--;
+      move.y-=P1S;
     }
     if(Keys[1]==true) {
-      move.x--;
+      move.x-=P1S;
     }
     if(Keys[2]==true) {
-      move.y++;
+      move.y+=P1S;
     }
     if(Keys[3]==true) {
-      move.x++;
+      move.x+=P1S;
     }
   } else {//player 2
     
   }
-  return move.limit(1);
+  return move.normalize();
 }
 
 void keyPressed() {
