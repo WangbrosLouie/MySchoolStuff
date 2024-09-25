@@ -9,7 +9,7 @@
 |* got it out for me,     *|
 |* 'cause they know I'll  *|
 |* easily have them beat. *|
-\*_Date:Sept.18,2024______*/
+\*_Date:Sept.18-24,2024___*/
 
 import net.java.games.input.*;
 import org.gamecontrolplus.*;
@@ -45,7 +45,7 @@ void setup() {
     //P2Pos = ((width/2)+0x7FFF)*0x10000+(height/4)+0x7FFF;//top bits columns, bottom bits rows
     P1P = new PVector(width/2,height/4*3);
     P2P = new PVector(width/2,height/4);
-    BP = new PVector(width/2,height/2);// for the ball too
+    BP = new PVector(width/2,height/2);  //for the ball too
 }
 
 void draw() {
@@ -58,6 +58,7 @@ void draw() {
   P2P.add(getInput(false));
   BP.add(BMove);
   BHeight += BHMove;
+  if(BP.x<0)BP.x=0;if(BP.x>width)BP.x=width;if(BP.y<0)BP.y=0;if(BP.y>height)BP.y=height;
   boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //calculate collisions
   boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
   boolean HWHit = (BP.y<BWidth/2)||(BP.y>height-BWidth/2);//hit horizontal walls (the top and bottom)
@@ -96,7 +97,7 @@ void draw() {
   } else {
     if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;} //deceleration of ball
   }
-  BMove.mult(0.97);
+  BMove.mult(0.98);
   BHMove += Grav;
   if(HWHit) {
     BMove.y = -BMove.y;
@@ -106,7 +107,7 @@ void draw() {
   }
   circle(P1P.x,P1P.y,PWidth);
   circle(P2P.x,P2P.y,PWidth);
-  circle(BP.x,BP.y,BWidth);
+  circle(BP.x,BP.y,BWidth+(BHeight/10));
   push();
   fill(0);
   text(BHeight,BP.x,BP.y);
