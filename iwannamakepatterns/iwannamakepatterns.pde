@@ -55,14 +55,22 @@ void draw() {
     break;
   case 1: //dragons scales, colors can go diagonally or horizontally, depending on coolMode
     ellipseMode(CENTER);
-    for(int i=0;i<SV2;i++) {
-      for(int j=0;j<SV1;j++) {
+    for(int i=0;i<SV2+1;i++) {
+      if(i%2==0)for(int j=0;j<SV1;j++) {//work on this later maaaaan
         push();
         float x = SV1;
         float y = SV2;
-        translate(x/width,y/height);
+        translate(width/x*j,height/y*i);
         fill(255);
-        circle(0,0,x/width);
+        circle(0,0,width/x);
+        pop();
+      } else for(int j=0;j<SV1+1;j++) {
+        push();
+        float x = SV1;
+        float y = SV2;
+        translate(width/x*j,height/y*i);
+        fill(255);
+        circle(0,0,width/x);
         pop();
       }
     }

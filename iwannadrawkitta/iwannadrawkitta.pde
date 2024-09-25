@@ -18,13 +18,13 @@ void setup() {
 
 void draw() {
   //graphics buffer writing stuff goes here
-  background(0);
-  head(0,150,50,100,100);
+  background(255);
   arm(0,135,160,-40,180);
   arm(0,265,160,40,180);
   leg(0,135,305,50,180);
   leg(0,265,305,-50,180);
   body(0,130,145,140,180);
+  head(0,150,50,100,100);
 }
 
 //individual parts of kitta go here
@@ -33,10 +33,15 @@ void head(int rot, int X, int Y, int Sx, int Sy) {
   translate(X, Y);
   rotate(rot);
   fill(240);
+  ear(0,0,-Sy/2,Sx/4,Sy);
+  ear(0,Sx,-Sy/2,-Sx/4,Sy);
   rect(0,0,Sx,Sy,Sy/3);
   eye(0,Sx/15*8,Sy/15*3,-Sx/15*5,Sy/15*7,KittasCanonEyeColour,#000000);
   eye(0,Sx/15*9,Sy/15*3,Sx/15*5,Sy/15*7,KittasCanonEyeColour,#000000);
   nose(0,Sx/15*7,Sy/15*10,Sx/15*3,Sy/15);
+  noFill();
+  arc((Sx/2)-(Sy/15*2),Sy/15*12,Sy/15*4,Sy/15*2,0,PI);
+  arc((Sx/2)+(Sy/15*2),Sy/15*12,Sy/15*4,Sy/15*2,0,PI);
   pop();
 }
 
@@ -97,6 +102,18 @@ void body(float rot, int X, int Y, int Sx, int Sy) {
   rect(0,0,Sx,Sy,(abs(Sx)+abs(Sy))/8);
   fill(200);
   rect(0,Sy/3*2,Sx,Sy/3,0,0,(abs(Sx)+abs(Sy))/16,(abs(Sx)+abs(Sy))/16);
+  pop();
+}
+
+void ear(int rot, int X, int Y, int Sx, int Sy) {
+  push();
+  translate(X, Y);
+  rotate(rot);
+  fill(240);
+  beginShape();
+  vertex(0,Sy);
+  bezierVertex(-Sx/4,Sy/3,-Sx/8,0,Sx,Sy/2);
+  endShape(CLOSE);
   pop();
 }
 
