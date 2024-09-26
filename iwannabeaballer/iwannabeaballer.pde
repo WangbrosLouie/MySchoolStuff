@@ -28,12 +28,14 @@ int PWidth = 100;
 int BWidth = 50;
 int HoopWidth = 75;
 int Score = 0;//compressed score; top bits P1, bottom bits P2
-int MaxHeight = 255;//max ball height
+int MaxHeight = 155;//max ball height
 int HoopHeight = 100;
 int PHight = 80;//hmm i wonder what this is a reference to
 boolean[] Keys = new boolean[10];
 int P1S = 5;//ensitivity
 int P2S = 5;//ensitivity
+int P1Score = 0;
+int P2Score = 0;
 
 
 void setup() {
@@ -49,7 +51,9 @@ void setup() {
 }
 
 void draw() {
-  boolean goIn = BHeight>HoopHeight && (dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth||dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth);//if the ball can go in the hoop
+  //Setting Variables
+  boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth;//if the ball can go in the top hoop
+  boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth; //bottom hoop
   boolean goP1 = BHeight>=PHight && dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //can it bounce
   boolean goP2 = BHeight>=PHight && dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //on my skull
   background(200);
@@ -63,6 +67,7 @@ void draw() {
   boolean P2Hit = BHeight<PHight && dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
   boolean HWHit = (BP.y<BWidth/2)||(BP.y>height-BWidth/2);//hit horizontal walls (the top and bottom)
   boolean VWHit = (BP.x<BWidth/2)||(BP.x>width-BWidth/2);//hit vertical walls (the sides)
+  //Calculating collisions
   if(P1Hit&&P2Hit) {//double collision
     if(goP1||goP2){
       if(BHeight<=PHight) {
@@ -93,8 +98,14 @@ void draw() {
       BMove = PVector.fromAngle(PVector.sub(BP,P2P).heading()).normalize().mult(Bounce);
       BHMove = Bounce;
     }
+  } else if(goIn1) {
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth){}//goes in
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth){}//bounces off rim
+  } else if(goIn2) {
+    
   } else {
     if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;} //deceleration of ball
+    else if(BHeight>MaxHeight){BHeight=MaxHeight;BHMove=-abs(BHMove)/2;}
   }
   BMove.mult(0.98);
   BHMove += Grav;
@@ -104,6 +115,7 @@ void draw() {
   if(VWHit) {
     BMove.x = -BMove.x;
   }
+  //Drawing the circles
   circle(P1P.x,P1P.y,PWidth);
   circle(P2P.x,P2P.y,PWidth);
   circle(BP.x,BP.y,BWidth+(BHeight/10));
