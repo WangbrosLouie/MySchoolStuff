@@ -18,7 +18,7 @@ void setup() {
 
 void draw() {
   //graphics buffer writing stuff goes here
-  background(255);
+  background(0);
   arm(0,135,160,-40,180);
   arm(0,265,160,40,180);
   leg(0,135,305,50,180);

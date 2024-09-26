@@ -26,7 +26,7 @@ float Grav = -0.1; //Gravity
 float Bounce = 5; //how much the ball bounces off the floor or hoop or player
 int PWidth = 100;
 int BWidth = 50;
-int HoopWidth = 50;
+int HoopWidth = 75;
 int Score = 0;//compressed score; top bits P1, bottom bits P2
 int MaxHeight = 255;//max ball height
 int HoopHeight = 100;
@@ -59,8 +59,8 @@ void draw() {
   BP.add(BMove);
   BHeight += BHMove;
   if(BP.x<0)BP.x=0;if(BP.x>width)BP.x=width;if(BP.y<0)BP.y=0;if(BP.y>height)BP.y=height;
-  boolean P1Hit = dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //calculate collisions
-  boolean P2Hit = dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
+  boolean P1Hit = BHeight<PHight && dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //calculate collisions
+  boolean P2Hit = BHeight<PHight && dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
   boolean HWHit = (BP.y<BWidth/2)||(BP.y>height-BWidth/2);//hit horizontal walls (the top and bottom)
   boolean VWHit = (BP.x<BWidth/2)||(BP.x>width-BWidth/2);//hit vertical walls (the sides)
   if(P1Hit&&P2Hit) {//double collision
@@ -82,7 +82,6 @@ void draw() {
     } else {
       BMove = PVector.fromAngle(PVector.sub(BP,P1P).heading()).normalize().mult(Bounce);
       BHMove = Bounce;
-      println("bounced",frameCount, goP1);
     }
   }else if(P2Hit) {
     if(goP2){
@@ -111,6 +110,10 @@ void draw() {
   push();
   fill(0);
   text(BHeight,BP.x,BP.y);
+  noFill();
+  stroke(255,127,0);
+  circle(width/2,HoopWidth/2,HoopWidth);
+  circle(width/2,height-HoopWidth/2,HoopWidth);
   pop();
 }
 
@@ -150,35 +153,59 @@ PVector getInput(boolean Player) {
 }
 
 void keyPressed() {
-  switch(key){
-  case 'w':
+  switch(keyCode){
+  case 87:
     Keys[0] = true;
     break;
-  case 'a':
+  case 65:
     Keys[1] = true;
     break;
-  case 's':
+  case 83:
     Keys[2] = true;
     break;
-  case 'd':
+  case 68:
     Keys[3] = true;
+    break;
+  case 38:
+    Keys[4] = true;
+    break;
+  case 37:
+    Keys[5] = true;
+    break;
+  case 40:
+    Keys[6] = true;
+    break;
+  case 39:
+    Keys[7] = true;
     break;
   }
 }
 
 void keyReleased() {
-  switch(key){
-  case 'w':
+  switch(keyCode){
+  case 87:
     Keys[0] = false;
     break;
-  case 'a':
+  case 65:
     Keys[1] = false;
     break;
-  case 's':
+  case 83:
     Keys[2] = false;
     break;
-  case 'd':
+  case 68:
     Keys[3] = false;
+    break;
+  case 38:
+    Keys[4] = false;
+    break;
+  case 37:
+    Keys[5] = false;
+    break;
+  case 40:
+    Keys[6] = false;
+    break;
+  case 39:
+    Keys[7] = false;
     break;
   }
 }
