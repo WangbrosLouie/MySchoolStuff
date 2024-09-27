@@ -90,7 +90,7 @@ class Mover {
 }
 
 Mover[] a = new Mover[10];
-int Mode = 3;
+int Mode = 0x43;
 
 void setup() {
   size(640,480);
@@ -98,14 +98,16 @@ void setup() {
 }
 
 void draw() {
-  if(Mode%0x2>0)background(200);
-  for(int i = 0; i < a.length; i++) {
-    a[i].draw(CENTER);
-    if(Mode%0x4/2>0)a[i].move();
-    if(Mode%0x8/4>0)a[i].resize();
-    if(Mode%0x10/8>0)a[i].recolor();
+  if(Mode%0x80/0x40>0) {
+    if(Mode%0x2>0)background(200);
+    for(int i = 0; i < a.length; i++) {
+      a[i].draw(CENTER);
+      if(Mode%0x4/2>0)a[i].move();
+      if(Mode%0x8/4>0)a[i].resize();
+      if(Mode%0x10/8>0)a[i].recolor();
+    }
+    if(Mode%0x40/0x20>0)text("WARNING! If you press 4 again, the circles will start rapidly flashing.\nIf you experience seizures, please reset the sketch to prevent seeing this.",100,100);
   }
-  if(Mode%0x40/0x20>0)text("WARNING! If you press 4 again, the circles will start rapidly flashing.\nIf you experience seizures, please reset the sketch to prevent seeing this.",100,100);
 }
 
 void keyPressed() {
@@ -128,6 +130,9 @@ void keyPressed() {
       Mode |= 0x10;//warning bit
       Mode |= 0x20;//draw warning
     }
+    break;
+  case 32:
+    Mode ^= 0x40;//stop drawing
     break;
   }
 }

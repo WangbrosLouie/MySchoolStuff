@@ -43,6 +43,8 @@ void setup() {
     for(int i=0;i<Keys.length;i++) {
       Keys[i] = false;
     }
+  noSmooth();
+  frameRate(1);
     //P1Pos = ((width/2)+0x7FFF)*0x10000+(height/4*3)+0x7FFF;//you know how it goes
     //P2Pos = ((width/2)+0x7FFF)*0x10000+(height/4)+0x7FFF;//top bits columns, bottom bits rows
     P1P = new PVector(width/2,height/4*3);
@@ -51,6 +53,32 @@ void setup() {
 }
 
 void draw() {
+  background(255);
+  stroke(0);
+  for(int i=0;i<width;i++) {
+    for(int j=0;j<height;j++) {
+      if(test(new PVector(i,j)))point(i,j);//make case here
+    }
+  }
+}
+
+int test(PVector BP) {
+  int ret = 0;
+  BHeight = 255;
+  boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth;//if the ball can go in the top hoop
+  boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth; //bottom hoop
+  BHeight = 0;
+  if(goIn1) {
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth-BWidth)*2)ret=2;//goes in
+    else if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth+BWidth/2)ret++;
+  } else if(goIn2) {
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth-BWidth)*2)ret=2;//goes in
+    else if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth*2)ret++;
+  }
+  return ret;
+}
+
+void drawl() {
   //Setting Variables
   boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth;//if the ball can go in the top hoop
   boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth; //bottom hoop
@@ -99,11 +127,11 @@ void draw() {
       BHMove = Bounce;
     }
   } else if(goIn1) {
-    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth)P1Score++;//goes in
-    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}//BMove = PVector.fromAngle(PVector.sub(new PVector(width/2,HoopHeight),BP).heading()).normalize();}//bounces off rim
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth-BWidth/2)P1Score++;//goes in
+    else if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth+BWidth/2){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}//BMove = PVector.fromAngle(PVector.sub(new PVector(width/2,HoopHeight),BP).heading()).normalize();}//bounces off rim
   } else if(goIn2) {
-    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth)P1Score++;//goes in
-    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}//bounces off rim
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth-BWidth)P2Score++;//goes in
+    else if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}//bounces off rim
   } else {
     if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;} //deceleration of ball
     else if(BHeight>MaxHeight){BHeight=MaxHeight;BHMove=-abs(BHMove)/2;}

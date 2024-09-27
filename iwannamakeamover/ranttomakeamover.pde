@@ -291,4 +291,40 @@ HUH?
 Japanese text was
 outline-bolded.)
 -------------------------
+
+I'm just gonna continue
+writing some random stuff
+down here. Don't worry,
+I'm gonna continue the
+transcribing of the comic,
+it's just that I'm in
+class right now and I
+want to write about more
+class related stuff.
+(says the guy who's
+yapping instead of coding)
+I have used the same
+computer here for 3 years
+in a row. I gotta backup
+this thing to OneDrive or
+something someday.
+I should be working on
+baller game actually.
+And also, this file is now
+over 300 lines long.
+Granted, every line is
+like 5 words long, but
+that is still a whopping
+1500 words. A whole essay.
+I guess next time I will
+talk about Speedshooter's
+origins and how I got
+exposed to retro computing.
+Yappin' Yoplar out.
+P.S. Yoplar is a silly
+name that I thought up
+for my Nintendo account.
+It doesn't mean anything.
+I just made it up on the
+spot.
 */
