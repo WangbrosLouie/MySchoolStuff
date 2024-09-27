@@ -25,8 +25,8 @@ float BHMove = 0; //ball movement
 float Grav = -0.1; //Gravity
 float Bounce = 5; //how much the ball bounces off the floor or hoop or player
 int PWidth = 100;
-int BWidth = 50;
-int HoopWidth = 75;
+int BWidth = 33;
+int HoopWidth = 100;
 int Score = 0;//compressed score; top bits P1, bottom bits P2
 int MaxHeight = 155;//max ball height
 int HoopHeight = 100;
@@ -99,10 +99,11 @@ void draw() {
       BHMove = Bounce;
     }
   } else if(goIn1) {
-    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth){}//goes in
-    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth){}//bounces off rim
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth)P1Score++;//goes in
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}//BMove = PVector.fromAngle(PVector.sub(new PVector(width/2,HoopHeight),BP).heading()).normalize();}//bounces off rim
   } else if(goIn2) {
-    
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth)P1Score++;//goes in
+    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}//bounces off rim
   } else {
     if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;} //deceleration of ball
     else if(BHeight>MaxHeight){BHeight=MaxHeight;BHMove=-abs(BHMove)/2;}
@@ -116,6 +117,14 @@ void draw() {
     BMove.x = -BMove.x;
   }
   //Drawing the circles
+  push();
+  fill(#7F000000);
+  textAlign(CENTER,CENTER);
+  textSize(50);
+  text(P2Score,width/2,height/4);
+  text(P1Score,width/2,height/4*3);
+  pop();
+  fill(255);
   circle(P1P.x,P1P.y,PWidth);
   circle(P2P.x,P2P.y,PWidth);
   circle(BP.x,BP.y,BWidth+(BHeight/10));
