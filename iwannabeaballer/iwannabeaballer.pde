@@ -11,9 +11,9 @@
 |* easily have them beat. *|
 \*_Date:Sept.18-24,2024___*/
 
-import net.java.games.input.*;
-import org.gamecontrolplus.*;
-import org.gamecontrolplus.gui.*;
+//import net.java.games.input.*;
+//import org.gamecontrolplus.*;
+//import org.gamecontrolplus.gui.*;
 
 //vegetas
 PVector P1P;
@@ -54,10 +54,25 @@ void setup() {
 
 void draw() {
   background(255);
-  stroke(0);
   for(int i=0;i<width;i++) {
     for(int j=0;j<height;j++) {
-      if(test(new PVector(i,j)))point(i,j);//make case here
+      stroke(0);
+      fill(0);
+      switch(test(new PVector(i,j))) {
+        case 0:
+          stroke(0);
+          fill(0);
+          break;
+        case 1:
+          stroke(127);
+          fill(127);
+          break;
+        case 2:
+          stroke(255);
+          fill(255);
+          break;
+      }
+      point(i,j);
     }
   }
 }
@@ -68,12 +83,12 @@ int test(PVector BP) {
   boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth;//if the ball can go in the top hoop
   boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth; //bottom hoop
   BHeight = 0;
-  if(goIn1) {
-    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth-BWidth)*2)ret=2;//goes in
-    else if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth+BWidth/2)ret++;
-  } else if(goIn2) {
-    if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth-BWidth)*2)ret=2;//goes in
-    else if (BHeight<=HoopHeight && dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth*2)ret++;
+  if(goIn1&&BHeight<=HoopHeight) {
+    if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth-BWidth)*2)ret=2;//goes in
+    else if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth+BWidth)*2)/*(dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth+BWidth)*2)ret=1;*/print("g");
+  } else if(goIn2&&BHeight<=HoopHeight) {
+    if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth-BWidth)*2)ret=2;//goes in
+    else if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth+BWidth)*2)ret=1;
   }
   return ret;
 }
@@ -146,7 +161,7 @@ void drawl() {
   }
   //Drawing the circles
   push();
-  fill(#7F000000);
+  fill(0x7F000000);
   textAlign(CENTER,CENTER);
   textSize(50);
   text(P2Score,width/2,height/4);
