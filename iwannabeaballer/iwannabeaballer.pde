@@ -80,15 +80,16 @@ void draw() {
 int test(PVector BP) {
   int ret = 0;
   BHeight = 255;
-  boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth;//if the ball can go in the top hoop
-  boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth; //bottom hoop
+  boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth+BWidth)/2;//if the ball can go in the top hoop
+  boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth/2)<(HoopWidth+BWidth)/2; //bottom hoop
   BHeight = 0;
+  //BP = new PVector(width/2,height/2);
   if(goIn1&&BHeight<=HoopHeight) {
-    if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth-BWidth)*2)ret=2;//goes in
-    else if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth+BWidth)*2)/*(dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth+BWidth)*2)ret=1;*/print("g");
+    if (dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth/2)ret=2;//goes in
+    else if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth+BWidth)/2)ret=1;
   } else if(goIn2&&BHeight<=HoopHeight) {
-    if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth-BWidth)*2)ret=2;//goes in
-    else if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth+BWidth)*2)ret=1;
+    if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth/2)ret=2;//goes in
+    else if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth+BWidth)/2)ret=1;
   }
   return ret;
 }
