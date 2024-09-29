@@ -56,7 +56,7 @@ void draw() {
   boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth; //bottom hoop
   boolean goP1 = BHeight>=PHight && dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //can it bounce
   boolean goP2 = BHeight>=PHight && dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //on my skull
-  background(200);
+  background(0xFFDF8F1F);
   //background with wood boards image and other stuff
   P1P.add(getInput(true));     //calculate movements
   P2P.add(getInput(false));
@@ -127,15 +127,21 @@ void draw() {
   fill(255);
   circle(P1P.x,P1P.y,PWidth);
   circle(P2P.x,P2P.y,PWidth);
-  circle(BP.x,BP.y,BWidth+(BHeight/10));
+  if(BHeight<HoopHeight)circle(BP.x,BP.y,BWidth+(BHeight/10));
   push();
   fill(0);
   text(BHeight,BP.x,BP.y);
   noFill();
+  stroke(0);
+  strokeWeight(2);
+  circle(width/2,HoopWidth/2,HoopWidth);
+  circle(width/2,height-HoopWidth/2,HoopWidth);
+  strokeWeight(1);
   stroke(255,127,0);
   circle(width/2,HoopWidth/2,HoopWidth);
   circle(width/2,height-HoopWidth/2,HoopWidth);
   pop();
+  if(BHeight>=HoopHeight)circle(BP.x,BP.y,BWidth+(BHeight/10));
 }
 
 
