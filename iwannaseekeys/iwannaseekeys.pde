@@ -15,13 +15,13 @@ void setup() {
 void draw() {
   background(255);
   textAlign(CENTER,CENTER);
-  fill(#1F000000);
+  fill(0x1F000000);
   textSize(30);
   text("key",100,120);
   textSize(25);
   text("ASCII",50,185);
   text("KeyCode",150,185);
-  fill(#FF000000);
+  fill(0xFF000000);
   textSize(100);
   text(Key,100,50);
   textSize(50);
