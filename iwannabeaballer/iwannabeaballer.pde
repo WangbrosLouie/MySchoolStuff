@@ -99,10 +99,10 @@ void draw() {
       BHMove = Bounce;
     }
   } else if(goIn1&&BHeight<=HoopHeight) {
-    if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth-BWidth)/2)P1Score++;//goes in
+    if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth)/2)P1Score++;//goes in
     else if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth+BWidth)/2){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}
   } else if(goIn2&&BHeight<=HoopHeight) {
-    if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth-BWidth)/2)P2Score++;//goes in
+    if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth)/2)P2Score++;//goes in
     else if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth+BWidth)/2){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}
   }else {
     if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;} //deceleration of ball
