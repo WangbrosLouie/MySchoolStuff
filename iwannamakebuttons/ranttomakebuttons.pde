@@ -190,4 +190,13 @@ taper ces choses inutile,
 donc je dors maintenant.
 Au matin, mon amis, au matin.
 
+Ah, c'est le matin prochain.
+Tu sais, il est presque le
+deux-centieme ligne dans ce
+fichier. Je ne pense pas que
+je dois ecrire beaucoup.
+Tu sais quel ca signifie!
+P O I S S O N
+Alors, je vais m'arreter.
+Au fichier prochaine. Miaou.
 */
