@@ -12,9 +12,12 @@ class Button {
   int YSize = -1;
   color Out = color(0,0,0);
   color In = color(0,0,0);
-  color doWhat = -1;
-  Button(int tYPE, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color DOwHAT) {
-    if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0) {
+  int doWhat = -1;
+  String text = "";
+  color TOut = color(0,0,0);
+  color TIn = color(0,0,0);
+  Button(int tYPE, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, int DOwHAT, String TEXT, color toUT, color tiN) {
+    if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
       Type = 1;
       X = 0;
       Y = 0;
@@ -37,7 +40,8 @@ class Button {
 }
 
 Button[] Btns = {
-new Button(1,0,0,100,50,color(50,50,50),100,color(0,0,1))
+new Button(1,0,0,100,50,color(50,50,50),100,1),
+new Button(1,0,100,100,50,color(50,50,50),100,2)
 };
 PGraphics Hitbox;
 
@@ -53,7 +57,7 @@ void draw() {
   background(200);
   Hitbox.noStroke();
   for(int i=0;i<Btns.length;i++) {//draw button hitboxes
-    Hitbox.fill(Btns[i].doWhat);
+    Hitbox.fill(i2col(i+1));
     switch(Btns[i].Type) {
     case 1:
       Hitbox.rect(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
@@ -86,4 +90,8 @@ void mousePressed() {
     break;
   default:
   }
+}
+
+color i2col(int i) {
+  return color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100);
 }
