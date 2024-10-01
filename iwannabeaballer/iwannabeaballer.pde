@@ -31,11 +31,13 @@ int Score = 0;//compressed score; top bits P1, bottom bits P2
 int MaxHeight = 155;//max ball height
 int HoopHeight = 100;
 int PHight = 80;//hmm i wonder what this is a reference to
-boolean[] Keys = new boolean[10];
+boolean[] Keys = new boolean[12];
 int P1S = 5;//ensitivity
 int P2S = 5;//ensitivity
 int P1Score = 0;
 int P2Score = 0;
+PImage Snowy; //was gonna use catshot but not anymore
+PImage Kitta;
 
 
 void setup() {
@@ -48,15 +50,66 @@ void setup() {
     P1P = new PVector(width/2,height/4*3);
     P2P = new PVector(width/2,height/4);
     BP = new PVector(width/2,height/2);  //for the ball too
+    Snowy = loadImage("itSnows.png");
+    Kitta = loadImage("catbot.png");
+}
+
+void drawl() {
+    background(255);
+  for(int i=0;i<width;i++) {
+    for(int j=0;j<height;j++) {
+      stroke(0);
+      fill(0);
+      switch(test(new PVector(i,j))) {
+      case 1:
+        stroke(255);
+        break;
+      case 2:
+        stroke(#FFFF0000);
+        break;
+      case 3:
+        stroke(#FF00FF00);
+        break;
+      case 4:
+        stroke(#FF0000FF);
+        break;
+      }
+      point(i,j);
+    }
+  }
+}
+
+int test(PVector BP) {
+  int ret = 0;
+  BHeight = 255;
+  boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth-BWidth;//if the ball can go in the top hoop
+  boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth-BWidth; //bottom hoop
+  BHeight = 0;
+  if(goIn1&&BHeight<=HoopHeight) {
+    if (dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth/2)ret=2;//goes in
+    else if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth+BWidth)/2)ret=1;
+  } else if(goIn2&&BHeight<=HoopHeight) {
+    if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth/2)ret=4;//goes in
+    else if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth+BWidth)/2)ret=3;
+  }
+  return ret;
 }
 
 void draw() {
   //Setting Variables
-  boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth)<HoopWidth-BWidth;//if the ball can go in the top hoop
-  boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-HoopWidth)<HoopWidth-BWidth; //bottom hoop
+  boolean goIn1 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth-BWidth;//if the ball can go in the top hoop
+  boolean goIn2 = BHeight>HoopHeight && dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth-BWidth; //bottom hoop
   boolean goP1 = BHeight>=PHight && dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //can it bounce
   boolean goP2 = BHeight>=PHight && dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //on my skull
   background(0xFFDF8F1F);
+  stroke(255);
+  line(0,height/2,width,height/2);
+  noFill();
+  circle(width/2,height/2,width/5);
+  rect(width/5*2,0,width/5,width/10*3);
+  rect(width/5*2,height,width/5,-width/10*3);
+  circle(width/2,width/10*3,width/5);
+  circle(width/2,height-(width/10*3),width/5);
   //background with wood boards image and other stuff
   P1P.add(getInput(true));     //calculate movements
   P2P.add(getInput(false));
@@ -99,12 +152,12 @@ void draw() {
       BHMove = Bounce;
     }
   } else if(goIn1&&BHeight<=HoopHeight) {
-    if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth)/2)P1Score++;//goes in
+    if (dist(BP.x,BP.y,width/2,HoopWidth/2)<HoopWidth/2)P1Score++;//goes in
     else if (dist(BP.x,BP.y,width/2,HoopWidth/2)<(HoopWidth+BWidth)/2){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}
   } else if(goIn2&&BHeight<=HoopHeight) {
-    if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth)/2)P2Score++;//goes in
+    if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<HoopWidth/2)P2Score++;//goes in
     else if (dist(BP.x,BP.y,width/2,height-(HoopWidth/2))<(HoopWidth+BWidth)/2){BHeight=HoopHeight;BHMove=abs(BHMove)/2;}
-  }else {
+  } else {
     if(BHeight<0){BHeight=0;BHMove=abs(BHMove)/2;} //deceleration of ball
     else if(BHeight>MaxHeight){BHeight=MaxHeight;BHMove=-abs(BHMove)/2;}
   }
@@ -125,11 +178,16 @@ void draw() {
   text(P1Score,width/2,height/4*3);
   pop();
   fill(255);
+  stroke(0);
   circle(P1P.x,P1P.y,PWidth);
+  image(Snowy,P1P.x-(PWidth/2)*sqrt(0.5),P1P.y-(PWidth/2)*sqrt(0.5),PWidth*sqrt(0.5),PWidth*sqrt(0.5));
   circle(P2P.x,P2P.y,PWidth);
+  image(Kitta,P2P.x-(PWidth/2)*sqrt(0.5),P2P.y-(PWidth/2)*sqrt(0.5),PWidth*sqrt(0.5),PWidth*sqrt(0.5));
   if(BHeight<HoopHeight)circle(BP.x,BP.y,BWidth+(BHeight/10));
   push();
-  fill(0);
+  fill(0x7F000000);
+  textAlign(CENTER,CENTER);
+  textSize(6);
   text(BHeight,BP.x,BP.y);
   noFill();
   stroke(0);
@@ -141,7 +199,24 @@ void draw() {
   circle(width/2,HoopWidth/2,HoopWidth);
   circle(width/2,height-HoopWidth/2,HoopWidth);
   pop();
-  if(BHeight>=HoopHeight)circle(BP.x,BP.y,BWidth+(BHeight/10));
+  if(BHeight>=HoopHeight) {
+    circle(BP.x,BP.y,BWidth+(BHeight/10));
+    push();
+    fill(0x7F000000);
+    textAlign(CENTER,CENTER);
+    textSize(6);
+    text(BHeight,BP.x,BP.y);
+    pop();
+  }
+  //cheats heh heh
+  if(Keys[8]&&!Keys[9]) {
+    Keys[9] = true;
+    P1Score++;
+  } else if(!Keys[8]) Keys[9] = false;
+  if(Keys[10]&&!Keys[11]) {
+    Keys[11] = true;
+    P2Score++;
+  } else if(!Keys[10]) Keys[11] = false;
 }
 
 
@@ -205,6 +280,12 @@ void keyPressed() {
   case 39:
     Keys[7] = true;
     break;
+  case 49:
+    Keys[8] = true;
+    break;
+  case 50:
+    Keys[10] = true;
+    break;
   }
 }
 
@@ -233,6 +314,12 @@ void keyReleased() {
     break;
   case 39:
     Keys[7] = false;
+    break;
+  case 49:
+    Keys[8] = false;
+    break;
+  case 50:
+    Keys[10] = false;
     break;
   }
 }
