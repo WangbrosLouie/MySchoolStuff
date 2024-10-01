@@ -12,3 +12,8 @@ I only made cover versions of those songs. If you wish to credit me, credit me a
 
 Bottom line, don't steal songs, it's not nice. I worked hard on my songs.
 
+Bottomer line: other song credits and stuff
+
+Azure Temple.mid -- taken from Sonic Robo Blast 2
+untitled.opus -- bitcrushed version of an early version of Bridge Island Zone Act 1's song from Sonic Superstars
+يا طارشي.mid -- taken from an internet archive, the iconic nokia arabic phone ringtone Al Yareshy
