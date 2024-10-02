@@ -5,29 +5,29 @@
 \*_Date:Sept.29, 2024_______*/
 
 class Button {
-  int Type = -1;
-  int X = -1;
-  int Y = -1;
-  int XSize = -1;
-  int YSize = -1;
-  color Out = color(0,0,0);
-  color In = color(0,0,0);
-  int doWhat = -1;
+  int Type = 0; //positive type is text, negative type is image
+  int X = 0;
+  int Y = 0;
+  int XSize = 0;
+  int YSize = 0;
+  color Out = color(0,0,0);// idle outline
+  color In = color(0,0,0);// idle fill
+  int doWhat = 0;
   String text = "";
-  color TOut = color(0,0,0);
-  color TIn = color(0,0,0);
-  Button(int tYPE, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, int DOwHAT, String TEXT, color toUT, color tiN) {
+  PImage img = new PImage();
+  color TOut = color(0,0,0);// text unpressed
+  color TIn = color(0,0,0);// text depressed
+  color POut = color(0,0,0);// pressed outline
+  color PIn = color(0,0,0);// pressed fill
+  color THov = color(0,0,0);// text hover
+  color HOut = color(0,0,0);// hover outline
+  color HIn = color(0,0,0);// hover fill
+  //text button constructor
+  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, String TEXT) {
     if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
       Type = 1;
-      X = 0;
-      Y = 0;
-      XSize = 0;
-      YSize = 0;
-      Out = 0;
-      In = 0;
-      doWhat = 0;
     } else {
-      Type = tYPE;
+      Type = abs(tYPE);
       X = x;
       Y = y;
       XSize = xsIZE;
@@ -35,63 +35,143 @@ class Button {
       Out = oUT;
       In = iN;
       doWhat = DOwHAT;
+      text = TEXT;
+      TOut = toUT;
+      TIn = tiN;
+      POut = poUT;
+      PIn = piN;
+      HIn = hiN;
+      HOut = hoUT;
+    }
+  }
+  //image button constructor
+  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, PImage IMG) {
+    if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
+      Type = -1;
+    } else {
+      Type = -abs(tYPE);
+      X = x;
+      Y = y;
+      XSize = xsIZE;
+      YSize = ysIZE;
+      Out = oUT;
+      In = iN;
+      doWhat = DOwHAT;
+      img = IMG;
+      TOut = toUT;
+      TIn = tiN;
+      POut = poUT;
+      PIn = piN;
+      HIn = hiN;
+      HOut = hoUT;
+    }
+  }
+  
+  void draw(byte Active) {//2 is pressed, 1 is hover, 0 is idle
+    if(Type==0||Type==-0) {
+      println("Warning: Uninitialized button.");
+    } else {
+      push();
+      textAlign(CENTER,CENTER);
+      switch(Active) {
+      case 0:
+        fill(TOut);
+        push();
+        stroke(Out);
+        fill(In);
+        break;
+      case 1:
+        fill(THov);
+        push();
+        stroke(HOut);
+        fill(HIn);
+        break;
+      case 2:
+        fill(TIn);
+        push();
+        stroke(POut);
+        fill(PIn);
+        break;
+      default:
+        println("Naked huh?");
+      }
+      switch(abs(Type)) {
+      case 1:
+        rect(X,Y,XSize,YSize);
+        pop();
+        text(text,XSize/2+X,YSize/2+Y);
+        break;
+      case 2:
+        ellipse(X,Y,XSize,YSize);
+        pop();
+        text(text,XSize/2+X,YSize/2+Y);
+      }
+      pop();
+    }
+  }
+  
+  void drawHit(int i) {
+    i++;
+    Hitbox.fill(color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100));
+    switch(abs(Type)) {
+    case 1:
+      Hitbox.rect(X,Y,XSize,YSize);
+      break;
+    case 2:
+      Hitbox.ellipse(X,Y,XSize,YSize);
     }
   }
 }
-
 Button[] Btns = {
-new Button(1,0,0,100,50,color(50,50,50),100,1),
-new Button(1,0,100,100,50,color(50,50,50),100,2)
+new Button(1,1,50,50,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"NYA")
 };
 PGraphics Hitbox;
+int Button = 0;
+int BGCol = 0;
 
 void setup() {
-  noSmooth();
   size(640,480);
   Hitbox = createGraphics(640,480);
+  Hitbox.noSmooth();//yooshi yattazo!
+  Hitbox.noStroke();
 }
 
 void draw() {
   Hitbox.beginDraw();
   Hitbox.background(0);
-  background(200);
-  Hitbox.noStroke();
-  for(int i=0;i<Btns.length;i++) {//draw button hitboxes
-    Hitbox.fill(i2col(i+1));
-    switch(Btns[i].Type) {
-    case 1:
-      Hitbox.rect(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
-      break;
-    case 2:
-      Hitbox.ellipse(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
-    }
+  background(255);
+  for(int i=0;i<Btns.length;i++)Btns[i].drawHit(i);
+  for(int i=0;i<Btns.length;i++) {//draw buttons
+    byte Status = 0;
+    int Hover = Hitbox.get(mouseX,mouseY);
+    Hover = round(red(Hover))*0x100+round(green(Hover))*0x100+ceil(blue(Hover));
+    print(Hover);
+    if(Hover-1==i)Status = 1;
+    if(Button-1==i)Status = 2;
+    Btns[i].draw(Status);
   }
   Hitbox.endDraw();
-  for(int i=0;i<Btns.length;i++) {//draw buttons
-    fill(Btns[i].In);
-    stroke(Btns[i].Out);
-    switch(Btns[i].Type) {
-    case 1:
-      rect(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
-      break;
-    case 2:
-      ellipse(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
-    }
-  }
 }
 
 void mousePressed() {
   int Action = Hitbox.get(mouseX,mouseY);
-  Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
-  println(Action);
-  switch(Action) {
-  case 1:
-    print("yay");
-    break;
-  default:
-  }
+  Button = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
 }
 
-color i2col(int i) {
-  return color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100);
+void mouseReleased() {
+  int Action = Hitbox.get(mouseX,mouseY);
+  Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+  if(Action==Button&&Action!=0) {
+    Action = Btns[Action-1].doWhat;
+    switch(Action) {
+    case 1:
+      print("yay");
+      //increase bg col
+      break;
+    case 2:
+      //decrease bg col
+    default:
+    }
+  Button = 0;
+  }
 }
