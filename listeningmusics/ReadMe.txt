@@ -14,6 +14,6 @@ Bottom line, don't steal songs, it's not nice. I worked hard on my songs.
 
 Bottomer line: other song credits and stuff
 
-Azure Temple.mid -- taken from Sonic Robo Blast 2
+Azure Temple.mid -- taken from Sonic Robo Blast 2 made by Arrow and Shane and arranged by Monster Iestyn according to the SRB2 wiki
 untitled.opus -- bitcrushed version of an early version of Bridge Island Zone Act 1's song from Sonic Superstars
-يا طارشي.mid -- taken from an internet archive, the iconic nokia arabic phone ringtone Al Yareshy
+يا طارشي.mid -- taken from an internet archive, the iconic nokia arabic phone ringtone Ya Tareshy by Eida Al Menhali
