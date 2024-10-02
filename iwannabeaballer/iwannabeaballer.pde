@@ -118,8 +118,6 @@ void draw() {
   if(BP.x<0)BP.x=0;if(BP.x>width)BP.x=width;if(BP.y<0)BP.y=0;if(BP.y>height)BP.y=height;
   boolean P1Hit = BHeight<PHight && dist(P1P.x,P1P.y,BP.x,BP.y)<(PWidth+BWidth)/2; //calculate collisions
   boolean P2Hit = BHeight<PHight && dist(P2P.x,P2P.y,BP.x,BP.y)<(PWidth+BWidth)/2;
-  boolean HWHit = (BP.y<BWidth/2)||(BP.y>height-BWidth/2);//hit horizontal walls (the top and bottom)
-  boolean VWHit = (BP.x<BWidth/2)||(BP.x>width-BWidth/2);//hit vertical walls (the sides)
   //Calculating collisions
   if(P1Hit&&P2Hit) {//double collision
     if(goP1||goP2){
@@ -163,12 +161,10 @@ void draw() {
   }
   BMove.mult(0.98);
   BHMove += Grav;
-  if(HWHit) {
-    BMove.y = -BMove.y;
-  }
-  if(VWHit) {
-    BMove.x = -BMove.x;
-  }
+  if(BP.y<BWidth/2)BMove.y = -BMove.y;
+  if(BP.y>height-BWidth/2)
+  if(BP.x<BWidth/2)BMove.x = -BMove.x;
+  if(BP.x>width-BWidth/2)
   //Drawing the circles
   push();
   fill(0x7F000000);
