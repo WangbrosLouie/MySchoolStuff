@@ -111,7 +111,8 @@ class Button {
   }
   
   void drawHit(int i) {
-    Hitbox.fill(i2col(i+1));
+    i++;
+    Hitbox.fill(color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100));
     switch(abs(Type)) {
     case 1:
       Hitbox.rect(X,Y,XSize,YSize);
@@ -121,15 +122,15 @@ class Button {
     }
   }
 }
-//int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, PImage IMG) {
 Button[] Btns = {
 new Button(1,1,50,50,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"NYA")
 };
 PGraphics Hitbox;
 int Button = 0;
+int BGCol = 0;
 
 void setup() {
-  size(640*2,480);
+  size(640,480);
   Hitbox = createGraphics(640,480);
   Hitbox.noSmooth();//yooshi yattazo!
   Hitbox.noStroke();
@@ -150,36 +151,6 @@ void draw() {
     Btns[i].draw(Status);
   }
   Hitbox.endDraw();
-  image(Hitbox,640,0,640,480);
-}
-
-void drawl() {
-  Hitbox.beginDraw();
-  Hitbox.background(0);
-  background(200);
-  Hitbox.noStroke();
-  for(int i=0;i<Btns.length;i++) {//draw button hitboxes
-    Hitbox.fill(i2col(i+1));
-    switch(Btns[i].Type) {
-    case 1:
-      Hitbox.rect(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
-      break;
-    case 2:
-      Hitbox.ellipse(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
-    }
-  }
-  Hitbox.endDraw();
-  for(int i=0;i<Btns.length;i++) {//draw buttons
-    fill(Btns[i].In);
-    stroke(Btns[i].Out);
-    switch(Btns[i].Type) {
-    case 1:
-      rect(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
-      break;
-    case 2:
-      ellipse(Btns[i].X,Btns[i].Y,Btns[i].XSize,Btns[i].YSize);
-    }
-  }
 }
 
 void mousePressed() {
@@ -195,13 +166,12 @@ void mouseReleased() {
     switch(Action) {
     case 1:
       print("yay");
+      //increase bg col
       break;
+    case 2:
+      //decrease bg col
     default:
     }
   Button = 0;
   }
-}
-
-color i2col(int i) {
-  return color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100);
 }
