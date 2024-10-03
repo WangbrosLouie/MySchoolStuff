@@ -60,9 +60,24 @@ These 3 all like each other due to [name TBD]'s fascination with robots.
 
 Snowballer & Gwentwin Spiritus
 (bla bla Quentwin Corpus & Gwentwin Spiritus COMMING SOON)
-
+(also this origin story for Gwentwin might be offensive somehow, idk)
+This is the spiritual bunch of the characters. Snowballer is a snow spirit
+person thing, and Gwentwin is a ghost. They met in a forest one day when
+Gwentwin was still Quentwin Spiritus, and then after spending lots of time
+together Quentwin transitioned into Gwentwin. (is that how transitioning
+works? I have no idea since I have no experience or any friends to discuss
+this with)(also this is merely the original idea, it still can be changed)
 
 [name TBD] & Quentwin Corpus
+Quentwin was asked to look after [name TBD] in school, and this is what
+results from it. While Snowballer & Gwentwin are chatting away at home,
+Quentwin is busy making sure [name TBD] doesn't get into any trouble at
+school. However, this means that they can play together at break and stuff.
+
+Bassblaster & Firefighter
+These 2 are childhood friends (I have just decided) that bonded over the
+mutual love of carbonated drinks. Both of them know quite a lot about the
+soda landscape of the city.
 
 
 

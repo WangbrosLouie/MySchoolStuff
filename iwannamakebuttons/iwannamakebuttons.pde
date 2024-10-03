@@ -169,7 +169,7 @@ void setup() {
   Btns = new Button[]{
   new Button(1,1,50,50,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Goin' Down!"),
   new Button(1,2,50,0,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Goin' Up!"),
-  new Button(1,2,200,100,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(255),color(200),color(150),loadImage("catbot.png"))
+  new Button(1,3,200,100,100,100,color(0),color(200),color(0),color(150),color(0),color(100),color(255),color(200),color(150),loadImage("catbot.png"))
   };
   //note: the way to declare arrays in setup is to use new Class[] {...} instead of just {...}
 }
@@ -208,7 +208,13 @@ void mouseReleased() {
       break;
     case 2:
       if(BGCol<0xF)BGCol++;else BGCol=0xF;
+      break;
+    case 3:
+      Btns[Action-1].XSize+=3;
+      Btns[Action-1].YSize+=3;
+      break;
     default:
+      
     }
   }
   Button = 0;
