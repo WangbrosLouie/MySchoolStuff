@@ -130,12 +130,12 @@ class Button {
         default:
           println("Naked huh?");
         }
-        switch(Type) {
-        case -1:
+        switch(-Type) {
+        case 1:
           rect(X,Y,XSize,YSize);
           image(img,X,Y,XSize,YSize);
           break;
-        case -2:
+        case 2:
           ellipse(X,Y,XSize,YSize);
           text(text,XSize/2+X,YSize/2+Y);
         }
