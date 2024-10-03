@@ -15,11 +15,11 @@ class Button {
   int doWhat = 0;
   String text = "";
   PImage img = new PImage();
-  color TOut = color(0,0,0);// text unpressed
-  color TIn = color(0,0,0);// text depressed
+  color TOut = color(0,0,0);// text/tint unpressed
+  color TIn = color(0,0,0);// text/tint depressed
   color POut = color(0,0,0);// pressed outline
   color PIn = color(0,0,0);// pressed fill
-  color THov = color(0,0,0);// text hover
+  color THov = color(0,0,0);// text/tint hover
   color HOut = color(0,0,0);// hover outline
   color HIn = color(0,0,0);// hover fill
   //text button constructor
@@ -59,6 +59,7 @@ class Button {
       doWhat = DOwHAT;
       img = IMG;
       TOut = toUT;
+      THov = thOV;
       TIn = tiN;
       POut = poUT;
       PIn = piN;
@@ -71,45 +72,82 @@ class Button {
     if(Type==0||Type==-0) {
       println("Warning: Uninitialized button.");
     } else {
-      push();
-      textAlign(CENTER,CENTER);
-      switch(Active) {
-      case 0:
-        fill(TOut);
+      if(Type>0) {
         push();
-        stroke(Out);
-        fill(In);
-        break;
-      case 1:
-        fill(THov);
-        push();
-        stroke(HOut);
-        fill(HIn);
-        break;
-      case 2:
-        fill(TIn);
-        push();
-        stroke(POut);
-        fill(PIn);
-        break;
-      default:
-        println("Naked huh?");
-      }
-      switch(abs(Type)) {
-      case 1:
-        rect(X,Y,XSize,YSize);
+        textAlign(CENTER,CENTER);
+        switch(Active) {
+        case 0:
+          fill(TOut);
+          push();
+          stroke(Out);
+          fill(In);
+          break;
+        case 1:
+          fill(THov);
+          push();
+          stroke(HOut);
+          fill(HIn);
+          break;
+        case 2:
+          fill(TIn);
+          push();
+          stroke(POut);
+          fill(PIn);
+          break;
+        default:
+          println("Naked grandma!");
+        }
+        switch(Type) {
+        case 1:
+          rect(X,Y,XSize,YSize);
+          pop();
+          text(text,XSize/2+X,YSize/2+Y);
+          break;
+        case 2:
+          ellipse(X,Y,XSize,YSize);
+          pop();
+          text(text,XSize/2+X,YSize/2+Y);
+        }
         pop();
-        text(text,XSize/2+X,YSize/2+Y);
-        break;
-      case 2:
-        ellipse(X,Y,XSize,YSize);
+      } else {
+        push();
+        switch(Active) {
+        case 0:
+          tint(TOut);
+          push();
+          stroke(Out);
+          fill(In);
+          break;
+        case 1:
+          tint(THov);
+          push();
+          stroke(HOut);
+          fill(HIn);
+          break;
+        case 2:
+          tint(TIn);
+          push();
+          stroke(POut);
+          fill(PIn);
+          break;
+        default:
+          println("Naked huh?");
+        }
+        switch(Type) {
+        case 1:
+          rect(X,Y,XSize,YSize);
+          pop();
+          text(text,XSize/2+X,YSize/2+Y);
+          break;
+        case 2:
+          ellipse(X,Y,XSize,YSize);
+          pop();
+          text(text,XSize/2+X,YSize/2+Y);
+        }
         pop();
-        text(text,XSize/2+X,YSize/2+Y);
       }
-      pop();
     }
   }
-  
   void drawHit(int i) {
     i++;
     Hitbox.fill(color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100));
@@ -123,11 +161,12 @@ class Button {
   }
 }
 Button[] Btns = {
-new Button(1,1,50,50,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"NYA")
+new Button(1,1,50,50,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Goin' Down!"),
+new Button(1,2,50,0,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Goin' Up!")
 };
 PGraphics Hitbox;
 int Button = 0;
-int BGCol = 0;
+int BGCol = 0x8;
 
 void setup() {
   size(640,480);
@@ -139,7 +178,7 @@ void setup() {
 void draw() {
   Hitbox.beginDraw();
   Hitbox.background(0);
-  background(255);
+  background(BGCol*0x10);
   for(int i=0;i<Btns.length;i++)Btns[i].drawHit(i);
   for(int i=0;i<Btns.length;i++) {//draw buttons
     byte Status = 0;
@@ -165,11 +204,10 @@ void mouseReleased() {
     Action = Btns[Action-1].doWhat;
     switch(Action) {
     case 1:
-      print("yay");
-      //increase bg col
+      if(BGCol>0)BGCol--;else BGCol=0;
       break;
     case 2:
-      //decrease bg col
+      if(BGCol<0xF)BGCol++;else BGCol=0xF;
     default:
     }
   Button = 0;

@@ -1,6 +1,6 @@
 Don't Steal My Songs!
 
-Note: This does not apply to "Azure Temple.mid", "untitled.opus" and "يا طارشي.mid"; those songs are not mine.
+Note: This does not apply to "Azure Temple.mid", "Armored Sensui.mid", "untitled.opus" and "يا طارشي.mid"; those songs are not mine.
 
 By putting my songs here on my repo, I am allowing you to download and listen to them for free.
 I do not allow you to redistribute these songs as your songs that you created.
@@ -15,5 +15,6 @@ Bottom line, don't steal songs, it's not nice. I worked hard on my songs.
 Bottomer line: other song credits and stuff
 
 Azure Temple.mid -- taken from Sonic Robo Blast 2 made by Arrow and Shane and arranged by Monster Iestyn according to the SRB2 wiki
+Armored Sensui.mid -- converted from the SPC original from Yuu Yuu Hakusho Final Makai Saikyou Retsuden composed by Tose Sound Team
 untitled.opus -- bitcrushed version of an early version of Bridge Island Zone Act 1's song from Sonic Superstars
 يا طارشي.mid -- taken from an internet archive, the iconic nokia arabic phone ringtone Ya Tareshy by Eida Al Menhali
