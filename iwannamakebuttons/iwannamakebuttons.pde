@@ -144,21 +144,22 @@ class Button {
     }
   }
   
-  void drawHit(int i) {
+  void drawHit(int i, PGraphics H) {
     i++;
-    Hitbox.fill(color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100));
+    H.fill(color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100));
     switch(abs(Type)) {
     case 1:
-      Hitbox.rect(X,Y,XSize,YSize);
+      H.rect(X,Y,XSize,YSize);
       break;
     case 2:
-      Hitbox.ellipse(X,Y,XSize,YSize);
+      H.ellipse(X,Y,XSize,YSize);
     }
   }
 }
+
 Button[] Btns;
 PGraphics Hitbox;
-int Button = 0;
+int Btn = 0;
 int BGCol = 0x8;
 
 void setup() {
@@ -177,30 +178,19 @@ void setup() {
 
   
 void draw() {
-  Hitbox.beginDraw();
-  Hitbox.background(0);
   background(BGCol*0x10);
-  for(int i=0;i<Btns.length;i++)Btns[i].drawHit(i);
-  for(int i=0;i<Btns.length;i++) {//draw buttons
-    byte Status = 0;
-    int Hover = Hitbox.get(mouseX,mouseY);
-    Hover = round(red(Hover))*0x100+round(green(Hover))*0x100+ceil(blue(Hover));
-    if(Hover-1==i)Status = 1;
-    if(Button-1==i)Status = 2;
-    Btns[i].draw(Status);
-  }
-  Hitbox.endDraw();
+  process(Btns,Hitbox);
 }
 
 void mousePressed() {
   int Action = Hitbox.get(mouseX,mouseY);
-  Button = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+  Btn = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
 }
 
 void mouseReleased() {
   int Action = Hitbox.get(mouseX,mouseY);
   Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
-  if(Action==Button&&Action!=0) {
+  if(Action==Btn&&Action!=0) {
     Action = Btns[Action-1].doWhat;
     switch(Action) {
     case 1:
@@ -217,5 +207,20 @@ void mouseReleased() {
       
     }
   }
-  Button = 0;
+  Btn = 0;
+}
+
+void process(Button[] B, PGraphics H) {
+  H.beginDraw();
+  H.background(0);
+  for(int i=0;i<B.length;i++)B[i].drawHit(i,H);
+  for(int i=0;i<B.length;i++) {//draw buttons
+    byte Status = 0;
+    int Hover = Hitbox.get(mouseX,mouseY);
+    Hover = round(red(Hover))*0x100+round(green(Hover))*0x100+ceil(blue(Hover));
+    if(Hover-1==i)Status = 1;
+    if(Btn-1==i)Status = 2;
+    B[i].draw(Status);
+  }
+  H.endDraw();
 }
