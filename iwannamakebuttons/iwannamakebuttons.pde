@@ -114,19 +114,16 @@ class Button {
         switch(Active) {
         case 0:
           tint(TOut);
-          push();
-          stroke(Out);
+          stroke(Out);//ya need to keep these parts in case of transparent images
           fill(In);
           break;
         case 1:
           tint(THov);
-          push();
           stroke(HOut);
           fill(HIn);
           break;
         case 2:
           tint(TIn);
-          push();
           stroke(POut);
           fill(PIn);
           break;
@@ -134,20 +131,19 @@ class Button {
           println("Naked huh?");
         }
         switch(Type) {
-        case 1:
+        case -1:
           rect(X,Y,XSize,YSize);
-          pop();
-          text(text,XSize/2+X,YSize/2+Y);
+          image(img,X,Y,XSize,YSize);
           break;
-        case 2:
+        case -2:
           ellipse(X,Y,XSize,YSize);
-          pop();
           text(text,XSize/2+X,YSize/2+Y);
         }
         pop();
       }
     }
   }
+  
   void drawHit(int i) {
     i++;
     Hitbox.fill(color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100));
@@ -160,10 +156,7 @@ class Button {
     }
   }
 }
-Button[] Btns = {
-new Button(1,1,50,50,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Goin' Down!"),
-new Button(1,2,50,0,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Goin' Up!")
-};
+Button[] Btns;
 PGraphics Hitbox;
 int Button = 0;
 int BGCol = 0x8;
@@ -173,8 +166,16 @@ void setup() {
   Hitbox = createGraphics(640,480);
   Hitbox.noSmooth();//yooshi yattazo!
   Hitbox.noStroke();
+  Btns = new Button[]{
+  new Button(1,1,50,50,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Goin' Down!"),
+  new Button(1,2,50,0,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Goin' Up!"),
+  new Button(1,2,200,100,150,50,color(0),color(200),color(0),color(150),color(0),color(100),color(255),color(200),color(150),loadImage("catbot.png"))
+  };
+  //note: the way to declare arrays in setup is to use new Class[] {...} instead of just {...}
 }
 
+
+  
 void draw() {
   Hitbox.beginDraw();
   Hitbox.background(0);
@@ -184,7 +185,6 @@ void draw() {
     byte Status = 0;
     int Hover = Hitbox.get(mouseX,mouseY);
     Hover = round(red(Hover))*0x100+round(green(Hover))*0x100+ceil(blue(Hover));
-    print(Hover);
     if(Hover-1==i)Status = 1;
     if(Button-1==i)Status = 2;
     Btns[i].draw(Status);
@@ -210,6 +210,6 @@ void mouseReleased() {
       if(BGCol<0xF)BGCol++;else BGCol=0xF;
     default:
     }
-  Button = 0;
   }
+  Button = 0;
 }
