@@ -14,8 +14,8 @@ I also wrote a little tidbit about me getting a balisong comb, or a
 combalisong as I like to call it. Finally, I alluded to the relationship
 that Speedshooter is in with a certain cat. I suppose I will describe the
 various relationships of Tophat Turmoil this time on Talkument Yap.
-Oh, and feel free to skip to the line where the relationships end if you
-don't want to see that stuff. I will specify the line # when I'm finished.
+Oh, and feel free to skip to line 117 where the relationships end if you
+don't want to see that stuff.
 
 Part 1: Romances (Not only that, but actual yap organization? Fancy.)
 
@@ -79,6 +79,50 @@ These 2 are childhood friends (I have just decided) that bonded over the
 mutual love of carbonated drinks. Both of them know quite a lot about the
 soda landscape of the city.
 
+Part :3 Familial Ties
+
+Snowballer & [name TBD]
+Snowballer was shown the orphanage on her grand tour given by Gwentwin, and
+she wondered what it would be like to have a child, so she adopted one.
+That's right, [name TBD] is adopted.
+
+Quentwin & Gwentwin (technically)
+The twins are really two parts of a single person. The lore is that the
+original boy Quentin got killed by electricity during an operation (that I
+will detail on later) and got his spirit freed from his body, but then was
+promptly revived by electricity, however without the spirit coming back to
+the body. This resulted in 2 of the same boy, just in different forms.
+
+Kitta & DarKitta (technically)
+DarKitta was made as an evil version of Kitta, and as such, has an AI based
+off of Kitta's AI, just not very evil since Evyle is not very
+technologically capable of doing such a task. Basically, this means that
+they technically count as sisters due to possessing the same-ish AI?
+
+DarKitta & Evyle (technically)
+Since Evyle made DarKitta, technically Evyle's a father.
+
+Trickshotter & Blademaster (i need better names :sob:)
+These 2 are brothers who are good at doing tricks with weaponary due to
+them serving in the army in the Filler War (exactly what it sounds like).
+
+Part 4: Rivalries
+
+[name TBD] & his friend who writes
+Wowies, it's a new character that I just thought of today on the walk home
+for lunch. There's this other character in the same school class as
+[name TBD] who loves to write as much as [name TBD] loves to draw.
+They compete to show that their passion is superior to the other.
+
+End Relationships
+
+Yowf, that was way too much unnecessary lore, especially for a game that is
+currently not even close to being finished. I'm gonna make a demo soon, I
+swear. I just gotta make a map and some enemies and some kits and some UI s
+Anyways, I forgot to mention in the previous Talkument Yap that
+Speedshooter writes his memoires a lot and it is very long.
+Also, did you know that Talkument Yap is a funny based off Dragon Ball Z?
+I mean the name. The name is based off of Dragon Ball Z.
 
 
 */

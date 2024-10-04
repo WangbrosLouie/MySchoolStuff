@@ -166,7 +166,8 @@ int Btn = 0;
 Gif[] Movies;
 //the song of la palice is quite funny
 void setup() {
-  
+  size(640,480);
+  Hitbox = createGraphics(640,480);
 }
 
 void draw() {
