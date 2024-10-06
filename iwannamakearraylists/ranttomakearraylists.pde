@@ -70,7 +70,7 @@ least. and by the way i played as the kings. i think boston was the eastern
 conference finalist. anyways im trying nhl 97 on the PlayStation which is
 the best 5th generation console version of nhl 97. the saturn version is
 just the same thing but with faux transparency and a lower framerate. the
-nice thing is the saturn manual is publically available, but sadly not the
+nice thing is the saturn manual is publicly available, but sadly not the
 PlayStation one so i have no idea how to play outside of the snes controls.
 also i have tony hawk on both the n64 and the ps1 but sadly the n64 cart
 does not feature battery backups and i do not have a memory pak so i cant
