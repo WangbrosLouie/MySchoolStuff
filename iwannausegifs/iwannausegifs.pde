@@ -205,7 +205,7 @@ void setup() {
 
 void draw() {
   background(0);
-  if(Movie!=null)image(Movie,70,0,470,430);
+  if(Movie!=null)image(Movie,70,0,570,430);
   process(Btns,Hitbox);
 }
 
@@ -224,7 +224,7 @@ void mouseReleased() {
       selectInput("Get your gif nya","gifGet");
       if(Movie!=null)Movie.stop();
       for(int i=0;i<Btns.length;i++){
-        if(Btns[i].doWhat==Action)Btns[i].text=">";
+        if(Btns[i].doWhat==3)Btns[i].text=">";
       } 
       break;
     case 2:

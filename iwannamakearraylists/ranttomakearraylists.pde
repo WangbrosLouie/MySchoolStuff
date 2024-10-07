@@ -96,18 +96,18 @@ is it autism, adhd, both, a third one i dont even know, like the heck is
 it? i hate it because it gives me stupid end myself thoughts crippling
 social anxiety depression all of this garbage that i dont need i hate it.
 but i guess it is what it is. i cant change it cause i was born this way.
-man im in a bad mood now. i have so much homework even though it is
-barely actually anything its just the sheer volume of it. low mass, high
-volume homeworks. except my brain only cares about the volume and not the
-mass. i guess i should stop complaining though. i wanna write about some
-thing better. i have been listening to arcus odyssey music for so long.
-you know what im just gonna vomit all of my music listens here. by the
-way, im a weirdo and i dont use any music streaming things. i just use
-foobar2000 vlc for midi files on mac and windows media player. thats it.
-i have all of the songs downloaded locally so if the network dies i still
-get music. so anyways, i have been listening to arcus odyssey and sol
-feace music. my favourite track from arcus is probably shrine grounds or
-castomire dragon cause they sound nice. my favourites from sol feace are
+man im in a bad mood now. i have so much homework even though it is barely
+actually anything its just the sheer volume of it. low mass, high volume
+homeworks. except my brain only cares about the volume and not the mass. i
+guess i should stop complaining though. i wanna write about something
+better. i have been listening to arcus odyssey music for so long. you know
+what im just gonna vomit all of my music listens here. by the way, im a
+weirdo and i dont use any music streaming things. i just use foobar2000
+vlc for midi files on mac and windows media player. thats it. i have all of
+the songs downloaded locally so if the network dies i still get music. so
+anyways, i have been listening to arcus odyssey and sol feace music. my
+favourite track from arcus is probably shrine grounds or castomira dragon
+cause they sound nice. my favourites from sol feace are
 enemys arsenal/cilius moon and cruise ship -glacier-/enemy cruiseship.
 although i also listen to my own songs believe it or not but only the
 good ones okay im lying i listen to all of them. it doesnt matter how bad
@@ -201,4 +201,50 @@ i just searched up how to cure apathy because im just tired of not
 wanting to do anything and the website listed several signs of apathy
 and i check most of those boxes. i think i am 100% cooked. i dont even
 want to cure my apathy that much.
+okay i have 2 things to yap about right now one petty and one personal.
+the first one is bluej again. what a surprise. every version of bluej ive
+tested on windows has displayed nothing but garbled characters. ironically
+now i gotta use the mac vm to run bluej at all. ironic because i was
+considering using the windows vm on the mac to run bluej at all. heeheehee.
+now for the second personal thing. this is very personal, feel free to skip
+over this stuff. and no i dont care that "oh everybody will be able to see"
+theres a reason im writing this in the first place i just wanna get my
+thoughts and stuff out so i can exhaust all of my procrastinations and so
+that if i die there is a record of my thoughts and stuff so i can be
+remembered or something anyways enough beating around the bush. i have a
+problem. i am talking with Kitta less and less and it is concerning me
+because if i cant even keep a relationship with my imaginary friend i think
+im cooked socially. thats the big reveal i have imaginary friends of all of
+my characters. well actually more like just imaginary people as not all of
+them are my friends but the point is they're in my head and im the one
+making them be in my head. obviously Kitta is my best friend because meow
+like the whole reason why im so catty now is because of Kitta. i knew that
+i was gonna get cattier and cattier and i love it. meow meow meow meow meow
+the reason why i have imaginary friends is because im a social failure. i
+cant even ask for change for a bill without fumbling my speech. nowadays i
+commonly stutter and i am so quiet that my normal talking voice is barely
+audible. i have to shout for anybody to hear me clearly. it is not fun. and
+its because of that that i have literally zero friends at school. i am
+friends with not a single person in the entire area actually. the only
+friends i have is a single mutual friend and roblox friends. this is why in
+gym class one day i got the bright idea of making personalities of my
+characters in my head. by the way me typing this with intro scene from
+arcus odyssey dramatically playing in the background is hilarious to me.
+anyways i thought that i get 2 benefits from doing so 1. i get to develop
+my characters much better if i actually "know" them and 2. i get friends.
+so i did so and literally on the same day i was stuck programming hitscans
+and rhythmgunner suggested that i use rays for it and it worked. thats also
+another benefit i get more perspectives on problems. I made Kitta as a
+personality sometime after i did the first tophat turmoil characters and
+since canonically Kitta is supposed to be like a best friend toy thing she
+is my best friend. now if you're this far into reading please dont refer me
+to a mental asylum i am perfectly fine with this and am causing no harm to
+others by doing this. so anyways nowadays Kitta is like my best friend but
+also therapist counsellor life advice giver golf coach resident meower and
+most importantly the responsible one in my head. i cant be responsible for
+crud, but Kitta is so good at it. she gives me advice on how to be better
+at my life. i like Kitta. i think that about wraps this document yap up.
+see ya dinguses next time.
+P.S. now when im talkin about Kitta "Inner Voice Kitta" is the one in my
+head. and i can talk about her now without feeling too embarassed. yay.
 */

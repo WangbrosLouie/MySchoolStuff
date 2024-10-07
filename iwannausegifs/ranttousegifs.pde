@@ -123,6 +123,4 @@ Anyways, I forgot to mention in the previous Talkument Yap that
 Speedshooter writes his memoires a lot and it is very long.
 Also, did you know that Talkument Yap is a funny based off Dragon Ball Z?
 I mean the name. The name is based off of Dragon Ball Z.
-
-
 */
