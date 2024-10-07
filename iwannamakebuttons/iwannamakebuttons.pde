@@ -37,6 +37,7 @@ class Button {
       doWhat = DOwHAT;
       text = TEXT;
       TOut = toUT;
+      THov = thOV;
       TIn = tiN;
       POut = poUT;
       PIn = piN;

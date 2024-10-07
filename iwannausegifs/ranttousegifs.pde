@@ -1,6 +1,6 @@
-   /*----------------------/
-   || rant to make buttons ||                            
-    /----------------------*/
+   /*------------------/
+   || rant to use gifs ||                            
+    /------------------*/
     
 /* heyo, I just wanted to write more rants so bad that I made a file for
 the next project before i was planning to work on it. classic me.

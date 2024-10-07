@@ -25,6 +25,7 @@ class Button { //code recycling go brrrr
   color THov = color(0,0,0);// text/tint hover
   color HOut = color(0,0,0);// hover outline
   color HIn = color(0,0,0);// hover fill
+  int tSize = 12;
   //text button constructor
   Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, String TEXT) {
     if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
@@ -40,11 +41,36 @@ class Button { //code recycling go brrrr
       doWhat = DOwHAT;
       text = TEXT;
       TOut = toUT;
+      THov = thOV;
       TIn = tiN;
       POut = poUT;
       PIn = piN;
       HIn = hiN;
       HOut = hoUT;
+    }
+  }
+  //text with size button constructor
+  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, String TEXT, int TsIZE) {
+    if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
+      Type = 1;
+    } else {
+      Type = abs(tYPE);
+      X = x;
+      Y = y;
+      XSize = xsIZE;
+      YSize = ysIZE;
+      Out = oUT;
+      In = iN;
+      doWhat = DOwHAT;
+      text = TEXT;
+      TOut = toUT;
+      THov = thOV;
+      TIn = tiN;
+      POut = poUT;
+      PIn = piN;
+      HIn = hiN;
+      HOut = hoUT;
+      tSize = TsIZE;
     }
   }
   //image button constructor
@@ -78,6 +104,7 @@ class Button { //code recycling go brrrr
       if(Type>0) {
         push();
         textAlign(CENTER,CENTER);
+        textSize(tSize);
         switch(Active) {
         case 0:
           fill(TOut);
@@ -163,15 +190,22 @@ class Button { //code recycling go brrrr
 Button[] Btns;
 PGraphics Hitbox;
 int Btn = 0;
-Gif[] Movies;
+Gif Movie;
 //the song of la palice is quite funny
+
 void setup() {
+  Btns = new Button[] {
+  new Button(1,1,0,0,70,480,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"Load GIF"),
+  new Button(1,2,70,430,200,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),"<<",24),
+  new Button(1,3,270,430,170,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),">",24),
+  new Button(1,4,440,430,200,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),">>",24)};
   size(640,480);
   Hitbox = createGraphics(640,480);
 }
 
 void draw() {
   background(0);
+  if(Movie!=null)image(Movie,70,0,470,430);
   process(Btns,Hitbox);
 }
 
@@ -187,14 +221,30 @@ void mouseReleased() {
     Action = Btns[Action-1].doWhat;
     switch(Action) {
     case 1:
-      //next gif
+      selectInput("Get your gif nya","gifGet");
+      if(Movie!=null)Movie.stop();
+      for(int i=0;i<Btns.length;i++){
+        if(Btns[i].doWhat==Action)Btns[i].text=">";
+      } 
       break;
     case 2:
-      //prev gif
+      //slow/rewind mode
       break;
     case 3:
-      Btns[Action-1].XSize+=3;
-      Btns[Action-1].YSize+=3;
+      if(Movie.isPlaying()) {
+        Movie.pause();
+        for(int i=0;i<Btns.length;i++){
+          if(Btns[i].doWhat==Action)Btns[i].text=">";
+        }
+      } else {
+        Movie.play();
+        for(int i=0;i<Btns.length;i++){
+          if(Btns[i].doWhat==Action)Btns[i].text="||";
+        } 
+      }
+      break;
+    case 4:
+      //fast forward
       break;
     default:
       
@@ -217,3 +267,10 @@ void process(Button[] B, PGraphics H) {
   }
   H.endDraw();
 }
+
+void gifGet(File giffy) {
+  if(giffy!=null){
+    Movie = new Gif(this,giffy.getAbsolutePath());
+  }
+}
+// Σ:3 this is sigma cat sigma cat is sigma because the ears are made of a sigma character say mraow to sigma cat
