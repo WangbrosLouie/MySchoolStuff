@@ -161,10 +161,10 @@ void draw() {
   }
   BMove.mult(0.98);
   BHMove += Grav;
-  if(BP.y<BWidth/2)BMove.y = -BMove.y;
-  if(BP.y>height-BWidth/2)
-  if(BP.x<BWidth/2)BMove.x = -BMove.x;
-  if(BP.x>width-BWidth/2)
+  if(BP.y<BWidth/2){BMove.y = -BMove.y; BP.y = BWidth/2;}
+  if(BP.y>height-BWidth/2){BMove.y = -BMove.y; BP.y = height - BWidth/2;}
+  if(BP.x<BWidth/2){BMove.x = -BMove.x; BP.x = BWidth/2;}
+  if(BP.x>width-BWidth/2){BMove.x = -BMove.x; BP.x = height - BWidth/2;}
   //Drawing the circles
   push();
   fill(0x7F000000);
