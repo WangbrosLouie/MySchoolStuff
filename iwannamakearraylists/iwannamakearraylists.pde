@@ -36,12 +36,13 @@ class Thing {//it's a thing. what more is there to say?
   
 }
 
-ArrayList<Thing> Things = new ArrayList<Thing>();
+ArrayList<Thing> Things = new ArrayList<Thing>();//how da heck i make them initial
 
 void setup() {
   size(640,480);
+  Things.add(new Thing());
 }
 
 void draw() {
-  
+  println(Things.get(0).P,Things.get(0).S,Things.get(0).D);
 }
