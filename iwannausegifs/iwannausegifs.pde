@@ -189,17 +189,107 @@ class Button { //code recycling go brrrr
 class Gif extends PImage {
   PImage[] frm;
   int frame = 0;
-  Gif(String pre, String suf, int frames, int speed) {
+  float frameCnt = frameCount;
+  float delay = 1; //in frames
+  boolean playing = false;
+  Gif(String pre, String suf, int frames) {
     super();
-    frame = 0;
-    for(int i=0;i<frames;i++) {
-      frm[i] = loadImage(pre+i+suf);
+    if(frames>0){
+      frame = 0;
+      frm = new PImage[frames];
+      for(int i=0;i<frames;i++) {
+        frm[i] = loadImage(pre+i+suf);
+      }
+      loadPixels();
+      frm[frame].loadPixels();
+      pixels = frm[frame].pixels;
+      frm[frame].updatePixels();
+      updatePixels();
     }
-    loadPixels();
-    frm[frame].loadPixels();
-    pixels = frm[frame].pixels;
-    frm[frame].updatePixels();
-    updatePixels();
+  }
+  
+  void play() {
+    if(!playing) {
+      playing = true;
+      while(playing) {
+        if(delay>frameCount-frameCnt) {
+          int adv = round(delay%(frameCount-frameCnt));
+          frameCnt += adv*delay;
+          frame += adv;
+          loadPixels();
+          frm[frame].loadPixels();
+          pixels = frm[frame].pixels;
+          frm[frame].updatePixels();
+          updatePixels();
+        }
+      }
+    }
+  }
+  
+  void play(float DELAY) {
+    if(!playing) {
+      delay = DELAY;
+      playing = true;
+      while(playing) {
+        if(delay>frameCount-frameCnt) {
+          int adv = round(delay%(frameCount-frameCnt));
+          frameCnt += adv*delay;
+          frame += adv;
+          loadPixels();
+          frm[frame].loadPixels();
+          pixels = frm[frame].pixels;
+          frm[frame].updatePixels();
+          updatePixels();
+        }
+      }
+    }
+  }
+  
+  void pause() {
+    playing = false;
+  }
+  
+  void stop() {
+    playing = false;
+    frame = 0;
+  }
+  
+  void restart() {
+    if(!playing) {
+    frame = 0;
+      playing = true;
+      while(playing) {
+        if(delay>frameCount-frameCnt) {
+          int adv = round(delay%(frameCount-frameCnt));
+          frameCnt += adv*delay;
+          frame += adv;
+          loadPixels();
+          frm[frame].loadPixels();
+          pixels = frm[frame].pixels;
+          frm[frame].updatePixels();
+          updatePixels();
+        }
+      }
+    }
+  }
+  
+  void restart(float DELAY) {
+    if(!playing) {
+    frame = 0;
+    delay = DELAY;
+    playing = true;
+    while(playing) {
+      if(delay>frameCount-frameCnt) {
+        int adv = round(delay%(frameCount-frameCnt));
+        frameCnt += adv*delay;
+        frame += adv;
+        loadPixels();
+        frm[frame].loadPixels();
+        pixels = frm[frame].pixels;
+        frm[frame].updatePixels();
+        updatePixels();
+      }
+    }
   }
 }
 
