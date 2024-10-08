@@ -275,19 +275,20 @@ class Gif extends PImage {
   
   void restart(float DELAY) {
     if(!playing) {
-    frame = 0;
-    delay = DELAY;
-    playing = true;
-    while(playing) {
-      if(delay>frameCount-frameCnt) {
-        int adv = round(delay%(frameCount-frameCnt));
-        frameCnt += adv*delay;
-        frame += adv;
-        loadPixels();
-        frm[frame].loadPixels();
-        pixels = frm[frame].pixels;
-        frm[frame].updatePixels();
-        updatePixels();
+      frame = 0;
+      delay = DELAY;
+      playing = true;
+      while(playing) {
+        if(delay>frameCount-frameCnt) {
+          int adv = round(delay%(frameCount-frameCnt));
+          frameCnt += adv*delay;
+          frame += adv;
+          loadPixels();
+          frm[frame].loadPixels();
+          pixels = frm[frame].pixels;
+          frm[frame].updatePixels();
+          updatePixels();
+        }
       }
     }
   }
@@ -327,17 +328,16 @@ void mouseReleased() {
     Action = Btns[Action-1].doWhat;
     switch(Action) {
     case 1:
-      selectInput("Get your gif nya","gifGet");
-      if(Movie!=null)Movie.stop();
-      for(int i=0;i<Btns.length;i++){
-        if(Btns[i].doWhat==3)Btns[i].text=">";
-      } 
+      String pre = new java.util.Scanner(System.in).nextLine();
+      String suf = new java.util.Scanner(System.in).nextLine();
+      int frames = int(new java.util.Scanner(System.in).nextLine());
+      Movie = new Gif(pre,suf,frames);
       break;
     case 2:
       //slow/rewind mode
       break;
     case 3:
-      if(Movie.isPlaying()) {
+      if(Movie.playing) {
         Movie.pause();
         for(int i=0;i<Btns.length;i++){
           if(Btns[i].doWhat==Action)Btns[i].text=">";
@@ -376,7 +376,7 @@ void process(Button[] B, PGraphics H) {
 
 void gifGet(File giffy) {
   if(giffy!=null){
-    Movie = new Gif(this,giffy.getAbsolutePath());
+    //Movie = new Gif(this,giffy.getAbsolutePath());
   }
 }
 // Σ:3 this is sigma cat sigma cat is sigma because the ears are made of a sigma character say mraow to sigma cat
