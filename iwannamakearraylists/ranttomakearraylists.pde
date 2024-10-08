@@ -32,13 +32,13 @@ genesis is easier than the snes because it uses the 68k also used in many
 japanese home pcs and the original macintoshes in conjunction with a z80
 which is used in all of the texas instruments graphing calculators and is
 super easy to learn. the snes has like a proprietary processor based off of
-the nes s processor i think? and the sound processor is also one of those
+the nes's processor i think? and the sound processor is also one of those
 but different? and the next console the sega saturn is like a cd 32x but
 without the genesis parts and a proprietary sound processor like the other
 consoles. but it has 2 gpus and 2 cpus and was incredibly hard to program
 on it has to be better. i bought the nintendo 64 when i was young because
 it was my favourite console at the time because look at that controller.
- _---_  im gonna make some ascii art of it on the right but just look at it
+ _---_  im gonna make some ascii art of it on the left but just look at it
 /+,*,#\ its a crazy looking controller with 3 grips like what is the third
 \/|o|\/ grip for my private? at least it was the first controller made by
    V    one of the big gaming companies to have an analog stick. that was
@@ -247,4 +247,37 @@ at my life. i like Kitta. i think that about wraps this document yap up.
 see ya dinguses next time.
 P.S. now when im talkin about Kitta "Inner Voice Kitta" is the one in my
 head. and i can talk about her now without feeling too embarassed. yay.
+man i just cant resist. i just gotta write more or else im gonna go crazy
+well more crazy than i am already at least. today while walking back to
+school from lunch i got this random burst of such motivation that lasted
+until like 10 minutes back into school. that motivational feeling was so
+extreme compared to what i usually feel that i need more. who knows, maybe
+i can actually get work done in my life if im motivated like that in a
+productive enviroment (ie my pc at home or the pcs at school) but sadly i
+got nothing done because it was english class. bummer. but maybe it has
+something to do with me ranting excessively, so i guess i can also see if
+this is what caused that sudden motivation, although all i did at lunch was
+eat half a plate of broccoli and rice and get a stomach ache. meow, if i
+could get that motivation while working on like a project or my game i
+could get so much done compared to normal. like, i would basically almost
+get as much done in that time as a normal person. can you believe it. oh
+right i guess i should write more about inner Kitta. sadly its getting
+worse and im barely talking with her anymore. i just want it to go back
+like it was before because i really like Kitta. you know inner Kitta is one
+of the reasons that i dont want to get therapy because im afraid that
+therapy will get rid of her and i obviously dont want that to happen. i
+know that to have inner Kitta with me i have to think of her but im just
+not doing that much lately apparently. i think i might be going dumber or
+something. or maybe im just not as bored as before or something. or maybe
+inner Kitta is finally fusing into my actual personality and then i will
+be Kitta and Kitta will be me (although we already technically are). that
+i am still not ok with because the whole point of having inner Kitta and
+cohorts is to have company. oh well if i lose her its just another thing
+that ive lost forever. on a lighter note i still talk with her its just not
+much thats the problem. also if this is a sign of severe mental illness or
+something just know that im faking it because im making the personalities
+in my head by my own volition and not from intrusive thoughts. i guess
+thats it for today im gonna sleep early at 11:30 nyahoo mrrp mrrp hooray.
+but first ill eat some more yogurt because yummers yummrrps. too much mrrp.
+i dont even speak mrrpian i only speak meowese and nyaese.
 */

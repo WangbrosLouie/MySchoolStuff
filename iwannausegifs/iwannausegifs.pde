@@ -5,8 +5,6 @@
 |* will use in this one *|
 \*_Date:_Oct.2,_2024____*/
 
-import gifAnimation.*;
-
 class Button { //code recycling go brrrr
   int Type = 0; //positive type is text, negative type is image
   int X = 0;
@@ -94,6 +92,24 @@ class Button { //code recycling go brrrr
       PIn = piN;
       HIn = hiN;
       HOut = hoUT;
+    }
+  }
+  
+  //man i wanna use the gif library
+  class Gif extends PImage {
+    PImage[] frm;
+    int frame = 0;
+    Gif(String pre, String suf, int frames, int speed) {
+      super();
+      frame = 0;
+      for(int i=0;i<frames;i++) {
+        frm[i] = loadImage(pre+i+suf);
+      }
+      loadPixels();
+      frm[frame].loadPixels();
+      pixels = frm[frame].pixels;
+      frm[frame].updatePixels();
+      updatePixels();
     }
   }
   
@@ -239,7 +255,7 @@ void mouseReleased() {
       } else {
         Movie.play();
         for(int i=0;i<Btns.length;i++){
-          if(Btns[i].doWhat==Action)Btns[i].text="||";
+          if(Btns[i].doWhat==Action)Btns[i].text="| |";
         } 
       }
       break;
