@@ -95,24 +95,6 @@ class Button { //code recycling go brrrr
     }
   }
   
-  //man i wanna use the gif library
-  class Gif extends PImage {
-    PImage[] frm;
-    int frame = 0;
-    Gif(String pre, String suf, int frames, int speed) {
-      super();
-      frame = 0;
-      for(int i=0;i<frames;i++) {
-        frm[i] = loadImage(pre+i+suf);
-      }
-      loadPixels();
-      frm[frame].loadPixels();
-      pixels = frm[frame].pixels;
-      frm[frame].updatePixels();
-      updatePixels();
-    }
-  }
-  
   void draw(byte Active) {//2 is pressed, 1 is hover, 0 is idle
     if(Type==0||Type==-0) {
       println("Warning: Uninitialized button.");
@@ -200,6 +182,24 @@ class Button { //code recycling go brrrr
     case 2:
       H.ellipse(X,Y,XSize,YSize);
     }
+  }
+}
+
+//man i wanna use the gif library
+class Gif extends PImage {
+  PImage[] frm;
+  int frame = 0;
+  Gif(String pre, String suf, int frames, int speed) {
+    super();
+    frame = 0;
+    for(int i=0;i<frames;i++) {
+      frm[i] = loadImage(pre+i+suf);
+    }
+    loadPixels();
+    frm[frame].loadPixels();
+    pixels = frm[frame].pixels;
+    frm[frame].updatePixels();
+    updatePixels();
   }
 }
 
