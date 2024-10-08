@@ -186,7 +186,7 @@ class Button { //code recycling go brrrr
 }
 
 //man i wanna use the gif library
-class Gif extends PImage {
+class Gif extends PImage implements Runnable {
   PImage[] frm;
   int frame = 0;
   float frameCnt = frameCount;
@@ -208,21 +208,29 @@ class Gif extends PImage {
     }
   }
   
+  Gif() {
+    super();
+    frm = new PImage[0];
+  }
+  
+  void run() {
+    if(playing) {
+      if(delay>frameCount-frameCnt) {
+        int adv = round(delay%(frameCount-frameCnt));
+        frameCnt += adv*delay;
+        frame += adv;
+        loadPixels();
+        frm[frame].loadPixels();
+        pixels = frm[frame].pixels;
+        frm[frame].updatePixels();
+        updatePixels();
+      }
+    }
+  }
+  
   void play() {
     if(!playing) {
       playing = true;
-      while(playing) {
-        if(delay>frameCount-frameCnt) {
-          int adv = round(delay%(frameCount-frameCnt));
-          frameCnt += adv*delay;
-          frame += adv;
-          loadPixels();
-          frm[frame].loadPixels();
-          pixels = frm[frame].pixels;
-          frm[frame].updatePixels();
-          updatePixels();
-        }
-      }
     }
   }
   
@@ -230,18 +238,6 @@ class Gif extends PImage {
     if(!playing) {
       delay = DELAY;
       playing = true;
-      while(playing) {
-        if(delay>frameCount-frameCnt) {
-          int adv = round(delay%(frameCount-frameCnt));
-          frameCnt += adv*delay;
-          frame += adv;
-          loadPixels();
-          frm[frame].loadPixels();
-          pixels = frm[frame].pixels;
-          frm[frame].updatePixels();
-          updatePixels();
-        }
-      }
     }
   }
   
@@ -297,7 +293,7 @@ class Gif extends PImage {
 Button[] Btns;
 PGraphics Hitbox;
 int Btn = 0;
-Gif Movie;
+Gif Movie = new Gif();
 //the song of la palice is quite funny
 
 void setup() {
@@ -308,6 +304,7 @@ void setup() {
   new Button(1,4,440,430,200,50,color(0),color(200),color(0),color(150),color(0),color(100),color(0),color(0),color(0),">>",24)};
   size(640,480);
   Hitbox = createGraphics(640,480);
+  //Movie.start();
 }
 
 void draw() {
@@ -328,10 +325,7 @@ void mouseReleased() {
     Action = Btns[Action-1].doWhat;
     switch(Action) {
     case 1:
-      String pre = new java.util.Scanner(System.in).nextLine();
-      String suf = new java.util.Scanner(System.in).nextLine();
-      int frames = int(new java.util.Scanner(System.in).nextLine());
-      Movie = new Gif(pre,suf,frames);
+      selectInput("Get your gif nya","gifGet");
       break;
     case 2:
       //slow/rewind mode
@@ -376,7 +370,7 @@ void process(Button[] B, PGraphics H) {
 
 void gifGet(File giffy) {
   if(giffy!=null){
-    //Movie = new Gif(this,giffy.getAbsolutePath());
+    Movie.frm = (PImage[])append(Movie.frm, loadImage(giffy.getAbsolutePath()));
   }
 }
 // Σ:3 this is sigma cat sigma cat is sigma because the ears are made of a sigma character say mraow to sigma cat
