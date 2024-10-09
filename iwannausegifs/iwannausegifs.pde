@@ -189,6 +189,7 @@ class Button { //code recycling go brrrr
 class Gif extends PImage implements Runnable {
   PImage[] frm;
   int frame = 0;
+  int numFrames = 0;
   float frameCnt = frameCount;
   float delay = 1; //in frames
   boolean playing = false;
@@ -214,16 +215,19 @@ class Gif extends PImage implements Runnable {
   }
   
   void run() {
-    if(playing) {
+    if(playing&&numFrames>0) {
       if(delay>frameCount-frameCnt) {
         int adv = round(delay%(frameCount-frameCnt));
         frameCnt += adv*delay;
+        frameCnt %= numFrames;
         frame += adv;
         loadPixels();
-        frm[frame].loadPixels();
-        pixels = frm[frame].pixels;
-        frm[frame].updatePixels();
+        int[] temp = new int[0];
+        arrayCopy(pixels,temp);
         updatePixels();
+        frm[frame].loadPixels();
+        pixels = temp;
+        frm[frame].updatePixels();
       }
     }
   }
@@ -288,6 +292,11 @@ class Gif extends PImage implements Runnable {
       }
     }
   }
+  
+  void addImage(PImage add) {
+    frm = (PImage[])append(frm,add);
+    numFrames++;
+  }
 }
 
 Button[] Btns;
@@ -305,6 +314,7 @@ void setup() {
   size(640,480);
   Hitbox = createGraphics(640,480);
   //Movie.start();
+new Thread(Movie).start();
 }
 
 void draw() {
