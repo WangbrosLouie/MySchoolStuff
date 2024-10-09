@@ -17,32 +17,38 @@ class Thing {//it's a thing. what more is there to say?
   }
   Thing(){
     P = new PVector(random(0,width),random(0,height));
-    S = round(random(10,40));
+    S = 60;
     D = PVector.fromAngle(random(0,TAU));
   }
   void draw(ArrayList<Thing> Stuff) {
-    P.add(D);
-    if(P.x<0||P.x>width){P.x = constrain(P.x,0,width);D.x = -D.x;}
-    if(P.y<0||P.y>width){P.y = constrain(P.y,0,width);D.y = -D.y;}
+    for(int i=0;i<5;i++) {
+      P.add(D);
+      if(P.x<S/2||P.x>width-(S/2)){P.x = constrain(P.x,S/2,width-(S/2));D.x = -D.x;}
+      if(P.y<S/2||P.y>height-(S/2)){P.y = constrain(P.y,S/2,height-(S/2));D.y = -D.y;}
+    }
+    fill(#3972A7);
     circle(P.x,P.y,S);
     for (Thing thin : Stuff) {
       float dist = P.dist(thin.P)*5;
       push();
-      stroke(255,255-dist);
+      stroke(255,255-(dist/3));
       line(P.x,P.y,thin.P.x,thin.P.y);
       pop();
     }
   }
-  
 }
 
 ArrayList<Thing> Things = new ArrayList<Thing>();//how da heck i make them initial
 
 void setup() {
   size(640,480);
-  Things.add(new Thing());
+  for(int i=0;i<10;i++)Things.add(new Thing());
 }
 
 void draw() {
-  println(Things.get(0).P,Things.get(0).S,Things.get(0).D);
+  colorMode(ARGB);
+  background(0x7F3FFF,1);
+  for(Thing thang : Things) {
+    thang.draw(Things);
+  }
 }
