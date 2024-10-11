@@ -17,7 +17,7 @@ FPoly frame, fram2;
 FCircle ball, tire1, tire2, tire3, tire4;
 //FCircle[] tires;
 FDistanceJoint[] axles;
-boolean[] Keys = new boolean[12];
+boolean[] Keys = new boolean[14]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump?
 
 
 void setup() {
@@ -47,8 +47,6 @@ void setup() {
   fram2.vertex(100,50);
   fram2.vertex(0,50);
   fram2.setPosition(width-100,0);
-  //tires = new FCircle[4];
-  //java.util.Arrays.fill(tires,new FCircle(20));
   tire1 = new FCircle(20);
   tire2 = new FCircle(20);
   tire3 = new FCircle(20);
@@ -94,6 +92,7 @@ void setup() {
   myWorld.add(tire3);
   myWorld.add(tire4);
   for(int i=0;i<4;i++) {
+    axles[i].setDrawable(false);
     myWorld.add(axles[i]);
   }
   myWorld.add(ball);
@@ -103,12 +102,30 @@ void draw() {
   float ballVelo = pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2);
   if(ballVelo<0.5)ballVelo = 0;
   translate(round(width/2-ball.getX())+ballVelo,round(height/2-ball.getY())+ballVelo);
-  scale(1-ballVelo/400);
+  scale(1-ballVelo/400);//add limit to the ball velocity
   background(200);
-  //tire1.addTorque(100);
-  //tire2.addTorque(100);
+  processKeys();
+  if(Keys[2]&&!Keys[6])Keys[6]=true;
+  if(Keys[6]&&!Keys[2])Keys[6]=false;
   myWorld.step();
   myWorld.draw();
+}
+
+void processKeys() {
+  if(Keys[0]){
+    tire1.addTorque(-10);
+    tire2.addTorque(-10);
+    if(!Keys[8]&&!Keys[9])frame.addTorque(-500);
+  }
+  if(Keys[1]){
+    tire1.addTorque(10);
+    tire2.addTorque(10);
+    frame.addTorque(500);
+  }
+  if(Keys[2]&&!Keys[6]){//&&Keys[8]&&Keys[9]){
+    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(5000);
+    frame.addImpulse(jump.x,jump.y,0,25);
+  }
 }
 
 void keyPressed() {
