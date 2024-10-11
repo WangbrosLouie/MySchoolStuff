@@ -13,16 +13,18 @@ void settings() {
 
 FWorld myWorld;
 FBox floor;
-FPoly frame;
-FCircle tire, tire2, ball;
-FCompound car1;
-FCompound car2;
+FPoly frame, fram2;
+FCircle ball, tire1, tire2, tire3, tire4;
+//FCircle[] tires;
 FDistanceJoint[] axles;
-boolean[] Keys = new boolean[6];
-boolean[] deKeys = new boolean[6];
+boolean[] Keys = new boolean[12];
+
 
 void setup() {
+  java.util.Arrays.fill(Keys,false);
   myWorld = new FWorld();
+  myWorld.setGrabbable(false);
+  myWorld.setGravity(0,500);
   floor = new FBox(width,30);
   floor.setStatic(true);
   floor.setPosition(width/2,height-15);
@@ -34,52 +36,77 @@ void setup() {
   frame.vertex(80,20);
   frame.vertex(100,20);
   frame.vertex(100,50);
-  frame.vertex(90,50);
-  frame.vertex(80,40);
-  frame.vertex(70,50);
-  frame.vertex(30,50);
-  frame.vertex(20,40);
-  frame.vertex(10,50);
   frame.vertex(0,50);
-  car1 = new FCompound();
-  car2 = new FCompound();
-  car1.addBody(frame);
-  car2.addBody(frame);
-  tire = new FCircle(20);
+  fram2 = new FPoly();
+  fram2.vertex(0,20);
+  fram2.vertex(20,20);
+  fram2.vertex(30,0);
+  fram2.vertex(70,0);
+  fram2.vertex(80,20);
+  fram2.vertex(100,20);
+  fram2.vertex(100,50);
+  fram2.vertex(0,50);
+  fram2.setPosition(width-100,0);
+  //tires = new FCircle[4];
+  //java.util.Arrays.fill(tires,new FCircle(20));
+  tire1 = new FCircle(20);
   tire2 = new FCircle(20);
-  tire.setPosition(20,50);
-  car1.addBody(tire);
-  car2.addBody(tire);
+  tire3 = new FCircle(20);
+  tire4 = new FCircle(20);
+  tire1.setPosition(20,50);
   tire2.setPosition(80,50);
-  car1.addBody(tire2);
-  car2.addBody(tire2);
-  axles = new FDistanceJoint[] {new FDistanceJoint((FBody)car1.getBodies().get(0),(FBody)car1.getBodies().get(1)),
-  new FDistanceJoint((FBody)car1.getBodies().get(0),(FBody)car1.getBodies().get(2)),
-  new FDistanceJoint((FBody)car2.getBodies().get(0),(FBody)car2.getBodies().get(1)),
-  new FDistanceJoint((FBody)car2.getBodies().get(0),(FBody)car2.getBodies().get(1))};
+  tire3.setPosition(width-20,50);
+  tire4.setPosition(width-80,50);
+  tire1.setFriction(1);
+  tire2.setFriction(1);
+  tire3.setFriction(1);
+  tire4.setFriction(1);
+  axles = new FDistanceJoint[] {new FDistanceJoint(frame,tire1),
+  new FDistanceJoint(frame,tire2),
+  new FDistanceJoint(fram2,tire3),
+  new FDistanceJoint(fram2,tire4)};
   for(int i=0;i<2;i++) {
-    axles[i].setAnchor1(20,50);
-    axles[i].setAnchor2(10,10);
-    axles[i+1].setAnchor1(80,50);
-    axles[i+1].setAnchor2(10,10);
+    axles[i*2].setAnchor1(20,50);
+    axles[i*2].setAnchor2(0,0);
+    axles[i*2].setLength(0);
+    axles[i*2].setDamping(0);
+    axles[i*2+1].setAnchor1(80,50);
+    axles[i*2+1].setAnchor2(0,0);
+    axles[i*2+1].setLength(0);
+    axles[i*2+1].setDamping(0);
   }
   ball = new FCircle(60);
   ball.setPosition(width/2,height/2);
+  ball.setFriction(0.5);
+  ball.setDensity(0.01);
+  ball.setRestitution(0.8);
+  frame.setGroupIndex(-1);
+  tire1.setGroupIndex(-1);
+  tire2.setGroupIndex(-1);
+  fram2.setGroupIndex(-2);
+  tire3.setGroupIndex(-2);
+  tire4.setGroupIndex(-2);
   myWorld.add(floor);
-  myWorld.add(car1);
-  car2.setPosition(width-100,0);
-  myWorld.add(car2);
+  myWorld.add(frame);
+  myWorld.add(fram2);
+  myWorld.add(tire1);
+  myWorld.add(tire2);
+  myWorld.add(tire3);
+  myWorld.add(tire4);
   for(int i=0;i<4;i++) {
     myWorld.add(axles[i]);
   }
   myWorld.add(ball);
-  java.util.Arrays.fill(deKeys,false);
 }
 
 void draw() {
+  float ballVelo = pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2);
+  if(ballVelo<0.5)ballVelo = 0;
+  translate(round(width/2-ball.getX())+ballVelo,round(height/2-ball.getY())+ballVelo);
+  scale(1-ballVelo/400);
   background(200);
-  FBody temp = (FBody)car1.getBodies().get(1);
-  temp.setAngularVelocity(1);
+  //tire1.addTorque(100);
+  //tire2.addTorque(100);
   myWorld.step();
   myWorld.draw();
 }
