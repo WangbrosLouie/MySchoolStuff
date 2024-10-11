@@ -5,6 +5,7 @@
 \*_Date:_Oct.10,_2024______*/
 
 import fisica.*;
+import gifAnimation.*;
 
 void settings() {
   Fisica.init(this);
@@ -12,22 +13,35 @@ void settings() {
 }
 
 FWorld myWorld;
-FBox floor;
+FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2;
 FPoly frame, fram2;
 FCircle ball, tire1, tire2, tire3, tire4;
 //FCircle[] tires;
 FDistanceJoint[] axles;
-boolean[] Keys = new boolean[14]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump?
+boolean[] Keys = new boolean[16]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
+Gif bg;
+int goalHeight = 200;
 
 
 void setup() {
   java.util.Arrays.fill(Keys,false);
-  myWorld = new FWorld();
+  bg = new Gif(this,"chip.gif");
+  bg.loop();
+  myWorld = new FWorld(-width*2,-height,width*3,height);
   myWorld.setGrabbable(false);
   myWorld.setGravity(0,500);
-  floor = new FBox(width,30);
+  floor = new FBox(width*4,30);
   floor.setStatic(true);
   floor.setPosition(width/2,height-15);
+  roofe = new FBox(width*4,30);
+  roofe.setStatic(true);
+  roofe.setPosition(width/2,-height*2-15);
+  lwall = new FBox(30,height*2-goalHeight);
+  lwall.setStatic(true);
+  lwall.setPosition(-width*1.5,-goalHeight);
+  rwall = new FBox(30,height*2-goalHeight);
+  rwall.setStatic(true);
+  rwall.setPosition(width*2.5,-goalHeight);
   frame = new FPoly();
   frame.vertex(0,20);
   frame.vertex(20,20);
@@ -37,6 +51,7 @@ void setup() {
   frame.vertex(100,20);
   frame.vertex(100,50);
   frame.vertex(0,50);
+  frame.setDensity(3);
   fram2 = new FPoly();
   fram2.vertex(0,20);
   fram2.vertex(20,20);
@@ -47,6 +62,7 @@ void setup() {
   fram2.vertex(100,50);
   fram2.vertex(0,50);
   fram2.setPosition(width-100,0);
+  fram2.setDensity(3);
   tire1 = new FCircle(20);
   tire2 = new FCircle(20);
   tire3 = new FCircle(20);
@@ -55,10 +71,14 @@ void setup() {
   tire2.setPosition(80,50);
   tire3.setPosition(width-20,50);
   tire4.setPosition(width-80,50);
-  tire1.setFriction(1);
-  tire2.setFriction(1);
-  tire3.setFriction(1);
-  tire4.setFriction(1);
+  tire1.setFriction(10);
+  tire2.setFriction(10);
+  tire3.setFriction(10);
+  tire4.setFriction(10);
+  tire1.setBullet(true);
+  tire2.setBullet(true);
+  tire3.setBullet(true);
+  tire4.setBullet(true);
   axles = new FDistanceJoint[] {new FDistanceJoint(frame,tire1),
   new FDistanceJoint(frame,tire2),
   new FDistanceJoint(fram2,tire3),
@@ -76,8 +96,9 @@ void setup() {
   ball = new FCircle(60);
   ball.setPosition(width/2,height/2);
   ball.setFriction(0.5);
-  ball.setDensity(0.01);
+  ball.setDensity(0.1);
   ball.setRestitution(0.8);
+  ball.setBullet(true);
   frame.setGroupIndex(-1);
   tire1.setGroupIndex(-1);
   tire2.setGroupIndex(-1);
@@ -85,6 +106,9 @@ void setup() {
   tire3.setGroupIndex(-2);
   tire4.setGroupIndex(-2);
   myWorld.add(floor);
+  myWorld.add(roofe);
+  myWorld.add(lwall);
+  myWorld.add(rwall);
   myWorld.add(frame);
   myWorld.add(fram2);
   myWorld.add(tire1);
@@ -99,33 +123,65 @@ void setup() {
 }
 
 void draw() {
-  float ballVelo = pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2);
+  float ballVelo = round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5;
   if(ballVelo<0.5)ballVelo = 0;
-  translate(round(width/2-ball.getX())+ballVelo,round(height/2-ball.getY())+ballVelo);
-  scale(1-ballVelo/400);//add limit to the ball velocity
+  if(ballVelo>50)ballVelo = 50;
   background(200);
   processKeys();
-  if(Keys[2]&&!Keys[6])Keys[6]=true;
-  if(Keys[6]&&!Keys[2])Keys[6]=false;
   myWorld.step();
+  float bgScale = 300;
+  for(int i=-1;i<1+height/bgScale;i++) {
+    for(int j=-1;j<1+width/bgScale;j++) {
+      //image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
+    }
+  }
+  translate(round((width-ball.getX())/2)+ballVelo,round((height-ball.getY())/2)+ballVelo);
+  scale(0.5-ballVelo/400);//add limit to the ball velocity
   myWorld.draw();
 }
 
 void processKeys() {
   if(Keys[0]){
-    tire1.addTorque(-10);
-    tire2.addTorque(-10);
+    tire1.addTorque(-100);
+    tire2.addTorque(-100);
     if(!Keys[8]&&!Keys[9])frame.addTorque(-500);
   }
   if(Keys[1]){
-    tire1.addTorque(10);
-    tire2.addTorque(10);
-    frame.addTorque(500);
+    tire1.addTorque(100);
+    tire2.addTorque(100);
+    if(!Keys[8]&&!Keys[9])frame.addTorque(500);
   }
-  if(Keys[2]&&!Keys[6]){//&&Keys[8]&&Keys[9]){
-    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(5000);
+  if(Keys[2]&&!Keys[6]&&Keys[12]){
+    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(15000);
     frame.addImpulse(jump.x,jump.y,0,25);
+    Keys[12] = false;
+  } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
+    frame.setAngularVelocity(-frame.getRotation()*4);
   }
+  if(Keys[3]){
+    tire3.addTorque(-100);
+    tire4.addTorque(-100);
+    if(!Keys[10]&&!Keys[11])fram2.addTorque(-500);
+  }
+  if(Keys[4]){
+    tire3.addTorque(100);
+    tire4.addTorque(100);
+    if(!Keys[10]&&!Keys[11])fram2.addTorque(500);
+  }
+  if(Keys[5]&&!Keys[7]&&Keys[13]){
+    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(15000);
+    fram2.addImpulse(jump.x,jump.y,0,25);
+    println("A");
+    Keys[13] = false;
+  } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
+    fram2.setAngularVelocity(-fram2.getRotation()*4);
+  }
+  if(Keys[2]&&!Keys[6])Keys[6]=true;
+  if(Keys[6]&&!Keys[2])Keys[6]=false;
+  if(Keys[8]&&Keys[9])Keys[12]=true;
+  if(Keys[5]&&!Keys[7])Keys[7]=true;
+  if(Keys[6]&&!Keys[5])Keys[7]=false;
+  if(Keys[10]&&Keys[11])Keys[13]=true;
 }
 
 void keyPressed() {
@@ -172,4 +228,22 @@ void keyReleased() {
     Keys[5] = false;
     break;
   }
+}
+
+void contactStarted(FContact contact) {
+  if(contact.contains(tire1,floor))Keys[8]=true;
+  if(contact.contains(tire2,floor))Keys[9]=true;
+  if(contact.contains(tire3,floor))Keys[10]=true;
+  if(contact.contains(tire4,floor))Keys[11]=true;
+  if(contact.contains(frame,floor))Keys[14]=true;
+  if(contact.contains(fram2,floor))Keys[15]=true;
+}
+
+void contactEnded(FContact contact) {
+  if(contact.contains(tire1,floor))Keys[8]=false;
+  if(contact.contains(tire2,floor))Keys[9]=false;
+  if(contact.contains(tire3,floor))Keys[10]=false;
+  if(contact.contains(tire4,floor))Keys[11]=false;
+  if(contact.contains(frame,floor))Keys[14]=false;
+  if(contact.contains(fram2,floor))Keys[15]=false;
 }
