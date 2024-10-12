@@ -23,8 +23,8 @@ Gif bg;
 int goalHeight = height*2;
 int scor1 = 0;
 int scor2 = 0;
-int boos1 = 33;
-int boos2 = 33;
+float boos1 = 33;
+float boos2 = 33;
 byte jmp1 = 0;
 byte jmp2 = 0;
 float ballVelo = 0;
@@ -57,7 +57,7 @@ void setup() {
   frame.vertex(100,20);
   frame.vertex(100,50);
   frame.vertex(0,50);
-  frame.setPosition(0,height-105);
+  frame.setPosition(0,height-125);
   frame.setDensity(3);
   fram2 = new FPoly();
   fram2.vertex(0,20);
@@ -68,16 +68,16 @@ void setup() {
   fram2.vertex(100,20);
   fram2.vertex(100,50);
   fram2.vertex(0,50);
-  fram2.setPosition(width-100,height-105);
+  fram2.setPosition(width-100,height-125);
   fram2.setDensity(3);
   tire1 = new FCircle(30);
   tire2 = new FCircle(30);
   tire3 = new FCircle(30);
   tire4 = new FCircle(30);
-  tire1.setPosition(20,height-60);
-  tire2.setPosition(80,height-60);
-  tire3.setPosition(width-20,height-60);
-  tire4.setPosition(width-80,height-60);
+  tire1.setPosition(20,height-80);
+  tire2.setPosition(80,height-80);
+  tire3.setPosition(width-20,height-80);
+  tire4.setPosition(width-80,height-80);
   tire1.setFriction(10);
   tire2.setFriction(10);
   tire3.setFriction(10);
@@ -135,6 +135,10 @@ void draw() {
   if(ballVelo<0.5)ballVelo = 0;
   if(ballVelo>50)ballVelo = 50;
   background(200);
+  boos1+=0.25;
+  boos1 = constrain(boos1,0,100);
+  boos2+=0.25;
+  boos2 = constrain(boos2,0,100);
   processKeys();
   myWorld.step();
   float bgScale = 300;
@@ -153,7 +157,13 @@ void draw() {
   text(scor1,30,30);
   textAlign(RIGHT,CENTER);
   text(scor2,width-30,30);
-  println(ball.isSleeping());
+  fill(0);
+  rect(0,height,100,-30);
+  rect(width,height,-100,-30);
+  fill(boos1*2.55,0,0);
+  rect(0,height,boos1,-30);
+  fill(boos2*2.55,0,0);
+  rect(width,height,-boos2,-30);
 }
 
 void processKeys() {
@@ -177,9 +187,11 @@ void processKeys() {
   if(!(Keys[16]&&Keys[17])) {
     if(Keys[16]) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(500);
       frame.addImpulse(jump.x,jump.y,0,0);
+      boos1 -= 0.7;
     }
     if(Keys[17]) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(500);
       frame.addImpulse(jump.x,jump.y,0,0);
+      boos1 -= 0.7;
     }
   }
   if(Keys[3]){
@@ -202,19 +214,19 @@ void processKeys() {
   if(!(Keys[18]&&Keys[19])){
     if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(500);
       fram2.addImpulse(jump.x,jump.y,0,0);
-      boos2 -= 2;
+      boos2 -= 0.7;
     }
     if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(500);
       fram2.addImpulse(jump.x,jump.y,0,0);
-      boos2 -= 2;
+      boos2 -= 0.7;
     }
   }
   if(Keys[2]&&!Keys[6])Keys[6]=true;
   if(Keys[6]&&!Keys[2])Keys[6]=false;
-  if(Keys[8]||Keys[9])Keys[12]=true;
   if(Keys[5]&&!Keys[7])Keys[7]=true;
   if(Keys[7]&&!Keys[5])Keys[7]=false;
-  if(Keys[10]||Keys[11])Keys[13]=true;
+  if(jmp1>0)Keys[12]=true;
+  if(jmp2>0)Keys[13]=true;
 }
 
 void keyPressed() {
@@ -228,13 +240,13 @@ void keyPressed() {
   case 87:
     Keys[2] = true;
     break;
-  case 37:
+  case 127:
     Keys[3] = true;
     break;
-  case 39:
+  case 34:
     Keys[4] = true;
     break;
-  case 38:
+  case 36:
     Keys[5] = true;
     break;
   case 81:
@@ -242,6 +254,12 @@ void keyPressed() {
     break;
   case 69:
     Keys[17] = true;
+    break;
+  case 155:
+    Keys[18] = true;
+    break;
+  case 33:
+    Keys[19] = true;
     break;
   }
 }
@@ -257,13 +275,13 @@ void keyReleased() {
   case 87:
     Keys[2] = false;
     break;
-  case 37:
+  case 127:
     Keys[3] = false;
     break;
-  case 39:
+  case 34:
     Keys[4] = false;
     break;
-  case 38:
+  case 36:
     Keys[5] = false;
     break;
   case 81:
@@ -272,23 +290,37 @@ void keyReleased() {
   case 69:
     Keys[17] = false;
     break;
+  case 155:
+    Keys[18] = false;
+    break;
+  case 33:
+    Keys[19] = false;
+    break;
   }
 }
 
 void contactStarted(FContact contact) {
-  if(contact.contains(tire1,floor))Keys[8]=true;
-  if(contact.contains(tire2,floor))Keys[9]=true;
-  if(contact.contains(tire3,floor))Keys[10]=true;
-  if(contact.contains(tire4,floor))Keys[11]=true;
+  if(contact.contains(tire1,floor))jmp1++;
+  if(contact.contains(tire2,floor))jmp1++;
+  if(contact.contains(tire3,floor))jmp2++;
+  if(contact.contains(tire4,floor))jmp2++;
+  if(contact.contains(tire1,ball))jmp1++;
+  if(contact.contains(tire2,ball))jmp1++;
+  if(contact.contains(tire3,ball))jmp2++;
+  if(contact.contains(tire4,ball))jmp2++;
   if(contact.contains(frame,floor))Keys[14]=true;
   if(contact.contains(fram2,floor))Keys[15]=true;
 }
 
 void contactEnded(FContact contact) {
-  if(contact.contains(tire1,floor))Keys[8]=false;
-  if(contact.contains(tire2,floor))Keys[9]=false;
-  if(contact.contains(tire3,floor))Keys[10]=false;
-  if(contact.contains(tire4,floor))Keys[11]=false;
+  if(contact.contains(tire1,floor))jmp1--;
+  if(contact.contains(tire2,floor))jmp1--;
+  if(contact.contains(tire3,floor))jmp2--;
+  if(contact.contains(tire4,floor))jmp2--;
+  if(contact.contains(tire1,ball))jmp1--;
+  if(contact.contains(tire2,ball))jmp1--;
+  if(contact.contains(tire3,ball))jmp2--;
+  if(contact.contains(tire4,ball))jmp2--;
   if(contact.contains(frame,floor))Keys[14]=false;
   if(contact.contains(fram2,floor))Keys[15]=false;
 }
