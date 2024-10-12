@@ -18,22 +18,28 @@ FPoly frame, fram2;
 FCircle ball, tire1, tire2, tire3, tire4;
 //FCircle[] tires;
 FDistanceJoint[] axles;
-boolean[] Keys = new boolean[16]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
+boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
 Gif bg;
-int goalHeight = 200;
-
+int goalHeight = height*2;
+int scor1 = 0;
+int scor2 = 0;
+int boos1 = 33;
+int boos2 = 33;
+byte jmp1 = 0;
+byte jmp2 = 0;
+float ballVelo = 0;
 
 void setup() {
   java.util.Arrays.fill(Keys,false);
   bg = new Gif(this,"chip.gif");
   bg.loop();
-  myWorld = new FWorld(-width*2,-height,width*3,height);
+  myWorld = new FWorld(-width*2,-goalHeight*5,width*3,height+100);
   myWorld.setGrabbable(false);
   myWorld.setGravity(0,500);
-  floor = new FBox(width*4,30);
+  floor = new FBox(width*4,100);
   floor.setStatic(true);
-  floor.setPosition(width/2,height-15);
-  roofe = new FBox(width*4,30);
+  floor.setPosition(width/2,height+15);
+  roofe = new FBox(width*4,100);
   roofe.setStatic(true);
   roofe.setPosition(width/2,-height*2-15);
   lwall = new FBox(30,height*2-goalHeight);
@@ -100,6 +106,7 @@ void setup() {
   ball.setDensity(0.1);
   ball.setRestitution(1);
   ball.setBullet(true);
+  ball.setAllowSleeping(false);
   frame.setGroupIndex(-1);
   tire1.setGroupIndex(-1);
   tire2.setGroupIndex(-1);
@@ -124,7 +131,7 @@ void setup() {
 }
 
 void draw() {
-  float ballVelo = round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5;
+  ballVelo = lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.01);
   if(ballVelo<0.5)ballVelo = 0;
   if(ballVelo>50)ballVelo = 50;
   background(200);
@@ -136,9 +143,17 @@ void draw() {
       image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
     }
   }
+  push();
   translate(round((width-ball.getX())/2)+ballVelo,round((height-ball.getY())/2)+ballVelo);
-  scale(0.5-ballVelo/400);//add limit to the ball velocity
+  scale(0.5-ballVelo/400);
   myWorld.draw();
+  pop();
+  textSize(50);
+  textAlign(LEFT,CENTER);
+  text(scor1,30,30);
+  textAlign(RIGHT,CENTER);
+  text(scor2,width-30,30);
+  println(ball.isSleeping());
 }
 
 void processKeys() {
@@ -159,6 +174,14 @@ void processKeys() {
   } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
     frame.setAngularVelocity(-frame.getRotation()*4);
   }
+  if(!(Keys[16]&&Keys[17])) {
+    if(Keys[16]) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(500);
+      frame.addImpulse(jump.x,jump.y,0,0);
+    }
+    if(Keys[17]) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(500);
+      frame.addImpulse(jump.x,jump.y,0,0);
+    }
+  }
   if(Keys[3]){
     tire3.addTorque(-100);
     tire4.addTorque(-100);
@@ -175,6 +198,16 @@ void processKeys() {
     Keys[13] = false;
   } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
     fram2.setAngularVelocity(-fram2.getRotation()*4);
+  }
+  if(!(Keys[18]&&Keys[19])){
+    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(500);
+      fram2.addImpulse(jump.x,jump.y,0,0);
+      boos2 -= 2;
+    }
+    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(500);
+      fram2.addImpulse(jump.x,jump.y,0,0);
+      boos2 -= 2;
+    }
   }
   if(Keys[2]&&!Keys[6])Keys[6]=true;
   if(Keys[6]&&!Keys[2])Keys[6]=false;
@@ -204,6 +237,12 @@ void keyPressed() {
   case 38:
     Keys[5] = true;
     break;
+  case 81:
+    Keys[16] = true;
+    break;
+  case 69:
+    Keys[17] = true;
+    break;
   }
 }
 
@@ -226,6 +265,12 @@ void keyReleased() {
     break;
   case 38:
     Keys[5] = false;
+    break;
+  case 81:
+    Keys[16] = false;
+    break;
+  case 69:
+    Keys[17] = false;
     break;
   }
 }
