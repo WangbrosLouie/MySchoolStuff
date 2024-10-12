@@ -51,6 +51,7 @@ void setup() {
   frame.vertex(100,20);
   frame.vertex(100,50);
   frame.vertex(0,50);
+  frame.setPosition(0,height-105);
   frame.setDensity(3);
   fram2 = new FPoly();
   fram2.vertex(0,20);
@@ -61,16 +62,16 @@ void setup() {
   fram2.vertex(100,20);
   fram2.vertex(100,50);
   fram2.vertex(0,50);
-  fram2.setPosition(width-100,0);
+  fram2.setPosition(width-100,height-105);
   fram2.setDensity(3);
-  tire1 = new FCircle(20);
-  tire2 = new FCircle(20);
-  tire3 = new FCircle(20);
-  tire4 = new FCircle(20);
-  tire1.setPosition(20,50);
-  tire2.setPosition(80,50);
-  tire3.setPosition(width-20,50);
-  tire4.setPosition(width-80,50);
+  tire1 = new FCircle(30);
+  tire2 = new FCircle(30);
+  tire3 = new FCircle(30);
+  tire4 = new FCircle(30);
+  tire1.setPosition(20,height-60);
+  tire2.setPosition(80,height-60);
+  tire3.setPosition(width-20,height-60);
+  tire4.setPosition(width-80,height-60);
   tire1.setFriction(10);
   tire2.setFriction(10);
   tire3.setFriction(10);
@@ -94,10 +95,10 @@ void setup() {
     axles[i*2+1].setDamping(0);
   }
   ball = new FCircle(60);
-  ball.setPosition(width/2,height/2);
+  ball.setPosition(width/2,0);
   ball.setFriction(0.5);
   ball.setDensity(0.1);
-  ball.setRestitution(0.8);
+  ball.setRestitution(1);
   ball.setBullet(true);
   frame.setGroupIndex(-1);
   tire1.setGroupIndex(-1);
@@ -132,7 +133,7 @@ void draw() {
   float bgScale = 300;
   for(int i=-1;i<1+height/bgScale;i++) {
     for(int j=-1;j<1+width/bgScale;j++) {
-      //image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
+      image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
     }
   }
   translate(round((width-ball.getX())/2)+ballVelo,round((height-ball.getY())/2)+ballVelo);
@@ -171,17 +172,16 @@ void processKeys() {
   if(Keys[5]&&!Keys[7]&&Keys[13]){
     PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(15000);
     fram2.addImpulse(jump.x,jump.y,0,25);
-    println("A");
     Keys[13] = false;
   } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
     fram2.setAngularVelocity(-fram2.getRotation()*4);
   }
   if(Keys[2]&&!Keys[6])Keys[6]=true;
   if(Keys[6]&&!Keys[2])Keys[6]=false;
-  if(Keys[8]&&Keys[9])Keys[12]=true;
+  if(Keys[8]||Keys[9])Keys[12]=true;
   if(Keys[5]&&!Keys[7])Keys[7]=true;
-  if(Keys[6]&&!Keys[5])Keys[7]=false;
-  if(Keys[10]&&Keys[11])Keys[13]=true;
+  if(Keys[7]&&!Keys[5])Keys[7]=false;
+  if(Keys[10]||Keys[11])Keys[13]=true;
 }
 
 void keyPressed() {
