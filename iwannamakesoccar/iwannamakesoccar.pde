@@ -20,14 +20,16 @@ FCircle ball, tire1, tire2, tire3, tire4;
 FDistanceJoint[] axles;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
 Gif bg;
-int goalHeight = height*2;
-int scor1 = 0;
+int goalHeight = height*2;//fix wall heights and make nets and scoreboard and stuff
+int scor1 = 0;//namely a scoreboard in the background would be nice.
 int scor2 = 0;
 float boos1 = 33;
 float boos2 = 33;
 byte jmp1 = 0;
 byte jmp2 = 0;
 float ballVelo = 0;
+int camX = 0;
+int camY = 0;
 
 void setup() {
   java.util.Arrays.fill(Keys,false);
@@ -36,7 +38,7 @@ void setup() {
   myWorld = new FWorld(-width*2,-goalHeight*5,width*3,height+100);
   myWorld.setGrabbable(false);
   myWorld.setGravity(0,500);
-  floor = new FBox(width*4,100);
+  floor = new FBox(width*5,100);
   floor.setStatic(true);
   floor.setPosition(width/2,height+15);
   roofe = new FBox(width*4,100);
@@ -45,6 +47,9 @@ void setup() {
   lwall = new FBox(30,height*2-goalHeight);
   lwall.setStatic(true);
   lwall.setPosition(-width*1.5,-goalHeight);
+  lgol1 = new FBox(width*0.5,30);
+  lgol1.setStatic(true);
+  lgol1.setPosition(-width*1.75,-goalHeight);
   rwall = new FBox(30,height*2-goalHeight);
   rwall.setStatic(true);
   rwall.setPosition(width*2.5,-goalHeight);
@@ -117,6 +122,7 @@ void setup() {
   myWorld.add(roofe);
   myWorld.add(lwall);
   myWorld.add(rwall);
+  myWorld.add(lgol1);
   myWorld.add(frame);
   myWorld.add(fram2);
   myWorld.add(tire1);
@@ -134,6 +140,10 @@ void draw() {
   ballVelo = lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.01);
   if(ballVelo<0.5)ballVelo = 0;
   if(ballVelo>50)ballVelo = 50;
+  if(mousePressed) {
+    camX += mouseX-pmouseX;
+    camY += mouseY-pmouseY;
+  }
   background(200);
   boos1+=0.25;
   boos1 = constrain(boos1,0,100);
@@ -148,7 +158,7 @@ void draw() {
     }
   }
   push();
-  translate(round((width-ball.getX())/2)+ballVelo,round((height-ball.getY())/2)+ballVelo);
+  translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
   scale(0.5-ballVelo/400);
   myWorld.draw();
   pop();
