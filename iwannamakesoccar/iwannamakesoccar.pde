@@ -12,15 +12,9 @@ void settings() {
   size(640,480);
 }
 
-FWorld myWorld;
-FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2;
-FPoly frame, fram2;
-FCircle ball, tire1, tire2, tire3, tire4;
-//FCircle[] tires;
-FDistanceJoint[] axles;
-boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
-Gif bg;
-int goalHeight = height*2;//fix wall heights and make nets and scoreboard and stuff
+final int AWidth = width*4;
+final int AHeight = height*3;
+final int goalHeight = height*2;//fix wall heights and make nets and scoreboard and stuff
 int scor1 = 0;//namely a scoreboard in the background would be nice.
 int scor2 = 0;
 float boos1 = 33;
@@ -30,29 +24,105 @@ byte jmp2 = 0;
 float ballVelo = 0;
 int camX = 0;
 int camY = 0;
+FWorld myWorld;
+FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2;
+FPoly frame, fram2;
+FCircle ball, tire1, tire2, tire3, tire4;
+FDistanceJoint[] axles;
+Gif bg;
+boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
 
 void setup() {
   java.util.Arrays.fill(Keys,false);
   bg = new Gif(this,"chip.gif");
   bg.loop();
-  myWorld = new FWorld(-width*2,-goalHeight*5,width*3,height+100);
+  myWorld = new FWorld(-AWidth/2+width,-AHeight+height-100,AWidth/2+width,height+100);
   myWorld.setGrabbable(false);
   myWorld.setGravity(0,500);
-  floor = new FBox(width*5,100);
-  floor.setStatic(true);
-  floor.setPosition(width/2,height+15);
-  roofe = new FBox(width*4,100);
-  roofe.setStatic(true);
-  roofe.setPosition(width/2,-height*2-15);
-  lwall = new FBox(30,height*2-goalHeight);
-  lwall.setStatic(true);
-  lwall.setPosition(-width*1.5,-goalHeight);
+  makeArena();
+  makeCars();
+  ball = new FCircle(60);
+  ball.setPosition(width/2,height-30);
+  ball.setFriction(0.5);
+  ball.setDensity(0.1);
+  ball.setRestitution(1);
+  ball.setBullet(true);
+  ball.setAllowSleeping(false);
+  myWorld.add(floor);
+  myWorld.add(roofe);
+  myWorld.add(lwall);
+  myWorld.add(rwall);
+  myWorld.add(lgol1);
+  myWorld.add(frame);
+  myWorld.add(fram2);
+  myWorld.add(tire1);
+  myWorld.add(tire2);
+  myWorld.add(tire3);
+  myWorld.add(tire4);
+  for(int i=0;i<4;i++) {
+    axles[i].setDrawable(false);
+    myWorld.add(axles[i]);
+  }
+  myWorld.add(ball);
+}
+
+void draw() {
+  ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.01),0.5,50);
+  if(mousePressed) {
+    camX += mouseX-pmouseX;
+    camY += mouseY-pmouseY;
+  }
+  background(200);
+  boos1+=0.25;
+  boos1 = constrain(boos1,0,100);
+  boos2+=0.25;
+  boos2 = constrain(boos2,0,100);
+  processKeys();
+  myWorld.step();
+  float bgScale = 300;
+  for(int i=-1;i<1+height/bgScale;i++) {
+    for(int j=-1;j<1+width/bgScale;j++) {
+      //image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
+    }
+  }
+  push();
+  translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
+  scale(0.5-ballVelo/400);
+  myWorld.draw();
+  pop();
+  textSize(50);
+  textAlign(LEFT,CENTER);
+  text(scor1,30,30);
+  textAlign(RIGHT,CENTER);
+  text(scor2,width-30,30);
+  fill(0);
+  rect(0,height,100,-30);
+  rect(width,height,-100,-30);
+  fill(boos1*2.55,0,0);
+  rect(0,height,boos1,-30);
+  fill(boos2*2.55,0,0);
+  rect(width,height,-boos2,-30);
+}
+
+void makeArena() {
+  floor = new FBox(AWidth,100);
+  floor.setPosition(width/2,height+50);
+  roofe = new FBox(AWidth-200,100);
+  roofe.setPosition(width/2,AHeight+height-50);
+  lwall = new FBox(50,AHeight-goalHeight);
+  lwall.setPosition(-AWidth/2+width+100,height-(AHeight/2)-(goalHeight/2));
   lgol1 = new FBox(width*0.5,30);
-  lgol1.setStatic(true);
   lgol1.setPosition(-width*1.75,-goalHeight);
-  rwall = new FBox(30,height*2-goalHeight);
+  rwall = new FBox(50,AHeight-goalHeight);
+  rwall.setPosition(-AWidth/2+width+100,height-(AHeight/2)-(goalHeight/2));
+  floor.setStatic(true);
+  roofe.setStatic(true);
+  lwall.setStatic(true);
+  lgol1.setStatic(true);
   rwall.setStatic(true);
-  rwall.setPosition(width*2.5,-goalHeight);
+}
+
+void makeCars() {
   frame = new FPoly();
   frame.vertex(0,20);
   frame.vertex(20,20);
@@ -105,75 +175,12 @@ void setup() {
     axles[i*2+1].setLength(0);
     axles[i*2+1].setDamping(0);
   }
-  ball = new FCircle(60);
-  ball.setPosition(width/2,0);
-  ball.setFriction(0.5);
-  ball.setDensity(0.1);
-  ball.setRestitution(1);
-  ball.setBullet(true);
-  ball.setAllowSleeping(false);
   frame.setGroupIndex(-1);
   tire1.setGroupIndex(-1);
   tire2.setGroupIndex(-1);
   fram2.setGroupIndex(-2);
   tire3.setGroupIndex(-2);
   tire4.setGroupIndex(-2);
-  myWorld.add(floor);
-  myWorld.add(roofe);
-  myWorld.add(lwall);
-  myWorld.add(rwall);
-  myWorld.add(lgol1);
-  myWorld.add(frame);
-  myWorld.add(fram2);
-  myWorld.add(tire1);
-  myWorld.add(tire2);
-  myWorld.add(tire3);
-  myWorld.add(tire4);
-  for(int i=0;i<4;i++) {
-    axles[i].setDrawable(false);
-    myWorld.add(axles[i]);
-  }
-  myWorld.add(ball);
-}
-
-void draw() {
-  ballVelo = lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.01);
-  if(ballVelo<0.5)ballVelo = 0;
-  if(ballVelo>50)ballVelo = 50;
-  if(mousePressed) {
-    camX += mouseX-pmouseX;
-    camY += mouseY-pmouseY;
-  }
-  background(200);
-  boos1+=0.25;
-  boos1 = constrain(boos1,0,100);
-  boos2+=0.25;
-  boos2 = constrain(boos2,0,100);
-  processKeys();
-  myWorld.step();
-  float bgScale = 300;
-  for(int i=-1;i<1+height/bgScale;i++) {
-    for(int j=-1;j<1+width/bgScale;j++) {
-      image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
-    }
-  }
-  push();
-  translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
-  scale(0.5-ballVelo/400);
-  myWorld.draw();
-  pop();
-  textSize(50);
-  textAlign(LEFT,CENTER);
-  text(scor1,30,30);
-  textAlign(RIGHT,CENTER);
-  text(scor2,width-30,30);
-  fill(0);
-  rect(0,height,100,-30);
-  rect(width,height,-100,-30);
-  fill(boos1*2.55,0,0);
-  rect(0,height,boos1,-30);
-  fill(boos2*2.55,0,0);
-  rect(width,height,-boos2,-30);
 }
 
 void processKeys() {
