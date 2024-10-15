@@ -17,10 +17,11 @@ float boos2 = 33;
 byte jmp1 = 0;
 byte jmp2 = 0;
 float ballVelo = 0;
+byte goaling = 0;
 int camX = 0;
 int camY = 0;
 FWorld myWorld;
-FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2;
+FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
 FPoly frame, fram2;
 FCircle ball, tire1, tire2, tire3, tire4;
 FDistanceJoint[] axles;
@@ -39,7 +40,7 @@ void setup() {
   java.util.Arrays.fill(Keys,false);
   bg = new Gif(this,"chip.gif");
   bg.loop();
-  myWorld = new FWorld(-AWidth/2+width,-AHeight+height-100,AWidth/2+width,height+100);
+  myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
   myWorld.setGrabbable(false);
   myWorld.setGravity(0,500);
   makeArena();
@@ -55,7 +56,7 @@ void setup() {
 }
 
 void draw() {
-  ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.01),0.5,50);
+  ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
   if(mousePressed) {
     camX += mouseX-pmouseX;
     camY += mouseY-pmouseY;
@@ -90,29 +91,49 @@ void draw() {
   rect(0,height,boos1,-30);
   fill(boos2*2.55,0,0);
   rect(width,height,-boos2,-30);
+  push();
+  textFont(createFont("Unifont-JP",36));
+  textAlign(CENTER,CENTER);
+  colorMode(HSB);
+  fill(frameCount*11%255,255,255);
+  text("ゴール！",width/2,height/2);
+  text(frameRate,width/2,height*3/4);
+  pop();
 }
 
 void makeArena() {
   floor = new FBox(AWidth,100);
   floor.setPosition(width/2,height+50);
-  roofe = new FBox(AWidth-200,100);
-  roofe.setPosition(width/2,AHeight+height-50);
+  roofe = new FBox(AWidth-500,100);
+  roofe.setPosition(width/2,-AHeight+height-50);
   lwall = new FBox(50,AHeight-goalHeight);
-  lwall.setPosition(-AWidth/2+width+100,height-(AHeight/2)-(goalHeight/2));
-  lgol1 = new FBox(width*0.5,30);
-  lgol1.setPosition(-width*1.75,-goalHeight);
+  lwall.setPosition((-AWidth/2)+(width/2)+275,height-(AHeight/2)-(goalHeight/2));
+  lgol1 = new FBox(300,50);
+  lgol1.setPosition((-AWidth/2)+(width/2)+150,height-goalHeight);
+  lgol2 = new FBox(50,goalHeight+25);
+  lgol2.setPosition((-AWidth/2)+(width/2)+25,height/2-12.5);
   rwall = new FBox(50,AHeight-goalHeight);
-  rwall.setPosition(-AWidth/2+width+100,height-(AHeight/2)-(goalHeight/2));
+  rwall.setPosition((AWidth/2)+(width/2)-275,height-(AHeight/2)-(goalHeight/2));
+  rgol1 = new FBox(300,50);
+  rgol1.setPosition((AWidth/2)+(width/2)-150,height-goalHeight);
+  rgol2 = new FBox(50,goalHeight+25);
+  rgol2.setPosition((AWidth/2)+(width/2)-25,height/2-12.5);
   floor.setStatic(true);
   roofe.setStatic(true);
   lwall.setStatic(true);
   lgol1.setStatic(true);
+  lgol2.setStatic(true);
   rwall.setStatic(true);
+  rgol1.setStatic(true);
+  rgol2.setStatic(true);
   myWorld.add(floor);
   myWorld.add(roofe);
   myWorld.add(lwall);
-  myWorld.add(rwall);
   myWorld.add(lgol1);
+  myWorld.add(lgol2);
+  myWorld.add(rwall);
+  myWorld.add(rgol1);
+  myWorld.add(rgol2);
 }
 
 void makeCars() {
@@ -174,6 +195,12 @@ void makeCars() {
   fram2.setGroupIndex(-2);
   tire3.setGroupIndex(-2);
   tire4.setGroupIndex(-2);
+  frame.setFill(80,110,255);
+  fram2.setFill(240,130,30);
+  tire1.setFill(0);
+  tire2.setFill(0);
+  tire3.setFill(0);
+  tire4.setFill(0);
   myWorld.add(frame);
   myWorld.add(fram2);
   myWorld.add(tire1);
