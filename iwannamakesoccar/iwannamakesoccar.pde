@@ -7,14 +7,9 @@
 import fisica.*;
 import gifAnimation.*;
 
-void settings() {
-  Fisica.init(this);
-  size(640,480);
-}
-
-final int AWidth = width*4;
-final int AHeight = height*3;
-final int goalHeight = height*2;//fix wall heights and make nets and scoreboard and stuff
+int AWidth;
+int AHeight;
+int goalHeight;//fix wall heights and make nets and scoreboard and stuff
 int scor1 = 0;//namely a scoreboard in the background would be nice.
 int scor2 = 0;
 float boos1 = 33;
@@ -32,7 +27,15 @@ FDistanceJoint[] axles;
 Gif bg;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
 
+void settings() {
+  Fisica.init(this);
+  size(640,480);
+}
+
 void setup() {
+  AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
+  AHeight = height*3;
+  goalHeight = height;
   java.util.Arrays.fill(Keys,false);
   bg = new Gif(this,"chip.gif");
   bg.loop();
@@ -42,27 +45,12 @@ void setup() {
   makeArena();
   makeCars();
   ball = new FCircle(60);
-  ball.setPosition(width/2,height-30);
+  ball.setPosition(width/2,height-31);
   ball.setFriction(0.5);
   ball.setDensity(0.1);
   ball.setRestitution(1);
   ball.setBullet(true);
   ball.setAllowSleeping(false);
-  myWorld.add(floor);
-  myWorld.add(roofe);
-  myWorld.add(lwall);
-  myWorld.add(rwall);
-  myWorld.add(lgol1);
-  myWorld.add(frame);
-  myWorld.add(fram2);
-  myWorld.add(tire1);
-  myWorld.add(tire2);
-  myWorld.add(tire3);
-  myWorld.add(tire4);
-  for(int i=0;i<4;i++) {
-    axles[i].setDrawable(false);
-    myWorld.add(axles[i]);
-  }
   myWorld.add(ball);
 }
 
@@ -120,6 +108,11 @@ void makeArena() {
   lwall.setStatic(true);
   lgol1.setStatic(true);
   rwall.setStatic(true);
+  myWorld.add(floor);
+  myWorld.add(roofe);
+  myWorld.add(lwall);
+  myWorld.add(rwall);
+  myWorld.add(lgol1);
 }
 
 void makeCars() {
@@ -181,6 +174,16 @@ void makeCars() {
   fram2.setGroupIndex(-2);
   tire3.setGroupIndex(-2);
   tire4.setGroupIndex(-2);
+  myWorld.add(frame);
+  myWorld.add(fram2);
+  myWorld.add(tire1);
+  myWorld.add(tire2);
+  myWorld.add(tire3);
+  myWorld.add(tire4);
+  for(int i=0;i<4;i++) {
+    axles[i].setDrawable(false);
+    myWorld.add(axles[i]);
+  }
 }
 
 void processKeys() {
