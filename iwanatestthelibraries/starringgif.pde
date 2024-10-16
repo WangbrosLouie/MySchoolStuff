@@ -1,6 +1,6 @@
-/*   Library   */
-/* Gif class   */
-/* version 1   */
+   /*   Library   */
+  /* Gif class   */
+ /* version 1   */
 /* goofy giffy */
 
 class Gif extends PImage {

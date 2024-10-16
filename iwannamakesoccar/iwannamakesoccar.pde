@@ -5,7 +5,44 @@
 \*_Date:_Oct.10,_2024______*/
 
 import fisica.*;
-import gifAnimation.*;
+import processing.sound.*;
+
+class Gif extends PImage {
+  int frames = 0;
+  int currentFrame = 0;
+  float interval = 0;
+  PImage[] images;
+  Gif(int FRAMES, float INTERVAL, String filename, String suffix) {
+    super(1,1,ARGB);
+    frames = FRAMES;
+    interval = INTERVAL;
+    images = new PImage[frames];
+    for(int i=0;i<frames;i++) {
+      images[i] = loadImage(filename+i+suffix);
+    }
+    super.init(images[0].width,images[0].height,ARGB);
+    images[0].loadPixels();
+    int[] temp = new int[images[0].pixels.length];
+    arrayCopy(images[0].pixels,temp);
+    images[0].updatePixels();
+    super.loadPixels();
+    arrayCopy(temp,super.pixels);
+    super.updatePixels();
+  }
+  
+  void update() {
+    currentFrame++;
+    int frm = floor(currentFrame/interval)%frames;
+    super.init(images[frm].width,images[frm].height,ARGB);
+    images[frm].loadPixels();
+    int[] temp = new int[images[frm].pixels.length];
+    arrayCopy(images[frm].pixels,temp);
+    images[frm].updatePixels();
+    super.loadPixels();
+    arrayCopy(temp,super.pixels);
+    super.updatePixels();
+  }
+}
 
 int AWidth;
 int AHeight;
@@ -26,6 +63,7 @@ FPoly frame, fram2;
 FCircle ball, tire1, tire2, tire3, tire4;
 FDistanceJoint[] axles;
 Gif bg;
+SoundFile bgm;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
 
 void settings() {
@@ -34,12 +72,13 @@ void settings() {
 }
 
 void setup() {
+  frameRate(30);
   AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
   AHeight = height*3;
   goalHeight = height;
   java.util.Arrays.fill(Keys,false);
-  bg = new Gif(this,"chip.gif");
-  bg.loop();
+  bg = new Gif(53,3,"chip/",".png");
+  bgm = new SoundFile(this,"grent_looped.ogg");
   myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
   myWorld.setGrabbable(false);
   myWorld.setGravity(0,500);
@@ -53,6 +92,7 @@ void setup() {
   ball.setBullet(true);
   ball.setAllowSleeping(false);
   myWorld.add(ball);
+  bgm.loop();
 }
 
 void draw() {
@@ -68,10 +108,12 @@ void draw() {
   boos2 = constrain(boos2,0,100);
   processKeys();
   myWorld.step();
+  myWorld.step();
+  bg.update();
   float bgScale = 300;
   for(int i=-1;i<1+height/bgScale;i++) {
     for(int j=-1;j<1+width/bgScale;j++) {
-      //image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
+      image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
     }
   }
   push();

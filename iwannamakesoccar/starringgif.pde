@@ -3,7 +3,7 @@
  /* version 1   */
 /* goofy giffy */
 
-class Gif extends PImage {
+/*class Gif extends PImage {
   int frames = 0;
   float interval = 0;
   PImage[] images;
@@ -24,4 +24,4 @@ class Gif extends PImage {
     arrayCopy(temp,super.pixels);
     super.updatePixels();
   }
-}
+}*/
