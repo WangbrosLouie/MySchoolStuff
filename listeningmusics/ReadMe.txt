@@ -9,6 +9,7 @@ The best way that you can share these songs is linking this repo and downloading
 
 For STDFIGHT and TAKE YOUR TIME credit the original song creators (Noboru Yamane and Key After Key respectively).
 I only made cover versions of those songs. If you wish to credit me, credit me as cover creator or cv. or something.
+Now the VGMs have proper tags so refer to the tags for the original authors of the songs I made covers for.
 
 Bottom line, don't steal songs, it's not nice. I worked hard on my songs.
 
