@@ -87,7 +87,7 @@ rocks like it uses only the genesis sound hardware which is quite distinct
 and for the cutscenes it uses the cds sequenced sample audio chip which
 means absolutely zero CDDA tracks outside of the epic intro and credits
 tracks which makes sense cause that aint gameplay thats outside the game.
-also it has 100% unique composed tracks outside of the iconic goal themes
+also it has 95% unique composed tracks outside of the iconic goal themes
 and there are so many. so so so many. or maybe they come from the actual
 tsubasa anime and i wouldnt know cause i dont pay attention to the bgms of
 animes much. next songs im gonna skip its just the 5 different honoo no

@@ -92,7 +92,7 @@ void draw() {
   fill(boos2*2.55,0,0);
   rect(width,height,-boos2,-30);
   push();
-  textFont(createFont("Unifont-JP",36));
+  textFont(createFont("Unifont",36));
   textAlign(CENTER,CENTER);
   colorMode(HSB);
   fill(frameCount*11%255,255,255);
@@ -346,7 +346,7 @@ void keyReleased() {
   }
 }
 
-void contactStarted(FContact contact) {
+void contactStarted(FContact contact) { //add boost if car is on ground and not boosting like in sideswipe
   if(contact.contains(tire1,floor))jmp1++;
   if(contact.contains(tire2,floor))jmp1++;
   if(contact.contains(tire3,floor))jmp2++;
