@@ -82,8 +82,6 @@ void setup() {
   myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
   myWorld.setGrabbable(false);
   myWorld.setGravity(0,500);
-  makeArena();
-  makeCars();
   ball = new FCircle(60);
   ball.setPosition(width/2,height-31);
   ball.setFriction(0.5);
@@ -92,7 +90,15 @@ void setup() {
   ball.setBullet(true);
   ball.setAllowSleeping(false);
   myWorld.add(ball);
+  makeArena();
+  makeCars();
   bgm.loop();
+}
+
+void drawl() {
+  frame.setStatic(true);
+  frame.setRotation(frameCount/10);
+  myWorld.draw();
 }
 
 void draw() {
@@ -106,6 +112,7 @@ void draw() {
   boos1 = constrain(boos1,0,100);
   boos2+=0.25;
   boos2 = constrain(boos2,0,100);
+  processKeys();
   processKeys();
   myWorld.step();
   myWorld.step();
@@ -160,6 +167,10 @@ void makeArena() {
   rgol1.setPosition((AWidth/2)+(width/2)-150,height-goalHeight);
   rgol2 = new FBox(50,goalHeight+25);
   rgol2.setPosition((AWidth/2)+(width/2)-25,height/2-12.5);
+  lgoal = new FBox(250-ball.getSize(),goalHeight-25);
+  lgoal.setPosition((-AWidth/2)+(width/2)+175-(ball.getSize()/2),height/2+12.5);
+  rgoal = new FBox(250-ball.getSize(),goalHeight-25);
+  rgoal.setPosition((AWidth/2)+(width/2)-175+(ball.getSize()/2),height/2+12.5);
   floor.setStatic(true);
   roofe.setStatic(true);
   lwall.setStatic(true);
@@ -168,6 +179,10 @@ void makeArena() {
   rwall.setStatic(true);
   rgol1.setStatic(true);
   rgol2.setStatic(true);
+  lgoal.setStatic(true);
+  rgoal.setStatic(true);
+  lgoal.setSensor(true);
+  rgoal.setSensor(true);
   myWorld.add(floor);
   myWorld.add(roofe);
   myWorld.add(lwall);
@@ -176,6 +191,8 @@ void makeArena() {
   myWorld.add(rwall);
   myWorld.add(rgol1);
   myWorld.add(rgol2);
+  myWorld.add(lgoal);
+  myWorld.add(rgoal);
 }
 
 void makeCars() {
@@ -253,6 +270,20 @@ void makeCars() {
     axles[i].setDrawable(false);
     myWorld.add(axles[i]);
   }
+}
+
+void reset() {
+  ball = new FCircle(60);
+  ball.setPosition(width/2,height-31);
+  ball.setFriction(0.5);
+  ball.setDensity(0.1);
+  ball.setRestitution(1);
+  ball.setBullet(true);
+  ball.setAllowSleeping(false);
+  myWorld.add(ball);
+  myWorld.clear();
+  makeArena();
+  makeCars();
 }
 
 void processKeys() {
@@ -399,6 +430,8 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
   if(contact.contains(tire4,ball))jmp2++;
   if(contact.contains(frame,floor))Keys[14]=true;
   if(contact.contains(fram2,floor))Keys[15]=true;
+  if(contact.contains(ball,rgoal)){scor1++;reset();}
+  if(contact.contains(ball,lgoal)){scor2++;reset();}
 }
 
 void contactEnded(FContact contact) {
