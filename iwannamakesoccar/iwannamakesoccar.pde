@@ -49,21 +49,31 @@ int AHeight;
 int goalHeight;//fix wall heights and make nets and scoreboard and stuff
 int scor1 = 0;//namely a scoreboard in the background would be nice.
 int scor2 = 0;
-float boos1 = 33;
-float boos2 = 33;
+int boos1 = 100;
+int boos2 = 100;
 byte jmp1 = 0;
 byte jmp2 = 0;
 float ballVelo = 0;
 byte goaling = 0;
 int camX = 0;
 int camY = 0;
-FWorld myWorld;
+boolean loading = true;
+final int tireSpeed = 100;
+final int tireSpeed30 = 720;
+final int tireSpeedMax = 500;
+final int jumpPower = 15000;
+final int boostPower = 500;
+final int boostPower30 = 1000;
+final float tireSoftness = 1; 
+FWorld myWorld, play1, play2;
 FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
 FPoly frame, fram2;
 FCircle ball, tire1, tire2, tire3, tire4;
 FDistanceJoint[] axles;
 Gif bg;
 SoundFile bgm;
+PImage tire;
+PGraphics gcar1, gcar2, pcar1, pcar2;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
 
 void settings() {
@@ -72,27 +82,15 @@ void settings() {
 }
 
 void setup() {
-  frameRate(30);
-  AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
-  AHeight = height*3;
-  goalHeight = height;
-  java.util.Arrays.fill(Keys,false);
-  bg = new Gif(53,3,"chip/",".png");
-  bgm = new SoundFile(this,"grent_looped.ogg");
-  myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
-  myWorld.setGrabbable(false);
-  myWorld.setGravity(0,500);
-  ball = new FCircle(60);
-  ball.setPosition(width/2,height-31);
-  ball.setFriction(0.5);
-  ball.setDensity(0.1);
-  ball.setRestitution(1);
-  ball.setBullet(true);
-  ball.setAllowSleeping(false);
-  myWorld.add(ball);
-  makeArena();
-  makeCars();
-  bgm.loop();
+  push();
+  background(255);
+  tire = loadImage("=3.PNG");
+  image(tire,0,0,width,height);
+  textSize(64);
+  fill(0);
+  textAlign(CENTER,CENTER);
+  text("Loading...",width/2,height/2);
+  pop();
 }
 
 void drawl() {
@@ -102,52 +100,77 @@ void drawl() {
 }
 
 void draw() {
-  ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
-  if(mousePressed) {
-    camX += mouseX-pmouseX;
-    camY += mouseY-pmouseY;
-  }
-  background(200);
-  boos1+=0.25;
-  boos1 = constrain(boos1,0,100);
-  boos2+=0.25;
-  boos2 = constrain(boos2,0,100);
-  processKeys();
-  processKeys();
-  myWorld.step();
-  myWorld.step();
-  bg.update();
-  float bgScale = 300;
-  for(int i=-1;i<1+height/bgScale;i++) {
-    for(int j=-1;j<1+width/bgScale;j++) {
-      image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
+  if(loading) {
+    loading = false;
+    frameRate(30);
+    AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
+    AHeight = height*3;
+    goalHeight = height;
+    java.util.Arrays.fill(Keys,false);
+    bg = new Gif(53,3,"chip/",".png");
+    bgm = new SoundFile(this,"grent_looped.ogg");
+    tire.resize(30,30);
+    myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
+    myWorld.setGrabbable(false);
+    myWorld.setGravity(0,500);
+    ball = new FCircle(60);
+    ball.setPosition(width/2,height-31);
+    ball.setFriction(0.5);
+    ball.setDensity(0.1);
+    ball.setRestitution(1);
+    ball.setBullet(true);
+    ball.setAllowSleeping(false);
+    myWorld.add(ball);
+    makeArena();
+    makeCars();
+    gcar1 = createGraphics(100,100);
+    gcar2 = createGraphics(100,100);
+    bgm.loop();
+  } else {
+    ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
+    if(mousePressed) {
+      camX += mouseX-pmouseX;
+      camY += mouseY-pmouseY;
     }
+    background(200);
+    boos1 = constrain(boos1,0,100);
+    boos2 = constrain(boos2,0,100);
+    processKeys30fps();
+    myWorld.step();
+    myWorld.step();
+    bg.update();
+    float bgScale = 300;
+    for(int i=-1;i<1+height/bgScale;i++) {
+      for(int j=-1;j<1+width/bgScale;j++) {
+        image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
+      }
+    }
+    push();
+    translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
+    scale(0.5-ballVelo/400);
+    myWorld.draw();
+    pop();
+    textSize(50);
+    textAlign(LEFT,CENTER);
+    text(scor1,30,30);
+    textAlign(RIGHT,CENTER);
+    text(scor2,width-30,30);
+    fill(0);
+    rect(0,height,100,-30);
+    rect(width,height,-100,-30);
+    fill(boos1*2.55,0,0);
+    rect(0,height,boos1,-30);
+    fill(boos2*2.55,0,0);
+    rect(width,height,-boos2,-30);
+    push();
+    textFont(createFont("Unifont",36));
+    textAlign(CENTER,CENTER);
+    colorMode(HSB);
+    fill(frameCount*11%255,255,255);
+    text("ゴール！",width/2,height/2);
+    text(frameRate,width/2,height*3/4);
+    pop();
   }
-  push();
-  translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
-  scale(0.5-ballVelo/400);
-  myWorld.draw();
-  pop();
-  textSize(50);
-  textAlign(LEFT,CENTER);
-  text(scor1,30,30);
-  textAlign(RIGHT,CENTER);
-  text(scor2,width-30,30);
-  fill(0);
-  rect(0,height,100,-30);
-  rect(width,height,-100,-30);
-  fill(boos1*2.55,0,0);
-  rect(0,height,boos1,-30);
-  fill(boos2*2.55,0,0);
-  rect(width,height,-boos2,-30);
-  push();
-  textFont(createFont("Unifont",36));
-  textAlign(CENTER,CENTER);
-  colorMode(HSB);
-  fill(frameCount*11%255,255,255);
-  text("ゴール！",width/2,height/2);
-  text(frameRate,width/2,height*3/4);
-  pop();
 }
 
 void makeArena() {
@@ -183,6 +206,10 @@ void makeArena() {
   rgoal.setStatic(true);
   lgoal.setSensor(true);
   rgoal.setSensor(true);
+  lgoal.setNoFill();
+  rgoal.setNoFill();
+  lgoal.setNoStroke();
+  rgoal.setNoStroke();
   myWorld.add(floor);
   myWorld.add(roofe);
   myWorld.add(lwall);
@@ -260,6 +287,14 @@ void makeCars() {
   tire2.setFill(0);
   tire3.setFill(0);
   tire4.setFill(0);
+  tire1.setRestitution(tireSoftness);
+  tire2.setRestitution(tireSoftness);
+  tire3.setRestitution(tireSoftness);
+  tire4.setRestitution(tireSoftness);
+  //tire1.attachImage(tire);
+  //tire2.attachImage(tire);
+  //tire3.attachImage(tire);
+  //tire4.attachImage(tire);
   myWorld.add(frame);
   myWorld.add(fram2);
   myWorld.add(tire1);
@@ -284,6 +319,8 @@ void reset() {
   myWorld.clear();
   makeArena();
   makeCars();
+  boos1 = 100;
+  boos2 = 100;
 }
 
 void processKeys() {
@@ -305,13 +342,13 @@ void processKeys() {
     frame.setAngularVelocity(-frame.getRotation()*4);
   }
   if(!(Keys[16]&&Keys[17])) {
-    if(Keys[16]) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(500);
+    if(Keys[16]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(500);
       frame.addImpulse(jump.x,jump.y,0,0);
-      boos1 -= 0.7;
+      boos1 -= 1;
     }
-    if(Keys[17]) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(500);
+    if(Keys[17]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(500);
       frame.addImpulse(jump.x,jump.y,0,0);
-      boos1 -= 0.7;
+      boos1 -= 1;
     }
   }
   if(Keys[3]){
@@ -347,6 +384,80 @@ void processKeys() {
   if(Keys[7]&&!Keys[5])Keys[7]=false;
   if(jmp1>0)Keys[12]=true;
   if(jmp2>0)Keys[13]=true;
+}
+
+void processKeys30fps() {
+  if(Keys[0]){
+    tire1.addTorque(-tireSpeed30);
+    tire2.addTorque(-tireSpeed30/2);
+    if(!Keys[8]&&!Keys[9])frame.addTorque(-1000);
+  }
+  if(Keys[1]){
+    tire1.addTorque(tireSpeed30/2);
+    tire2.addTorque(tireSpeed30);
+    if(!Keys[8]&&!Keys[9])frame.addTorque(1000);
+  }
+  if(Keys[2]&&!Keys[6]&&Keys[12]){
+    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(jumpPower);
+    //frame.setAngularVelocity(-frame.getRotation()*2);
+    frame.addImpulse(jump.x,jump.y,0,25);
+    Keys[12] = false;
+  } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
+    frame.setAngularVelocity(-frame.getRotation()*4);
+    frame.addImpulse(0,2500,0,0);
+  }
+  if(!(Keys[16]&&Keys[17])) {
+    if(Keys[16]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(boostPower30);
+      frame.addImpulse(jump.x,jump.y,0,0);
+      boos1 -= 1;
+    }else if(Keys[17]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(boostPower30);
+      frame.addImpulse(jump.x,jump.y,0,0);
+      boos1 -= 1;
+    }
+  }
+  if(!(Keys[16]||Keys[17])) {
+    boos1 += 1;
+  }
+  if(Keys[3]){
+    tire3.addTorque(-200);
+    tire4.addTorque(-200);
+    if(!Keys[10]&&!Keys[11])fram2.addTorque(-1000);
+  }
+  if(Keys[4]){
+    tire3.addTorque(200);
+    tire4.addTorque(200);
+    if(!Keys[10]&&!Keys[11])fram2.addTorque(1000);
+  }
+  if(Keys[5]&&!Keys[7]&&Keys[13]){
+    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(15000);
+    fram2.addImpulse(jump.x,jump.y,0,25);
+    Keys[13] = false;
+  } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
+    fram2.setAngularVelocity(-fram2.getRotation()*4);
+  }
+  if(!(Keys[18]&&Keys[19])){
+    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(1000);
+      fram2.addImpulse(jump.x,jump.y,0,0);
+      boos2 -= 1;
+    }
+    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(1000);
+      fram2.addImpulse(jump.x,jump.y,0,0);
+      boos2 -= 1;
+    }
+  }
+  if(Keys[2]&&!Keys[6])Keys[6]=true;
+  if(Keys[6]&&!Keys[2])Keys[6]=false;
+  if(Keys[5]&&!Keys[7])Keys[7]=true;
+  if(Keys[7]&&!Keys[5])Keys[7]=false;
+  if(jmp1>0)Keys[12]=true;
+  if(jmp2>0)Keys[13]=true;
+  tire1.setAngularVelocity(constrain(tire1.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire2.setAngularVelocity(constrain(tire2.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire3.setAngularVelocity(constrain(tire3.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire4.setAngularVelocity(constrain(tire4.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  frame.setRotation((((((frame.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
+  fram2.setRotation((((((fram2.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
+  println(frame.getRotation());
 }
 
 void keyPressed() {
@@ -432,6 +543,11 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
   if(contact.contains(fram2,floor))Keys[15]=true;
   if(contact.contains(ball,rgoal)){scor1++;reset();}
   if(contact.contains(ball,lgoal)){scor2++;reset();}
+}
+
+void contactPersisted(FContact contact) {
+  if(contact.contains(frame,floor))Keys[14]=true;
+  if(contact.contains(fram2,floor))Keys[15]=true;
 }
 
 void contactEnded(FContact contact) {
