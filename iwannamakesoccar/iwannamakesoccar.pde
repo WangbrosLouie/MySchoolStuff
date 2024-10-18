@@ -17,9 +17,7 @@ class Gif extends PImage {
     frames = FRAMES;
     interval = INTERVAL;
     images = new PImage[frames];
-    for(int i=0;i<frames;i++) {
-      images[i] = loadImage(filename+i+suffix);
-    }
+    for(int i=0;i<frames;i++)images[i] = loadImage(filename+i+suffix);
     super.init(images[0].width,images[0].height,ARGB);
     images[0].loadPixels();
     int[] temp = new int[images[0].pixels.length];
@@ -457,7 +455,6 @@ void processKeys30fps() {
   tire4.setAngularVelocity(constrain(tire4.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
   frame.setRotation((((((frame.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
   fram2.setRotation((((((fram2.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
-  println(frame.getRotation());
 }
 
 void keyPressed() {
