@@ -6,6 +6,9 @@
 
 import fisica.*;
 import processing.sound.*;
+import net.java.games.input.*;
+import org.gamecontrolplus.*;
+import org.gamecontrolplus.gui.*;
 
 class Gif extends PImage {
   int frames = 0;
@@ -73,6 +76,11 @@ SoundFile bgm;
 PImage tire;
 PGraphics gcar1, gcar2, pcar1, pcar2;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
+//controller stuff
+ControlIO CtrlIO;
+ControlDevice N64;
+ControlHat DPad;
+ControlButton A, L, R;
 
 void settings() {
   Fisica.init(this);
@@ -95,6 +103,20 @@ void drawl() {
   frame.setStatic(true);
   frame.setRotation(frameCount/10);
   myWorld.draw();
+}
+
+void APressed(){Keys[2]=true;}
+void LPressed(){Keys[16]=true;}
+void RPressed(){Keys[17]=true;}
+void AReleased(){Keys[2]=false;}
+void LReleased(){Keys[16]=false;}
+void RReleased(){Keys[17]=false;}
+//2 dummy float params needed for ControlHat's plug() to work
+//also the stupid values dont even update in time for the plug
+void HPressed(float x) {
+  if(x<0){Keys[0]=true;Keys[1]=false;}
+  if(x==0){Keys[0]=false;Keys[1]=false;}
+  if(x>0){Keys[0]=false;Keys[1]=true;}
 }
 
 void draw() {
@@ -123,6 +145,22 @@ void draw() {
     makeCars();
     gcar1 = createGraphics(100,100);
     gcar2 = createGraphics(100,100);
+    CtrlIO = ControlIO.getInstance(this);
+    ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
+    if(Controllers.length>2) {
+      N64 = Controllers[2];
+      N64.open();
+      A = N64.getButton(2);
+      L = N64.getButton(7);
+      R = N64.getButton(8);
+      DPad = N64.getHat(0);
+      A.plug("APressed",ControlIO.ON_PRESS);
+      L.plug("LPressed",ControlIO.ON_PRESS);
+      R.plug("RPressed",ControlIO.ON_PRESS);
+      A.plug("AReleased",ControlIO.ON_RELEASE);
+      L.plug("LReleased",ControlIO.ON_RELEASE);
+      R.plug("RReleased",ControlIO.ON_RELEASE);
+    }
     bgm.loop();
   } else {
     ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
@@ -134,18 +172,23 @@ void draw() {
     boos1 = constrain(boos1,0,100);
     boos2 = constrain(boos2,0,100);
     processKeys30fps();
+    if(!(N64==null))HPressed(DPad.getX());
     myWorld.step();
     myWorld.step();
     bg.update();
-    float bgScale = 300;
-    for(int i=-1;i<1+height/bgScale;i++) {
-      for(int j=-1;j<1+width/bgScale;j++) {
-        image(bg,(j*bgScale)+(-ball.getX()/10%bgScale),(i*bgScale)-(-ball.getY()/10%bgScale),bgScale,bgScale);
+    float bgX = 300;
+    float bgY = 200;
+    for(int i=-1;i<1+height/bgY;i++) {
+      for(int j=-1;j<1+width/bgX;j++) {
+        image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
       }
     }
     push();
     translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
     scale(0.5-ballVelo/400);
+    fill(200);
+    rect(width/2-25,height,50,-200);
+    rect(width/2-100,height-250,200,50);
     myWorld.draw();
     pop();
     textSize(50);
