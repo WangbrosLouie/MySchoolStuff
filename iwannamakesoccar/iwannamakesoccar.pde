@@ -66,10 +66,10 @@ final int jumpPower = 15000;
 final int boostPower = 500;
 final int boostPower30 = 1000;
 final float tireSoftness = 1; 
-FWorld myWorld, play1, play2;
+FWorld myWorld;
 FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
 FPoly frame, fram2;
-FCircle ball, tire1, tire2, tire3, tire4;
+FCircle ball, tire1, tire2, tire3, tire4, carp1, carp2;
 FDistanceJoint[] axles;
 Gif bg;
 SoundFile bgm;
@@ -141,13 +141,12 @@ void draw() {
     ball.setBullet(true);
     ball.setAllowSleeping(false);
     myWorld.add(ball);
+    makeImages();
     makeArena();
     makeCars();
-    gcar1 = createGraphics(100,100);
-    gcar2 = createGraphics(100,100);
     CtrlIO = ControlIO.getInstance(this);
     ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
-    if(Controllers.length>2) {
+    if(Controllers.length>3) {
       N64 = Controllers[2];
       N64.open();
       A = N64.getButton(2);
@@ -346,6 +345,53 @@ void makeCars() {
     axles[i].setDrawable(false);
     myWorld.add(axles[i]);
   }
+}
+
+void makeImages() {//AHHHHHHHHHH
+  gcar1.fill(80,110,255);
+  gcar1.beginShape();
+  gcar1.vertex(0,20);
+  gcar1.vertex(20,20);
+  gcar1.vertex(30,0);
+  gcar1.vertex(70,0);
+  gcar1.vertex(80,20);
+  gcar1.vertex(100,20);
+  gcar1.vertex(100,50);
+  gcar1.vertex(0,50);
+  gcar1.endShape(CLOSE);
+  gcar2.fill(240,130,30);
+  gcar2.vertex(0,20);
+  gcar2.vertex(20,20);
+  gcar2.vertex(30,0);
+  gcar2.vertex(70,0);
+  gcar2.vertex(80,20);
+  gcar2.vertex(100,20);
+  gcar2.vertex(100,50);
+  gcar2.vertex(0,50);
+  gcar2.setPosition(0,height-125);
+  tire1 = new FCircle(30);
+  tire2 = new FCircle(30);
+  tire3 = new FCircle(30);
+  tire4 = new FCircle(30);
+  tire1.setPosition(20,height-80);
+  tire2.setPosition(80,height-80);
+  tire3.setPosition(width-20,height-80);
+  tire4.setPosition(width-80,height-80);
+  tire1.setFill(0);
+  tire2.setFill(0);
+  tire3.setFill(0);
+  tire4.setFill(0);
+  carp1 = new FCircle(100);
+  carp2 = new FCircle(100);
+  carp1.attachImage(gcar1);
+  carp2.attachImage(gcar2);
+  carp1.setStatic(true);
+  carp2.setStatic(true);
+  play1.add(carp1);
+  play2.add(carp2);
+  play1.draw(pcar1);
+  play2.draw(pcar2);
+  
 }
 
 void reset() {
