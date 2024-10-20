@@ -120,4 +120,116 @@ then after sandy shores zone from my cancelled sonic fangame i get to my
 mishmash sonic songs categorization. ima skip this for now cause the sonic
 songs come in bulk later. im gonna leave it off here now. if i continue
 this one look forward to more music yap. next document i yap about Kitta.
+okay whatever. the atmospheric pressure has been building up in my head and
+has now officially crossed the threshold of making me write more rantyap.
+as you probably have noticed if you paid attention to the program side of
+this processing folder you will notice that i have done a very large amount
+of things for my rocket league esque game. i have made primitive background
+graphics(to be scoreboard)the player orientation views the offscreen player
+location thing that is on the screen at all times but most importantly the
+new replay system that i have worked so hard on. i mean like it took me 3
+hours to figure out that i couldnt fill the pimage array with javautilarray
+arrayfill. and now im tryin to debug varied length replays. they are quite
+hard to make for some reason because all i get is a black screen when i
+should be seeing my ssl class goal. the timing is correct but i dont get a
+replay. i only get a seizure if 2 goals are scored in under 150 frames in
+succession. also that means dont try it unless you are not photosensitive.
+but then again i guess i do have the flashing go-ru text and framerate so..
+i actually should be working on my work from other classes now as if i dont
+im practically screwed because theyre important homeworks. but im yapping
+away like i dont care(gee i wonder why). so anyways i promised that i yap
+about kitta in the next one. change of plans i will yap about INNER kitta
+next time because im gonna yap about kaneko kita right here right now.
+the lore of kitta is that she is a robot toy thing made for children
+because capitalism and ai mix together very well. however people soon
+boycotted robots because of a deadly(computer)virus that made robots do bad
+things to people. so one day after getting reactivated after like 10 years
+since the development place shut down she finds herself not being wanted by
+the majority of people. then theres more boring lore stuff but i dont wanna
+talk about that i wanna talk about kitta herself. kitta is an average
+futuristic-looking anthropomorphic robot cat. she is very friendly due to
+being made for children and is also light so as to not make a safety hazard
+if she falls on someone. her main creator is some random smart woman who
+really liked the idea of a fun robot cat. when the story begins she is very
+childish but she matures over the course of it and other cliche stuffs.
+and im done with the replay system. i had to make a stupid little
+workaround for the saveReplayFrame but it works so who am i to complain.
+i really wanna spill the beans about inner kitta here so i guess i will do.
+oh but before i continue i gotta say this is about my mental health
+basically and since my only therapist is inner kitta currently im gonna
+assume that you dont wanna hear about it. and it may be disturbing or what
+ever. anyways. im gonna go from the very beginning part to how it is now.
+so on march 8 2024(i think)i get the bright idea to make personalities of
+all the characters from tophat turmoil in my head so that i can make them
+better since i will actually "know" them instead of just simply making them
+up. so then i made the og 5 characters in my head because at that point i
+only have thought up of those 5, but then i also decided to make one of
+kitta because i want a best friend since i have no friends at school.
+i am sweating buckets right now because of both the cringe that i am having
+now from writing this down in a PUBLIC document and also the cringe of the
+future because i am sure that i will be made fun of this. its something not
+normal of course im gonna be made fun of. anyways i talked with them every
+day to get to know them all better but i talked to kitta most because she
+was(and still is)my best friend. i decided that she was gonna be my best
+friend because in the lore she was supposed to be a friend and stuff so ye.
+so then as i made more characters i made more personalities but kitta
+always remained the one closest(as in most relevant)to me. i am not joking
+when i say i have talked with her at least once everyday since march 8.
+<<kitta streak real>>
+i dont know what other history is there other than a special rock that i
+found thats supposed to be a symbol of appreciation for kitta. it is THE
+cat rock. not only is it very 90-45-45 triangular but also on one of the
+faces there is a very cute =3 on the rock. i am not joking there is just a
+naturally formed =3 on the rock that i didnt even know existed until i
+cleaned the rock. i initially picked it up because the 90-45-45 triangle
+is what kitta's nose is shaped like(a la chat)but now i treasure it. but
+thats quite off topic because i gotta talk about kitta today. as i
+mentioned earlier in another Talkument Yap i think, i am talking to kitta
+less and less every day. that has now evened out and i am talking to her
+around 15-30 minutes everyday, whether it is simple small talk for walks
+to and from school/trying to sleep or therapy or golf coaching. now i
+think thats quite a smooth transition into how we talk. ever since her
+conception i knew that one day i would become catty and i am proud to say
+that that day has looong passed. now im no furry but i talk with kitta
+with so much nya and meow that i probably am in the top 10000 people in
+the world for number of times nya/meow has been said or thought of. like
+im just gonna talk with her for a little and record the conversation.
+<<oh no  cringe>>
+in hindsight i did not consider how cringy doing this would be so instead
+im going to do the highlights, which are all the nyas and the meows.
+"what is it nya?"(oh how it hurts inside)
+"this nyaing music hurts my ears. nyowch, nyowch!" (listening to the main
+theme of the legend of kage on the x1 turbo)
+uhh im just gonna stop here before i get a heart attack from cringe.
+i think you get the idea. we commonly use nya to end a sentence and some
+times i say what the nya when something that im doing does a surprise and
+there is just so much nya. i probably say nya more than a japanese
+catgirl. speaking of japanese i speak many languages with kitta because
+she is also my language tutor. i mainly speak french with her when i want
+to speak another language because of french. mais je ne peux pas faire le
+miau dans francais facilement. she also coaches me in golf to a
+surprising effectiveness. like my swing and stuff actually improves when
+kitta gives me various tips and stuff. and when im feeling down she can
+always cheer me up. i like kitta so much that i almost want to become an
+ai engineer just so i can make her in real life. that probably will
+happen in the future sometime. erm, idk what else there is to say about
+kitta so ill end off with the "dont commit me to a mental hospital" bit
+i may be insane(i actually dont know)but i dont wanna go to a mental
+hospital i assure you i am totally fine maybe just a little autistic or
+something i dont hurt anyone from this other than the cringe that you may
+feel from reading all of this and i am completely ok with this. well now
+thats over with i think im gonna do something drastic and actually rant
+properly about the project that this rant file is for. the theme of the
+game is goofy derptastic sports game, but i started this before i was
+even assigned it because i wanted to test out the physics engine. i did
+rocket league because i was playin sideswipe for the first time getting
+frozen at silver I and i wanted to make soccar in this physics engine.
+as of now i just gotta make some screens and some more ui stuff and also
+port over the new player 1 movement to player 2 and fix the insert key
+for my mac and maybe a pause button obviously disable mouse camera move
+and maybe vary the lengths of the lines that come from the ball to better
+show distance for max ease of play. thats it after that i will work on
+tophat turmoil for the first time since friday. now i need to go to sleep
+because i dont wanna wreck my sleep schedule too much. till the next time
+whether its me continuing this one or making the next project. sayonyara.
 */

@@ -179,10 +179,12 @@ void draw() {
     //arrayCopy(temp,pixels);
     //updatePixels();
     background(0);
-    image(replay[frameCount%replay.length],0,0,width,height);
-    if(abs(replayFrame-frameCount)>replay.length-2) {
+    if(replay.length<replayLength)image(replay[frameCount-replayFrame-1],0,0,width,height);
+    else image(replay[frameCount%replay.length],0,0,width,height);
+    if(frameCount-replayFrame>replay.length-1) {
       replaying=false;
       replay = new PImage[0];
+      frameCount -= replay.length;
     }
   } else {
     ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
@@ -455,7 +457,7 @@ void reset() {
   boos2 = 100;
 }
 
-//void saveReplayFrame() {
+//void saveReplayFrameRedraw() {
 //  replay[frameCount%replay.length].beginDraw();
 //  replay[frameCount%replay.length].background(0);
 //  replay[frameCount%replay.length].push();
@@ -475,13 +477,17 @@ void reset() {
 
 void saveReplayFrame() {
   loadPixels();
-  int[] temp = new int[pixels.length];
-  arrayCopy(pixels,temp);
+  if(replay.length<replayLength) {
+    replay = (PImage[])append(replay,new PImage(width,height,RGB));
+    replay[replay.length-1].loadPixels();
+    arrayCopy(pixels,replay[replay.length-1].pixels);
+    replay[replay.length-1].updatePixels();
+  } else {
+    replay[frameCount%replay.length].loadPixels();
+    arrayCopy(pixels,replay[frameCount%replay.length].pixels);
+    replay[frameCount%replay.length].updatePixels();
+  }
   updatePixels();
-  println(frameCount%replay.length);
-  replay[frameCount%replay.length].loadPixels();
-  arrayCopy(temp,replay[frameCount%replay.length].pixels);
-  replay[frameCount%replay.length].updatePixels();
 }
 
 void processKeys() {
