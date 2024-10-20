@@ -67,7 +67,8 @@ final int tireSpeedMax = 500;
 final int jumpPower = 15000;
 final int boostPower = 500;
 final int boostPower30 = 1000;
-final float tireSoftness = 1; 
+final int replayLength = 150;
+final float tireSoftness = 1;
 FWorld myWorld, play1, play2;
 FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
 FPoly frame, fram2;
@@ -76,7 +77,7 @@ FDistanceJoint[] axles;
 Gif bg;
 SoundFile bgm;
 PImage tire;
-PImage[] replay;
+PImage[] replay = new PImage[0];
 PGraphics gcar1, gcar2, pcar1, pcar2;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
 //controller stuff
@@ -132,8 +133,11 @@ void draw() {
     java.util.Arrays.fill(Keys,false);
     bg = new Gif(53,3,"chip/",".png");
     bgm = new SoundFile(this,"grent_looped.ogg");
-    replay = new PImage[60];
-    java.util.Arrays.fill(replay,new PImage(width,height,ARGB));
+    //replay = new PGraphics[60];
+    //java.util.Arrays.fill(replay,createGraphics(width,height));
+    for(int i=0;i<replay.length;i++) {
+      replay[i] = new PImage(width,height,RGB);
+    }
     tire.resize(30,30);
     myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
     myWorld.setGrabbable(false);
@@ -167,15 +171,19 @@ void draw() {
     }
     bgm.loop();
   } else if(replaying) {
-    replay[abs(replayFrame-frameCount)].loadPixels();
-    int[] temp = new int[replay[abs(replayFrame-frameCount)].pixels.length];
-    arrayCopy(replay[abs(replayFrame-frameCount)].pixels,temp);
-    replay[abs(replayFrame-frameCount)].updatePixels();
-    loadPixels();
-    arrayCopy(temp,pixels);
-    updatePixels();
-    println(abs(replayFrame-frameCount));
-    if(abs(replayFrame-frameCount)>replay.length-2)replaying=false;
+    //replay[abs(replayFrame-frameCount)].loadPixels();
+    //int[] temp = new int[replay[abs(replayFrame-frameCount)].pixels.length];
+    //arrayCopy(replay[abs(replayFrame-frameCount)].pixels,temp);
+    //replay[abs(replayFrame-frameCount)].updatePixels();
+    //loadPixels();
+    //arrayCopy(temp,pixels);
+    //updatePixels();
+    background(0);
+    image(replay[frameCount%replay.length],0,0,width,height);
+    if(abs(replayFrame-frameCount)>replay.length-2) {
+      replaying=false;
+      replay = new PImage[0];
+    }
   } else {
     ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
     if(mousePressed) {
@@ -207,6 +215,7 @@ void draw() {
     line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
     line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
     myWorld.draw();
+    saveReplayFrame();
     PVector temp = PVector.sub(new PVector(ball.getX(),ball.getY()),new PVector(frame.getX(),frame.getY())).normalize().mult(ball.getSize());
     stroke(80,110,255,127);
     line(ball.getX(),ball.getY(),ball.getX()-temp.x,ball.getY()-temp.y);
@@ -214,7 +223,6 @@ void draw() {
     temp = PVector.sub(new PVector(ball.getX(),ball.getY()),new PVector(fram2.getX(),fram2.getY())).normalize().mult(ball.getSize());
     line(ball.getX(),ball.getY(),ball.getX()-temp.x,ball.getY()-temp.y);
     pop();
-    saveReplayFrame();
     textSize(50);
     textAlign(LEFT,CENTER);
     text(scor1,30,30);
@@ -446,6 +454,24 @@ void reset() {
   boos1 = 100;
   boos2 = 100;
 }
+
+//void saveReplayFrame() {
+//  replay[frameCount%replay.length].beginDraw();
+//  replay[frameCount%replay.length].background(0);
+//  replay[frameCount%replay.length].push();
+//  replay[frameCount%replay.length].translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
+//  replay[frameCount%replay.length].scale(0.5-ballVelo/400);
+//  replay[frameCount%replay.length].fill(200);
+//  replay[frameCount%replay.length].rect(width/2-25,height,50,-200);
+//  replay[frameCount%replay.length].rect(width/2-100,height-250,200,50);
+//  replay[frameCount%replay.length].strokeWeight(10);
+//  replay[frameCount%replay.length].line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
+//  replay[frameCount%replay.length].line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
+//  myWorld.draw(replay[frameCount%replay.length]);
+//  replay[frameCount%replay.length].pop();
+//  replay[frameCount%replay.length].endDraw();
+//  println(frameCount%replay.length);
+//}
 
 void saveReplayFrame() {
   loadPixels();
