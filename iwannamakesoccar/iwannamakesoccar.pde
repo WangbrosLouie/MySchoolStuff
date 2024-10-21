@@ -200,7 +200,7 @@ class Button {
   }
 }
 
-byte screen = 2;
+byte screen = 0;
 int Btn = 0;
 //arena size variables
 int AWidth;
@@ -253,9 +253,7 @@ PImage[] replay = new PImage[0];
 PGraphics gcar1, gcar2, pcar1, pcar2, Hitbox;
 PFont Lucid;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
-Button play30 = new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS");
-Button play60;
-Button pause;
+Button[] title;
 //controller stuff
 ControlIO CtrlIO;
 ControlDevice N64;
@@ -297,59 +295,65 @@ void HPressed(float x) {
 }
 
 void draw() {
-  switch(screen) {
+  if(loading) {//draw the loadscreen
+    frameRate(30);
+    AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
+    AHeight = height*3;
+    goalHeight = height;
+    java.util.Arrays.fill(Keys,false);
+    bg = new Gif(53,3,"chip/",".png");//load assets
+    bgm = new SoundFile(this,"grent_looped.ogg");
+    for(int i=0;i<replay.length;i++) {
+      replay[i] = new PImage(width,height,RGB);
+    }
+    tire.resize(30,30);
+    Hitbox = createGraphics(640,480);
+    Hitbox.noSmooth();//yooshi yattazo!
+    Hitbox.noStroke();
+    title = new Button[]{
+    new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS"),
+    new Button(1, 2, width/8, height/4*3, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 60 FPS")
+    };
+    //initialize physics instances
+    myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
+    myWorld.setGrabbable(false);
+    myWorld.setGravity(0,500);
+    ball = new FCircle(60);
+    ball.setPosition(width/2,height-31);
+    ball.setFriction(0.5);
+    ball.setDensity(0.1);
+    ball.setRestitution(1);
+    ball.setBullet(true);
+    ball.setAllowSleeping(false);
+    myWorld.add(ball);
+    makeImages();
+    makeArena();
+    makeCars();
+    //controller detection
+    CtrlIO = ControlIO.getInstance(this);
+    ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
+    if(Controllers.length>3) {
+      N64 = Controllers[2];
+      N64.open();
+      A = N64.getButton(2);
+      L = N64.getButton(7);
+      R = N64.getButton(8);
+      DPad = N64.getHat(0);
+      A.plug("APressed",ControlIO.ON_PRESS);
+      L.plug("LPressed",ControlIO.ON_PRESS);
+      R.plug("RPressed",ControlIO.ON_PRESS);
+      A.plug("AReleased",ControlIO.ON_RELEASE);
+      L.plug("LReleased",ControlIO.ON_RELEASE);
+      R.plug("RReleased",ControlIO.ON_RELEASE);
+    }
+    loading = false;
+    bgm.loop();
+  } else switch(screen) {
   case 0://title screen
-    play30.draw();
-    play60.draw();
+    process(title,Hitbox);
     break;
   case 1://ingame
-    if(loading) {//draw the loadscreen
-      loading = false;
-      frameRate(30);
-      AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
-      AHeight = height*3;
-      goalHeight = height;
-      java.util.Arrays.fill(Keys,false);
-      bg = new Gif(53,3,"chip/",".png");//load assets
-      bgm = new SoundFile(this,"grent_looped.ogg");
-      for(int i=0;i<replay.length;i++) {
-        replay[i] = new PImage(width,height,RGB);
-      }
-      tire.resize(30,30);
-      //initialize physics instances
-      myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
-      myWorld.setGrabbable(false);
-      myWorld.setGravity(0,500);
-      ball = new FCircle(60);
-      ball.setPosition(width/2,height-31);
-      ball.setFriction(0.5);
-      ball.setDensity(0.1);
-      ball.setRestitution(1);
-      ball.setBullet(true);
-      ball.setAllowSleeping(false);
-      myWorld.add(ball);
-      makeImages();
-      makeArena();
-      makeCars();
-      //controller detection
-      CtrlIO = ControlIO.getInstance(this);
-      ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
-      if(Controllers.length>3) {
-        N64 = Controllers[2];
-        N64.open();
-        A = N64.getButton(2);
-        L = N64.getButton(7);
-        R = N64.getButton(8);
-        DPad = N64.getHat(0);
-        A.plug("APressed",ControlIO.ON_PRESS);
-        L.plug("LPressed",ControlIO.ON_PRESS);
-        R.plug("RPressed",ControlIO.ON_PRESS);
-        A.plug("AReleased",ControlIO.ON_RELEASE);
-        L.plug("LReleased",ControlIO.ON_RELEASE);
-        R.plug("RReleased",ControlIO.ON_RELEASE);
-      }
-      bgm.loop();
-    } else if(replaying) {
+    if(replaying) {
       background(0);
       if(replay.length<replayLength)image(replay[frameCount-replayFrame-1],0,0,width,height);
       else image(replay[frameCount%replay.length],0,0,width,height);
@@ -375,7 +379,7 @@ void draw() {
         camY += mouseY-pmouseY;
       }
       background(200);
-      if(drawBG) {
+      if(dispBG) {
         bg.update();
         for(int i=-1;i<1+height/bgY;i++) {
           for(int j=-1;j<1+width/bgX;j++) {
@@ -653,23 +657,24 @@ void reset() {
   pop();
 }
 
-void saveReplayFrameRedraw() {//very laggy maybe dont use
-  replay[frameCount%replay.length].beginDraw();
-  replay[frameCount%replay.length].background(0);
-  replay[frameCount%replay.length].push();
-  replay[frameCount%replay.length].translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
-  replay[frameCount%replay.length].scale(0.5-ballVelo/400);
-  replay[frameCount%replay.length].fill(200);
-  replay[frameCount%replay.length].rect(width/2-25,height,50,-200);
-  replay[frameCount%replay.length].rect(width/2-100,height-250,200,50);
-  replay[frameCount%replay.length].strokeWeight(10);
-  replay[frameCount%replay.length].line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
-  replay[frameCount%replay.length].line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
-  myWorld.draw(replay[frameCount%replay.length]);
-  replay[frameCount%replay.length].pop();
-  replay[frameCount%replay.length].endDraw();
-  println(frameCount%replay.length);
-}
+//void saveReplayFrameRedraw() {//very laggy maybe dont use
+//btw was written for a pgraphics instance so doesnt work rn
+//  replay[frameCount%replay.length].beginDraw();
+//  replay[frameCount%replay.length].background(0);
+//  replay[frameCount%replay.length].push();
+//  replay[frameCount%replay.length].translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
+//  replay[frameCount%replay.length].scale(0.5-ballVelo/400);
+//  replay[frameCount%replay.length].fill(200);
+//  replay[frameCount%replay.length].rect(width/2-25,height,50,-200);
+//  replay[frameCount%replay.length].rect(width/2-100,height-250,200,50);
+//  replay[frameCount%replay.length].strokeWeight(10);
+//  replay[frameCount%replay.length].line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
+//  replay[frameCount%replay.length].line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
+//  myWorld.draw(replay[frameCount%replay.length]);
+//  replay[frameCount%replay.length].pop();
+//  replay[frameCount%replay.length].endDraw();
+//  println(frameCount%replay.length);
+//}
 
 void saveReplayFrame() {
   loadPixels();
@@ -843,6 +848,7 @@ String toTime(int first, int second) {//cause im lazy
 
 //backported from tophat clicker(dont ask)!
 void blueDead(String CALLEDFR, String STOPCODE, String INFOSCND) { //funny
+  noLoop();
   background(#000080);
   fill(255);
   textFont(Lucid);
@@ -927,31 +933,43 @@ void keyReleased() {
 //finish implementing buttons
 
 void mousePressed() {
-  int Action = Hitbox.get(mouseX,mouseY);
-  Btn = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+  if(!loading){
+    int Action = Hitbox.get(mouseX,mouseY);
+    Btn = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+  }
 }
 
 void mouseReleased() {
-  int Action = Hitbox.get(mouseX,mouseY);
-  Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
-  if(Action==Btn&&Action!=0) {
-    Action = Btns[Action-1].doWhat;
-    switch(Action) {
-    case 1:
-      if(BGCol>0)BGCol--;else BGCol=0;
-      break;
-    case 2:
-      if(BGCol<0xF)BGCol++;else BGCol=0xF;
-      break;
-    case 3:
-      Btns[Action-1].XSize+=3;
-      Btns[Action-1].YSize+=3;
-      break;
-    default:
-      
+  if(!loading){
+    int Action = Hitbox.get(mouseX,mouseY);
+    Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+    if(Action==Btn&&Action!=0) {
+      Action = title[Action-1].doWhat;
+      switch(Action) {
+      case 1:
+        halfFPS = true;
+        frameRate(30);
+        //from the
+        screen = 1;
+        //to the
+        break;
+      //to the
+      case 2:
+        //to the
+        halfFPS = false;
+        frameRate(60);
+        screen = 1;
+        break;
+      case 3:
+        title[Action-1].XSize+=3;
+        title[Action-1].YSize+=3;
+        break;
+      default:
+        
+      }
     }
+    Btn = 0;
   }
-  Btn = 0;
 }
 
 void process(Button[] B, PGraphics H) {
