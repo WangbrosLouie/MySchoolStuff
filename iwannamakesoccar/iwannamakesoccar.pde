@@ -52,6 +52,7 @@ class Button {
   int Y = 0;
   int XSize = 0;
   int YSize = 0;
+  float tSize = 0;
   color Out = color(0,0,0);// idle outline
   color In = color(0,0,0);// idle fill
   int doWhat = 0;
@@ -65,7 +66,7 @@ class Button {
   color HOut = color(0,0,0);// hover outline
   color HIn = color(0,0,0);// hover fill
   //text button constructor
-  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, String TEXT) {
+  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, String TEXT, float TsIZE) {
     if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
       Type = 1;
     } else {
@@ -85,6 +86,7 @@ class Button {
       PIn = piN;
       HIn = hiN;
       HOut = hoUT;
+      tSize = TsIZE;
     }
   }
   //image button constructor
@@ -118,6 +120,7 @@ class Button {
       if(Type>0) {
         push();
         textAlign(CENTER,CENTER);
+        textSize(tSize);
         switch(Active) {
         case 0:
           fill(TOut);
@@ -229,7 +232,7 @@ int replayFrame = 0;
 int lastGoal = 0;
 int goalSpeed = 0;
 //fixed variables
-final int tireSpeed = 100;
+final int tireSpeed = 300;
 final int tireSpeed30 = 720;
 final int tireSpeedMax = 500;
 final int jumpPower = 15000;
@@ -296,23 +299,23 @@ void HPressed(float x) {
 
 void draw() {
   if(loading) {//draw the loadscreen
-    frameRate(30);
+    bg = new Gif(53,3,"chip/",".png");//load assets
+    bgm = new SoundFile(this,"grent_looped.ogg");
+    Hitbox = createGraphics(640,480);
+    Hitbox.noSmooth();//yooshi yattazo!
+    Hitbox.noStroke();
     AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
     AHeight = height*3;
     goalHeight = height;
     java.util.Arrays.fill(Keys,false);
-    bg = new Gif(53,3,"chip/",".png");//load assets
-    bgm = new SoundFile(this,"grent_looped.ogg");
     for(int i=0;i<replay.length;i++) {
       replay[i] = new PImage(width,height,RGB);
     }
     tire.resize(30,30);
-    Hitbox = createGraphics(640,480);
-    Hitbox.noSmooth();//yooshi yattazo!
-    Hitbox.noStroke();
     title = new Button[]{
-    new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS"),
-    new Button(1, 2, width/8, height/4*3, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 60 FPS")
+    new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS",24),
+    new Button(1, 2, width/8, height/8*5, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 60 FPS",24),
+    new Button(1, 3, width/8, height/4*3, width/4*3, height/8, color(0), color(50,184,83), color(0), color(30,150,60), color(0), color(10,100,23), color(0), color(0), color(0),"Background ON",32)
     };
     //initialize physics instances
     myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
@@ -346,16 +349,23 @@ void draw() {
       L.plug("LReleased",ControlIO.ON_RELEASE);
       R.plug("RReleased",ControlIO.ON_RELEASE);
     }
-    loading = false;
     bgm.loop();
+    loading = false;
   } else switch(screen) {
   case 0://title screen
+    background(200);
+    //make a title image maybe
+    textAlign(CENTER,CENTER);
+    textSize(69);//hehehe
+    text("BLAST PROCESSING\ns o c c e r",width/2,100);
     process(title,Hitbox);
     break;
   case 1://ingame
     if(replaying) {
       background(0);
-      if(replay.length<replayLength)image(replay[frameCount-replayFrame-1],0,0,width,height);
+      int Length = replayLength;
+      if(!halfFPS)Length*=2;
+      if(replay.length<Length)image(replay[frameCount-replayFrame-1],0,0,width,height);
       else image(replay[frameCount%replay.length],0,0,width,height);
       text(goalSpeed,200,height-50);
       text(toTime(lastGoal,replayFrame),width-100,height-50);
@@ -366,7 +376,7 @@ void draw() {
       }
     } else {
       //process gameplay
-      if(halfFPS)processKeys30fps();else processKeys();
+      processKeys();
       if(!(N64==null))HPressed(DPad.getX());
       boos1 = constrain(boos1,0,100);
       boos2 = constrain(boos2,0,100);
@@ -677,8 +687,10 @@ void reset() {
 //}
 
 void saveReplayFrame() {
+  int Length = replayLength;
+  if(!halfFPS)Length*=2;
   loadPixels();
-  if(replay.length<replayLength) {
+  if(replay.length<Length) {
     replay = (PImage[])append(replay,new PImage(width,height,RGB));
     replay[replay.length-1].loadPixels();
     arrayCopy(pixels,replay[replay.length-1].pixels);
@@ -691,7 +703,83 @@ void saveReplayFrame() {
   updatePixels();
 }
 
-void processKeys() {//backport stuff from the 30 fps version
+void processKeys() {
+  if(Keys[0]){
+    tire1.addTorque(halfFPS?-tireSpeed30:-tireSpeed);
+    tire2.addTorque(halfFPS?-tireSpeed30/2:-tireSpeed/2);
+    if(!Keys[8]&&!Keys[9])frame.addTorque(halfFPS?-1000:-500);
+  }
+  if(Keys[1]){
+    tire1.addTorque(halfFPS?tireSpeed30/2:tireSpeed/2);
+    tire2.addTorque(halfFPS?tireSpeed30:tireSpeed);
+    if(!Keys[8]&&!Keys[9])frame.addTorque(halfFPS?1000:500);
+  }
+  if(Keys[2]&&!Keys[6]&&Keys[12]){
+    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(jumpPower);
+    frame.addImpulse(jump.x,jump.y,0,25);
+    Keys[12] = false;
+  } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
+    frame.setAngularVelocity(-frame.getRotation()*4);
+    frame.addImpulse(0,2500,0,0);
+  }
+  if(!(Keys[16]&&Keys[17])) {
+    if(Keys[16]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(halfFPS?boostPower30:boostPower);
+      frame.addImpulse(jump.x,jump.y,0,0);
+      boos1 -= 1;
+    }else if(Keys[17]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(halfFPS?boostPower30:boostPower);
+      frame.addImpulse(jump.x,jump.y,0,0);
+      boos1 -= 1;
+    }
+  }
+  if(!(Keys[16]||Keys[17])) {
+    boos1 += 1;
+  }
+  if(Keys[3]){
+    tire3.addTorque(halfFPS?-tireSpeed30:-tireSpeed);
+    tire4.addTorque(halfFPS?-tireSpeed30/2:-tireSpeed/2);
+    if(!Keys[10]&&!Keys[11])fram2.addTorque(halfFPS?-1000:-500);
+  }
+  if(Keys[4]){
+    tire3.addTorque(halfFPS?tireSpeed30/2:tireSpeed/2);
+    tire4.addTorque(halfFPS?tireSpeed30:tireSpeed);
+    if(!Keys[10]&&!Keys[11])fram2.addTorque(halfFPS?1000:500);
+  }
+  if(Keys[5]&&!Keys[7]&&Keys[13]){
+    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(jumpPower);
+    fram2.addImpulse(jump.x,jump.y,0,25);
+    Keys[13] = false;
+  } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
+    fram2.setAngularVelocity(-fram2.getRotation()*4);
+  }
+  if(!(Keys[18]&&Keys[19])){
+    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(halfFPS?boostPower30:boostPower);
+      fram2.addImpulse(jump.x,jump.y,0,0);
+      boos2 -= 1;
+    }
+    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(halfFPS?boostPower30:boostPower);
+      fram2.addImpulse(jump.x,jump.y,0,0);
+      boos2 -= 1;
+    }
+  }
+  if(!(Keys[18]||Keys[19])) {
+    boos2 += 1;
+  }
+  if(Keys[2]&&!Keys[6])Keys[6]=true;
+  if(Keys[6]&&!Keys[2])Keys[6]=false;
+  if(Keys[5]&&!Keys[7])Keys[7]=true;
+  if(Keys[7]&&!Keys[5])Keys[7]=false;
+  if(jmp1>0)Keys[12]=true;
+  if(jmp2>0)Keys[13]=true;
+  println(tire1.getAngularVelocity());
+  tire1.setAngularVelocity(constrain(tire1.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire2.setAngularVelocity(constrain(tire2.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire3.setAngularVelocity(constrain(tire3.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire4.setAngularVelocity(constrain(tire4.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  frame.setRotation((((((frame.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
+  fram2.setRotation((((((fram2.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
+}
+
+void processKeysOld() {//backport stuff from the 30 fps version
 //or maybe merge functions and use some halfFPS?30fps:60fps
   if(Keys[0]){
     tire1.addTorque(-tireSpeed);
@@ -890,6 +978,12 @@ void keyPressed() {
   case 33:
     Keys[19] = true;
     break;
+  case 83:
+    Keys[20] = true;
+    break;
+  case 35:
+    Keys[21] = true;
+    break;
   }
 }
 
@@ -928,25 +1022,34 @@ void keyReleased() {
   case 33:
     Keys[19] = false;
     break;
+  case 83:
+    Keys[20] = false;
+    break;
+  case 35:
+    Keys[21] = false;
+    break;
   }
 }
-//finish implementing buttons
 
 void mousePressed() {
-  if(!loading){
+  if(frameCount>1&&!loading){//side effect of no onscreen buttons on frameCount<2
     int Action = Hitbox.get(mouseX,mouseY);
     Btn = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
   }
 }
 
 void mouseReleased() {
-  if(!loading){
+  if(frameCount>1&&!loading){
     int Action = Hitbox.get(mouseX,mouseY);
     Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
     if(Action==Btn&&Action!=0) {
       Action = title[Action-1].doWhat;
       switch(Action) {
       case 1:
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        frameCount = 0;
         halfFPS = true;
         frameRate(30);
         //from the
@@ -956,16 +1059,24 @@ void mouseReleased() {
       //to the
       case 2:
         //to the
+        frameCount = 0;
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
         halfFPS = false;
         frameRate(60);
         screen = 1;
         break;
-      case 3:
-        title[Action-1].XSize+=3;
-        title[Action-1].YSize+=3;
+      case 3://turn that frown upside down :3
+        dispBG = !dispBG;
+        title[Action-1].text = dispBG?"Background ON":"Background OFF";
+        //color(0), color(50,184,83), color(0), color(30,150,60), color(0), color(10,100,23), color(0), color(0), color(0)
+        title[Action-1].In = dispBG?color(50,184,83):color(184,83,50);
+        title[Action-1].HIn = dispBG?color(30,150,60):color(150,60,30);
+        title[Action-1].PIn = dispBG?color(10,100,23):color(100,23,10);
         break;
       default:
-        
+        blueDead("Button Action "+Action,"404 Not Found","Action = "+Action);
       }
     }
     Btn = 0;
