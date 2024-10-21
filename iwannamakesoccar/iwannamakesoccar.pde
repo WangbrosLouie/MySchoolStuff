@@ -255,13 +255,13 @@ PImage tire;
 PImage[] replay = new PImage[0];
 PGraphics gcar1, gcar2, pcar1, pcar2, Hitbox;
 PFont Lucid;
-boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
+boolean[] Keys = new boolean[22]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor? 16-19 boost keys 20&21 brake keys
 Button[] title;
 //controller stuff
 ControlIO CtrlIO;
 ControlDevice N64;
 ControlHat DPad;
-ControlButton A, L, R;
+ControlButton A, B, L, R;
 
 void settings() {
   Fisica.init(this);
@@ -286,9 +286,11 @@ void setup() {
 void APressed(){Keys[2]=true;}
 void LPressed(){Keys[16]=true;}
 void RPressed(){Keys[17]=true;}
+void BPressed(){Keys[20]=true;}
 void AReleased(){Keys[2]=false;}
 void LReleased(){Keys[16]=false;}
 void RReleased(){Keys[17]=false;}
+void BReleased(){Keys[20]=false;}
 //2 dummy float params needed for ControlHat's plug() to work
 //also the stupid values dont even update in time for the plug
 void HPressed(float x) {
@@ -339,15 +341,18 @@ void draw() {
       N64 = Controllers[2];
       N64.open();
       A = N64.getButton(2);
+      B = N64.getButton(3);
       L = N64.getButton(7);
       R = N64.getButton(8);
       DPad = N64.getHat(0);
       A.plug("APressed",ControlIO.ON_PRESS);
       L.plug("LPressed",ControlIO.ON_PRESS);
       R.plug("RPressed",ControlIO.ON_PRESS);
+      B.plug("BPressed",ControlIO.ON_PRESS);
       A.plug("AReleased",ControlIO.ON_RELEASE);
       L.plug("LReleased",ControlIO.ON_RELEASE);
       R.plug("RReleased",ControlIO.ON_RELEASE);
+      B.plug("BReleased",ControlIO.ON_RELEASE);
     }
     bgm.loop();
     loading = false;
@@ -734,6 +739,10 @@ void processKeys() {
   if(!(Keys[16]||Keys[17])) {
     boos1 += 1;
   }
+  if(Keys[20]) {
+    tire1.setAngularVelocity(0);
+    tire2.setAngularVelocity(0);
+  }
   if(Keys[3]){
     tire3.addTorque(halfFPS?-tireSpeed30:-tireSpeed);
     tire4.addTorque(halfFPS?-tireSpeed30/2:-tireSpeed/2);
@@ -764,154 +773,9 @@ void processKeys() {
   if(!(Keys[18]||Keys[19])) {
     boos2 += 1;
   }
-  if(Keys[2]&&!Keys[6])Keys[6]=true;
-  if(Keys[6]&&!Keys[2])Keys[6]=false;
-  if(Keys[5]&&!Keys[7])Keys[7]=true;
-  if(Keys[7]&&!Keys[5])Keys[7]=false;
-  if(jmp1>0)Keys[12]=true;
-  if(jmp2>0)Keys[13]=true;
-  println(tire1.getAngularVelocity());
-  tire1.setAngularVelocity(constrain(tire1.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
-  tire2.setAngularVelocity(constrain(tire2.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
-  tire3.setAngularVelocity(constrain(tire3.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
-  tire4.setAngularVelocity(constrain(tire4.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
-  frame.setRotation((((((frame.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
-  fram2.setRotation((((((fram2.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
-}
-
-void processKeysOld() {//backport stuff from the 30 fps version
-//or maybe merge functions and use some halfFPS?30fps:60fps
-  if(Keys[0]){
-    tire1.addTorque(-tireSpeed);
-    tire2.addTorque(-tireSpeed/2);
-    if(!Keys[8]&&!Keys[9])frame.addTorque(-500);
-  }
-  if(Keys[1]){
-    tire1.addTorque(tireSpeed/2);
-    tire2.addTorque(tireSpeed);
-    if(!Keys[8]&&!Keys[9])frame.addTorque(500);
-  }
-  if(Keys[2]&&!Keys[6]&&Keys[12]){
-    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(jumpPower);
-    frame.addImpulse(jump.x,jump.y,0,25);
-    Keys[12] = false;
-  } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
-    frame.setAngularVelocity(-frame.getRotation()*4);
-    frame.addImpulse(0,2500,0,0);
-  }
-  if(!(Keys[16]&&Keys[17])) {
-    if(Keys[16]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(boostPower);
-      frame.addImpulse(jump.x,jump.y,0,0);
-      boos1 -= 1;
-    }else if(Keys[17]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(boostPower);
-      frame.addImpulse(jump.x,jump.y,0,0);
-      boos1 -= 1;
-    }
-  }
-  if(!(Keys[16]||Keys[17])) {
-    boos1 += 1;
-  }
-  if(Keys[3]){
-    tire3.addTorque(-tireSpeed);
-    tire4.addTorque(-tireSpeed/2);
-    if(!Keys[10]&&!Keys[11])fram2.addTorque(-500);
-  }
-  if(Keys[4]){
-    tire3.addTorque(tireSpeed/2);
-    tire4.addTorque(tireSpeed);
-    if(!Keys[10]&&!Keys[11])fram2.addTorque(500);
-  }
-  if(Keys[5]&&!Keys[7]&&Keys[13]){
-    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(jumpPower);
-    fram2.addImpulse(jump.x,jump.y,0,25);
-    Keys[13] = false;
-  } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
-    fram2.setAngularVelocity(-fram2.getRotation()*4);
-  }
-  if(!(Keys[18]&&Keys[19])){
-    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(boostPower);
-      fram2.addImpulse(jump.x,jump.y,0,0);
-      boos2 -= 1;
-    }
-    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(boostPower);
-      fram2.addImpulse(jump.x,jump.y,0,0);
-      boos2 -= 1;
-    }
-  }
-  if(Keys[2]&&!Keys[6])Keys[6]=true;
-  if(Keys[6]&&!Keys[2])Keys[6]=false;
-  if(Keys[5]&&!Keys[7])Keys[7]=true;
-  if(Keys[7]&&!Keys[5])Keys[7]=false;
-  if(jmp1>0)Keys[12]=true;
-  if(jmp2>0)Keys[13]=true;
-  tire1.setAngularVelocity(constrain(tire1.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
-  tire2.setAngularVelocity(constrain(tire2.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
-  tire3.setAngularVelocity(constrain(tire3.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
-  tire4.setAngularVelocity(constrain(tire4.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
-  frame.setRotation((((((frame.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
-  fram2.setRotation((((((fram2.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
-}
-
-void processKeys30fps() {
-  if(Keys[0]){
-    tire1.addTorque(-tireSpeed30);
-    tire2.addTorque(-tireSpeed30/2);
-    if(!Keys[8]&&!Keys[9])frame.addTorque(-1000);
-  }
-  if(Keys[1]){
-    tire1.addTorque(tireSpeed30/2);
-    tire2.addTorque(tireSpeed30);
-    if(!Keys[8]&&!Keys[9])frame.addTorque(1000);
-  }
-  if(Keys[2]&&!Keys[6]&&Keys[12]){
-    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(jumpPower);
-    frame.addImpulse(jump.x,jump.y,0,25);
-    Keys[12] = false;
-  } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
-    frame.setAngularVelocity(-frame.getRotation()*4);
-    frame.addImpulse(0,2500,0,0);
-  }
-  if(!(Keys[16]&&Keys[17])) {
-    if(Keys[16]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(boostPower30);
-      frame.addImpulse(jump.x,jump.y,0,0);
-      boos1 -= 1;
-    }else if(Keys[17]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(boostPower30);
-      frame.addImpulse(jump.x,jump.y,0,0);
-      boos1 -= 1;
-    }
-  }
-  if(!(Keys[16]||Keys[17])) {
-    boos1 += 1;
-  }
-  if(Keys[3]){
-    tire3.addTorque(-tireSpeed30);
-    tire4.addTorque(-tireSpeed30/2);
-    if(!Keys[10]&&!Keys[11])fram2.addTorque(-1000);
-  }
-  if(Keys[4]){
-    tire3.addTorque(tireSpeed30/2);
-    tire4.addTorque(tireSpeed30);
-    if(!Keys[10]&&!Keys[11])fram2.addTorque(1000);
-  }
-  if(Keys[5]&&!Keys[7]&&Keys[13]){
-    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(jumpPower);
-    fram2.addImpulse(jump.x,jump.y,0,25);
-    Keys[13] = false;
-  } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
-    fram2.setAngularVelocity(-fram2.getRotation()*4);
-  }
-  if(!(Keys[18]&&Keys[19])){
-    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(boostPower30);
-      fram2.addImpulse(jump.x,jump.y,0,0);
-      boos2 -= 1;
-    }
-    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(boostPower30);
-      fram2.addImpulse(jump.x,jump.y,0,0);
-      boos2 -= 1;
-    }
-  }
-  if(!(Keys[18]||Keys[19])) {
-    boos2 += 1;
+  if(Keys[21]) {
+    tire3.setAngularVelocity(0);
+    tire4.setAngularVelocity(0);
   }
   if(Keys[2]&&!Keys[6])Keys[6]=true;
   if(Keys[6]&&!Keys[2])Keys[6]=false;
