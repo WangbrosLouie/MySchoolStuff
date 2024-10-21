@@ -232,4 +232,7 @@ show distance for max ease of play. thats it after that i will work on
 tophat turmoil for the first time since friday. now i need to go to sleep
 because i dont wanna wreck my sleep schedule too much. till the next time
 whether its me continuing this one or making the next project. sayonyara.
+hey ho. it be the next time. i love making this game. i get to compose
+a random song for the menu screen draw up fancy graphics that wont get
+used and also bug test bug test bug test.
 */

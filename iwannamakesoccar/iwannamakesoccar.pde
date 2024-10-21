@@ -45,6 +45,160 @@ class Gif extends PImage {
   }
 }
 
+class Button {
+  int Type = 0; //positive type is text, negative type is image
+  int X = 0;
+  int Y = 0;
+  int XSize = 0;
+  int YSize = 0;
+  color Out = color(0,0,0);// idle outline
+  color In = color(0,0,0);// idle fill
+  int doWhat = 0;
+  String text = "";
+  PImage img = new PImage();
+  color TOut = color(0,0,0);// text/tint unpressed
+  color TIn = color(0,0,0);// text/tint depressed
+  color POut = color(0,0,0);// pressed outline
+  color PIn = color(0,0,0);// pressed fill
+  color THov = color(0,0,0);// text/tint hover
+  color HOut = color(0,0,0);// hover outline
+  color HIn = color(0,0,0);// hover fill
+  //text button constructor
+  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, String TEXT) {
+    if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
+      Type = 1;
+    } else {
+      Type = abs(tYPE);
+      X = x;
+      Y = y;
+      XSize = xsIZE;
+      YSize = ysIZE;
+      Out = oUT;
+      In = iN;
+      doWhat = DOwHAT;
+      text = TEXT;
+      TOut = toUT;
+      THov = thOV;
+      TIn = tiN;
+      POut = poUT;
+      PIn = piN;
+      HIn = hiN;
+      HOut = hoUT;
+    }
+  }
+  //image button constructor
+  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, PImage IMG) {
+    if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
+      Type = -1;
+    } else {
+      Type = -abs(tYPE);
+      X = x;
+      Y = y;
+      XSize = xsIZE;
+      YSize = ysIZE;
+      Out = oUT;
+      In = iN;
+      doWhat = DOwHAT;
+      img = IMG;
+      TOut = toUT;
+      THov = thOV;
+      TIn = tiN;
+      POut = poUT;
+      PIn = piN;
+      HIn = hiN;
+      HOut = hoUT;
+    }
+  }
+  
+  void draw(byte Active) {//2 is pressed, 1 is hover, 0 is idle
+    if(Type==0||Type==-0) {
+      println("Warning: Uninitialized button.");
+    } else {
+      if(Type>0) {
+        push();
+        textAlign(CENTER,CENTER);
+        switch(Active) {
+        case 0:
+          fill(TOut);
+          push();
+          stroke(Out);
+          fill(In);
+          break;
+        case 1:
+          fill(THov);
+          push();
+          stroke(HOut);
+          fill(HIn);
+          break;
+        case 2:
+          fill(TIn);
+          push();
+          stroke(POut);
+          fill(PIn);
+          break;
+        default:
+          println("Naked grandma!");
+        }
+        switch(Type) {
+        case 1:
+          rect(X,Y,XSize,YSize);
+          pop();
+          text(text,XSize/2+X,YSize/2+Y);
+          break;
+        case 2:
+          ellipse(X,Y,XSize,YSize);
+          pop();
+          text(text,XSize/2+X,YSize/2+Y);
+        }
+        pop();
+      } else {
+        push();
+        switch(Active) {
+        case 0:
+          tint(TOut);
+          stroke(Out);//ya need to keep these parts in case of transparent images
+          fill(In);
+          break;
+        case 1:
+          tint(THov);
+          stroke(HOut);
+          fill(HIn);
+          break;
+        case 2:
+          tint(TIn);
+          stroke(POut);
+          fill(PIn);
+          break;
+        default:
+          println("Naked huh?");
+        }
+        switch(-Type) {
+        case 1:
+          rect(X,Y,XSize,YSize);
+          image(img,X,Y,XSize,YSize);
+          break;
+        case 2:
+          ellipse(X,Y,XSize,YSize);
+          text(text,XSize/2+X,YSize/2+Y);
+        }
+        pop();
+      }
+    }
+  }
+  
+  void drawHit(int i, PGraphics H) {
+    i++;
+    H.fill(color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100));
+    switch(abs(Type)) {
+    case 1:
+      H.rect(X,Y,XSize,YSize);
+      break;
+    case 2:
+      H.ellipse(X,Y,XSize,YSize);
+    }
+  }
+}
+
 int AWidth;
 int AHeight;
 int goalHeight;//fix wall heights and make nets and scoreboard and stuff
@@ -55,12 +209,16 @@ int boos2 = 100;
 byte jmp1 = 0;
 byte jmp2 = 0;
 float ballVelo = 0;
-byte goaling = 0;
+byte screen = 0;
 int camX = 0;
 int camY = 0;
 boolean loading = true;
 boolean replaying = false;
+boolean afterParty = false;
 int replayFrame = 0;
+int lastGoal = 0;
+boolean halfFPS = true;
+int goalSpeed = 0;
 final int tireSpeed = 100;
 final int tireSpeed30 = 720;
 final int tireSpeedMax = 500;
@@ -80,6 +238,9 @@ PImage tire;
 PImage[] replay = new PImage[0];
 PGraphics gcar1, gcar2, pcar1, pcar2;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
+Button play30 = new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS");
+Button play60;
+Button pause;
 //controller stuff
 ControlIO CtrlIO;
 ControlDevice N64;
@@ -171,20 +332,15 @@ void draw() {
     }
     bgm.loop();
   } else if(replaying) {
-    //replay[abs(replayFrame-frameCount)].loadPixels();
-    //int[] temp = new int[replay[abs(replayFrame-frameCount)].pixels.length];
-    //arrayCopy(replay[abs(replayFrame-frameCount)].pixels,temp);
-    //replay[abs(replayFrame-frameCount)].updatePixels();
-    //loadPixels();
-    //arrayCopy(temp,pixels);
-    //updatePixels();
     background(0);
     if(replay.length<replayLength)image(replay[frameCount-replayFrame-1],0,0,width,height);
     else image(replay[frameCount%replay.length],0,0,width,height);
+    text(goalSpeed,200,height-50);
+    text(toTime(lastGoal,replayFrame),width-100,height-50);
     if(frameCount-replayFrame>replay.length-1) {
       replaying=false;
       replay = new PImage[0];
-      frameCount -= replay.length;
+      frameCount = replayFrame;
     }
   } else {
     ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
@@ -195,10 +351,10 @@ void draw() {
     background(200);
     boos1 = constrain(boos1,0,100);
     boos2 = constrain(boos2,0,100);
-    processKeys30fps();
+    if(halfFPS)processKeys30fps();else processKeys();
     if(!(N64==null))HPressed(DPad.getX());
     myWorld.step();
-    myWorld.step();
+    if(halfFPS)myWorld.step();
     bg.update();
     float bgX = 300;
     float bgY = 200;
@@ -254,7 +410,11 @@ void draw() {
     textAlign(CENTER,CENTER);
     colorMode(HSB);
     fill(frameCount*11%255,255,255);
-    text("ゴール！",width/2,height/2);
+    if(afterParty) {
+      text("ゴール！",width/2,height/2);
+      ball.setFill(255,255-((float)(frameCount-replayFrame)/(replayLength/5))*255);
+      if(frameCount-replayFrame>replayLength/5){replaying=true;reset();afterParty=false;if(replay.length<replayLength)frameCount=replayFrame;}
+    }
     text(frameRate,width/2,height*3/4);
     pop();
   }
@@ -442,6 +602,8 @@ void makeImages() {
 }
 
 void reset() {
+  push();
+  colorMode(RGB);
   ball = new FCircle(60);
   ball.setPosition(width/2,height-31);
   ball.setFriction(0.5);
@@ -455,6 +617,7 @@ void reset() {
   makeCars();
   boos1 = 100;
   boos2 = 100;
+  pop();
 }
 
 //void saveReplayFrameRedraw() {
@@ -492,57 +655,60 @@ void saveReplayFrame() {
 
 void processKeys() {
   if(Keys[0]){
-    tire1.addTorque(-100);
-    tire2.addTorque(-100);
+    tire1.addTorque(-tireSpeed);
+    tire2.addTorque(-tireSpeed/2);
     if(!Keys[8]&&!Keys[9])frame.addTorque(-500);
   }
   if(Keys[1]){
-    tire1.addTorque(100);
-    tire2.addTorque(100);
+    tire1.addTorque(tireSpeed/2);
+    tire2.addTorque(tireSpeed);
     if(!Keys[8]&&!Keys[9])frame.addTorque(500);
   }
   if(Keys[2]&&!Keys[6]&&Keys[12]){
-    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(15000);
+    PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(jumpPower);
     frame.addImpulse(jump.x,jump.y,0,25);
     Keys[12] = false;
   } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
     frame.setAngularVelocity(-frame.getRotation()*4);
+    frame.addImpulse(0,2500,0,0);
   }
   if(!(Keys[16]&&Keys[17])) {
-    if(Keys[16]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(500);
+    if(Keys[16]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()-PI).mult(boostPower);
       frame.addImpulse(jump.x,jump.y,0,0);
       boos1 -= 1;
-    }
-    if(Keys[17]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(500);
+    }else if(Keys[17]&&boos1>0) {PVector jump = PVector.fromAngle(frame.getRotation()).mult(boostPower);
       frame.addImpulse(jump.x,jump.y,0,0);
       boos1 -= 1;
     }
   }
+  if(!(Keys[16]||Keys[17])) {
+    boos1 += 1;
+  }
   if(Keys[3]){
-    tire3.addTorque(-100);
-    tire4.addTorque(-100);
+    tire3.addTorque(-tireSpeed);
+    tire4.addTorque(-tireSpeed/2);
     if(!Keys[10]&&!Keys[11])fram2.addTorque(-500);
   }
   if(Keys[4]){
-    tire3.addTorque(100);
-    tire4.addTorque(100);
+    tire3.addTorque(tireSpeed/2);
+    tire4.addTorque(tireSpeed);
     if(!Keys[10]&&!Keys[11])fram2.addTorque(500);
   }
   if(Keys[5]&&!Keys[7]&&Keys[13]){
-    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(15000);
+    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(jumpPower);
     fram2.addImpulse(jump.x,jump.y,0,25);
     Keys[13] = false;
   } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
     fram2.setAngularVelocity(-fram2.getRotation()*4);
   }
   if(!(Keys[18]&&Keys[19])){
-    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(500);
+    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(boostPower);
       fram2.addImpulse(jump.x,jump.y,0,0);
-      boos2 -= 0.7;
+      boos2 -= 1;
     }
-    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(500);
+    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(boostPower);
       fram2.addImpulse(jump.x,jump.y,0,0);
-      boos2 -= 0.7;
+      boos2 -= 1;
     }
   }
   if(Keys[2]&&!Keys[6])Keys[6]=true;
@@ -551,6 +717,12 @@ void processKeys() {
   if(Keys[7]&&!Keys[5])Keys[7]=false;
   if(jmp1>0)Keys[12]=true;
   if(jmp2>0)Keys[13]=true;
+  tire1.setAngularVelocity(constrain(tire1.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire2.setAngularVelocity(constrain(tire2.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire3.setAngularVelocity(constrain(tire3.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  tire4.setAngularVelocity(constrain(tire4.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
+  frame.setRotation((((((frame.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
+  fram2.setRotation((((((fram2.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
 }
 
 void processKeys30fps() {
@@ -566,7 +738,6 @@ void processKeys30fps() {
   }
   if(Keys[2]&&!Keys[6]&&Keys[12]){
     PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(jumpPower);
-    //frame.setAngularVelocity(-frame.getRotation()*2);
     frame.addImpulse(jump.x,jump.y,0,25);
     Keys[12] = false;
   } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
@@ -586,31 +757,34 @@ void processKeys30fps() {
     boos1 += 1;
   }
   if(Keys[3]){
-    tire3.addTorque(-200);
-    tire4.addTorque(-200);
+    tire3.addTorque(-tireSpeed30);
+    tire4.addTorque(-tireSpeed30/2);
     if(!Keys[10]&&!Keys[11])fram2.addTorque(-1000);
   }
   if(Keys[4]){
-    tire3.addTorque(200);
-    tire4.addTorque(200);
+    tire3.addTorque(tireSpeed30/2);
+    tire4.addTorque(tireSpeed30);
     if(!Keys[10]&&!Keys[11])fram2.addTorque(1000);
   }
   if(Keys[5]&&!Keys[7]&&Keys[13]){
-    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(15000);
+    PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(jumpPower);
     fram2.addImpulse(jump.x,jump.y,0,25);
     Keys[13] = false;
   } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
     fram2.setAngularVelocity(-fram2.getRotation()*4);
   }
   if(!(Keys[18]&&Keys[19])){
-    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(1000);
+    if(Keys[18]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()-PI).mult(boostPower30);
       fram2.addImpulse(jump.x,jump.y,0,0);
       boos2 -= 1;
     }
-    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(1000);
+    if(Keys[19]&&boos2>0) {PVector jump = PVector.fromAngle(fram2.getRotation()).mult(boostPower30);
       fram2.addImpulse(jump.x,jump.y,0,0);
       boos2 -= 1;
     }
+  }
+  if(!(Keys[18]||Keys[19])) {
+    boos2 += 1;
   }
   if(Keys[2]&&!Keys[6])Keys[6]=true;
   if(Keys[6]&&!Keys[2])Keys[6]=false;
@@ -624,6 +798,13 @@ void processKeys30fps() {
   tire4.setAngularVelocity(constrain(tire4.getAngularVelocity(),-tireSpeedMax,tireSpeedMax));
   frame.setRotation((((((frame.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
   fram2.setRotation((((((fram2.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
+}
+
+String toTime(int first, int second) {
+  int elapsed = halfFPS?(second-first)/30:(second-first)/60;
+  int minutes = elapsed/60;
+  int seconds = elapsed%60;
+  return(String.format(minutes+":"+"%1$02d",seconds));
 }
 
 void keyPressed() {
@@ -652,7 +833,10 @@ void keyPressed() {
   case 69:
     Keys[17] = true;
     break;
-  case 155:
+  case 155://insert on windows
+    Keys[18] = true;
+    break;
+  case 156://insert on mac
     Keys[18] = true;
     break;
   case 33:
@@ -690,6 +874,9 @@ void keyReleased() {
   case 155:
     Keys[18] = false;
     break;
+  case 156:
+    Keys[18] = false;
+    break;
   case 33:
     Keys[19] = false;
     break;
@@ -707,8 +894,10 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
   if(contact.contains(tire4,ball))jmp2++;
   if(contact.contains(frame,floor))Keys[14]=true;
   if(contact.contains(fram2,floor))Keys[15]=true;
-  if(contact.contains(ball,rgoal)){scor1++;reset();replayFrame=frameCount;replaying=true;}
-  if(contact.contains(ball,lgoal)){scor2++;reset();replayFrame=frameCount;replaying=true;}
+  if(!afterParty) {
+    if(contact.contains(ball,rgoal)){scor1++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
+    if(contact.contains(ball,lgoal)){scor2++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
+  }
 }
 
 void contactPersisted(FContact contact) {
