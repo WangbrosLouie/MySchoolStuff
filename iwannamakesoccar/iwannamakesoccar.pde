@@ -217,6 +217,7 @@ byte jmp2 = 0;
 float ballVelo = 0;
 int camX = 0;
 int camY = 0;
+boolean dispBG = true;//add a button to toggle this
 //game control
 boolean loading = true;
 boolean halfFPS = true;
@@ -235,6 +236,8 @@ final int jumpPower = 15000;
 final int boostPower = 500;
 final int boostPower30 = 1000;
 final int replayLength = 150;
+final float bgX = 300;
+final float bgY = 200;
 final float tireSoftness = 1;
 //physics variables
 FWorld myWorld, play1, play2;
@@ -300,19 +303,20 @@ void draw() {
     play60.draw();
     break;
   case 1://ingame
-    if(loading) {
+    if(loading) {//draw the loadscreen
       loading = false;
       frameRate(30);
       AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
       AHeight = height*3;
       goalHeight = height;
       java.util.Arrays.fill(Keys,false);
-      bg = new Gif(53,3,"chip/",".png");
+      bg = new Gif(53,3,"chip/",".png");//load assets
       bgm = new SoundFile(this,"grent_looped.ogg");
       for(int i=0;i<replay.length;i++) {
         replay[i] = new PImage(width,height,RGB);
       }
       tire.resize(30,30);
+      //initialize physics instances
       myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
       myWorld.setGrabbable(false);
       myWorld.setGravity(0,500);
@@ -327,6 +331,7 @@ void draw() {
       makeImages();
       makeArena();
       makeCars();
+      //controller detection
       CtrlIO = ControlIO.getInstance(this);
       ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
       if(Controllers.length>3) {
@@ -356,30 +361,32 @@ void draw() {
         frameCount = replayFrame;
       }
     } else {
-      ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
-      if(mousePressed) {
-        camX += mouseX-pmouseX;
-        camY += mouseY-pmouseY;
-      }
-      background(200);
+      //process gameplay
       if(halfFPS)processKeys30fps();else processKeys();
       if(!(N64==null))HPressed(DPad.getX());
       boos1 = constrain(boos1,0,100);
       boos2 = constrain(boos2,0,100);
       myWorld.step();
       if(halfFPS)myWorld.step();
-      bg.update();
-      float bgX = 300;
-      float bgY = 200;
-      for(int i=-1;i<1+height/bgY;i++) {
-        for(int j=-1;j<1+width/bgX;j++) {
-          image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
+      //camera stuff
+      ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
+      if(mousePressed) {
+        camX += mouseX-pmouseX;
+        camY += mouseY-pmouseY;
+      }
+      background(200);
+      if(drawBG) {
+        bg.update();
+        for(int i=-1;i<1+height/bgY;i++) {
+          for(int j=-1;j<1+width/bgX;j++) {
+            image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
+          }
         }
       }
       push();
       translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
       scale(0.5-ballVelo/400);
-      fill(200);
+      fill(200);//bg scoreboard
       rect(width/2-25,height,50,-200);
       rect(width/2-100,height-250,200,50);
       strokeWeight(10);
@@ -387,6 +394,7 @@ void draw() {
       line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
       myWorld.draw();
       saveReplayFrame();
+      //draw player trackers
       PVector temp = PVector.sub(new PVector(ball.getX(),ball.getY()),new PVector(frame.getX(),frame.getY())).normalize().mult(ball.getSize());
       stroke(80,110,255,127);
       line(ball.getX(),ball.getY(),ball.getX()-temp.x,ball.getY()-temp.y);
@@ -440,6 +448,7 @@ void draw() {
     }
     break;
   default:
+//funny ^w^
     blueDead("Screen "+screen,"404 Not Found","Screen = "+screen);
   }
 }
@@ -578,7 +587,7 @@ void makeCars() {
   }
 }
 
-void makeImages() {
+void makeImages() {//for car rotation view
   play1 = new FWorld(0,0,100,100);
   play2 = new FWorld(0,0,100,100);
   gcar1 = createGraphics(100,100);
@@ -644,23 +653,23 @@ void reset() {
   pop();
 }
 
-//void saveReplayFrameRedraw() {
-//  replay[frameCount%replay.length].beginDraw();
-//  replay[frameCount%replay.length].background(0);
-//  replay[frameCount%replay.length].push();
-//  replay[frameCount%replay.length].translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
-//  replay[frameCount%replay.length].scale(0.5-ballVelo/400);
-//  replay[frameCount%replay.length].fill(200);
-//  replay[frameCount%replay.length].rect(width/2-25,height,50,-200);
-//  replay[frameCount%replay.length].rect(width/2-100,height-250,200,50);
-//  replay[frameCount%replay.length].strokeWeight(10);
-//  replay[frameCount%replay.length].line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
-//  replay[frameCount%replay.length].line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
-//  myWorld.draw(replay[frameCount%replay.length]);
-//  replay[frameCount%replay.length].pop();
-//  replay[frameCount%replay.length].endDraw();
-//  println(frameCount%replay.length);
-//}
+void saveReplayFrameRedraw() {//very laggy maybe dont use
+  replay[frameCount%replay.length].beginDraw();
+  replay[frameCount%replay.length].background(0);
+  replay[frameCount%replay.length].push();
+  replay[frameCount%replay.length].translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
+  replay[frameCount%replay.length].scale(0.5-ballVelo/400);
+  replay[frameCount%replay.length].fill(200);
+  replay[frameCount%replay.length].rect(width/2-25,height,50,-200);
+  replay[frameCount%replay.length].rect(width/2-100,height-250,200,50);
+  replay[frameCount%replay.length].strokeWeight(10);
+  replay[frameCount%replay.length].line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
+  replay[frameCount%replay.length].line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
+  myWorld.draw(replay[frameCount%replay.length]);
+  replay[frameCount%replay.length].pop();
+  replay[frameCount%replay.length].endDraw();
+  println(frameCount%replay.length);
+}
 
 void saveReplayFrame() {
   loadPixels();
@@ -677,7 +686,8 @@ void saveReplayFrame() {
   updatePixels();
 }
 
-void processKeys() {
+void processKeys() {//backport stuff from the 30 fps version
+//or maybe merge functions and use some halfFPS?30fps:60fps
   if(Keys[0]){
     tire1.addTorque(-tireSpeed);
     tire2.addTorque(-tireSpeed/2);
@@ -824,7 +834,7 @@ void processKeys30fps() {
   fram2.setRotation((((((fram2.getRotation()+PI)%TAU)+TAU)%TAU)-PI));
 }
 
-String toTime(int first, int second) {
+String toTime(int first, int second) {//cause im lazy
   int elapsed = halfFPS?(second-first)/30:(second-first)/60;
   int minutes = elapsed/60;
   int seconds = elapsed%60;
