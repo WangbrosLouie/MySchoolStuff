@@ -10,6 +10,7 @@ import net.java.games.input.*;
 import org.gamecontrolplus.*;
 import org.gamecontrolplus.gui.*;
 
+//classes and stuff
 class Gif extends PImage {
   int frames = 0;
   int currentFrame = 0;
@@ -199,26 +200,34 @@ class Button {
   }
 }
 
+byte screen = 2;
+int Btn = 0;
+//arena size variables
 int AWidth;
 int AHeight;
 int goalHeight;
+//player status vars
 int scor1 = 0;
 int scor2 = 0;
 int boos1 = 100;
 int boos2 = 100;
 byte jmp1 = 0;
 byte jmp2 = 0;
+//camera variables
 float ballVelo = 0;
-byte screen = 0;
 int camX = 0;
 int camY = 0;
+//game control
 boolean loading = true;
-boolean replaying = false;
+boolean halfFPS = true;
+boolean paused = false;
 boolean afterParty = false;
+//replay variables
+boolean replaying = false;
 int replayFrame = 0;
 int lastGoal = 0;
-boolean halfFPS = true;
 int goalSpeed = 0;
+//fixed variables
 final int tireSpeed = 100;
 final int tireSpeed30 = 720;
 final int tireSpeedMax = 500;
@@ -227,16 +236,19 @@ final int boostPower = 500;
 final int boostPower30 = 1000;
 final int replayLength = 150;
 final float tireSoftness = 1;
+//physics variables
 FWorld myWorld, play1, play2;
 FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
 FPoly frame, fram2;
 FCircle ball, tire1, tire2, tire3, tire4, carp1, carp2;
 FDistanceJoint[] axles;
+//other class variables
 Gif bg;
 SoundFile bgm;
 PImage tire;
 PImage[] replay = new PImage[0];
-PGraphics gcar1, gcar2, pcar1, pcar2;
+PGraphics gcar1, gcar2, pcar1, pcar2, Hitbox;
+PFont Lucid;
 boolean[] Keys = new boolean[20]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor?
 Button play30 = new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS");
 Button play60;
@@ -253,6 +265,7 @@ void settings() {
 }
 
 void setup() {
+  //loading screen 'w'
   push();
   background(255);
   tire = loadImage("=3.PNG");
@@ -262,14 +275,10 @@ void setup() {
   textAlign(CENTER,CENTER);
   text("Loading...",width/2,height/2);
   pop();
+  Lucid = createFont("Lucida Console",14,false);
 }
 
-void drawl() {
-  frame.setStatic(true);
-  frame.setRotation(frameCount/10);
-  myWorld.draw();
-}
-
+//controller plugs
 void APressed(){Keys[2]=true;}
 void LPressed(){Keys[16]=true;}
 void RPressed(){Keys[17]=true;}
@@ -285,143 +294,153 @@ void HPressed(float x) {
 }
 
 void draw() {
-  if(loading) {
-    loading = false;
-    frameRate(30);
-    AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
-    AHeight = height*3;
-    goalHeight = height;
-    java.util.Arrays.fill(Keys,false);
-    bg = new Gif(53,3,"chip/",".png");
-    bgm = new SoundFile(this,"grent_looped.ogg");
-    for(int i=0;i<replay.length;i++) {
-      replay[i] = new PImage(width,height,RGB);
-    }
-    tire.resize(30,30);
-    myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
-    myWorld.setGrabbable(false);
-    myWorld.setGravity(0,500);
-    ball = new FCircle(60);
-    ball.setPosition(width/2,height-31);
-    ball.setFriction(0.5);
-    ball.setDensity(0.1);
-    ball.setRestitution(1);
-    ball.setBullet(true);
-    ball.setAllowSleeping(false);
-    myWorld.add(ball);
-    makeImages();
-    makeArena();
-    makeCars();
-    CtrlIO = ControlIO.getInstance(this);
-    ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
-    if(Controllers.length>3) {
-      N64 = Controllers[2];
-      N64.open();
-      A = N64.getButton(2);
-      L = N64.getButton(7);
-      R = N64.getButton(8);
-      DPad = N64.getHat(0);
-      A.plug("APressed",ControlIO.ON_PRESS);
-      L.plug("LPressed",ControlIO.ON_PRESS);
-      R.plug("RPressed",ControlIO.ON_PRESS);
-      A.plug("AReleased",ControlIO.ON_RELEASE);
-      L.plug("LReleased",ControlIO.ON_RELEASE);
-      R.plug("RReleased",ControlIO.ON_RELEASE);
-    }
-    bgm.loop();
-  } else if(replaying) {
-    background(0);
-    if(replay.length<replayLength)image(replay[frameCount-replayFrame-1],0,0,width,height);
-    else image(replay[frameCount%replay.length],0,0,width,height);
-    text(goalSpeed,200,height-50);
-    text(toTime(lastGoal,replayFrame),width-100,height-50);
-    if(frameCount-replayFrame>replay.length-1) {
-      replaying=false;
-      replay = new PImage[0];
-      frameCount = replayFrame;
-    }
-  } else {
-    ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
-    if(mousePressed) {
-      camX += mouseX-pmouseX;
-      camY += mouseY-pmouseY;
-    }
-    background(200);
-    if(halfFPS)processKeys30fps();else processKeys();
-    if(!(N64==null))HPressed(DPad.getX());
-    boos1 = constrain(boos1,0,100);
-    boos2 = constrain(boos2,0,100);
-    myWorld.step();
-    if(halfFPS)myWorld.step();
-    bg.update();
-    float bgX = 300;
-    float bgY = 200;
-    for(int i=-1;i<1+height/bgY;i++) {
-      for(int j=-1;j<1+width/bgX;j++) {
-        image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
+  switch(screen) {
+  case 0://title screen
+    play30.draw();
+    play60.draw();
+    break;
+  case 1://ingame
+    if(loading) {
+      loading = false;
+      frameRate(30);
+      AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
+      AHeight = height*3;
+      goalHeight = height;
+      java.util.Arrays.fill(Keys,false);
+      bg = new Gif(53,3,"chip/",".png");
+      bgm = new SoundFile(this,"grent_looped.ogg");
+      for(int i=0;i<replay.length;i++) {
+        replay[i] = new PImage(width,height,RGB);
       }
+      tire.resize(30,30);
+      myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
+      myWorld.setGrabbable(false);
+      myWorld.setGravity(0,500);
+      ball = new FCircle(60);
+      ball.setPosition(width/2,height-31);
+      ball.setFriction(0.5);
+      ball.setDensity(0.1);
+      ball.setRestitution(1);
+      ball.setBullet(true);
+      ball.setAllowSleeping(false);
+      myWorld.add(ball);
+      makeImages();
+      makeArena();
+      makeCars();
+      CtrlIO = ControlIO.getInstance(this);
+      ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
+      if(Controllers.length>3) {
+        N64 = Controllers[2];
+        N64.open();
+        A = N64.getButton(2);
+        L = N64.getButton(7);
+        R = N64.getButton(8);
+        DPad = N64.getHat(0);
+        A.plug("APressed",ControlIO.ON_PRESS);
+        L.plug("LPressed",ControlIO.ON_PRESS);
+        R.plug("RPressed",ControlIO.ON_PRESS);
+        A.plug("AReleased",ControlIO.ON_RELEASE);
+        L.plug("LReleased",ControlIO.ON_RELEASE);
+        R.plug("RReleased",ControlIO.ON_RELEASE);
+      }
+      bgm.loop();
+    } else if(replaying) {
+      background(0);
+      if(replay.length<replayLength)image(replay[frameCount-replayFrame-1],0,0,width,height);
+      else image(replay[frameCount%replay.length],0,0,width,height);
+      text(goalSpeed,200,height-50);
+      text(toTime(lastGoal,replayFrame),width-100,height-50);
+      if(frameCount-replayFrame>replay.length-1) {
+        replaying=false;
+        replay = new PImage[0];
+        frameCount = replayFrame;
+      }
+    } else {
+      ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
+      if(mousePressed) {
+        camX += mouseX-pmouseX;
+        camY += mouseY-pmouseY;
+      }
+      background(200);
+      if(halfFPS)processKeys30fps();else processKeys();
+      if(!(N64==null))HPressed(DPad.getX());
+      boos1 = constrain(boos1,0,100);
+      boos2 = constrain(boos2,0,100);
+      myWorld.step();
+      if(halfFPS)myWorld.step();
+      bg.update();
+      float bgX = 300;
+      float bgY = 200;
+      for(int i=-1;i<1+height/bgY;i++) {
+        for(int j=-1;j<1+width/bgX;j++) {
+          image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
+        }
+      }
+      push();
+      translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
+      scale(0.5-ballVelo/400);
+      fill(200);
+      rect(width/2-25,height,50,-200);
+      rect(width/2-100,height-250,200,50);
+      strokeWeight(10);
+      line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
+      line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
+      myWorld.draw();
+      saveReplayFrame();
+      PVector temp = PVector.sub(new PVector(ball.getX(),ball.getY()),new PVector(frame.getX(),frame.getY())).normalize().mult(ball.getSize());
+      stroke(80,110,255,127);
+      line(ball.getX(),ball.getY(),ball.getX()-temp.x,ball.getY()-temp.y);
+      stroke(240,130,30,127);
+      temp = PVector.sub(new PVector(ball.getX(),ball.getY()),new PVector(fram2.getX(),fram2.getY())).normalize().mult(ball.getSize());
+      line(ball.getX(),ball.getY(),ball.getX()-temp.x,ball.getY()-temp.y);
+      pop();
+      textSize(50);
+      fill(0);
+      rect(0,height,100,-30);
+      rect(width,height,-100,-30);
+      fill(boos1*2.55,0,0);
+      rect(0,height,boos1,-30);
+      fill(boos2*2.55,0,0);
+      rect(width,height,-boos2,-30);
+      fill(0);
+      rect(width/2-75,0,150,60);
+      fill(255);
+      textAlign(CENTER,CENTER);
+      text(toTime(frameCount,halfFPS?30*300:60*300),width/2,25);
+      textAlign(LEFT,CENTER);
+      text(scor1,30,30);
+      text(boos1,0,height-25);
+      textAlign(RIGHT,CENTER);
+      text(scor2,width-30,30);
+      text(boos2,width,height-25);
+      carp1.setRotation(frame.getRotation());
+      carp2.setRotation(fram2.getRotation());
+      pcar1 = createGraphics(100,100);
+      pcar2 = createGraphics(100,100);
+      pcar1.beginDraw();
+      pcar2.beginDraw();
+      carp1.draw(pcar1);
+      carp2.draw(pcar2);
+      pcar1.endDraw();
+      pcar2.endDraw();
+      image(pcar1,0,height-130,100,100);
+      image(pcar2,width-100,height-130,100,100);
+      push();
+      textFont(createFont("Unifont",36));
+      textAlign(CENTER,CENTER);
+      colorMode(HSB);
+      fill(frameCount*11%255,255,255);
+      if(afterParty) {
+        text("ゴール！",width/2,height/2);
+        ball.setFill(255,255-((float)(frameCount-replayFrame)/(replayLength/5))*255);
+        if(frameCount-replayFrame>replayLength/5){replaying=true;reset();afterParty=false;if(replay.length<replayLength)frameCount=replayFrame;}
+      }
+      text(frameRate,width/2,height*3/4);
+      pop();
     }
-    push();
-    translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
-    scale(0.5-ballVelo/400);
-    fill(200);
-    rect(width/2-25,height,50,-200);
-    rect(width/2-100,height-250,200,50);
-    strokeWeight(10);
-    line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
-    line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
-    myWorld.draw();
-    saveReplayFrame();
-    PVector temp = PVector.sub(new PVector(ball.getX(),ball.getY()),new PVector(frame.getX(),frame.getY())).normalize().mult(ball.getSize());
-    stroke(80,110,255,127);
-    line(ball.getX(),ball.getY(),ball.getX()-temp.x,ball.getY()-temp.y);
-    stroke(240,130,30,127);
-    temp = PVector.sub(new PVector(ball.getX(),ball.getY()),new PVector(fram2.getX(),fram2.getY())).normalize().mult(ball.getSize());
-    line(ball.getX(),ball.getY(),ball.getX()-temp.x,ball.getY()-temp.y);
-    pop();
-    textSize(50);
-    fill(0);
-    rect(0,height,100,-30);
-    rect(width,height,-100,-30);
-    fill(boos1*2.55,0,0);
-    rect(0,height,boos1,-30);
-    fill(boos2*2.55,0,0);
-    rect(width,height,-boos2,-30);
-    fill(0);
-    rect(width/2-75,0,150,60);
-    fill(255);
-    textAlign(CENTER,CENTER);
-    text(toTime(frameCount,halfFPS?30*300:60*300),width/2,25);
-    textAlign(LEFT,CENTER);
-    text(scor1,30,30);
-    text(boos1,0,height-25);
-    textAlign(RIGHT,CENTER);
-    text(scor2,width-30,30);
-    text(boos2,width,height-25);
-    carp1.setRotation(frame.getRotation());
-    carp2.setRotation(fram2.getRotation());
-    pcar1 = createGraphics(100,100);
-    pcar2 = createGraphics(100,100);
-    pcar1.beginDraw();
-    pcar2.beginDraw();
-    carp1.draw(pcar1);
-    carp2.draw(pcar2);
-    pcar1.endDraw();
-    pcar2.endDraw();
-    image(pcar1,0,height-130,100,100);
-    image(pcar2,width-100,height-130,100,100);
-    push();
-    textFont(createFont("Unifont",36));
-    textAlign(CENTER,CENTER);
-    colorMode(HSB);
-    fill(frameCount*11%255,255,255);
-    if(afterParty) {
-      text("ゴール！",width/2,height/2);
-      ball.setFill(255,255-((float)(frameCount-replayFrame)/(replayLength/5))*255);
-      if(frameCount-replayFrame>replayLength/5){replaying=true;reset();afterParty=false;if(replay.length<replayLength)frameCount=replayFrame;}
-    }
-    text(frameRate,width/2,height*3/4);
-    pop();
+    break;
+  default:
+    blueDead("Screen "+screen,"404 Not Found","Screen = "+screen);
   }
 }
 
@@ -812,6 +831,14 @@ String toTime(int first, int second) {
   return(String.format(minutes+":"+"%1$02d",seconds));
 }
 
+//backported from tophat clicker(dont ask)!
+void blueDead(String CALLEDFR, String STOPCODE, String INFOSCND) { //funny
+  background(#000080);
+  fill(255);
+  textFont(Lucid);
+  text("A problem has been detected and Windows has halted your application to\nprevent further damage to your computer.\n\nThis application has called for\n"+CALLEDFR+"\nbut it was not found.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing 4 console.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+STOPCODE+"\n\n***    "+INFOSCND, 0, 24);
+}
+
 void keyPressed() {
   switch(keyCode){
   case 65:
@@ -886,6 +913,50 @@ void keyReleased() {
     Keys[19] = false;
     break;
   }
+}
+//finish implementing buttons
+
+void mousePressed() {
+  int Action = Hitbox.get(mouseX,mouseY);
+  Btn = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+}
+
+void mouseReleased() {
+  int Action = Hitbox.get(mouseX,mouseY);
+  Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+  if(Action==Btn&&Action!=0) {
+    Action = Btns[Action-1].doWhat;
+    switch(Action) {
+    case 1:
+      if(BGCol>0)BGCol--;else BGCol=0;
+      break;
+    case 2:
+      if(BGCol<0xF)BGCol++;else BGCol=0xF;
+      break;
+    case 3:
+      Btns[Action-1].XSize+=3;
+      Btns[Action-1].YSize+=3;
+      break;
+    default:
+      
+    }
+  }
+  Btn = 0;
+}
+
+void process(Button[] B, PGraphics H) {
+  H.beginDraw();
+  H.background(0);
+  for(int i=0;i<B.length;i++)B[i].drawHit(i,H);
+  for(int i=0;i<B.length;i++) {//draw buttons
+    byte Status = 0;
+    int Hover = Hitbox.get(mouseX,mouseY);
+    Hover = round(red(Hover))*0x100+round(green(Hover))*0x100+ceil(blue(Hover));
+    if(Hover-1==i)Status = 1;
+    if(Btn-1==i)Status = 2;
+    B[i].draw(Status);
+  }
+  H.endDraw();
 }
 
 void contactStarted(FContact contact) { //add boost if car is on ground and not boosting like in sideswipe
