@@ -201,8 +201,8 @@ class Button {
 
 int AWidth;
 int AHeight;
-int goalHeight;//fix wall heights and make nets and scoreboard and stuff
-int scor1 = 0;//namely a scoreboard in the background would be nice.
+int goalHeight;
+int scor1 = 0;
 int scor2 = 0;
 int boos1 = 100;
 int boos2 = 100;
