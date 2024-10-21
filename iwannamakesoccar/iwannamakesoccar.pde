@@ -348,9 +348,9 @@ void draw() {
     }
     background(200);
     if(halfFPS)processKeys30fps();else processKeys();
+    if(!(N64==null))HPressed(DPad.getX());
     boos1 = constrain(boos1,0,100);
     boos2 = constrain(boos2,0,100);
-    if(!(N64==null))HPressed(DPad.getX());
     myWorld.step();
     if(halfFPS)myWorld.step();
     bg.update();
