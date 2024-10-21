@@ -242,6 +242,7 @@ final int replayLength = 150;
 final float bgX = 300;
 final float bgY = 200;
 final float tireSoftness = 1;
+final boolean debug = false;
 //physics variables
 FWorld myWorld, play1, play2;
 FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
@@ -303,8 +304,8 @@ void draw() {
   if(loading) {//draw the loadscreen
     bg = new Gif(53,3,"chip/",".png");//load assets
     bgm = new SoundFile(this,"grent_looped.ogg");
-    Hitbox = createGraphics(640,480);
-    Hitbox.noSmooth();//yooshi yattazo!
+    Hitbox = createGraphics(width,height);
+    Hitbox.noSmooth();
     Hitbox.noStroke();
     AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
     AHeight = height*3;
@@ -362,7 +363,7 @@ void draw() {
     //make a title image maybe
     textAlign(CENTER,CENTER);
     textSize(69);//hehehe
-    text("BLAST PROCESSING\ns o c c e r",width/2,100);
+    text(".  B  -  L  *  A  *  S  -  T  .\nprocessing soccer",width/2,100);
     process(title,Hitbox);
     break;
   case 1://ingame
@@ -739,7 +740,7 @@ void processKeys() {
   if(!(Keys[16]||Keys[17])) {
     boos1 += 1;
   }
-  if(Keys[20]) {
+  if(Keys[20]) {//how do these not work when a movement is held down?
     tire1.setAngularVelocity(0);
     tire2.setAngularVelocity(0);
   }
@@ -976,6 +977,7 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
   if(!afterParty) {
     if(contact.contains(ball,rgoal)){scor1++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
     if(contact.contains(ball,lgoal)){scor2++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
+    if(contact.contains(ball,floor)){blueDead("EndOfGame()","Programmer didn't make this one yet","");}//why this no work ;|
   }
 }
 
