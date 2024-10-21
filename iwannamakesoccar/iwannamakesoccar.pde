@@ -347,9 +347,9 @@ void draw() {
       camY += mouseY-pmouseY;
     }
     background(200);
+    if(halfFPS)processKeys30fps();else processKeys();
     boos1 = constrain(boos1,0,100);
     boos2 = constrain(boos2,0,100);
-    if(halfFPS)processKeys30fps();else processKeys();
     if(!(N64==null))HPressed(DPad.getX());
     myWorld.step();
     if(halfFPS)myWorld.step();
@@ -380,10 +380,6 @@ void draw() {
     line(ball.getX(),ball.getY(),ball.getX()-temp.x,ball.getY()-temp.y);
     pop();
     textSize(50);
-    textAlign(LEFT,CENTER);
-    text(scor1,30,30);
-    textAlign(RIGHT,CENTER);
-    text(scor2,width-30,30);
     fill(0);
     rect(0,height,100,-30);
     rect(width,height,-100,-30);
@@ -391,6 +387,17 @@ void draw() {
     rect(0,height,boos1,-30);
     fill(boos2*2.55,0,0);
     rect(width,height,-boos2,-30);
+    fill(0);
+    rect(width/2-75,0,150,60);
+    fill(255);
+    textAlign(CENTER,CENTER);
+    text(toTime(frameCount,halfFPS?30*300:60*300),width/2,25);
+    textAlign(LEFT,CENTER);
+    text(scor1,30,30);
+    text(boos1,0,height-25);
+    textAlign(RIGHT,CENTER);
+    text(scor2,width-30,30);
+    text(boos2,width,height-25);
     carp1.setRotation(frame.getRotation());
     carp2.setRotation(fram2.getRotation());
     pcar1 = createGraphics(100,100);
