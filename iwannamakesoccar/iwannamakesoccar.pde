@@ -294,8 +294,6 @@ void draw() {
     java.util.Arrays.fill(Keys,false);
     bg = new Gif(53,3,"chip/",".png");
     bgm = new SoundFile(this,"grent_looped.ogg");
-    //replay = new PGraphics[60];
-    //java.util.Arrays.fill(replay,createGraphics(width,height));
     for(int i=0;i<replay.length;i++) {
       replay[i] = new PImage(width,height,RGB);
     }
