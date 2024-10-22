@@ -387,7 +387,7 @@ void draw() {
         replaying=false;
         replay = new PImage[0];
         frameCount = replayFrame;
-        if(overtime)screen=2;
+        if(overtime){screen=2;frameCount=0;}
       }
     } else {
       //process gameplay
@@ -479,7 +479,7 @@ void draw() {
     }
     break;
   case 2://end game screen
-    blueDead("EndOfGame()","GAME_OVER","WINNER = "+((scor1>scor2)?"PLAYER_1":"PLAYER_2"));
+    if(frameCount<300)background(color(0,10));
     break;
   case 3://training mode (time for some nightmaerials)
     break;
@@ -933,7 +933,7 @@ void mouseReleased() {
         Hitbox.beginDraw();
         Hitbox.background(0);
         Hitbox.endDraw();
-        frameCount = 8970;
+        frameCount = 8900;
         halfFPS = true;
         frameRate(30);
         //from the
@@ -1006,8 +1006,8 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
     if(contact.contains(ball,rgoal)){scor1++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
     if(contact.contains(ball,lgoal)){scor2++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
     if(contact.contains(ball,floor)&&(halfFPS?30*300:60*300)<=frameCount&&!overtime) {
-      if(scor1==scor2){overtime=true;reset();}
-      else screen=2;
+      if(scor1==scor2){overtime=true;frameCount=halfFPS?30*300:60*300;reset();}
+      else {screen=2;frameCount=0;}
     }
   }
 }
