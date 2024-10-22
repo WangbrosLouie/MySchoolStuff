@@ -44,6 +44,11 @@ class Gif extends PImage {
     arrayCopy(temp,super.pixels);
     super.updatePixels();
   }
+  void resizeGif(int x, int y) {
+    for(PImage pic:images) {
+      pic.resize(x,y);
+    }
+  }
 }
 
 class Button {
@@ -120,6 +125,7 @@ class Button {
       if(Type>0) {
         push();
         textAlign(CENTER,CENTER);
+        //println(tSize);
         textSize(tSize);
         switch(Active) {
         case 0:
@@ -226,6 +232,7 @@ boolean loading = true;
 boolean halfFPS = true;
 boolean paused = false;
 boolean afterParty = false;
+boolean overtime = false;
 //replay variables
 boolean replaying = false;
 int replayFrame = 0;
@@ -318,7 +325,8 @@ void draw() {
     title = new Button[]{
     new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS",24),
     new Button(1, 2, width/8, height/8*5, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 60 FPS",24),
-    new Button(1, 3, width/8, height/4*3, width/4*3, height/8, color(0), color(50,184,83), color(0), color(30,150,60), color(0), color(10,100,23), color(0), color(0), color(0),"Background ON",32)
+    new Button(1, 3, width/8, height/4*3, width/4*3, height/8, color(0), color(50,184,83), color(0), color(30,150,60), color(0), color(10,100,23), color(0), color(0), color(0),"Dynamic Background ON",32),
+    new Button(1, 4, width/2-25, 0, 50, 20, color(200), color(200), color(200), color(200), color(0), color(255), color(200), color(180), color(0),"Play with\nUnlimited FPS",8),
     };
     //initialize physics instances
     myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
@@ -379,6 +387,7 @@ void draw() {
         replaying=false;
         replay = new PImage[0];
         frameCount = replayFrame;
+        if(overtime)screen=2;
       }
     } else {
       //process gameplay
@@ -390,18 +399,20 @@ void draw() {
       if(halfFPS)myWorld.step();
       //camera stuff
       ballVelo = constrain(lerp(ballVelo,round(pow((dist(0,0,ball.getVelocityX(),ball.getVelocityY())+1)*0.01,2)/0.5)*0.5,0.25),0.5,50);
-      if(mousePressed) {
+      if(mousePressed&&debug) {
         camX += mouseX-pmouseX;
         camY += mouseY-pmouseY;
       }
       background(200);
+      bg.update();
       if(dispBG) {
-        bg.update();
         for(int i=-1;i<1+height/bgY;i++) {
           for(int j=-1;j<1+width/bgX;j++) {
             image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
           }
         }
+      } else {
+        //background(bg);
       }
       push();
       translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
@@ -434,7 +445,7 @@ void draw() {
       rect(width/2-75,0,150,60);
       fill(255);
       textAlign(CENTER,CENTER);
-      text(toTime(frameCount,halfFPS?30*300:60*300),width/2,25);
+      text((overtime?"+":"")+toTime(overtime?(halfFPS?30*300:60*300):frameCount,overtime?frameCount:(halfFPS?30*300:60*300)),width/2,25);
       textAlign(LEFT,CENTER);
       text(scor1,30,30);
       text(boos1,0,height-25);
@@ -468,6 +479,7 @@ void draw() {
     }
     break;
   case 2://end game screen
+    blueDead("EndOfGame()","GAME_OVER","WINNER = "+((scor1>scor2)?"PLAYER_1":"PLAYER_2"));
     break;
   case 3://training mode (time for some nightmaerials)
     break;
@@ -799,7 +811,9 @@ void processKeys() {
 String toTime(int first, int second) {//cause im lazy
   int elapsed = halfFPS?(second-first)/30:(second-first)/60;
   int minutes = elapsed/60;
+  if(minutes<0)minutes = 0;
   int seconds = elapsed%60;
+  if(seconds<0)seconds = 0;
   return(String.format(minutes+":"+"%1$02d",seconds));
 }
 
@@ -809,7 +823,8 @@ void blueDead(String CALLEDFR, String STOPCODE, String INFOSCND) { //funny
   background(#000080);
   fill(255);
   textFont(Lucid);
-  text("A problem has been detected and Windows has halted your application to\nprevent further damage to your computer.\n\nThis application has called for\n"+CALLEDFR+"\nbut it was not found.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing 4 console.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+STOPCODE+"\n\n***    "+INFOSCND, 0, 24);
+  textAlign(LEFT,TOP);
+  text("A problem has been detected and this application has been halted to prevent\nfurther problems from occuring.\n\nThis application has called for\n"+CALLEDFR+"\nbut it was not found.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing console if you are running this application from Processing.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+STOPCODE+"\n\n***    "+INFOSCND, 0, 24);
 }
 
 void keyPressed() {
@@ -918,7 +933,7 @@ void mouseReleased() {
         Hitbox.beginDraw();
         Hitbox.background(0);
         Hitbox.endDraw();
-        frameCount = 0;
+        frameCount = 8970;
         halfFPS = true;
         frameRate(30);
         //from the
@@ -938,11 +953,20 @@ void mouseReleased() {
         break;
       case 3://turn that frown upside down :3
         dispBG = !dispBG;
-        title[Action-1].text = dispBG?"Background ON":"Background OFF";
-        //color(0), color(50,184,83), color(0), color(30,150,60), color(0), color(10,100,23), color(0), color(0), color(0)
+        title[Action-1].text = "Dynamic Background "+(dispBG?"ON":"OFF");
         title[Action-1].In = dispBG?color(50,184,83):color(184,83,50);
         title[Action-1].HIn = dispBG?color(30,150,60):color(150,60,30);
         title[Action-1].PIn = dispBG?color(10,100,23):color(100,23,10);
+        if(dispBG)bg.resizeGif(round(bgX),round(bgY));else bg.resizeGif(width,height);
+        break;
+      case 4:
+        frameCount = 0;
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        halfFPS = false;
+        frameRate(42069);//ehehe
+        screen = 1;
         break;
       default:
         blueDead("Button Action "+Action,"404 Not Found","Action = "+Action);
@@ -981,7 +1005,10 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
   if(!afterParty) {
     if(contact.contains(ball,rgoal)){scor1++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
     if(contact.contains(ball,lgoal)){scor2++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
-    //if(contact.contains(ball,floor)&&toTime(frameCount,halfFPS?30*300:60*300)=="0:00"){blueDead("EndOfGame()","Programmer didn't make this one yet","");}//why this no work ;|
+    if(contact.contains(ball,floor)&&(halfFPS?30*300:60*300)<=frameCount&&!overtime) {
+      if(scor1==scor2){overtime=true;reset();}
+      else screen=2;
+    }
   }
 }
 
