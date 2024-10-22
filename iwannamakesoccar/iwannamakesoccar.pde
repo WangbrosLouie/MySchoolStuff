@@ -467,8 +467,12 @@ void draw() {
       pop();
     }
     break;
+  case 2://end game screen
+    break;
+  case 3://training mode (time for some nightmaerials)
+    break;
   default:
-//funny ^w^
+  //funny ^w^
     blueDead("Screen "+screen,"404 Not Found","Screen = "+screen);
   }
 }
@@ -977,7 +981,7 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
   if(!afterParty) {
     if(contact.contains(ball,rgoal)){scor1++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
     if(contact.contains(ball,lgoal)){scor2++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
-    if(contact.contains(ball,floor)){blueDead("EndOfGame()","Programmer didn't make this one yet","");}//why this no work ;|
+    //if(contact.contains(ball,floor)&&toTime(frameCount,halfFPS?30*300:60*300)=="0:00"){blueDead("EndOfGame()","Programmer didn't make this one yet","");}//why this no work ;|
   }
 }
 
