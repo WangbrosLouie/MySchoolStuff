@@ -249,7 +249,7 @@ final int replayLength = 150;
 final float bgX = 300;
 final float bgY = 200;
 final float tireSoftness = 1;
-final boolean debug = false;
+final boolean debug = true;
 //physics variables
 FWorld myWorld, play1, play2;
 FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
@@ -261,6 +261,8 @@ Gif bg;
 SoundFile bgm;
 PImage tire;
 PImage[] replay = new PImage[0];
+PImage[] replays = new PImage[0];
+PImage[][] replays2D = new PImage[0][0];
 PGraphics gcar1, gcar2, pcar1, pcar2, Hitbox;
 PFont Lucid;
 boolean[] Keys = new boolean[22]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor? 16-19 boost keys 20&21 brake keys
@@ -385,6 +387,7 @@ void draw() {
       text(toTime(lastGoal,replayFrame),width-100,height-50);
       if(frameCount-replayFrame>replay.length-1) {
         replaying=false;
+        //replays = (PImage[])concat(replays,replay);
         replay = new PImage[0];
         frameCount = replayFrame;
         if(overtime){screen=2;frameCount=0;}
@@ -412,7 +415,7 @@ void draw() {
           }
         }
       } else {
-        //background(bg);
+        background(bg);
       }
       push();
       translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
@@ -479,8 +482,15 @@ void draw() {
     }
     break;
   case 2://end game screen
-    if(frameCount<300){fill(0,16);rect(0,0,width,height);}
-    else if(frameCount==300)background(0);
+    if(frameCount<(halfFPS?60:120)){fill(0,16);rect(0,0,width,height);if(halfFPS)rect(0,0,width,height);}
+    else if(frameCount==(halfFPS?60:120)){background(0);results();}
+    else if(frameCount>(halfFPS?60:120)){
+      //background(replays[(frameCount-(halfFPS?60:120))%replays.length]);
+      processKeys();
+      myWorld.step();
+      myWorld.draw();
+    }
+    
     //do the rest of the stuff here maybe a rocket league ahh winscreen with them moving cars
     break;
   case 3://training mode (time for some nightmaerials)
@@ -538,6 +548,7 @@ void makeArena() {
   myWorld.add(rgol2);
   myWorld.add(lgoal);
   myWorld.add(rgoal);
+  if(debug)println("arena made");
 }
 
 void makeCars() {
@@ -623,6 +634,7 @@ void makeCars() {
     axles[i].setDrawable(false);
     myWorld.add(axles[i]);
   }
+  if(debug)println("cars made");
 }
 
 void makeImages() {//for car rotation view
@@ -670,6 +682,7 @@ void makeImages() {//for car rotation view
   carp2.attachImage(gcar2);
   carp1.setStatic(true);
   carp2.setStatic(true);
+  if(debug)println("images made");
 }
 
 void reset() {
@@ -689,6 +702,25 @@ void reset() {
   boos1 = 100;
   boos2 = 100;
   pop();
+  if(debug)println("game reset");
+}
+
+void results() {
+  myWorld.clear();
+  myWorld.step();
+  ((scor1>scor2)?frame:fram2).setPosition(width/2-50,height-80);//im going to do whats called a pro gamer move
+  ((scor1>scor2)?tire1:tire3).setPosition(width/2-30,height-30);
+  ((scor1>scor2)?tire2:tire4).setPosition(width/2+30,height-30);
+  floor = new FBox(width,40);
+  floor.setPosition(width/2,height-20);
+  floor.setStatic(true);
+  myWorld.add((scor1>scor2)?frame:fram2);
+  myWorld.add((scor1>scor2)?tire1:tire3);
+  myWorld.add((scor1>scor2)?tire2:tire4);
+  myWorld.add(axles[(scor1>scor2)?0:2]);
+  myWorld.add(axles[(scor1>scor2)?1:3]);
+  myWorld.add(floor);
+  if(debug)println("endgame initiated");
 }
 
 //void saveReplayFrameRedraw() {//very laggy maybe dont use
@@ -935,7 +967,7 @@ void mouseReleased() {
         Hitbox.beginDraw();
         Hitbox.background(0);
         Hitbox.endDraw();
-        frameCount = 8900;
+        frameCount = 0;
         halfFPS = true;
         frameRate(30);
         //from the

@@ -235,4 +235,6 @@ next project. sayonyara.
 hey ho. it be the next time. i love making this game. i get to compose
 a random song for the menu screen draw up fancy graphics that wont get
 used and also bug test bug test bug test.
+its now the next next time. im bored. i think i should say that you should
+never, NEVER follow in my style of coding. it is messy and bad.
 */
