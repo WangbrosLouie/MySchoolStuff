@@ -1,0 +1,16 @@
+heheh, nice to see you here.
+i dont usually do this stuff here, but this one time im gonna make a planning page in my github.
+this is basically detailing how snowballer will work in my games.
+snowballer has infinite ammunition that comes from her infinite bucket of snow on her back
+she uses her snow powers to float a snowball out of it and launch it forwards
+this isnt a copy of subspace from phighting i swear i just realized how similar they are
+when a snowball hits something it makes a little radius of damage because its like glass
+when glass breaks it flies out into shards and stuff
+if anyone is caught in the radius they get damaged and 1 frostbite stack
+each frostbite stack makes the carrier a little slower
+when someone accumulates 7(havent balance tested it yet)stacks they get frozen for 2 seconds.
+a direct hit from the snowball does a little more damage
+the f move is still the same blizzard zone thing where people get slowed and hurt gradually
+maybe they get frostbite stacks from that too hmm
+for the game right now the slowness doesnt change anything too much but is still useful
+because of the radius of the snowball it can hit many robots and slow a whole wave i guess

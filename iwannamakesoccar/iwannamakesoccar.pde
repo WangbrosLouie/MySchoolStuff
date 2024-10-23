@@ -479,7 +479,9 @@ void draw() {
     }
     break;
   case 2://end game screen
-    if(frameCount<300)background(color(0,10));
+    if(frameCount<300){fill(0,16);rect(0,0,width,height);}
+    else if(frameCount==300)background(0);
+    //do the rest of the stuff here maybe a rocket league ahh winscreen with them moving cars
     break;
   case 3://training mode (time for some nightmaerials)
     break;
@@ -1015,6 +1017,10 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
 void contactPersisted(FContact contact) {
   if(contact.contains(frame,floor))Keys[14]=true;
   if(contact.contains(fram2,floor))Keys[15]=true;
+  if(contact.contains(ball,floor)&&(halfFPS?30*300:60*300)<=frameCount&&!overtime&&!afterParty) {
+    if(scor1==scor2){overtime=true;frameCount=halfFPS?30*300:60*300;reset();}
+    else {screen=2;frameCount=0;}
+  }
 }
 
 void contactEnded(FContact contact) {
