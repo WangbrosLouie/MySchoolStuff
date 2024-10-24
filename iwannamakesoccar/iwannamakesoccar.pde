@@ -222,6 +222,7 @@ int boos1 = 100;
 int boos2 = 100;
 byte jmp1 = 0;
 byte jmp2 = 0;
+float[] endgame;
 //camera variables
 float ballVelo = 0;
 int camX = 0;
@@ -249,7 +250,7 @@ final int replayLength = 150;
 final float bgX = 300;
 final float bgY = 200;
 final float tireSoftness = 1;
-final boolean debug = true;
+final boolean debug = false;
 //physics variables
 FWorld myWorld, play1, play2;
 FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
@@ -262,8 +263,8 @@ SoundFile bgm;
 PImage tire;
 //PImage[] replay = new PImage[0];
 //PImage[] replays = new PImage[0];
-String[][] replay = new String[0][0];
-String[][] replays = new String[0][0];
+float[][] replay = new float[0][0];
+float[][] replays = new float[0][0];
 PGraphics gcar1, gcar2, pcar1, pcar2, Hitbox;
 PFont Lucid;
 boolean[] Keys = new boolean[22]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor? 16-19 boost keys 20&21 brake keys
@@ -321,9 +322,10 @@ void draw() {
     AHeight = height*3;
     goalHeight = height;
     java.util.Arrays.fill(Keys,false);
-    for(int i=0;i<replay.length;i++) {
-      replay[i] = new PImage(width,height,RGB);
-    }
+    //for(int i=0;i<replay.length;i++) {
+    //  replay[i] = new PImage(width,height,RGB);
+    //}
+    endgame = new float[18];
     tire.resize(30,30);
     title = new Button[]{
     new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS",24),
@@ -382,15 +384,63 @@ void draw() {
       background(0);
       int Length = replayLength;
       if(!halfFPS)Length*=2;
-      if(replay.length<Length)image(replay[frameCount-replayFrame-1],0,0,width,height);
-      else image(replay[frameCount%replay.length],0,0,width,height);
+      if(replay.length<Length) {
+        ball.setPosition(replay[frameCount-replayFrame-1][0],replay[frameCount-replayFrame-1][1]);
+        frame.setPosition(replay[frameCount-replayFrame-1][2],replay[frameCount-replayFrame-1][3]);
+        frame.setRotation(replay[frameCount-replayFrame-1][4]);
+        fram2.setPosition(replay[frameCount-replayFrame-1][5],replay[frameCount-replayFrame-1][6]);
+        fram2.setRotation(replay[frameCount-replayFrame-1][7]);
+        tire1.setPosition(replay[frameCount-replayFrame-1][8],replay[frameCount-replayFrame-1][9]);
+        tire2.setPosition(replay[frameCount-replayFrame-1][10],replay[frameCount-replayFrame-1][11]);
+        tire3.setPosition(replay[frameCount-replayFrame-1][12],replay[frameCount-replayFrame-1][13]);
+        tire4.setPosition(replay[frameCount-replayFrame-1][14],replay[frameCount-replayFrame-1][15]);
+        ballVelo = replay[frameCount-replayFrame-1][16];
+      } else {
+        ball.setPosition(replay[frameCount%replay.length][0],replay[frameCount%replay.length][1]);
+        frame.setPosition(replay[frameCount%replay.length][2],replay[frameCount%replay.length][3]);
+        frame.setRotation(replay[frameCount%replay.length][4]);
+        fram2.setPosition(replay[frameCount%replay.length][5],replay[frameCount%replay.length][6]);
+        fram2.setRotation(replay[frameCount%replay.length][7]);
+        tire1.setPosition(replay[frameCount%replay.length][8],replay[frameCount%replay.length][9]);
+        tire2.setPosition(replay[frameCount%replay.length][10],replay[frameCount%replay.length][11]);
+        tire3.setPosition(replay[frameCount%replay.length][12],replay[frameCount%replay.length][13]);
+        tire4.setPosition(replay[frameCount%replay.length][14],replay[frameCount%replay.length][15]);
+        ballVelo = replay[frameCount%replay.length][16];
+      }
+      background(200);
+      bg.update();
+      if(dispBG) {
+        for(int i=-1;i<1+height/bgY;i++) {
+          for(int j=-1;j<1+width/bgX;j++) {
+            image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
+          }
+        }
+      } else {
+        background(bg);
+      }
+      push();
+      translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
+      scale(0.5-ballVelo/400);
+      fill(200);//bg scoreboard
+      rect(width/2-25,height,50,-200);
+      rect(width/2-100,height-250,200,50);
+      strokeWeight(10);
+      line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
+      line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
+      myWorld.draw();
+      pop();
+      //if(replay.length<Length)image(replay[frameCount-replayFrame-1],0,0,width,height);
+      //else image(replay[frameCount%replay.length],0,0,width,height);
       text(goalSpeed,200,height-50);
       text(toTime(lastGoal,replayFrame),width-100,height-50);
       if(frameCount-replayFrame>replay.length-1) {
         replaying=false;
         //replays = (PImage[])concat(replays,replay);
-        replay = new PImage[0];
+        //replay = new PImage[0];
+        replays = (float[][])concat(replays,replay);
+        replay = new float[0][0];
         frameCount = replayFrame;
+        reset();
         if(overtime){screen=2;frameCount=0;}
       }
     } else {
@@ -486,6 +536,73 @@ void draw() {
     if(frameCount<(halfFPS?60:120)){fill(0,16);rect(0,0,width,height);if(halfFPS)rect(0,0,width,height);}
     else if(frameCount==(halfFPS?60:120)){background(0);results();}
     else if(frameCount>(halfFPS?60:120)){
+      endgame[0] = (scor1>scor2?frame:fram2).getX();
+      endgame[1] = (scor1>scor2?frame:fram2).getY();
+      endgame[2] = (scor1>scor2?frame:fram2).getRotation();
+      endgame[3] = (scor1>scor2?frame:fram2).getVelocityX();
+      endgame[4] = (scor1>scor2?frame:fram2).getVelocityY();
+      endgame[5] = (scor1>scor2?frame:fram2).getAngularVelocity();
+      endgame[6] = (scor1>scor2?tire1:tire3).getX();
+      endgame[7] = (scor1>scor2?tire1:tire3).getY();
+      endgame[8] = (scor1>scor2?tire1:tire3).getRotation();
+      endgame[9] = (scor1>scor2?tire1:tire3).getVelocityX();
+      endgame[10] = (scor1>scor2?tire1:tire3).getVelocityY();
+      endgame[11] = (scor1>scor2?tire1:tire3).getAngularVelocity();
+      endgame[12] = (scor1>scor2?tire2:tire4).getX();
+      endgame[13] = (scor1>scor2?tire2:tire4).getY();
+      endgame[14] = (scor1>scor2?tire2:tire4).getRotation();
+      endgame[15] = (scor1>scor2?tire2:tire4).getVelocityX();
+      endgame[16] = (scor1>scor2?tire2:tire4).getVelocityY();
+      endgame[17] = (scor1>scor2?tire2:tire4).getAngularVelocity();
+      background(0);
+      int Length = replayLength;
+      if(!halfFPS)Length*=2;
+      if(replay.length<Length) {
+        ball.setPosition(replay[frameCount-replayFrame-1][0],replay[frameCount-replayFrame-1][1]);
+        frame.setPosition(replay[frameCount-replayFrame-1][2],replay[frameCount-replayFrame-1][3]);
+        frame.setRotation(replay[frameCount-replayFrame-1][4]);
+        fram2.setPosition(replay[frameCount-replayFrame-1][5],replay[frameCount-replayFrame-1][6]);
+        fram2.setRotation(replay[frameCount-replayFrame-1][7]);
+        tire1.setPosition(replay[frameCount-replayFrame-1][8],replay[frameCount-replayFrame-1][9]);
+        tire2.setPosition(replay[frameCount-replayFrame-1][10],replay[frameCount-replayFrame-1][11]);
+        tire3.setPosition(replay[frameCount-replayFrame-1][12],replay[frameCount-replayFrame-1][13]);
+        tire4.setPosition(replay[frameCount-replayFrame-1][14],replay[frameCount-replayFrame-1][15]);
+        ballVelo = replay[frameCount-replayFrame-1][16];
+      } else {
+        ball.setPosition(replay[frameCount%replay.length][0],replay[frameCount%replay.length][1]);
+        frame.setPosition(replay[frameCount%replay.length][2],replay[frameCount%replay.length][3]);
+        frame.setRotation(replay[frameCount%replay.length][4]);
+        fram2.setPosition(replay[frameCount%replay.length][5],replay[frameCount%replay.length][6]);
+        fram2.setRotation(replay[frameCount%replay.length][7]);
+        tire1.setPosition(replay[frameCount%replay.length][8],replay[frameCount%replay.length][9]);
+        tire2.setPosition(replay[frameCount%replay.length][10],replay[frameCount%replay.length][11]);
+        tire3.setPosition(replay[frameCount%replay.length][12],replay[frameCount%replay.length][13]);
+        tire4.setPosition(replay[frameCount%replay.length][14],replay[frameCount%replay.length][15]);
+        ballVelo = replay[frameCount%replay.length][16];
+      }
+      background(200);
+      bg.update();
+      if(dispBG) {
+        for(int i=-1;i<1+height/bgY;i++) {
+          for(int j=-1;j<1+width/bgX;j++) {
+            image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
+          }
+        }
+      } else {
+        background(bg);
+      }
+      push();
+      translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
+      scale(0.5-ballVelo/400);
+      fill(200);//bg scoreboard
+      rect(width/2-25,height,50,-200);
+      rect(width/2-100,height-250,200,50);
+      strokeWeight(10);
+      line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
+      line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
+      myWorld.draw();
+      pop();
+      
       //background(replays[(frameCount-(halfFPS?60:120))%replays.length]);
       processKeys();
       myWorld.step();
@@ -764,10 +881,42 @@ void saveReplayFrame() {
   int Length = replayLength;
   if(!halfFPS)Length*=2;
   if(replay.length<Length) {
-    replay = (String[][])append(replay,new String[1][22]);
-    replay[replay.length-1];
+    replay = (float[][])append(replay,new float[17]);
+    replay[replay.length-1][0]=ball.getX();
+    replay[replay.length-1][1]=ball.getY();
+    replay[replay.length-1][2]=frame.getX();
+    replay[replay.length-1][3]=frame.getY();
+    replay[replay.length-1][4]=frame.getRotation();
+    replay[replay.length-1][5]=fram2.getX();
+    replay[replay.length-1][6]=fram2.getY();
+    replay[replay.length-1][7]=fram2.getRotation();
+    replay[replay.length-1][8]=tire1.getX();
+    replay[replay.length-1][9]=tire1.getY();
+    replay[replay.length-1][10]=tire2.getX();
+    replay[replay.length-1][11]=tire2.getY();
+    replay[replay.length-1][12]=tire3.getX();
+    replay[replay.length-1][13]=tire3.getY();
+    replay[replay.length-1][14]=tire4.getX();
+    replay[replay.length-1][15]=tire4.getY();
+    replay[replay.length-1][16]=ballVelo;
   } else {
-    replay[frameCount%replay.length];
+    replay[frameCount%replay.length][0]=ball.getX();
+    replay[frameCount%replay.length][1]=ball.getY();
+    replay[frameCount%replay.length][2]=frame.getX();
+    replay[frameCount%replay.length][3]=frame.getY();
+    replay[frameCount%replay.length][4]=frame.getRotation();
+    replay[frameCount%replay.length][5]=fram2.getX();
+    replay[frameCount%replay.length][6]=fram2.getY();
+    replay[frameCount%replay.length][7]=fram2.getRotation();
+    replay[frameCount%replay.length][8]=tire1.getX();
+    replay[frameCount%replay.length][9]=tire1.getY();
+    replay[frameCount%replay.length][10]=tire2.getX();
+    replay[frameCount%replay.length][11]=tire2.getY();
+    replay[frameCount%replay.length][12]=tire3.getX();
+    replay[frameCount%replay.length][13]=tire3.getY();
+    replay[frameCount%replay.length][14]=tire4.getX();
+    replay[frameCount%replay.length][15]=tire4.getY();
+    replay[frameCount%replay.length][16]=ballVelo;
   }
 }
 
