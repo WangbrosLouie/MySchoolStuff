@@ -260,9 +260,10 @@ FDistanceJoint[] axles;
 Gif bg;
 SoundFile bgm;
 PImage tire;
-PImage[] replay = new PImage[0];
-PImage[] replays = new PImage[0];
-PImage[][] replays2D = new PImage[0][0];
+//PImage[] replay = new PImage[0];
+//PImage[] replays = new PImage[0];
+String[][] replay = new String[0][0];
+String[][] replays = new String[0][0];
 PGraphics gcar1, gcar2, pcar1, pcar2, Hitbox;
 PFont Lucid;
 boolean[] Keys = new boolean[22]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor? 16-19 boost keys 20&21 brake keys
@@ -742,21 +743,32 @@ void results() {
 //  println(frameCount%replay.length);
 //}
 
+//void saveReplayFrame() {
+//  int Length = replayLength;
+//  if(!halfFPS)Length*=2;
+//  loadPixels();
+//  if(replay.length<Length) {
+//    replay = (PImage[])append(replay,new PImage(width,height,RGB));
+//    replay[replay.length-1].loadPixels();
+//    arrayCopy(pixels,replay[replay.length-1].pixels);
+//    replay[replay.length-1].updatePixels();
+//  } else {
+//    replay[frameCount%replay.length].loadPixels();
+//    arrayCopy(pixels,replay[frameCount%replay.length].pixels);
+//    replay[frameCount%replay.length].updatePixels();
+//  }
+//  updatePixels();
+//}
+
 void saveReplayFrame() {
   int Length = replayLength;
   if(!halfFPS)Length*=2;
-  loadPixels();
   if(replay.length<Length) {
-    replay = (PImage[])append(replay,new PImage(width,height,RGB));
-    replay[replay.length-1].loadPixels();
-    arrayCopy(pixels,replay[replay.length-1].pixels);
-    replay[replay.length-1].updatePixels();
+    replay = (String[][])append(replay,new String[1][22]);
+    replay[replay.length-1];
   } else {
-    replay[frameCount%replay.length].loadPixels();
-    arrayCopy(pixels,replay[frameCount%replay.length].pixels);
-    replay[frameCount%replay.length].updatePixels();
+    replay[frameCount%replay.length];
   }
-  updatePixels();
 }
 
 void processKeys() {
