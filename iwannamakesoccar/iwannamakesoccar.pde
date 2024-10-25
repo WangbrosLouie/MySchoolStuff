@@ -555,31 +555,17 @@ void draw() {
       endgame[16] = (scor1>scor2?tire2:tire4).getVelocityY();
       endgame[17] = (scor1>scor2?tire2:tire4).getAngularVelocity();
       background(0);
-      int Length = replayLength;
-      if(!halfFPS)Length*=2;
-      if(replay.length<Length) {
-        ball.setPosition(replay[frameCount-replayFrame-1][0],replay[frameCount-replayFrame-1][1]);
-        frame.setPosition(replay[frameCount-replayFrame-1][2],replay[frameCount-replayFrame-1][3]);
-        frame.setRotation(replay[frameCount-replayFrame-1][4]);
-        fram2.setPosition(replay[frameCount-replayFrame-1][5],replay[frameCount-replayFrame-1][6]);
-        fram2.setRotation(replay[frameCount-replayFrame-1][7]);
-        tire1.setPosition(replay[frameCount-replayFrame-1][8],replay[frameCount-replayFrame-1][9]);
-        tire2.setPosition(replay[frameCount-replayFrame-1][10],replay[frameCount-replayFrame-1][11]);
-        tire3.setPosition(replay[frameCount-replayFrame-1][12],replay[frameCount-replayFrame-1][13]);
-        tire4.setPosition(replay[frameCount-replayFrame-1][14],replay[frameCount-replayFrame-1][15]);
-        ballVelo = replay[frameCount-replayFrame-1][16];
-      } else {
-        ball.setPosition(replay[frameCount%replay.length][0],replay[frameCount%replay.length][1]);
-        frame.setPosition(replay[frameCount%replay.length][2],replay[frameCount%replay.length][3]);
-        frame.setRotation(replay[frameCount%replay.length][4]);
-        fram2.setPosition(replay[frameCount%replay.length][5],replay[frameCount%replay.length][6]);
-        fram2.setRotation(replay[frameCount%replay.length][7]);
-        tire1.setPosition(replay[frameCount%replay.length][8],replay[frameCount%replay.length][9]);
-        tire2.setPosition(replay[frameCount%replay.length][10],replay[frameCount%replay.length][11]);
-        tire3.setPosition(replay[frameCount%replay.length][12],replay[frameCount%replay.length][13]);
-        tire4.setPosition(replay[frameCount%replay.length][14],replay[frameCount%replay.length][15]);
-        ballVelo = replay[frameCount%replay.length][16];
-      }
+      reset();
+      ball.setPosition(replays[frameCount%replays.length][0],replays[frameCount%replays.length][1]);
+      frame.setPosition(replays[frameCount%replays.length][2],replays[frameCount%replays.length][3]);
+      frame.setRotation(replays[frameCount%replays.length][4]);
+      fram2.setPosition(replays[frameCount%replays.length][5],replays[frameCount%replays.length][6]);
+      fram2.setRotation(replays[frameCount%replays.length][7]);
+      tire1.setPosition(replays[frameCount%replays.length][8],replays[frameCount%replays.length][9]);
+      tire2.setPosition(replays[frameCount%replays.length][10],replays[frameCount%replays.length][11]);
+      tire3.setPosition(replays[frameCount%replays.length][12],replays[frameCount%replays.length][13]);
+      tire4.setPosition(replays[frameCount%replays.length][14],replays[frameCount%replays.length][15]);
+      ballVelo = replays[frameCount%replays.length][16];
       background(200);
       bg.update();
       if(dispBG) {
@@ -602,8 +588,23 @@ void draw() {
       line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
       myWorld.draw();
       pop();
-      
       //background(replays[(frameCount-(halfFPS?60:120))%replays.length]);
+      myWorld.clear();
+      myWorld.add(scor1>scor2?frame:fram2);
+      myWorld.add(scor1>scor2?tire1:tire3);
+      myWorld.add(scor1>scor2?tire2:tire4);
+      (scor1>scor2?frame:fram2).setPosition(endgame[0],endgame[1]);
+      (scor1>scor2?frame:fram2).setRotation(endgame[2]);
+      (scor1>scor2?frame:fram2).setVelocity(endgame[3],endgame[4]);
+      (scor1>scor2?frame:fram2).setAngularVelocity(endgame[5]);
+      (scor1>scor2?tire1:tire3).setPosition(endgame[6],endgame[7]);
+      (scor1>scor2?tire1:tire3).setRotation(endgame[8]);
+      (scor1>scor2?tire1:tire3).setVelocity(endgame[9],endgame[10]);
+      (scor1>scor2?tire1:tire3).setAngularVelocity(endgame[11]);
+      (scor1>scor2?tire2:tire4).setPosition(endgame[12],endgame[13]);
+      (scor1>scor2?tire2:tire4).setRotation(endgame[14]);
+      (scor1>scor2?tire2:tire4).setVelocity(endgame[15],endgame[16]);
+      (scor1>scor2?tire2:tire4).setAngularVelocity(endgame[17]);
       processKeys();
       myWorld.step();
       myWorld.draw();
@@ -1155,7 +1156,7 @@ void mouseReleased() {
         if(dispBG)bg.resizeGif(round(bgX),round(bgY));else bg.resizeGif(width,height);
         break;
       case 4:
-        frameCount = 0;
+        frameCount = 17000;
         Hitbox.beginDraw();
         Hitbox.background(0);
         Hitbox.endDraw();

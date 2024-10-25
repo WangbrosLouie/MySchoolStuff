@@ -240,4 +240,5 @@ never, NEVER follow in my style of coding. it is messy and bad.
 methinks ima gonna be poob for halloween. i dont know if i should trick or
 treat though. im a bit old for that... but its free candy so i dont care.
 i think i like the new replay system that i made. it is much better on ram.
+but oh dear is it a nightmare to implement on the victor's screen. yeeowch.
 */
