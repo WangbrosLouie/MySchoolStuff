@@ -313,6 +313,7 @@ void HPressed(float x) {
 
 void draw() {
   if(loading) {//draw the loadscreen
+    if(false)print("A");//bookmarks
     bg = new Gif(53,3,"chip/",".png");//load assets
     bgm = new SoundFile(this,"grent_looped.ogg");
     Hitbox = createGraphics(width,height);
@@ -533,6 +534,7 @@ void draw() {
     }
     break;
   case 2://end game screen
+    if(false)print("A");//bookmarks
     if(frameCount<(halfFPS?60:120)){fill(0,16);rect(0,0,width,height);if(halfFPS)rect(0,0,width,height);}
     else if(frameCount==(halfFPS?60:120)){background(0);results();}
     else if(frameCount>(halfFPS?60:120)){
@@ -624,6 +626,7 @@ void draw() {
 }
 
 void makeArena() {
+  if(false)print("A");//bookmarks
   floor = new FBox(AWidth,100);
   floor.setPosition(width/2,height+50);
   roofe = new FBox(AWidth-500,100);
@@ -674,6 +677,7 @@ void makeArena() {
 }
 
 void makeCars() {
+  if(false)print("A");//bookmarks
   frame = new FPoly();
   frame.vertex(0,20);
   frame.vertex(20,20);
@@ -760,6 +764,7 @@ void makeCars() {
 }
 
 void makeImages() {//for car rotation view
+  if(false)print("A");//bookmarks
   play1 = new FWorld(0,0,100,100);
   play2 = new FWorld(0,0,100,100);
   gcar1 = createGraphics(100,100);
@@ -808,6 +813,7 @@ void makeImages() {//for car rotation view
 }
 
 void reset() {
+  if(false)print("A");//bookmarks
   push();
   colorMode(RGB);
   ball = new FCircle(60);
@@ -828,6 +834,7 @@ void reset() {
 }
 
 void results() {
+  if(false)print("A");//bookmarks
   myWorld.clear();
   myWorld.step();
   ((scor1>scor2)?frame:fram2).setPosition(width/2-50,height-80);//im going to do whats called a pro gamer move
@@ -882,6 +889,7 @@ void results() {
 //}
 
 void saveReplayFrame() {
+  if(false)print("A");//bookmarks
   int Length = replayLength;
   if(!halfFPS)Length*=2;
   if(replay.length<Length) {
@@ -925,6 +933,7 @@ void saveReplayFrame() {
 }
 
 void processKeys() {
+  if(false)print("A");//bookmarks
   if(Keys[0]){
     tire1.addTorque(halfFPS?-tireSpeed30:-tireSpeed);
     tire2.addTorque(halfFPS?-tireSpeed30/2:-tireSpeed/2);
@@ -1122,6 +1131,7 @@ void mousePressed() {
 }
 
 void mouseReleased() {
+  if(false)print("A");//bookmarks
   if(frameCount>1&&!loading){
     int Action = Hitbox.get(mouseX,mouseY);
     Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));

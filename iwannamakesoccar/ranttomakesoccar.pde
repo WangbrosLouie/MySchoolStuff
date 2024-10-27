@@ -241,4 +241,11 @@ methinks ima gonna be poob for halloween. i dont know if i should trick or
 treat though. im a bit old for that... but its free candy so i dont care.
 i think i like the new replay system that i made. it is much better on ram.
 but oh dear is it a nightmare to implement on the victor's screen. yeeowch.
+i am quite pleased to announce that the game is practically finished. i
+just need to make the end results screen and i have a fully complete game.
+of course i could also add in practice mode for no reason because lets be
+real who is gonna sweat and get to supersonic legend in nyaing blast
+processing soccer. there isnt a single soul on this planet who would wanna.
+i must say though this is quite the departure from my usual flavour of yap.
+im not really yapping about my life anymore its just stuff thats happening.
 */
