@@ -376,7 +376,7 @@ void draw() {
     //make a title image maybe
     textAlign(CENTER,CENTER);
     textSize(69);//hehehe
-    text(".  B  -  L  *  A  *  S  -  T  .\nprocessing soccer",width/2,100);
+    text(". B - L * A * S - T .\nprocessing soccer",width/2,100);
     process(title,Hitbox);
     break;
   case 1://ingame
@@ -593,6 +593,8 @@ void draw() {
       myWorld.add(scor1>scor2?frame:fram2);
       myWorld.add(scor1>scor2?tire1:tire3);
       myWorld.add(scor1>scor2?tire2:tire4);
+      myWorld.add(scor1>scor2?axles[0]:axles[2]);
+      myWorld.add(scor1>scor2?axles[1]:axles[3]);
       (scor1>scor2?frame:fram2).setPosition(endgame[0],endgame[1]);
       (scor1>scor2?frame:fram2).setRotation(endgame[2]);
       (scor1>scor2?frame:fram2).setVelocity(endgame[3],endgame[4]);
@@ -605,6 +607,7 @@ void draw() {
       (scor1>scor2?tire2:tire4).setRotation(endgame[14]);
       (scor1>scor2?tire2:tire4).setVelocity(endgame[15],endgame[16]);
       (scor1>scor2?tire2:tire4).setAngularVelocity(endgame[17]);
+      
       processKeys();
       myWorld.step();
       myWorld.draw();
