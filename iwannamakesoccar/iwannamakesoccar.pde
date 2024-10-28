@@ -284,7 +284,7 @@ void setup() {
   //loading screen 'w'
   push();
   background(255);
-  tire = loadImage("=3.PNG");
+  tire = loadImage("RobloxScreenShot20201123_094426300.png");//funny picture
   image(tire,0,0,width,height);
   textSize(64);
   fill(0);
@@ -326,7 +326,7 @@ void draw() {
     //for(int i=0;i<replay.length;i++) {
     //  replay[i] = new PImage(width,height,RGB);
     //}
-    endgame = new float[18];
+    endgame = new float[24];
     tire.resize(30,30);
     title = new Button[]{
     new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS",24),
@@ -538,24 +538,31 @@ void draw() {
     if(frameCount<(halfFPS?60:120)){fill(0,16);rect(0,0,width,height);if(halfFPS)rect(0,0,width,height);}
     else if(frameCount==(halfFPS?60:120)){background(0);results();}
     else if(frameCount>(halfFPS?60:120)){
+      if(scor1>scor2)boos1=100;else boos2=100;
       endgame[0] = (scor1>scor2?frame:fram2).getX();
       endgame[1] = (scor1>scor2?frame:fram2).getY();
       endgame[2] = (scor1>scor2?frame:fram2).getRotation();
       endgame[3] = (scor1>scor2?frame:fram2).getVelocityX();
       endgame[4] = (scor1>scor2?frame:fram2).getVelocityY();
       endgame[5] = (scor1>scor2?frame:fram2).getAngularVelocity();
-      endgame[6] = (scor1>scor2?tire1:tire3).getX();
-      endgame[7] = (scor1>scor2?tire1:tire3).getY();
-      endgame[8] = (scor1>scor2?tire1:tire3).getRotation();
-      endgame[9] = (scor1>scor2?tire1:tire3).getVelocityX();
-      endgame[10] = (scor1>scor2?tire1:tire3).getVelocityY();
-      endgame[11] = (scor1>scor2?tire1:tire3).getAngularVelocity();
-      endgame[12] = (scor1>scor2?tire2:tire4).getX();
-      endgame[13] = (scor1>scor2?tire2:tire4).getY();
-      endgame[14] = (scor1>scor2?tire2:tire4).getRotation();
-      endgame[15] = (scor1>scor2?tire2:tire4).getVelocityX();
-      endgame[16] = (scor1>scor2?tire2:tire4).getVelocityY();
-      endgame[17] = (scor1>scor2?tire2:tire4).getAngularVelocity();
+      endgame[6] = (scor1>scor2?frame:fram2).getForceX();
+      endgame[7] = (scor1>scor2?frame:fram2).getForceY();
+      endgame[8] = (scor1>scor2?tire1:tire3).getX();
+      endgame[9] = (scor1>scor2?tire1:tire3).getY();
+      endgame[10] = (scor1>scor2?tire1:tire3).getRotation();
+      endgame[11] = (scor1>scor2?tire1:tire3).getVelocityX();
+      endgame[12] = (scor1>scor2?tire1:tire3).getVelocityY();
+      endgame[13] = (scor1>scor2?tire1:tire3).getAngularVelocity();
+      endgame[14] = (scor1>scor2?tire1:tire3).getForceX();
+      endgame[15] = (scor1>scor2?tire1:tire3).getForceY();
+      endgame[16] = (scor1>scor2?tire2:tire4).getX();
+      endgame[17] = (scor1>scor2?tire2:tire4).getY();
+      endgame[18] = (scor1>scor2?tire2:tire4).getRotation();
+      endgame[19] = (scor1>scor2?tire2:tire4).getVelocityX();
+      endgame[20] = (scor1>scor2?tire2:tire4).getVelocityY();
+      endgame[21] = (scor1>scor2?tire2:tire4).getAngularVelocity();
+      endgame[22] = (scor1>scor2?tire2:tire4).getForceX();
+      endgame[23] = (scor1>scor2?tire2:tire4).getForceY();
       background(0);
       reset();
       ball.setPosition(replays[frameCount%replays.length][0],replays[frameCount%replays.length][1]);
@@ -601,15 +608,33 @@ void draw() {
       (scor1>scor2?frame:fram2).setRotation(endgame[2]);
       (scor1>scor2?frame:fram2).setVelocity(endgame[3],endgame[4]);
       (scor1>scor2?frame:fram2).setAngularVelocity(endgame[5]);
+      (scor1>scor2?frame:fram2).setForce(endgame[5]);
       (scor1>scor2?tire1:tire3).setPosition(endgame[6],endgame[7]);
       (scor1>scor2?tire1:tire3).setRotation(endgame[8]);
       (scor1>scor2?tire1:tire3).setVelocity(endgame[9],endgame[10]);
       (scor1>scor2?tire1:tire3).setAngularVelocity(endgame[11]);
+      (scor1>scor2?tire1:tire3).setForce(endgame[11]);
       (scor1>scor2?tire2:tire4).setPosition(endgame[12],endgame[13]);
       (scor1>scor2?tire2:tire4).setRotation(endgame[14]);
       (scor1>scor2?tire2:tire4).setVelocity(endgame[15],endgame[16]);
       (scor1>scor2?tire2:tire4).setAngularVelocity(endgame[17]);
-      
+      (scor1>scor2?tire2:tire4).setForce(endgame[17]);
+      floor = new FBox(width,50);
+      floor.setPosition(width/2,height+25);
+      floor.setStatic(true);
+      myWorld.add(floor);
+      roofe = new FBox(width,50);
+      roofe.setPosition(width/2,-25);
+      roofe.setStatic(true);
+      myWorld.add(roofe);
+      lgoal = new FBox(50,height);
+      lgoal.setPosition(-25,height/2);
+      lgoal.setStatic(true);
+      myWorld.add(lgoal);
+      rgoal = new FBox(50,height);
+      rgoal.setPosition(width+25,height/2);
+      rgoal.setStatic(true);
+      myWorld.add(rgoal);
       processKeys();
       myWorld.step();
       myWorld.draw();
@@ -837,18 +862,14 @@ void results() {
   if(false)print("A");//bookmarks
   myWorld.clear();
   myWorld.step();
-  ((scor1>scor2)?frame:fram2).setPosition(width/2-50,height-80);//im going to do whats called a pro gamer move
-  ((scor1>scor2)?tire1:tire3).setPosition(width/2-30,height-30);
-  ((scor1>scor2)?tire2:tire4).setPosition(width/2+30,height-30);
-  floor = new FBox(width,40);
-  floor.setPosition(width/2,height-20);
-  floor.setStatic(true);
+  ((scor1>scor2)?frame:fram2).setPosition(width/2-50,height-180);//im going to do whats called a pro gamer move
+  ((scor1>scor2)?tire1:tire3).setPosition(width/2-30,height-130);
+  ((scor1>scor2)?tire2:tire4).setPosition(width/2+30,height-130);
   myWorld.add((scor1>scor2)?frame:fram2);
   myWorld.add((scor1>scor2)?tire1:tire3);
   myWorld.add((scor1>scor2)?tire2:tire4);
   myWorld.add(axles[(scor1>scor2)?0:2]);
   myWorld.add(axles[(scor1>scor2)?1:3]);
-  myWorld.add(floor);
   if(debug)println("endgame initiated");
 }
 
