@@ -254,8 +254,8 @@ final boolean debug = false;
 //physics variables
 FWorld myWorld, play1, play2;
 FBox floor, lwall, rwall, roofe, lgol1, lgol2, rgol1, rgol2, lgoal, rgoal;
-FPoly frame, fram2;
-FCircle ball, tire1, tire2, tire3, tire4, carp1, carp2;
+FPoly frame, fram2, frbak;
+FCircle ball, tire1, tire2, tire3, tire4, carp1, carp2, t1bak, t2bak;
 FDistanceJoint[] axles;
 //other class variables
 Gif bg;
@@ -538,31 +538,6 @@ void draw() {
     if(frameCount<(halfFPS?60:120)){fill(0,16);rect(0,0,width,height);if(halfFPS)rect(0,0,width,height);}
     else if(frameCount==(halfFPS?60:120)){background(0);results();}
     else if(frameCount>(halfFPS?60:120)){
-      if(scor1>scor2)boos1=100;else boos2=100;
-      endgame[0] = (scor1>scor2?frame:fram2).getX();
-      endgame[1] = (scor1>scor2?frame:fram2).getY();
-      endgame[2] = (scor1>scor2?frame:fram2).getRotation();
-      endgame[3] = (scor1>scor2?frame:fram2).getVelocityX();
-      endgame[4] = (scor1>scor2?frame:fram2).getVelocityY();
-      endgame[5] = (scor1>scor2?frame:fram2).getAngularVelocity();
-      endgame[6] = (scor1>scor2?frame:fram2).getForceX();
-      endgame[7] = (scor1>scor2?frame:fram2).getForceY();
-      endgame[8] = (scor1>scor2?tire1:tire3).getX();
-      endgame[9] = (scor1>scor2?tire1:tire3).getY();
-      endgame[10] = (scor1>scor2?tire1:tire3).getRotation();
-      endgame[11] = (scor1>scor2?tire1:tire3).getVelocityX();
-      endgame[12] = (scor1>scor2?tire1:tire3).getVelocityY();
-      endgame[13] = (scor1>scor2?tire1:tire3).getAngularVelocity();
-      endgame[14] = (scor1>scor2?tire1:tire3).getForceX();
-      endgame[15] = (scor1>scor2?tire1:tire3).getForceY();
-      endgame[16] = (scor1>scor2?tire2:tire4).getX();
-      endgame[17] = (scor1>scor2?tire2:tire4).getY();
-      endgame[18] = (scor1>scor2?tire2:tire4).getRotation();
-      endgame[19] = (scor1>scor2?tire2:tire4).getVelocityX();
-      endgame[20] = (scor1>scor2?tire2:tire4).getVelocityY();
-      endgame[21] = (scor1>scor2?tire2:tire4).getAngularVelocity();
-      endgame[22] = (scor1>scor2?tire2:tire4).getForceX();
-      endgame[23] = (scor1>scor2?tire2:tire4).getForceY();
       background(0);
       reset();
       ball.setPosition(replays[frameCount%replays.length][0],replays[frameCount%replays.length][1]);
@@ -598,27 +573,31 @@ void draw() {
       myWorld.draw();
       pop();
       //background(replays[(frameCount-(halfFPS?60:120))%replays.length]);
-      myWorld.clear();
+      myWorld.clear();//this. eviscerate. draw and quarter. hang. discombobulate. bamboozle. destroy this now its NOT EVEN IMPLEMENTED YET AND NEVER WILL BE AAAAAA
+      //basically write my own clear world thing where it gets all bodies from the world and removes them one by one so i can do this thing
+      //"      clear
+      //public void clear()
+      //Clear all bodies and joints from the world. NOT IMPLEMENTED YET."
+      (scor1>scor2?frame:fram2).setPosition(endgame[0],endgame[1]);
+      (scor1>scor2?frame:fram2).setRotation(endgame[2]);
+      (scor1>scor2?frame:fram2).setVelocity(endgame[3],endgame[4]);
+      (scor1>scor2?frame:fram2).setAngularVelocity(endgame[5]);
+      (scor1>scor2?frame:fram2).setForce(endgame[6],endgame[7]);
+      (scor1>scor2?tire1:tire3).setPosition(endgame[8],endgame[9]);
+      (scor1>scor2?tire1:tire3).setRotation(endgame[10]);
+      (scor1>scor2?tire1:tire3).setVelocity(endgame[11],endgame[12]);
+      (scor1>scor2?tire1:tire3).setAngularVelocity(endgame[13]);
+      (scor1>scor2?tire1:tire3).setForce(endgame[14],endgame[15]);
+      (scor1>scor2?tire2:tire4).setPosition(endgame[16],endgame[17]);
+      (scor1>scor2?tire2:tire4).setRotation(endgame[18]);
+      (scor1>scor2?tire2:tire4).setVelocity(endgame[19],endgame[20]);
+      (scor1>scor2?tire2:tire4).setAngularVelocity(endgame[21]);
+      (scor1>scor2?tire2:tire4).setForce(endgame[22],endgame[23]);
       myWorld.add(scor1>scor2?frame:fram2);
       myWorld.add(scor1>scor2?tire1:tire3);
       myWorld.add(scor1>scor2?tire2:tire4);
       myWorld.add(scor1>scor2?axles[0]:axles[2]);
       myWorld.add(scor1>scor2?axles[1]:axles[3]);
-      (scor1>scor2?frame:fram2).setPosition(endgame[0],endgame[1]);
-      (scor1>scor2?frame:fram2).setRotation(endgame[2]);
-      (scor1>scor2?frame:fram2).setVelocity(endgame[3],endgame[4]);
-      (scor1>scor2?frame:fram2).setAngularVelocity(endgame[5]);
-      (scor1>scor2?frame:fram2).setForce(endgame[5]);
-      (scor1>scor2?tire1:tire3).setPosition(endgame[6],endgame[7]);
-      (scor1>scor2?tire1:tire3).setRotation(endgame[8]);
-      (scor1>scor2?tire1:tire3).setVelocity(endgame[9],endgame[10]);
-      (scor1>scor2?tire1:tire3).setAngularVelocity(endgame[11]);
-      (scor1>scor2?tire1:tire3).setForce(endgame[11]);
-      (scor1>scor2?tire2:tire4).setPosition(endgame[12],endgame[13]);
-      (scor1>scor2?tire2:tire4).setRotation(endgame[14]);
-      (scor1>scor2?tire2:tire4).setVelocity(endgame[15],endgame[16]);
-      (scor1>scor2?tire2:tire4).setAngularVelocity(endgame[17]);
-      (scor1>scor2?tire2:tire4).setForce(endgame[17]);
       floor = new FBox(width,50);
       floor.setPosition(width/2,height+25);
       floor.setStatic(true);
@@ -637,6 +616,30 @@ void draw() {
       myWorld.add(rgoal);
       processKeys();
       myWorld.step();
+      endgame[0] = (scor1>scor2?frame:fram2).getX();
+      endgame[1] = (scor1>scor2?frame:fram2).getY();
+      endgame[2] = (scor1>scor2?frame:fram2).getRotation();
+      endgame[3] = (scor1>scor2?frame:fram2).getVelocityX();
+      endgame[4] = (scor1>scor2?frame:fram2).getVelocityY();
+      endgame[5] = (scor1>scor2?frame:fram2).getAngularVelocity();
+      endgame[6] = (scor1>scor2?frame:fram2).getForceX();
+      endgame[7] = (scor1>scor2?frame:fram2).getForceY();
+      endgame[8] = (scor1>scor2?tire1:tire3).getX();
+      endgame[9] = (scor1>scor2?tire1:tire3).getY();
+      endgame[10] = (scor1>scor2?tire1:tire3).getRotation();
+      endgame[11] = (scor1>scor2?tire1:tire3).getVelocityX();
+      endgame[12] = (scor1>scor2?tire1:tire3).getVelocityY();
+      endgame[13] = (scor1>scor2?tire1:tire3).getAngularVelocity();
+      endgame[14] = (scor1>scor2?tire1:tire3).getForceX();
+      endgame[15] = (scor1>scor2?tire1:tire3).getForceY();
+      endgame[16] = (scor1>scor2?tire2:tire4).getX();
+      endgame[17] = (scor1>scor2?tire2:tire4).getY();
+      endgame[18] = (scor1>scor2?tire2:tire4).getRotation();
+      endgame[19] = (scor1>scor2?tire2:tire4).getVelocityX();
+      endgame[20] = (scor1>scor2?tire2:tire4).getVelocityY();
+      endgame[21] = (scor1>scor2?tire2:tire4).getAngularVelocity();
+      endgame[22] = (scor1>scor2?tire2:tire4).getForceX();
+      endgame[23] = (scor1>scor2?tire2:tire4).getForceY();
       myWorld.draw();
     }
     
@@ -870,6 +873,22 @@ void results() {
   myWorld.add((scor1>scor2)?tire2:tire4);
   myWorld.add(axles[(scor1>scor2)?0:2]);
   myWorld.add(axles[(scor1>scor2)?1:3]);
+      floor = new FBox(width,50);
+      floor.setPosition(width/2,height+25);
+      floor.setStatic(true);
+      myWorld.add(floor);
+      roofe = new FBox(width,50);
+      roofe.setPosition(width/2,-25);
+      roofe.setStatic(true);
+      myWorld.add(roofe);
+      lgoal = new FBox(50,height);
+      lgoal.setPosition(-25,height/2);
+      lgoal.setStatic(true);
+      myWorld.add(lgoal);
+      rgoal = new FBox(50,height);
+      rgoal.setPosition(width+25,height/2);
+      rgoal.setStatic(true);
+      myWorld.add(rgoal);
   if(debug)println("endgame initiated");
 }
 
