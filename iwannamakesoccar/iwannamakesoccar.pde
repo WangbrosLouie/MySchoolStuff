@@ -260,15 +260,13 @@ FDistanceJoint[] axles;
 //other class variables
 Gif bg;
 SoundFile bgm;
-PImage tire;
-//PImage[] replay = new PImage[0];
-//PImage[] replays = new PImage[0];
+PImage tire, whsav;
 float[][] replay = new float[0][0];
 float[][] replays = new float[0][0];
 PGraphics gcar1, gcar2, pcar1, pcar2, Hitbox;
 PFont Lucid;
 boolean[] Keys = new boolean[22]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor? 16-19 boost keys 20&21 brake keys
-Button[] title;
+Button[] title, gover;
 //controller stuff
 ControlIO CtrlIO;
 ControlDevice N64;
@@ -312,10 +310,13 @@ void HPressed(float x) {
 }
 
 void draw() {
+  println(jmp1,jmp2);
   if(loading) {//draw the loadscreen
     if(false)print("A");//bookmarks
     bg = new Gif(53,3,"chip/",".png");//load assets
     bgm = new SoundFile(this,"grent_looped.ogg");
+    whsav = loadImage("whatasav.png");
+    whsav.resize(width,height);
     Hitbox = createGraphics(width,height);
     Hitbox.noSmooth();
     Hitbox.noStroke();
@@ -323,16 +324,15 @@ void draw() {
     AHeight = height*3;
     goalHeight = height;
     java.util.Arrays.fill(Keys,false);
-    //for(int i=0;i<replay.length;i++) {
-    //  replay[i] = new PImage(width,height,RGB);
-    //}
     endgame = new float[24];
-    tire.resize(30,30);
     title = new Button[]{
     new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS",24),
     new Button(1, 2, width/8, height/8*5, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 60 FPS",24),
     new Button(1, 3, width/8, height/4*3, width/4*3, height/8, color(0), color(50,184,83), color(0), color(30,150,60), color(0), color(10,100,23), color(0), color(0), color(0),"Dynamic Background ON",32),
-    new Button(1, 4, width/2-25, 0, 50, 20, color(200), color(200), color(200), color(200), color(0), color(255), color(200), color(180), color(0),"Play with\nUnlimited FPS",8),
+    new Button(1, 4, width/2-25, 0, 50, 20, color(134), color(134), color(134), color(134), color(0), color(150), color(134), color(200), color(0),"Play with\nUnlimited FPS",8),
+    };
+    gover = new Button[]{
+    new Button(1, 5, width/4, height/4*3, width/2, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Back to title",32)
     };
     //initialize physics instances
     myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
@@ -373,12 +373,27 @@ void draw() {
     loading = false;
   } else switch(screen) {
   case 0://title screen
-    background(200);
-    //make a title image maybe
-    textAlign(CENTER,CENTER);
-    textSize(69);//hehehe
-    text(". B - L * A * S - T .\nprocessing soccer",width/2,100);
-    process(title,Hitbox);
+    if(frameCount<60){
+      image(tire,0,0,width,height);
+      push();
+      textSize(64);
+      fill(0);
+      textAlign(CENTER,CENTER);
+      text("Loading...",width/2,height/2);
+      pop();
+      image(whsav,width-((frameCount*width)/60),0,width,height);
+    } else if(frameCount>60&&frameCount<120) {
+      background(127-frameCount+60);
+      blend(whsav,0,0,width,height,0,0,width,height,OVERLAY);
+      //make image darker
+    } else {
+      background(67);
+      blend(whsav,0,0,width,height,0,0,width,height,OVERLAY);
+      textAlign(CENTER,CENTER);
+      textSize(69);//hehehe
+      text(". B - L * A * S - T .\nprocessing soccer",width/2,100);
+      process(title,Hitbox);
+    }
     break;
   case 1://ingame
     if(replaying) {
@@ -537,7 +552,31 @@ void draw() {
     if(false)print("A");//bookmarks
     if(frameCount<(halfFPS?60:120)){fill(0,16);rect(0,0,width,height);if(halfFPS)rect(0,0,width,height);}
     else if(frameCount==(halfFPS?60:120)){background(0);results();}
-    else if(frameCount>(halfFPS?60:120)){
+    else if(frameCount>(halfFPS?60:120)&&frameCount<(halfFPS?150:300)){//le grand split
+      background(200);
+      bg.update();
+      if(dispBG) {
+        for(int i=-1;i<1+height/bgY;i++) {
+          for(int j=-1;j<1+width/bgX;j++) {
+            image(bg,(j*bgX)+(-ball.getX()/10%bgX),(i*bgY)-(-ball.getY()/10%bgY),bgX,bgY);
+          }
+        }
+      } else {
+        background(bg);
+      }
+      processKeys();
+      if(scor1>scor2)boos1=100;else boos2=100;
+      myWorld.step();
+      //(scor1>scor2?frame:fram2).setPosition(width/2,(scor1>scor2?frame:fram2).getY()); kinda annoying this one
+      myWorld.draw();
+      push();
+      fill(255);
+      textAlign(CENTER,CENTER);
+      textSize(70);
+      text("Player "+(scor1>scor2?"1":"2")+"\nA WINNER IS YOU",width/2,100);
+      pop();
+      //draw winner text and maybe logo
+    } else {
       background(0);
       reset();
       ball.setPosition(replays[frameCount%replays.length][0],replays[frameCount%replays.length][1]);
@@ -572,78 +611,14 @@ void draw() {
       line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
       myWorld.draw();
       pop();
-      //background(replays[(frameCount-(halfFPS?60:120))%replays.length]);
-      myWorld.clear();//this. eviscerate. draw and quarter. hang. discombobulate. bamboozle. destroy this now its NOT EVEN IMPLEMENTED YET AND NEVER WILL BE AAAAAA
-      //basically write my own clear world thing where it gets all bodies from the world and removes them one by one so i can do this thing
-      //"      clear
-      //public void clear()
-      //Clear all bodies and joints from the world. NOT IMPLEMENTED YET."
-      (scor1>scor2?frame:fram2).setPosition(endgame[0],endgame[1]);
-      (scor1>scor2?frame:fram2).setRotation(endgame[2]);
-      (scor1>scor2?frame:fram2).setVelocity(endgame[3],endgame[4]);
-      (scor1>scor2?frame:fram2).setAngularVelocity(endgame[5]);
-      (scor1>scor2?frame:fram2).setForce(endgame[6],endgame[7]);
-      (scor1>scor2?tire1:tire3).setPosition(endgame[8],endgame[9]);
-      (scor1>scor2?tire1:tire3).setRotation(endgame[10]);
-      (scor1>scor2?tire1:tire3).setVelocity(endgame[11],endgame[12]);
-      (scor1>scor2?tire1:tire3).setAngularVelocity(endgame[13]);
-      (scor1>scor2?tire1:tire3).setForce(endgame[14],endgame[15]);
-      (scor1>scor2?tire2:tire4).setPosition(endgame[16],endgame[17]);
-      (scor1>scor2?tire2:tire4).setRotation(endgame[18]);
-      (scor1>scor2?tire2:tire4).setVelocity(endgame[19],endgame[20]);
-      (scor1>scor2?tire2:tire4).setAngularVelocity(endgame[21]);
-      (scor1>scor2?tire2:tire4).setForce(endgame[22],endgame[23]);
-      myWorld.add(scor1>scor2?frame:fram2);
-      myWorld.add(scor1>scor2?tire1:tire3);
-      myWorld.add(scor1>scor2?tire2:tire4);
-      myWorld.add(scor1>scor2?axles[0]:axles[2]);
-      myWorld.add(scor1>scor2?axles[1]:axles[3]);
-      floor = new FBox(width,50);
-      floor.setPosition(width/2,height+25);
-      floor.setStatic(true);
-      myWorld.add(floor);
-      roofe = new FBox(width,50);
-      roofe.setPosition(width/2,-25);
-      roofe.setStatic(true);
-      myWorld.add(roofe);
-      lgoal = new FBox(50,height);
-      lgoal.setPosition(-25,height/2);
-      lgoal.setStatic(true);
-      myWorld.add(lgoal);
-      rgoal = new FBox(50,height);
-      rgoal.setPosition(width+25,height/2);
-      rgoal.setStatic(true);
-      myWorld.add(rgoal);
-      processKeys();
-      myWorld.step();
-      endgame[0] = (scor1>scor2?frame:fram2).getX();
-      endgame[1] = (scor1>scor2?frame:fram2).getY();
-      endgame[2] = (scor1>scor2?frame:fram2).getRotation();
-      endgame[3] = (scor1>scor2?frame:fram2).getVelocityX();
-      endgame[4] = (scor1>scor2?frame:fram2).getVelocityY();
-      endgame[5] = (scor1>scor2?frame:fram2).getAngularVelocity();
-      endgame[6] = (scor1>scor2?frame:fram2).getForceX();
-      endgame[7] = (scor1>scor2?frame:fram2).getForceY();
-      endgame[8] = (scor1>scor2?tire1:tire3).getX();
-      endgame[9] = (scor1>scor2?tire1:tire3).getY();
-      endgame[10] = (scor1>scor2?tire1:tire3).getRotation();
-      endgame[11] = (scor1>scor2?tire1:tire3).getVelocityX();
-      endgame[12] = (scor1>scor2?tire1:tire3).getVelocityY();
-      endgame[13] = (scor1>scor2?tire1:tire3).getAngularVelocity();
-      endgame[14] = (scor1>scor2?tire1:tire3).getForceX();
-      endgame[15] = (scor1>scor2?tire1:tire3).getForceY();
-      endgame[16] = (scor1>scor2?tire2:tire4).getX();
-      endgame[17] = (scor1>scor2?tire2:tire4).getY();
-      endgame[18] = (scor1>scor2?tire2:tire4).getRotation();
-      endgame[19] = (scor1>scor2?tire2:tire4).getVelocityX();
-      endgame[20] = (scor1>scor2?tire2:tire4).getVelocityY();
-      endgame[21] = (scor1>scor2?tire2:tire4).getAngularVelocity();
-      endgame[22] = (scor1>scor2?tire2:tire4).getForceX();
-      endgame[23] = (scor1>scor2?tire2:tire4).getForceY();
-      myWorld.draw();
+      push();
+      textAlign(CENTER,CENTER);
+      textSize(70);
+      fill(255);
+      text(scor1+" - "+scor2,width/2,100);
+      pop();
     }
-    
-    //do the rest of the stuff here maybe a rocket league ahh winscreen with them moving cars
+    //draw stats here
     break;
   case 3://training mode (time for some nightmaerials)
     break;
@@ -707,26 +682,26 @@ void makeArena() {
 void makeCars() {
   if(false)print("A");//bookmarks
   frame = new FPoly();
-  frame.vertex(0,20);
-  frame.vertex(20,20);
-  frame.vertex(30,0);
-  frame.vertex(70,0);
-  frame.vertex(80,20);
-  frame.vertex(100,20);
-  frame.vertex(100,50);
-  frame.vertex(0,50);
-  frame.setPosition(0,height-125);
+  frame.vertex(-50,-5);
+  frame.vertex(-30,-5);
+  frame.vertex(-20,-25);
+  frame.vertex(20,-25);
+  frame.vertex(30,-5);
+  frame.vertex(50,-5);
+  frame.vertex(50,25);
+  frame.vertex(-50,25);
+  frame.setPosition(50,height-150);
   frame.setDensity(3);
   fram2 = new FPoly();
-  fram2.vertex(0,20);
-  fram2.vertex(20,20);
-  fram2.vertex(30,0);
-  fram2.vertex(70,0);
-  fram2.vertex(80,20);
-  fram2.vertex(100,20);
-  fram2.vertex(100,50);
-  fram2.vertex(0,50);
-  fram2.setPosition(width-100,height-125);
+  fram2.vertex(-50,-5);
+  fram2.vertex(-30,-5);
+  fram2.vertex(-20,-25);
+  fram2.vertex(20,-25);
+  fram2.vertex(30,-5);
+  fram2.vertex(50,-5);
+  fram2.vertex(50,25);
+  fram2.vertex(-50,25);
+  fram2.setPosition(width-50,height-150);
   fram2.setDensity(3);
   tire1 = new FCircle(30);
   tire2 = new FCircle(30);
@@ -749,11 +724,11 @@ void makeCars() {
   new FDistanceJoint(fram2,tire3),
   new FDistanceJoint(fram2,tire4)};
   for(int i=0;i<2;i++) {
-    axles[i*2].setAnchor1(20,50);
+    axles[i*2].setAnchor1(-30,25);
     axles[i*2].setAnchor2(0,0);
     axles[i*2].setLength(0);
     axles[i*2].setDamping(0);
-    axles[i*2+1].setAnchor1(80,50);
+    axles[i*2+1].setAnchor1(30,25);
     axles[i*2+1].setAnchor2(0,0);
     axles[i*2+1].setLength(0);
     axles[i*2+1].setDamping(0);
@@ -844,6 +819,7 @@ void reset() {
   if(false)print("A");//bookmarks
   push();
   colorMode(RGB);
+  myWorld.clear();
   ball = new FCircle(60);
   ball.setPosition(width/2,height-31);
   ball.setFriction(0.5);
@@ -852,9 +828,10 @@ void reset() {
   ball.setBullet(true);
   ball.setAllowSleeping(false);
   myWorld.add(ball);
-  myWorld.clear();
   makeArena();
   makeCars();
+  jmp1 = 0;
+  jmp2 = 0;
   boos1 = 100;
   boos2 = 100;
   pop();
@@ -863,70 +840,43 @@ void reset() {
 
 void results() {
   if(false)print("A");//bookmarks
-  myWorld.clear();
+  frameRate(60);
+  clearFWorld(myWorld);
   myWorld.step();
-  ((scor1>scor2)?frame:fram2).setPosition(width/2-50,height-180);//im going to do whats called a pro gamer move
-  ((scor1>scor2)?tire1:tire3).setPosition(width/2-30,height-130);
-  ((scor1>scor2)?tire2:tire4).setPosition(width/2+30,height-130);
+  ((scor1>scor2)?frame:fram2).setPosition(width/2-50,height-80);//im going to do whats called a pro gamer move
+  ((scor1>scor2)?tire1:tire3).setPosition(width/2-30,height-30);
+  ((scor1>scor2)?tire2:tire4).setPosition(width/2+30,height-30);
   myWorld.add((scor1>scor2)?frame:fram2);
   myWorld.add((scor1>scor2)?tire1:tire3);
   myWorld.add((scor1>scor2)?tire2:tire4);
   myWorld.add(axles[(scor1>scor2)?0:2]);
   myWorld.add(axles[(scor1>scor2)?1:3]);
-      floor = new FBox(width,50);
-      floor.setPosition(width/2,height+25);
-      floor.setStatic(true);
-      myWorld.add(floor);
-      roofe = new FBox(width,50);
-      roofe.setPosition(width/2,-25);
-      roofe.setStatic(true);
-      myWorld.add(roofe);
-      lgoal = new FBox(50,height);
-      lgoal.setPosition(-25,height/2);
-      lgoal.setStatic(true);
-      myWorld.add(lgoal);
-      rgoal = new FBox(50,height);
-      rgoal.setPosition(width+25,height/2);
-      rgoal.setStatic(true);
-      myWorld.add(rgoal);
+  floor = new FBox(width,50);
+  floor.setPosition(width/2,height+25);
+  floor.setStatic(true);
+  myWorld.add(floor);
+  roofe = new FBox(width,50);
+  roofe.setPosition(width/2,-25);
+  roofe.setStatic(true);
+  myWorld.add(roofe);
+  lgoal = new FBox(50,height);
+  lgoal.setPosition(-25,height/2);
+  lgoal.setStatic(true);
+  myWorld.add(lgoal);
+  rgoal = new FBox(50,height);
+  rgoal.setPosition(width+25,height/2);
+  rgoal.setStatic(true);
+  myWorld.add(rgoal);
   if(debug)println("endgame initiated");
 }
 
-//void saveReplayFrameRedraw() {//very laggy maybe dont use
-//btw was written for a pgraphics instance so doesnt work rn
-//  replay[frameCount%replay.length].beginDraw();
-//  replay[frameCount%replay.length].background(0);
-//  replay[frameCount%replay.length].push();
-//  replay[frameCount%replay.length].translate(round((width-ball.getX())/2)+ballVelo+camX,round((height-ball.getY())/2)+ballVelo+camY);
-//  replay[frameCount%replay.length].scale(0.5-ballVelo/400);
-//  replay[frameCount%replay.length].fill(200);
-//  replay[frameCount%replay.length].rect(width/2-25,height,50,-200);
-//  replay[frameCount%replay.length].rect(width/2-100,height-250,200,50);
-//  replay[frameCount%replay.length].strokeWeight(10);
-//  replay[frameCount%replay.length].line((-AWidth/2)+(width/2)+295,height-goalHeight,(-AWidth/2)+(width/2)+295,height);
-//  replay[frameCount%replay.length].line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
-//  myWorld.draw(replay[frameCount%replay.length]);
-//  replay[frameCount%replay.length].pop();
-//  replay[frameCount%replay.length].endDraw();
-//  println(frameCount%replay.length);
-//}
-
-//void saveReplayFrame() {
-//  int Length = replayLength;
-//  if(!halfFPS)Length*=2;
-//  loadPixels();
-//  if(replay.length<Length) {
-//    replay = (PImage[])append(replay,new PImage(width,height,RGB));
-//    replay[replay.length-1].loadPixels();
-//    arrayCopy(pixels,replay[replay.length-1].pixels);
-//    replay[replay.length-1].updatePixels();
-//  } else {
-//    replay[frameCount%replay.length].loadPixels();
-//    arrayCopy(pixels,replay[frameCount%replay.length].pixels);
-//    replay[frameCount%replay.length].updatePixels();
-//  }
-//  updatePixels();
-//}
+void clearFWorld(FWorld seikai) {
+  seikai.clear();//get rid of somethin probs
+  ArrayList<FBody> bodies = seikai.getBodies();
+  for(FBody body : bodies) {
+    //body.removeFromWorld(); is this ALSO not implemented either??? i wonder whats next...
+  }
+}
 
 void saveReplayFrame() {
   if(false)print("A");//bookmarks
