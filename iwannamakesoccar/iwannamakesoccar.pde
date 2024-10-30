@@ -310,7 +310,6 @@ void HPressed(float x) {
 }
 
 void draw() {
-  println(jmp1,jmp2);
   if(loading) {//draw the loadscreen
     if(false)print("A");//bookmarks
     bg = new Gif(53,3,"chip/",".png");//load assets
@@ -382,7 +381,7 @@ void draw() {
       text("Loading...",width/2,height/2);
       pop();
       image(whsav,width-((frameCount*width)/60),0,width,height);
-    } else if(frameCount>60&&frameCount<120) {
+    } else if(frameCount>=60&&frameCount<120) {
       background(127-frameCount+60);
       blend(whsav,0,0,width,height,0,0,width,height,OVERLAY);
       //make image darker
