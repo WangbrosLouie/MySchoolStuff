@@ -266,7 +266,8 @@ float[][] replays = new float[0][0];
 PGraphics gcar1, gcar2, pcar1, pcar2, Hitbox;
 PFont Lucid;
 boolean[] Keys = new boolean[22]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor? 16-19 boost keys 20&21 brake keys
-Button[] title, gover;
+Button[] butns;
+int[] title, gover;
 //controller stuff
 ControlIO CtrlIO;
 ControlDevice N64;
@@ -324,15 +325,15 @@ void draw() {
     goalHeight = height;
     java.util.Arrays.fill(Keys,false);
     endgame = new float[24];
-    title = new Button[]{
+    butns = new Button[]{
     new Button(1, 1, width/8, height/2, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 30 FPS",24),
     new Button(1, 2, width/8, height/8*5, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 60 FPS",24),
     new Button(1, 3, width/8, height/4*3, width/4*3, height/8, color(0), color(50,184,83), color(0), color(30,150,60), color(0), color(10,100,23), color(0), color(0), color(0),"Dynamic Background ON",32),
     new Button(1, 4, width/2-25, 0, 50, 20, color(134), color(134), color(134), color(134), color(0), color(150), color(134), color(200), color(0),"Play with\nUnlimited FPS",8),
-    };
-    gover = new Button[]{
     new Button(1, 5, width/4, height/4*3, width/2, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Back to title",32)
     };
+    title = new int[]{0,1,2,3};
+    gover = new int[]{4};
     //initialize physics instances
     myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
     myWorld.setGrabbable(false);
@@ -373,13 +374,6 @@ void draw() {
   } else switch(screen) {
   case 0://title screen
     if(frameCount<60){
-      image(tire,0,0,width,height);
-      push();
-      textSize(64);
-      fill(0);
-      textAlign(CENTER,CENTER);
-      text("Loading...",width/2,height/2);
-      pop();
       image(whsav,width-((frameCount*width)/60),0,width,height);
     } else if(frameCount>=60&&frameCount<120) {
       background(127-frameCount+60);
@@ -390,6 +384,7 @@ void draw() {
       blend(whsav,0,0,width,height,0,0,width,height,OVERLAY);
       textAlign(CENTER,CENTER);
       textSize(69);//hehehe
+      fill(255);
       text(". B - L * A * S - T .\nprocessing soccer",width/2,100);
       process(title,Hitbox);
     }
@@ -549,9 +544,10 @@ void draw() {
     break;
   case 2://end game screen
     if(false)print("A");//bookmarks
-    if(frameCount<(halfFPS?60:120)){fill(0,16);rect(0,0,width,height);if(halfFPS)rect(0,0,width,height);}
-    else if(frameCount==(halfFPS?60:120)){background(0);results();}
-    else if(frameCount>(halfFPS?60:120)&&frameCount<(halfFPS?150:300)){//le grand split
+    if(frameCount<(halfFPS?60:120)){push();textAlign(CENTER,CENTER);textFont(Lucid);textSize(70);text("GAME OVER",width/2,100);pop();}
+    else if(frameCount<(halfFPS?120:240)){fill(0,16);rect(0,0,width,height);if(halfFPS)rect(0,0,width,height);}
+    else if(frameCount==(halfFPS?120:240)){background(0);results();}
+    else if(frameCount<(halfFPS?330:660)){//le grand split
       background(200);
       bg.update();
       if(dispBG) {
@@ -566,6 +562,7 @@ void draw() {
       processKeys();
       if(scor1>scor2)boos1=100;else boos2=100;
       myWorld.step();
+      if(halfFPS)myWorld.step();
       //(scor1>scor2?frame:fram2).setPosition(width/2,(scor1>scor2?frame:fram2).getY()); kinda annoying this one
       myWorld.draw();
       push();
@@ -616,6 +613,7 @@ void draw() {
       fill(255);
       text(scor1+" - "+scor2,width/2,100);
       pop();
+      process(gover,Hitbox);
     }
     //draw stats here
     break;
@@ -819,6 +817,7 @@ void reset() {
   push();
   colorMode(RGB);
   myWorld.clear();
+  clearFWorld(myWorld);
   ball = new FCircle(60);
   ball.setPosition(width/2,height-31);
   ball.setFriction(0.5);
@@ -839,7 +838,6 @@ void reset() {
 
 void results() {
   if(false)print("A");//bookmarks
-  frameRate(60);
   clearFWorld(myWorld);
   myWorld.step();
   ((scor1>scor2)?frame:fram2).setPosition(width/2-50,height-80);//im going to do whats called a pro gamer move
@@ -1125,7 +1123,7 @@ void mouseReleased() {
     int Action = Hitbox.get(mouseX,mouseY);
     Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
     if(Action==Btn&&Action!=0) {
-      Action = title[Action-1].doWhat;
+      //Action = title[Action-1].doWhat;
       switch(Action) {
       case 1:
         Hitbox.beginDraw();
@@ -1151,20 +1149,30 @@ void mouseReleased() {
         break;
       case 3://turn that frown upside down :3
         dispBG = !dispBG;
-        title[Action-1].text = "Dynamic Background "+(dispBG?"ON":"OFF");
-        title[Action-1].In = dispBG?color(50,184,83):color(184,83,50);
-        title[Action-1].HIn = dispBG?color(30,150,60):color(150,60,30);
-        title[Action-1].PIn = dispBG?color(10,100,23):color(100,23,10);
+        butns[title[Action-1]].text = "Dynamic Background "+(dispBG?"ON":"OFF");
+        butns[title[Action-1]].In = dispBG?color(50,184,83):color(184,83,50);
+        butns[title[Action-1]].HIn = dispBG?color(30,150,60):color(150,60,30);
+        butns[title[Action-1]].PIn = dispBG?color(10,100,23):color(100,23,10);
         if(dispBG)bg.resizeGif(round(bgX),round(bgY));else bg.resizeGif(width,height);
         break;
       case 4:
-        frameCount = 17000;
+        frameCount = 0;
         Hitbox.beginDraw();
         Hitbox.background(0);
         Hitbox.endDraw();
         halfFPS = false;
         frameRate(42069);//ehehe
         screen = 1;
+        break;
+      case 5:
+        frameCount = 0;
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        reset();
+        screen = 0;
+        scor1 = 0;
+        scor2 = 0;
         break;
       default:
         blueDead("Button Action "+Action,"404 Not Found","Action = "+Action);
@@ -1174,17 +1182,17 @@ void mouseReleased() {
   }
 }
 
-void process(Button[] B, PGraphics H) {
+void process(int[] B, PGraphics H) {
   H.beginDraw();
   H.background(0);
-  for(int i=0;i<B.length;i++)B[i].drawHit(i,H);
+  for(int i=0;i<B.length;i++)butns[B[i]].drawHit(B[i],H);
   for(int i=0;i<B.length;i++) {//draw buttons
     byte Status = 0;
     int Hover = Hitbox.get(mouseX,mouseY);
     Hover = round(red(Hover))*0x100+round(green(Hover))*0x100+ceil(blue(Hover));
-    if(Hover-1==i)Status = 1;
-    if(Btn-1==i)Status = 2;
-    B[i].draw(Status);
+    if(Hover-1==B[i])Status = 1;
+    if(Btn-1==B[i])Status = 2;
+    butns[B[i]].draw(Status);
   }
   H.endDraw();
 }
