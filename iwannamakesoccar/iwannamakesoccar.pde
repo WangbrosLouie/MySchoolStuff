@@ -934,6 +934,7 @@ void processKeys() {
   if(Keys[2]&&!Keys[6]&&Keys[12]){
     PVector jump = PVector.fromAngle(frame.getRotation()-HALF_PI).mult(jumpPower);
     frame.addImpulse(jump.x,jump.y,0,25);
+    jmp1--;
     Keys[12] = false;
   } else if(Keys[2]&&!Keys[6]&&!(Keys[8]&&Keys[9])&&Keys[14]) {//flip car
     frame.setAngularVelocity(-frame.getRotation()*4);
@@ -968,6 +969,7 @@ void processKeys() {
   if(Keys[5]&&!Keys[7]&&Keys[13]){
     PVector jump = PVector.fromAngle(fram2.getRotation()-HALF_PI).mult(jumpPower);
     fram2.addImpulse(jump.x,jump.y,0,25);
+    jmp2--;
     Keys[13] = false;
   } else if(Keys[5]&&!Keys[7]&&!(Keys[10]&&Keys[11])&&Keys[15]) {//flip car
     fram2.setAngularVelocity(-fram2.getRotation()*4);
@@ -1111,7 +1113,7 @@ void keyReleased() {
 }
 
 void mousePressed() {
-  if(frameCount>1&&!loading){//side effect of no onscreen buttons on frameCount<2
+  if(frameCount>1&&!loading){//side effect: no onscreen buttons on frameCount<2
     int Action = Hitbox.get(mouseX,mouseY);
     Btn = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
   }
@@ -1198,14 +1200,14 @@ void process(int[] B, PGraphics H) {
 }
 
 void contactStarted(FContact contact) { //add boost if car is on ground and not boosting like in sideswipe
-  if(contact.contains(tire1,floor))jmp1++;
-  if(contact.contains(tire2,floor))jmp1++;
-  if(contact.contains(tire3,floor))jmp2++;
-  if(contact.contains(tire4,floor))jmp2++;
-  if(contact.contains(tire1,ball))jmp1++;
-  if(contact.contains(tire2,ball))jmp1++;
-  if(contact.contains(tire3,ball))jmp2++;
-  if(contact.contains(tire4,ball))jmp2++;
+  if(contact.contains(tire1,floor))jmp1=2;
+  if(contact.contains(tire2,floor))jmp1=2;
+  if(contact.contains(tire3,floor))jmp2=2;
+  if(contact.contains(tire4,floor))jmp2=2;
+  if(contact.contains(tire1,ball))jmp1=2;
+  if(contact.contains(tire2,ball))jmp1=2;
+  if(contact.contains(tire3,ball))jmp2=2;
+  if(contact.contains(tire4,ball))jmp2=2;
   if(contact.contains(frame,floor))Keys[14]=true;
   if(contact.contains(fram2,floor))Keys[15]=true;
   if(!afterParty) {
@@ -1228,14 +1230,14 @@ void contactPersisted(FContact contact) {
 }
 
 void contactEnded(FContact contact) {
-  if(contact.contains(tire1,floor))jmp1--;
-  if(contact.contains(tire2,floor))jmp1--;
-  if(contact.contains(tire3,floor))jmp2--;
-  if(contact.contains(tire4,floor))jmp2--;
-  if(contact.contains(tire1,ball))jmp1--;
-  if(contact.contains(tire2,ball))jmp1--;
-  if(contact.contains(tire3,ball))jmp2--;
-  if(contact.contains(tire4,ball))jmp2--;
+  //if(contact.contains(tire1,floor))jmp1=1;
+  //if(contact.contains(tire2,floor))jmp1=1;
+  //if(contact.contains(tire3,floor))jmp2=1;
+  //if(contact.contains(tire4,floor))jmp2=1;
+  //if(contact.contains(tire1,ball))jmp1=1;
+  //if(contact.contains(tire2,ball))jmp1=1;
+  //if(contact.contains(tire3,ball))jmp2=1;
+  //if(contact.contains(tire4,ball))jmp2=1;
   if(contact.contains(frame,floor))Keys[14]=false;
   if(contact.contains(fram2,floor))Keys[15]=false;
 }
