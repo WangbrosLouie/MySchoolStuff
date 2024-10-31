@@ -259,7 +259,7 @@ FCircle ball, tire1, tire2, tire3, tire4, carp1, carp2, t1bak, t2bak;
 FDistanceJoint[] axles;
 //other class variables
 Gif bg;
-SoundFile bgm;
+SoundFile ttl, bgm;
 PImage tire, whsav;
 float[][] replay = new float[0][0];
 float[][] replays = new float[0][0];
@@ -314,6 +314,7 @@ void draw() {
   if(loading) {//draw the loadscreen
     if(false)print("A");//bookmarks
     bg = new Gif(53,3,"chip/",".png");//load assets
+    ttl = new SoundFile(this,"title.wav");
     bgm = new SoundFile(this,"grent_looped.ogg");
     whsav = loadImage("whatasav.png");
     whsav.resize(width,height);
@@ -369,7 +370,7 @@ void draw() {
       R.plug("RReleased",ControlIO.ON_RELEASE);
       B.plug("BReleased",ControlIO.ON_RELEASE);
     }
-    bgm.loop();
+    ttl.loop();
     loading = false;
   } else switch(screen) {
   case 0://title screen
@@ -1134,6 +1135,8 @@ void mouseReleased() {
         frameCount = 0;
         halfFPS = true;
         frameRate(30);
+        ttl.stop();
+        bgm.loop();
         //from the
         screen = 1;
         //to the
@@ -1147,6 +1150,8 @@ void mouseReleased() {
         Hitbox.endDraw();
         halfFPS = false;
         frameRate(60);
+        ttl.stop();
+        bgm.loop();
         screen = 1;
         break;
       case 3://turn that frown upside down :3
@@ -1164,6 +1169,8 @@ void mouseReleased() {
         Hitbox.endDraw();
         halfFPS = false;
         frameRate(42069);//ehehe
+        ttl.stop();
+        bgm.loop();
         screen = 1;
         break;
       case 5:
@@ -1172,6 +1179,8 @@ void mouseReleased() {
         Hitbox.background(0);
         Hitbox.endDraw();
         reset();
+        bgm.stop();
+        ttl.loop();
         screen = 0;
         scor1 = 0;
         scor2 = 0;
