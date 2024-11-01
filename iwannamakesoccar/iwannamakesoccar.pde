@@ -331,9 +331,10 @@ void draw() {
     new Button(1, 2, width/8, height/8*5, width/4*3, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Play with 60 FPS",24),
     new Button(1, 3, width/8, height/4*3, width/4*3, height/8, color(0), color(50,184,83), color(0), color(30,150,60), color(0), color(10,100,23), color(0), color(0), color(0),"Dynamic Background ON",32),
     new Button(1, 4, width/2-25, 0, 50, 20, color(134), color(134), color(134), color(134), color(0), color(150), color(134), color(200), color(0),"Play with\nUnlimited FPS",8),
-    new Button(1, 5, width/4, height/4*3, width/2, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Back to title",32)
+    new Button(1, 5, width/4, height/4*3, width/2, height/8, color(0), color(50,83,184), color(0), color(30,60,150), color(0), color(10,23,100), color(0), color(0), color(0),"Back to title",32),
+    new Button(1, 6, width/2+25, 0, 50, 20, color(134), color(134), color(134), color(134), color(0), color(150), color(134), color(200), color(0),"Demo Mode",8)
     };
-    title = new int[]{0,1,2,3};
+    title = new int[]{0,1,2,3,5};
     gover = new int[]{4};
     //initialize physics instances
     myWorld = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
@@ -1178,12 +1179,24 @@ void mouseReleased() {
         Hitbox.beginDraw();
         Hitbox.background(0);
         Hitbox.endDraw();
+        frameRate(60);
         reset();
         bgm.stop();
         ttl.loop();
         screen = 0;
         scor1 = 0;
         scor2 = 0;
+        break;
+      case 6:
+        frameCount = 16200;
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        halfFPS = false;
+        frameRate(60);
+        ttl.stop();
+        bgm.loop();
+        screen = 1;
         break;
       default:
         blueDead("Button Action "+Action,"404 Not Found","Action = "+Action);
@@ -1209,10 +1222,10 @@ void process(int[] B, PGraphics H) {
 }
 
 void contactStarted(FContact contact) { //add boost if car is on ground and not boosting like in sideswipe
-  if(contact.contains(tire1,floor))jmp1=2;
-  if(contact.contains(tire2,floor))jmp1=2;
-  if(contact.contains(tire3,floor))jmp2=2;
-  if(contact.contains(tire4,floor))jmp2=2;
+  if(contact.contains(tire1,floor)){jmp1=2;Keys[8]=true;}
+  if(contact.contains(tire2,floor)){jmp1=2;Keys[9]=true;}
+  if(contact.contains(tire3,floor)){jmp2=2;Keys[10]=true;}
+  if(contact.contains(tire4,floor)){jmp2=2;Keys[11]=true;}
   if(contact.contains(tire1,ball))jmp1=2;
   if(contact.contains(tire2,ball))jmp1=2;
   if(contact.contains(tire3,ball))jmp2=2;
@@ -1239,6 +1252,10 @@ void contactPersisted(FContact contact) {
 }
 
 void contactEnded(FContact contact) {
+  if(contact.contains(tire1,floor))Keys[8]=false;
+  if(contact.contains(tire2,floor))Keys[9]=false;
+  if(contact.contains(tire3,floor))Keys[10]=false;
+  if(contact.contains(tire4,floor))Keys[11]=false;
   //if(contact.contains(tire1,floor))jmp1=1;
   //if(contact.contains(tire2,floor))jmp1=1;
   //if(contact.contains(tire3,floor))jmp2=1;
