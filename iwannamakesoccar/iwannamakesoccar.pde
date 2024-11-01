@@ -234,6 +234,7 @@ boolean halfFPS = true;
 boolean paused = false;
 boolean afterParty = false;
 boolean overtime = false;
+boolean drawing = false;
 //replay variables
 boolean replaying = false;
 int replayFrame = 0;
@@ -311,6 +312,7 @@ void HPressed(float x) {
 }
 
 void draw() {
+  drawing = true;
   if(loading) {//draw the loadscreen
     if(false)print("A");//bookmarks
     bg = new Gif(53,3,"chip/",".png");//load assets
@@ -441,14 +443,16 @@ void draw() {
       line((AWidth/2)+(width/2)-295,height-goalHeight,(AWidth/2)+(width/2)-295,height);
       myWorld.draw();
       pop();
-      //if(replay.length<Length)image(replay[frameCount-replayFrame-1],0,0,width,height);
-      //else image(replay[frameCount%replay.length],0,0,width,height);
       text(goalSpeed,200,height-50);
       text(toTime(lastGoal,replayFrame),width-100,height-50);
       if(frameCount-replayFrame>replay.length-1) {
         replaying=false;
-        //replays = (PImage[])concat(replays,replay);
-        //replay = new PImage[0];
+        if(replay.length==replayLength) {
+          float[] temp = new float[replayLength];
+          arrayCopy(replay,frameCount%replayLength,temp,0,replayLength-(frameCount%replayLength));
+          arrayCopy(replay,0,temp,(replayLength-(frameCount%replayLength)),frameCount%replayLength);
+          arrayCopy(temp,replay);
+        }
         replays = (float[][])concat(replays,replay);
         replay = new float[0][0];
         frameCount = replayFrame;
@@ -625,6 +629,7 @@ void draw() {
   //funny ^w^
     blueDead("Screen "+screen,"404 Not Found","Screen = "+screen);
   }
+  drawing = false;
 }
 
 void makeArena() {
@@ -1237,7 +1242,7 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
     if(contact.contains(ball,lgoal)){scor2++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
     if(contact.contains(ball,floor)&&(halfFPS?30*300:60*300)<=frameCount&&!overtime) {
       if(scor1==scor2){overtime=true;frameCount=halfFPS?30*300:60*300;reset();}
-      else {screen=2;frameCount=0;}
+      else {screen=2;while(drawing){print("");}frameCount=0;}
     }
   }
 }
@@ -1247,7 +1252,7 @@ void contactPersisted(FContact contact) {
   if(contact.contains(fram2,floor))Keys[15]=true;
   if(contact.contains(ball,floor)&&(halfFPS?30*300:60*300)<=frameCount&&!overtime&&!afterParty) {
     if(scor1==scor2){overtime=true;frameCount=halfFPS?30*300:60*300;reset();}
-    else {screen=2;frameCount=0;}
+    else {screen=2;while(drawing){print("");}frameCount=0;}
   }
 }
 
