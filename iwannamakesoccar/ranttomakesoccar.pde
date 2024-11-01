@@ -248,4 +248,52 @@ real who is gonna sweat and get to supersonic legend in nyaing blast
 processing soccer. there isnt a single soul on this planet who would wanna.
 i must say though this is quite the departure from my usual flavour of yap.
 im not really yapping about my life anymore its just stuff thats happening.
+alright, now that ive finished the game, i think i need to yap some more.
+today is halloween, although it might not be anymore by the time i finish
+writing this. i dressed up as poob for the whole day today. i didnt even
+realize how amazing my costume was, not because it looked good, but because
+i made it out of scratch(excluding the clothes which i thrifted). i made a
+party hat out of paper using a template that i printed and pencil crayons.
+i acutually made 2, but the first one came out way too light, so i remade
+it, and it is much clearer in colour. i made some party horns with paper
+using tutorials i found online, as well as the horn part of some dollar
+store party horns, with tape. as with the hat, i wanted the true poob
+experience, so i after i made 3 horns with a paper straw, and one out of a
+horn part, i decided to create a red horn by colouring the paper that i
+folded into the horn before i folded it. i made sure to use lots of tape on
+the shaft because the paper would get soggy when i blew on it too much, but
+it didnt help much as it still got quite soggy where the taping ended. now
+the biggest most prominent part of the costume is the present. i used a box
+with a lot of painters tape and some more paper to make a nice looking
+present box. it was green because i remember the green present box the most
+and because coincidentally i thought of using painters tape since that is
+green. i still cant believe i was gonna colour the entire box green with
+pencil crayon. the box is by far the thing that took me the most time, as
+i ran out of tape midway through so it spread out into two days of work.
+overall, im happy with the costume, and i still would be if it didnt start
+downpouring while i was trick or treating. like holy nya, the rain came
+down like a cold. it was heavy, and obviously, since most of my costume was
+made out of paper, didnt end too well. i had the good forethought of
+putting all paper things inside the box, which includes the paper/tape
+ribbon and paper/staple bow, and the party part of partynoob, so only the
+box was soaked. even then, the water did not penetrate far into the card
+board, as only the boxtop got watered, but as of now after about an hour in
+front of the fireplace, it is still soggy. i eventually had to go back home
+because i was starting to get hypothermia from the rain, as i was literally
+only wearing a tshirt on top of a blouse, and green jeans. my hands were so
+cold and numb even after running them under warm water for 5 minutes. sadly
+i only got like 5 handfuls of candy, while the other people that i went
+with got almost more than the capacity of my box, because they stayed out
+in the rain. the funny thing is that literally only two people knew who i
+was dressing up as, and they were from school. everyone else thought i was
+simply the embodiment of a birthday party, which wouldnt be wrong, but not
+exactly. anyways i think i glazed my poob costume enough. one last thing
+though. it cost me around 30 dollars to get the clothes and the tape. thats
+all it cost for the costume. the box was free from my dads workplace and
+the paper is literally worth fractions of a cent(well maybe not literally).
+since i want to do other things for the first time ever, ill leave off with
+a simple but powerful message: the tophat turmoil group and game have been
+uploaded to roblox. they are nowhere near finished, i just wanted to upload
+them on a special day and this counts as one especially with the poob
+costume. welp, toodles.
 */
