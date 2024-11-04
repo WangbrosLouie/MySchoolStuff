@@ -35,4 +35,8 @@ backport it and make it work. ahh, it feels nice to relax and just let it
 all out again. except i still have a boatload of schoolwork to do so bleh.
 okay i figured it out it was the stupid script run context. why did they
 add that ARGHHHHHHH
+now that ive made the thingy work im gonna make some gui stuff in it
+because right now its what you would call a minimalistic ui, as in a
+nonexistant one. im workin on backporting the ui from tophat tournament,
+which is what i call the original team deathmatch.rbxl nowadays. 
 */
