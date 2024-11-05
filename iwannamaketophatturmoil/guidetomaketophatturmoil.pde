@@ -31,9 +31,13 @@ hex editor is strongly recommended.
     /-engine features-/
 The engine is a platformer engine. It is physics based, using the Fisica
 library. Level chunk loading from files may be implemented in the future
-for level making purposes. The engine generates the chunks around the
-player based on the camera.
+for level making purposes. The engine pregenerates every chunk in each
+level.
 
-
-
+chunk reference
+0 = air
+1 = flat ground
+2 = slope up
+3 = slope down
+4 = half block
 */

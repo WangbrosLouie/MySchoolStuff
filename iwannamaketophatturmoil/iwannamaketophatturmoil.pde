@@ -23,24 +23,55 @@ PVector camera;
 PVector playerVec;
 FWorld world;
 FBox player;
+FCompound[] chunks;
 
 void setup() {
   lucid = createFont("Lucida Console",14,false);
+  Fisica.init(this);
+  java.util.Arrays.fill(chunks,null);
 }
 
 void draw() {
   if(loading){
     loading = false;
     map = loadBytes(maps[0]);
-    mapName = tostring(char(subset(map,17,map[16]+1)));
+    mapName = tostring(char(subset(map,33,map[32]+1)));
+    println(mapName);
     makeLevel();
   }
-  //read map info from header and create level
+  world.step();
+  world.draw();
 }
 
-//make level chunk generation here
 void makeLevel() {
-  
+  int lWidth = map[16]+1;
+  int lHeight = map[17]+1;
+  world = new FWorld(0,0,lWidth*128,lHeight*128);
+  for(int j=0;j<lHeight;j++){
+    for(int i=0;i<lWidth;i++) {
+      makeChunk(j*lWidth+i);
+    }
+  }
+}
+
+void makeChunk(int chunk) {
+  byte ID = map[chunk+32];
+  switch(ID){
+  case 0:
+    chunks[chunk] = null;
+    break;
+  case 1:
+    FCompound add = new FCompound();
+    FBox gnd = new FBox(128,128);
+    add.addBody(gnd);
+    //move into place and make static
+    chunks[chunk] = add;
+    break;
+  case 2:
+    break;
+  case 3:
+    break;
+  }
 }
 
 String tostring(char[] chars) { //oh lua how i wish i were programming in thy scrypt
@@ -148,11 +179,3 @@ void keyReleased() {
     break;
   }
 }
-
-/*chunk reference
-0 = air
-1 = flat ground
-2 = slope up
-3 = slope down
-4 = half block
-*/
