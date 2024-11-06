@@ -49,12 +49,14 @@ void makeLevel() {
   world = new FWorld(0,0,lWidth*128,lHeight*128);
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
-      makeChunk(j*lWidth+i);
+      makeChunk(i,j);
     }
   }
 }
 
-void makeChunk(int chunk) {
+void makeChunk(int i,int j) {
+  int lWidth = map[16]+1;
+  int chunk = j*lWidth+i;
   byte ID = map[chunk+32];
   switch(ID){
   case 0:
