@@ -10,6 +10,9 @@ am to write a very good game engine deserving of my game.
 supposed to hold that I am making an effort to write neatly and with proper
 English conventions.
 
+NOTE: Document is subject to change, and may not be accurate as the engine
+is developed. This document may be behind or ahead of the engine.
+
     /-contents-/
 -Level Data Format
 -Engine Features
