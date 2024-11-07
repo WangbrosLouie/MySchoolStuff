@@ -41,7 +41,7 @@ void draw() {
   }
   processKeys();
   world.step();
-  background(0);
+  background(200);
   cameraX = width/2-player.getX();
   cameraY = height/2-player.getY();
   translate(cameraX,cameraY);
@@ -62,6 +62,7 @@ void makeLevel() {
   player.setPosition(256*bi(map[18])+bi(map[19]),256*bi(map[20])+bi(map[21]));
   player.setRotatable(false);
   player.setFriction(100);
+  player.setName("00");
   world.add(player);
 }
 
@@ -75,15 +76,42 @@ void makeChunk(int i,int j) {
     break;
   case 1:
     chunks[chunk] = new FCompound();
-    FBox gnd = new FBox(128,128);
+    FBox gnd = new FBox(128,127);
+    gnd.setPosition(65,65.5);
+    gnd.setName("00");
+    FLine jmp = new FLine(1,1,129,1);
+    jmp.setName("01");
     chunks[chunk].addBody(gnd);
-    chunks[chunk].setPosition(128*i+64,128*j+64);
+    chunks[chunk].addBody(jmp);
+    chunks[chunk].setPosition(128*i+1,128*j+1);
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
     break;
   case 2:
+    chunks[chunk] = new FCompound();
+    FPoly slo = new FPoly();
+    slo.vertex(0,128);
+    slo.vertex(128,0);
+    slo.vertex(128,128);
+    slo.setFriction(0.1);
+    chunks[chunk].setName("00");
+    chunks[chunk].addBody(slo);
+    chunks[chunk].setPosition(128*i,128*j);
+    chunks[chunk].setStatic(true);
+    world.add(chunks[chunk]);
     break;
   case 3:
+    chunks[chunk] = new FCompound();
+    slo = new FPoly();
+    slo.vertex(0,0);
+    slo.vertex(0,128);
+    slo.vertex(128,128);
+    slo.setFriction(0.1);
+    chunks[chunk].setName("00");
+    chunks[chunk].addBody(slo);
+    chunks[chunk].setPosition(128*i,128*j);
+    chunks[chunk].setStatic(true);
+    world.add(chunks[chunk]);
     break;
   }
 }
@@ -111,15 +139,27 @@ void blueDead(String CALLEDFR, String STOPCODE, String INFOSCND) { //funny
 }
 
 void processKeys() {
+  ArrayList<FContact> touchings = player.getContacts();
+  for(FContact bod:touchings) {
+    int flags;
+    if(bod.getBody1()==player) {
+      flags = unbinary(bod.getBody2().getName());
+      println(flags);
+    } else {
+      flags = unbinary(bod.getBody1().getName());
+    }
+    //if(flags%0x2/1>0) bittest template
+    if(flags%0x4/2>0)keys[4] = true;
+  }
   if(!(keys[1]&&keys[3])) {
     if(keys[1]) {
-      player.setVelocity(-100,player.getVelocityY());
+      player.setVelocity(-200,player.getVelocityY());
     }
     if(keys[3]) {
-      player.setVelocity(100,player.getVelocityY());
+      player.setVelocity(200,player.getVelocityY());
     }
   }
-  if(keys[1]&&!keys[4]) {
+  if(keys[0]&&!keys[4]) {
       keys[4] = true;
       player.setVelocity(player.getVelocityX(),-200);
   }

@@ -43,4 +43,16 @@ chunk reference
 2 = slope up
 3 = slope down
 4 = half block
+
+nameflag reference (big endian)
+note: if an FCompound has only 1 body, set the name of the FCompound
+otherwise set the names of the individual bodies
+0 = replenishes jump
+1 = climbable???
+2 = hurts nyowch
+3 = undecided
+4 = undecided
+5 = undecided
+6 = undecided
+7 = undecided
 */
