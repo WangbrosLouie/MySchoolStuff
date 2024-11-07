@@ -14,7 +14,7 @@ void settings() {
 
 boolean loading = true;
 String[] maps = new String[]{"map01.lvl"};
-byte[] map;
+byte[] map; //i guess we doin 7 bit integers now
 String mapName;
 color[] pal1 = new color[]{color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0)};
 boolean[] keys = new boolean[13];
@@ -34,7 +34,7 @@ void setup() {
 void draw() {
   if(loading){
     loading = false;
-    map = loadBytes(maps[0]);//why are there no UNSIGNED BYTES NYARGHHHHH
+    map = loadBytes(maps[0]);
     mapName = tostring(char(subset(map,33,map[32]+1)));
     println(mapName);
     makeLevel();
@@ -59,8 +59,9 @@ void makeLevel() {
     }
   }
   player = new FBox(32,32);
-  player.setPosition(256*map[18]+map[19],256*map[20]+map[21]);
+  player.setPosition(256*bi(map[18])+bi(map[19]),256*bi(map[20])+bi(map[21]));
   player.setRotatable(false);
+  player.setFriction(100);
   world.add(player);
 }
 
@@ -95,6 +96,10 @@ String tostring(char[] chars) { //oh lua how i wish i were programming in thy sc
   return retVal;
 }
 
+int bi(byte b) {//byte to int
+  return unbinary(binary(b));
+}//alas, unsigned byte problem, i hath defeated thee!
+
 //input events and controller support here
 void blueDead(String CALLEDFR, String STOPCODE, String INFOSCND) { //funny
   noLoop();
@@ -113,6 +118,10 @@ void processKeys() {
     if(keys[3]) {
       player.setVelocity(100,player.getVelocityY());
     }
+  }
+  if(keys[1]&&!keys[4]) {
+      keys[4] = true;
+      player.setVelocity(player.getVelocityX(),-200);
   }
 }
 
