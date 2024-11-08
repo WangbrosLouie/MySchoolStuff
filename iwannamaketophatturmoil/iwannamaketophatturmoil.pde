@@ -83,19 +83,22 @@ void makeChunk(int i,int j) {
     jmp.setName("01");
     chunks[chunk].addBody(gnd);
     chunks[chunk].addBody(jmp);
-    chunks[chunk].setPosition(128*i+1,128*j+1);
+    chunks[chunk].setPosition(128*i-1,128*j-1);
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
     break;
   case 2:
     chunks[chunk] = new FCompound();
     FPoly slo = new FPoly();
-    slo.vertex(0,128);
-    slo.vertex(128,0);
+    slo.vertex(1,128);
+    slo.vertex(128,1);
     slo.vertex(128,128);
     slo.setFriction(0.1);
-    chunks[chunk].setName("00");
+    slo.setName("00");
+    jmp = new FLine(0,128,128,0);
+    jmp.setName("01");
     chunks[chunk].addBody(slo);
+    chunks[chunk].addBody(jmp);
     chunks[chunk].setPosition(128*i,128*j);
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
@@ -149,7 +152,7 @@ void processKeys() {
       flags = unbinary(bod.getBody1().getName());
     }
     //if(flags%0x2/1>0) bittest template
-    if(flags%0x4/2>0)keys[4] = true;
+    if(flags%0x2/1>0)keys[4] = false;
   }
   if(!(keys[1]&&keys[3])) {
     if(keys[1]) {
