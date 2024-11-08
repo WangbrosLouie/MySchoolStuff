@@ -39,4 +39,21 @@ now that ive made the thingy work im gonna make some gui stuff in it
 because right now its what you would call a minimalistic ui, as in a
 nonexistant one. im workin on backporting the ui from tophat tournament,
 which is what i call the original team deathmatch.rbxl nowadays. 
+
+oh man oh meow my shoulder hurts after drawin that rhythmgunner stuff.
+rather, i ported the head from the genesis graphics and made a body. but
+yeowf. i just remembered that i uploaded that phighting page and now only
+64.6% of my code is processing. that is crazy because that means that the
+amount of stuff i wrote for that page is over half the amount of code that
+i have written in processing. that is wild, crazy, insan-o style. if all of
+these rants get collected in a book someday i want that book to be titled
+"unconventional" in all lowercase just like my writing style. i want it to
+be called unconventional because thats what my coding style is. it is super
+hard to read and comprehend because i never really followed major or even
+common coding conventions. though i wonder, how long the book would be. it
+would probably be the size of a short novel if i keep writing here though,
+i gotta get back to implementing new chunks after all. also, i hate that i
+keep misspelling chunks as ch!nks (censored). what makes it more ironic is
+that i am one myself, although i guess not surprising because my surname is
+literally wang.
 */

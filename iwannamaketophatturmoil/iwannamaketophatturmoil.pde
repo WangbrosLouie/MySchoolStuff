@@ -11,10 +11,10 @@ import fisica.*;
 void settings() {
   size(640,480);
 }
-
+//remind me to do the stuff on this here web page https://answers.microsoft.com/en-us/outlook_com/forum/all/how-to-stop-the-new-outlook-from-automatically/34246983-2a13-4462-8a8a-df618c36ca3f?page=4
 boolean loading = true;
 String[] maps = new String[]{"map01.lvl"};
-byte[] map; //i guess we doin 7 bit integers now
+byte[] map;
 String mapName;
 color[] pal1 = new color[]{color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0)};
 boolean[] keys = new boolean[13];
@@ -49,16 +49,17 @@ void draw() {
 }
 
 void makeLevel() {
-  int lWidth = map[16]+1;
-  int lHeight = map[17]+1;
+  int lWidth = bi(map[16])+1;
+  int lHeight = bi(map[17])+1;
+  println(lWidth,lHeight);
   chunks = new FCompound[lWidth*lHeight];
-  world = new FWorld(0,0,lWidth*128,lHeight*128);
+  world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
       makeChunk(i,j);
     }
   }
-  player = new FBox(32,32);
+  player = new FBox(32,64);
   player.setPosition(256*bi(map[18])+bi(map[19]),256*bi(map[20])+bi(map[21]));
   player.setRotatable(false);
   player.setFriction(100);
@@ -67,9 +68,9 @@ void makeLevel() {
 }
 
 void makeChunk(int i,int j) {
-  int lWidth = map[16]+1;
+  int lWidth = bi(map[16])+1;
   int chunk = j*lWidth+i;
-  byte ID = map[chunk+34+map[16]];
+  byte ID = map[chunk+33+bi(map[32])];
   switch(ID){
   case 0:
     chunks[chunk] = null;
@@ -106,12 +107,15 @@ void makeChunk(int i,int j) {
   case 3:
     chunks[chunk] = new FCompound();
     slo = new FPoly();
-    slo.vertex(0,0);
+    slo.vertex(0,1);
+    slo.vertex(127,128);
     slo.vertex(0,128);
-    slo.vertex(128,128);
     slo.setFriction(0.1);
-    chunks[chunk].setName("00");
+    slo.setName("00");
+    jmp = new FLine(0,0,128,128);
+    jmp.setName("01");
     chunks[chunk].addBody(slo);
+    chunks[chunk].addBody(jmp);
     chunks[chunk].setPosition(128*i,128*j);
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
@@ -147,9 +151,10 @@ void processKeys() {
     int flags;
     if(bod.getBody1()==player) {
       flags = unbinary(bod.getBody2().getName());
-      println(flags);
+      println(bod.getBody2());
     } else {
       flags = unbinary(bod.getBody1().getName());
+      println(bod.getBody1());
     }
     //if(flags%0x2/1>0) bittest template
     if(flags%0x2/1>0)keys[4] = false;
