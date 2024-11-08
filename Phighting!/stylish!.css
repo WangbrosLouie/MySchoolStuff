@@ -1,0 +1,626 @@
+body {
+  background: url("Pics/Background.png") center top no-repeat fixed;
+  background-size: contain;
+}
+body2 {
+  background: rgba(255, 255, 255, 0.7);
+  display: block;
+  width: 80%;
+  margin: 0 10%;
+  text-shadow: 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black, -1px -1px 0 black;
+  color: white;
+}
+nav {
+}
+a {
+  color: white;
+  padding: 5px;
+  background: black;
+  font-family: "Segoe UI", Arial, Verdana;
+  margin: 0;
+  width: 100px;
+  height: 25px;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
+  border: 0.5px solid #444444;
+}
+a.mainlogo {
+  width: 101%;
+  margin: -1%;
+  margin-bottom: 0;
+  height: auto;
+  background-color: white;
+  border: hidden;
+}
+a.phighting {
+  text-decoration: none;
+  font-size: 2em;
+  font-variant: small-caps;
+  font-family: Arial;
+  border: 3px solid white;
+  border-radius: 4px;
+  background: lightgreen;
+  color: white;
+  text-shadow: 0px 0px 3px grey;
+  padding: 2px 10px;
+  margin: 10px 0;
+  width: auto;
+  height: auto;
+}
+a.phighting:hover {
+  background: green;
+}
+a.phighting:active {
+  color: grey;
+}
+img.mainlogo {
+  width: 30%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+rightalign {
+  text-align: right;
+  float: right;
+}
+navstyle {
+  display: inline-block;
+}
+ul.phighter {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+}
+li {
+  list-style-type: none;
+}
+dummytag {
+  display: inline;
+  width: 100px;
+}
+p {
+  margin: 3%;
+  color: white;
+  font-size: 1.5em;
+}
+div.mainpic {
+  width: 300px;
+  height: auto;
+  float: right;
+  margin: 1%;
+  border: 1px solid grey;
+  border-radius: 4px;
+  background: lightgrey;
+  padding: 5px;
+}
+charname {
+  font-size: 2em;
+  text-align: center;
+  display: block;
+}
+sub {
+  font-weight: bold;
+  text-align: left;
+  font-size: 1.2em;
+}
+data {
+  float: right;
+  font-size: 1em;
+}
+img.mainpic {
+  border: 1px solid black;
+  border-radius: 2px;
+  background: white;
+  width: 90%;
+  margin: 2%;
+  padding: 3%;
+}
+attacks {
+  display: inline-block;
+  width: 400px;
+  height: 300px;
+  margin: 5%;
+  border: 2px solid;
+  border-image: linear-gradient(to right, red 20px, blue 20px, blue 40px, red 40px, red 60px, blue 60px, blue 80px, red 80px, red 100px, blue 100px, blue 120px, red 120px, red 140px, blue 140px, blue 160px, red 160px, red 180px, blue 180px, blue 200px, red 200px, red 220px, blue 220px, blue 240px, red 240px, red 260px, blue 260px, blue 280px, red 280px, red 300px, blue 300px, blue 320px, red 320px, red 340px, blue 340px, blue 360px, red 360px, red 380px, blue 380px, blue 400px) 5;
+  background: #CCCCCC;
+}
+att1 {
+  text-align: center;
+  display: block;
+  font-size: 2em;
+}
+table.keys, table.mouse {
+  float: left;
+  margin: 10px 30px;
+  display: inline;
+}
+tr.key,td.key {
+  font-size: 1em;
+  font-family: Arial, "Segoe UI";
+  border: 2px solid black;
+  border-collapse: collapse;
+  background: black;
+  text-shadow: 0;
+  font-weight: bold;
+  color: white;
+  height: 50px;
+  width: 44px;
+}
+div.attdscrp {
+  float: right;
+  display: inline;
+  height: 200px;
+  width: 178px;
+  border: 2px solid lightgrey;
+}
+attitle {
+  display: block;
+  text-align: center;
+  background: black;
+  width: 178px;
+  height: 30px;
+  font-size: 0.8em;
+  border: 1px solid grey;
+}
+img.attphoto {
+  display: block;
+  width: 178px;
+  height: 110px;
+}
+attdscpt {
+  display: inline-block;
+  text-align: center;
+  background: black;
+  width: 100px;
+  height: 80px;
+  font-size: 0.6em;
+  border: 1px solid grey;
+}
+attdmg {
+  float: right;
+  display: inline-block;
+  text-align: center;
+  background: black;
+  width: 74px;
+  height: 80px;
+  font-size: 0.7em;
+  border: 1px solid grey;
+}
+table.maps {
+  text-shadow: 1px 1px 0px black, 1px -1px 0px black, -1px 1px 0px black, -1px -1px 0px black;
+  color: white;
+}
+table.maps,tr.maps,td.maps,th.maps {
+  border-collapse: collapse;
+  border: 3px solid grey;
+  border-radius: 2px;
+  overflow: auto;
+}
+tr.maps {
+  height: 125px;
+}
+td.maps.rating {
+  font-size: 1em;
+  color: black;
+  width: 10.7em;
+  text-shadow: 0px 0px 0px;
+}
+th.maphead {
+  color: white;
+  border: 3px solid black;
+  border-collapse: collapse;
+  height: 2em;
+}
+div.stupidtablehasnooverflowscroll {
+  height: 125px;
+  overflow-y: auto;
+  font-size: 1em;
+  text-align: justify;
+}
+tr.maps.maphead {
+  color: black;
+  border: 3px solid black;
+  border-collapse: collapse;
+  height: 2em;
+}
+th.map {
+  font-family: sans-serif;
+  color: rgba(255, 255, 255, 0.5);
+  text-shadow: 0px 0px 0px;
+}
+th.map.banland {
+  background: url("Pics/Banland.png") center;
+  background-size: cover;
+}
+th.map.bogpark {
+  background: url("Pics/BOGIO Skatepark.png") center;
+  background-size: cover;
+}
+th.map.chscnyn {
+  background: url("Pics/Chaos Canyon.png") center;
+  background-size: cover;
+}
+th.map.darkclf {
+  background: url("Pics/Darkage Cliffs.png") center;
+  background-size: cover;
+}
+th.map.dodgbal {
+  background: url("Pics/DODGEBALL!.png") center;
+  background-size: cover;
+}
+th.map.dmnovly {
+  background: url("Pics/Domino Valley.jpg") center;
+  background-size: cover;
+}
+th.map.dmspire {
+  background: url("Pics/Doomspire.png") center;
+  background-size: cover;
+}
+th.map.htelpht {
+  background: url("Pics/Hotel Elephant.png") center;
+  background-size: cover;
+}
+th.map.kofthil {
+  background: url("Pics/King of the Hill.png") center;
+  background-size: cover;
+}
+th.map.nktwhle {
+  background: url("Pics/Nuke the Whales.png") center;
+  background-size: cover;
+}
+th.map.ptctlmn {
+  background: url("Pics/Protect Telamon.png") center;
+  background-size: cover;
+}
+th.map.rtrbxbk {
+  background: url("Pics/ROBLOX Bank.png") center;
+  background-size: cover;
+}
+th.map.rbloxhq {
+  background: url("Pics/ROBLOX HQ.png") center;
+  background-size: cover;
+}
+th.map.rxlndmt {
+  background: url("Pics/ROBLOX Laundromat.png") center;
+  background-size: cover;
+}
+th.map.rbxmall {
+  background: url("Pics/ROBLOX Mall.png") center;
+  background-size: cover;
+}
+th.map.rxmseum {
+  background: url("Pics/ROBLOX Museum.png") center;
+  background-size: cover;
+}
+th.map.rktarna {
+  background: url("Pics/Rocket Arena.png") center;
+  background-size: cover;
+}
+th.map.swdfoth {
+  background: url("Pics/SFOTH.png") center;
+  background-size: cover;
+}
+th.map.spckngt {
+  background: url("Pics/Space Knights.png") center;
+  background-size: cover;
+}
+th.map.bdfctry {
+  background: url("Pics/The Bread Factory.png") center;
+  background-size: cover;
+}
+th.map.irncafe {
+  background: url("Pics/The Iron Cafe.png") center;
+  background-size: cover;
+}
+th.map.undergw {
+  background: url("Pics/The Underground War.png") center;
+  background-size: cover;
+}
+th.map.trndmlt {
+  background: url("Pics/Train Demolition.png") center;
+  background-size: cover;
+}
+a.phighterlink {
+  margin: 1em 0;
+}
+a.phighterlink.sword,a.phighterlink.skateboard,a.phighterlink.katana {
+  height: auto;
+  width: auto;
+  background: rgba(200, 0, 0, 0.5);
+}
+a.phighterlink.biograft {
+  height: auto;
+  width: auto;
+  background: rgba(220, 120, 0, 0.5);
+}
+a.phighterlink.rocket,a.phighterlink.slingshot,a.phighterlink.hyperlaser {
+  height: auto;
+  width: auto;
+  background: rgba(0, 80, 200, 0.5);
+}
+a.phighterlink.shuriken,a.phighterlink.boombox {
+  height: auto;
+  width: auto;
+  background: rgba(0, 160, 0, 0.5);
+}
+a.phighterlink.medkit {
+  height: auto;
+  width: auto;
+  background: rgba(15, 160, 80, 0.5);
+}
+a.phighterlink.subspace {
+  height: auto;
+  width: auto;
+  background: rgba(150, 10, 80, 0.5);
+}
+a.phighterlink.sword:hover,a.phighterlink.skateboard:hover,a.phighterlink.katana:hover {
+  background: rgba(220, 20, 20, 1);
+}
+a.phighterlink.biograft:hover {
+  background: rgba(240, 140, 20, 1);
+}
+a.phighterlink.rocket:hover,a.phighterlink.slingshot:hover,a.phighterlink.hyperlaser:hover {
+  height: auto;
+  width: auto;
+  background: rgba(20, 100, 220, 1);
+}
+a.phighterlink.shuriken:hover,a.phighterlink.boombox:hover {
+  height: auto;
+  width: auto;
+  background: rgba(20, 180, 20, 1);
+}
+a.phighterlink.medkit:hover {
+  height: auto;
+  width: auto;
+  background: rgba(10, 150, 90, 1);
+}
+a.phighterlink.subspace:hover {
+  height: auto;
+  width: auto;
+  background: rgba(200, 50, 130, 1);
+}
+img.phighterlink {
+  height: 150px;
+  width: auto;
+}
+plink.a,plink.b,plink.d {
+  background: grey;
+  width: 90%;
+  display: block;
+  float: left;
+  border-bottom-right-radius: 4em 2em;
+  padding-left: 1em;
+  border-top: 3px solid red;
+}
+plink.c {
+  background: grey;
+  width: 90%;
+  display: block;
+  float: left;
+  border-bottom-right-radius: 4em 2em;
+  padding-left: 1em;
+  border-top: 3px solid orange;
+}
+plink.e,plink.f,plink.g {
+  background: grey;
+  width: 90%;
+  display: block;
+  float: left;
+  border-bottom-right-radius: 4em 2em;
+  padding-left: 1em;
+  border-top: 3px solid blue;
+}
+plink.h,plink.k {
+  background: grey;
+  width: 90%;
+  display: block;
+  float: left;
+  border-bottom-right-radius: 4em 2em;
+  padding-left: 1em;
+  border-top: 3px solid green;
+}
+plink.i {
+  background: grey;
+  width: 90%;
+  display: block;
+  float: left;
+  border-bottom-right-radius: 4em 2em;
+  padding-left: 1em;
+  border-top: 3px solid teal;
+}
+plink.j {
+  background: grey;
+  width: 90%;
+  display: block;
+  float: left;
+  border-bottom-right-radius: 4em 2em;
+  padding-left: 1em;
+  border-top: 3px solid magenta;
+}
+aligny {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+img.region {
+  width: 25%;
+  background: grey;
+  border-radius: 10px;
+}
+div.region {
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 40%;
+  margin: 1em 0%;
+}
+
+flex {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+b.E {
+  font-size: 2.5em;
+}
+table.old,tr.old,td.old,th.old {
+  border-collapse: collapse;
+  border: 3px solid black;
+  text-shadow: none;
+}
+table.old {
+  margin: 3em auto;
+  width: 90%;
+}
+td.old {
+}
+td.old.Sword {
+  background: url("Pics/classrendersword2.png") -275px -140px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 2em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  font-style: italic;
+  opacity: 1;
+  width: 93px;
+}
+td.old.Skate {
+  background: url("Pics/classrenderskateboard1.png") -330px -120px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 1.1em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 10px 0 10px 0;
+  font-style: italic;
+  opacity: 1;
+  width: 93px;
+}
+td.old.Bio {
+  background: url("Pics/classrenderbiograft1.png") -285px -200px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 1.6em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 7px 0 7px 0;
+  font-style: italic;
+  opacity: 1;
+}
+td.old.Katana {
+  background: url("Pics/classrenderkatana.png") -175px -190px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 1.8em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 5px 0 5px 0;
+  font-style: italic;
+  opacity: 1;
+}
+td.old.Rocket {
+  background: url("Pics/classrenderrocket1.png") -279px -270px;
+  background-size: 500px 500px;
+  background-repeat: no-repeat;
+  font-size: 1.8em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 5px 0 5px 0;
+  font-style: italic;
+  opacity: 1;
+}
+td.old.Sling {
+  background: url("Pics/classrenderslingshot1.png") -190px -130px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 1.4em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 10px 0 10px 0;
+  font-style: italic;
+  opacity: 1;
+}
+td.old.Hyper {
+  background: url("Pics/classrenderhyperlaser1.png") -75px -40px;
+  background-size: 300px 300px;
+  background-repeat: no-repeat;
+  font-size: 1.2em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 12px 0 12px 0;
+  font-style: italic;
+  opacity: 1;
+}
+td.old.Shuriken {
+  background: url("Pics/classrendershuriken.png") -250px -180px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 1.5em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 10px 0 10px 0;
+  font-style: italic;
+  opacity: 1;
+}
+td.old.Medkit {
+  background: url("Pics/classrendermedkit3.png") -310px -150px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 2em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 5px 0 5px 0;
+  font-style: italic;
+  opacity: 1;
+}
+td.old.Subspace {
+  background: url("Pics/classrendersubspace2.png") -300px -120px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 1.3em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 10px 0 10px 0;
+  font-style: italic;
+  opacity: 1;
+}
+td.old.Boombox {
+  background: url("Pics/classrenderboombox1.png") -210px -420px;
+  background-size: 600px 600px;
+  background-repeat: no-repeat;
+  font-size: 1.4em;
+  font-family: Arial;
+  color: white;
+  text-shadow: 0px 0px 2px black;
+  padding: 10px 0 10px 0;
+  font-style: italic;
+  opacity: 1;
+}
+a.wiki {
+  text-shadow: none;
+  color: black;
+  padding: 0px;
+  background: none;
+  font-family: none;
+  margin: 0;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  text-decoration: underline;
+  font-size: 1em;
+  font-weight: normal;
+  border: 0;
+}
