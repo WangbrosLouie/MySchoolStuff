@@ -11,7 +11,7 @@ import fisica.*;
 void settings() {
   size(640,480);
 }
-//remind me to do the stuff on this here web page https://answers.microsoft.com/en-us/outlook_com/forum/all/how-to-stop-the-new-outlook-from-automatically/34246983-2a13-4462-8a8a-df618c36ca3f?page=4
+
 boolean loading = true;
 String[] maps = new String[]{"map01.lvl"};
 byte[] map;
@@ -70,7 +70,7 @@ void makeLevel() {
 void makeChunk(int i,int j) {
   int lWidth = bi(map[16])+1;
   int chunk = j*lWidth+i;
-  byte ID = map[chunk+33+bi(map[32])];
+  byte ID = map[chunk+34+bi(map[32])];
   switch(ID){
   case 0:
     chunks[chunk] = null;
