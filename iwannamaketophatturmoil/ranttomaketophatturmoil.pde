@@ -56,4 +56,39 @@ i gotta get back to implementing new chunks after all. also, i hate that i
 keep misspelling chunks as ch!nks (censored). what makes it more ironic is
 that i am one myself, although i guess not surprising because my surname is
 literally wang.
+
+alrighty, i think i need to address something. i completely forgot that i
+have uploaded literally zero pictures for the tophat turmoilers (yes cringe
+name) outside of snowballer (the one that wears a parka) and rhythmgunner
+(the one wearing headphones), so i should probably at least describe them.
+speedshooter is a fully metal grey robot without a mouth, and his eyes look
+like (III) but sideways. the I's are supposed to have serifs so if they
+dont then get a font with them i guess? bassblaster (the one with a bass
+guitar, also the one in that comic that i havent finished transferring onto
+here yet) wears a leather jacket and pants, triangular sunglasses and is
+named derrick. his bass guitar is one of those that look like bonnie from
+fnafs guitar. [name TBD]'s apperance now that i think about it is also tbd.
+i should mention that all of the characters have their emblem on their
+torso one way or another. rhythmgunner wears a tshirt with the big music
+note on it (idk what its called sue me) speedshooter has it on his chest
+bassblaster has the bass logo on the back of his jacket as well as a small
+logo on the right front snowballer has a snowflake emblem on the right
+front of her parka and [name TBD] has it just on his chest because his look
+is tbd. quentwin wears a green shirt with a 双 on the front, with grey
+pants for that frankenstein look or whatever, gwentwin is a ghost with the
+双 on her chest, firefigter wears firefighting clothing with a big flame
+logo on his back, glassbuster is tbd, darkitta is just kitta but dark grey
+and has her logo on the front like speedshooter, evyle is tbd, robocop ahh
+guy who shoots fireballs from his hands looks like a high tech robot with
+a non robot head, cook guy is dressed like a chef with a mustache OR a
+worker at the local creme of the cow icecream/fastfood place, sporeslinger
+wears a lab coat and black pants with a white shirt and his left arm is
+made of mushroomy fungusy whatever stuff, and i dont want to get into any
+non playable characters but mr god wears a black top hat with a purple
+stripe on it and has a comically large "Hi, I'm ____" sticker on his chest
+with the blank filled in with G O D or a comically large "Hi, my name is"
+sticker with the blank filled in with Mr. God. thats what to expect from
+me art-wise. that is, if i even finish this and dont leave it like tophat
+clicker, although i guess i do have the actual tophat turmoil to worry
+about so maybe im not gonna flesh this one out too much.
 */

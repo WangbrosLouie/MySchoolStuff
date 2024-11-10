@@ -19,8 +19,8 @@ String mapName;
 color[] pal1 = new color[]{color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0)};
 boolean[] keys = new boolean[13];
 PFont lucid;
-float cameraX, cameraY;
-PVector playerVec;
+PVector playerVec, camVec;
+boolean camDir = true;
 FWorld world;
 FBox player;
 FCompound[] chunks;
@@ -38,13 +38,15 @@ void draw() {
     mapName = tostring(char(subset(map,33,map[32]+1)));
     println(mapName);
     makeLevel();
+    playerVec = new PVector(player.getX(),player.getY());
+    camVec = new PVector(playerVec.x+sqrt2(player.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(player.getVelocityY()*30));
   }
   processKeys();
   world.step();
   background(200);
-  cameraX = width/2-player.getX();
-  cameraY = height/2-player.getY();
-  translate(cameraX,cameraY);
+  playerVec.set(player.getX(),player.getY());
+  camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(player.getVelocityX()*30)+(camDir?50:-50),sqrt2(player.getVelocityY()*30))),00.1);
+  translate(width/2-camVec.x,height/2-camVec.y);
   world.draw();
 }
 
@@ -135,6 +137,10 @@ int bi(byte b) {//byte to int
   return unbinary(binary(b));
 }//alas, unsigned byte problem, i hath defeated thee!
 
+float sqrt2(float num) {
+  return num<0?-sqrt(0-num):sqrt(num);
+}
+
 //input events and controller support here
 void blueDead(String CALLEDFR, String STOPCODE, String INFOSCND) { //funny
   noLoop();
@@ -157,35 +163,34 @@ void processKeys() {
       println(bod.getBody1());
     }
     //if(flags%0x2/1>0) bittest template
-    if(flags%0x2/1>0)keys[4] = false;
+    if(flags%0x2/1>0)keys[3] = false;
   }
-  if(!(keys[1]&&keys[3])) {
-    if(keys[1]) {
+  if(!(keys[0]&&keys[1])) {
+    if(keys[0]) {
       player.setVelocity(-200,player.getVelocityY());
+      camDir = false;
     }
-    if(keys[3]) {
+    if(keys[1]) {
       player.setVelocity(200,player.getVelocityY());
+      camDir = true;
     }
   }
-  if(keys[0]&&!keys[4]) {
-      keys[4] = true;
+  if(keys[2]&&!keys[3]) {
+      keys[3] = true;
       player.setVelocity(player.getVelocityX(),-200);
   }
 }
 
 void keyPressed() {
   switch(keyCode){
-  case 87:
+  case 65:
     keys[0] = true;
     break;
-  case 65:
+  case 68:
     keys[1] = true;
     break;
-  case 83:
+  case 32:
     keys[2] = true;
-    break;
-  case 68:
-    keys[3] = true;
     break;
     //addin actions n stuff later
   }
@@ -193,17 +198,14 @@ void keyPressed() {
 
 void keyReleased() {
   switch(keyCode){
-  case 87:
+  case 65:
     keys[0] = false;
     break;
-  case 65:
+  case 68:
     keys[1] = false;
     break;
-  case 83:
+  case 32:
     keys[2] = false;
-    break;
-  case 68:
-    keys[3] = false;
     break;
   }
 }
