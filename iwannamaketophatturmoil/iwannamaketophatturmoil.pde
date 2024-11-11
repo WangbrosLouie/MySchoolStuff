@@ -32,22 +32,27 @@ void setup() {
 }
 
 void draw() {
-  if(loading){
-    loading = false;
-    map = loadBytes(maps[0]);
-    mapName = tostring(char(subset(map,33,map[32]+1)));
-    println(mapName);
-    makeLevel();
-    playerVec = new PVector(player.getX(),player.getY());
-    camVec = new PVector(playerVec.x+sqrt2(player.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(player.getVelocityY()*30));
+  try {
+    if(loading){
+      loading = false;
+      map = loadBytes(maps[0]);
+      mapName = tostring(char(subset(map,33,map[32]+1)));
+      println(mapName);
+      makeLevel();
+      playerVec = new PVector(player.getX(),player.getY());
+      camVec = new PVector(playerVec.x+sqrt2(player.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(player.getVelocityY()*30));
+    }
+    processKeys();
+    world.step();
+    background(200);
+    playerVec.set(player.getX(),player.getY());
+    camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(player.getVelocityX()*30)+(camDir?50:-50),sqrt2(player.getVelocityY()*30))),00.1);
+    translate(width/2-camVec.x,height/2-camVec.y);
+    world.draw();
+  } catch (Exception e) {
+    blueDead(e.toString(),e.getMessage(),e.getStackTrace()[0].toString());
+    noLoop();
   }
-  processKeys();
-  world.step();
-  background(200);
-  playerVec.set(player.getX(),player.getY());
-  camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(player.getVelocityX()*30)+(camDir?50:-50),sqrt2(player.getVelocityY()*30))),00.1);
-  translate(width/2-camVec.x,height/2-camVec.y);
-  world.draw();
 }
 
 void makeLevel() {
@@ -148,11 +153,12 @@ void blueDead(String CALLEDFR, String STOPCODE, String INFOSCND) { //funny
   fill(255);
   textFont(lucid);
   textAlign(LEFT,TOP);
-  text("A problem has been detected and this application has been halted to prevent\nfurther problems from occuring.\n\nThis application has called for\n"+CALLEDFR+"\nbut it was not found.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing console if you are running this application from Processing.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+STOPCODE+"\n\n***    "+INFOSCND, 0, 24);
+  text("A problem has been detected and this application has been halted to prevent\nfurther problems from occuring.\n\nThis application has thrown a(n)\n"+CALLEDFR+"\nand halted itself.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing console if you are running this application from Processing.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+STOPCODE+"\n\n***    "+INFOSCND, 0, 24);
 }
 
 void processKeys() {
   ArrayList<FContact> touchings = player.getContacts();
+  keys[3] = true;
   for(FContact bod:touchings) {
     int flags;
     if(bod.getBody1()==player) {
@@ -173,6 +179,8 @@ void processKeys() {
     if(keys[1]) {
       player.setVelocity(200,player.getVelocityY());
       camDir = true;
+    } else {
+      player.addForce(-player.getVelocityX()/5,0);
     }
   }
   if(keys[2]&&!keys[3]) {
