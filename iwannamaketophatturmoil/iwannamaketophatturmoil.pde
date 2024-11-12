@@ -13,6 +13,7 @@ void settings() {
 }
 
 boolean loading = true;
+boolean debug = false;
 String[] maps = new String[]{"map01.lvl"};
 byte[] map;
 String mapName;
@@ -50,7 +51,7 @@ void draw() {
     translate(width/2-camVec.x,height/2-camVec.y);
     world.draw();
   } catch (Exception e) {
-    blueDead(e.toString(),e.getMessage(),e.getStackTrace()[0].toString());
+    blueDead(e);
     noLoop();
   }
 }
@@ -97,10 +98,21 @@ void makeChunk(int i,int j) {
     break;
   case 2:
     chunks[chunk] = new FCompound();
+    gnd = new FBox(128,128);
+    gnd.setPosition(64,64);
+    gnd.setName("00");
+    chunks[chunk].addBody(gnd);
+    chunks[chunk].setPosition(128*i,128*j);
+    chunks[chunk].setStatic(true);
+    world.add(chunks[chunk]);
+    break;
+  case 3:
+    chunks[chunk] = new FCompound();
     FPoly slo = new FPoly();
     slo.vertex(1,128);
     slo.vertex(128,1);
     slo.vertex(128,128);
+    slo.vertex(1,128);
     slo.setFriction(0.1);
     slo.setName("00");
     jmp = new FLine(0,128,127,1);
@@ -111,12 +123,13 @@ void makeChunk(int i,int j) {
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
     break;
-  case 3:
+  case 4:
     chunks[chunk] = new FCompound();
     slo = new FPoly();
     slo.vertex(0,1);
     slo.vertex(127,128);
     slo.vertex(0,128);
+    slo.vertex(0,1);
     slo.setFriction(0.1);
     slo.setName("00");
     jmp = new FLine(1,1,128,128);
@@ -124,6 +137,29 @@ void makeChunk(int i,int j) {
     chunks[chunk].addBody(slo);
     chunks[chunk].addBody(jmp);
     chunks[chunk].setPosition(128*i,128*j);
+    chunks[chunk].setStatic(true);
+    world.add(chunks[chunk]);
+    break;
+  case 5:
+    chunks[chunk] = new FCompound();
+    gnd = new FBox(128,63);
+    gnd.setPosition(65,31.5);
+    gnd.setName("00");
+    jmp = new FLine(1,1,129,1);
+    jmp.setName("01");
+    chunks[chunk].addBody(gnd);
+    chunks[chunk].addBody(jmp);
+    chunks[chunk].setPosition(128*i-1,128*j-17);
+    chunks[chunk].setStatic(true);
+    world.add(chunks[chunk]);
+    break;
+  case 6:
+    chunks[chunk] = new FCompound();
+    gnd = new FBox(128,64);
+    gnd.setPosition(64,32);
+    gnd.setName("00");
+    chunks[chunk].addBody(gnd);
+    chunks[chunk].setPosition(128*i,128*j-16);
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
     break;
@@ -147,22 +183,26 @@ float sqrt2(float num) {
 }
 
 //input events and controller support here
-void blueDead(String CALLEDFR, String STOPCODE, String INFOSCND) { //funny
+void blueDead(Exception e) { //funny
   noLoop();
   background(#000080);
   fill(255);
   textFont(lucid);
   textAlign(LEFT,TOP);
-  text("A problem has been detected and this application has been halted to prevent\nfurther problems from occuring.\n\nThis application has thrown a(n)\n"+CALLEDFR+"\nand halted itself.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing console if you are running this application from Processing.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+STOPCODE+"\n\n***    "+INFOSCND, 0, 24);
+  text("A problem has been detected and this application has been halted to prevent\nfurther problems from occuring.\n\nThis application has thrown a(n)\n"+e.toString()+"\nand halted itself.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing console if you are running this application from Processing.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+e.getMessage()+"\n\n***    "+e.getStackTrace()[0].toString(), 0, 24);
+  e.printStackTrace();
 }
 
 void processKeys() {
   ArrayList<FContact> touchings = player.getContacts();
   keys[3] = true;
   for(FContact bod:touchings) {
-    int flags;
+    int flags = 0;
     if(bod.getBody1()==player) {
+      if(!(bod.getBody1() instanceof FPoly))
       flags = unbinary(bod.getBody2().getName());
+     else 
+      flags = 0;
       println(bod.getBody2());
     } else {
       flags = unbinary(bod.getBody1().getName());

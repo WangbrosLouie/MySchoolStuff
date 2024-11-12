@@ -40,13 +40,13 @@ level.
 chunk reference
 0 = air
 1 = flat ground
-2 = slope up
-3 = slope down
-4 = half block
+2 = floorless ground
+3 = slope up
+4 = slope down
+5 = flat half
+6 = floorless half
 
 nameflag reference (big endian)
-note: if an FCompound has only 1 body, set the name of the FCompound
-otherwise set the names of the individual bodies
 0 = replenishes jump
 1 = climbable???
 2 = hurts nyowch
