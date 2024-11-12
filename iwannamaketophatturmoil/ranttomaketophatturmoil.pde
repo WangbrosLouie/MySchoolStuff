@@ -79,16 +79,50 @@ pants for that frankenstein look or whatever, gwentwin is a ghost with the
 双 on her chest, firefigter wears firefighting clothing with a big flame
 logo on his back, glassbuster is tbd, darkitta is just kitta but dark grey
 and has her logo on the front like speedshooter, evyle is tbd, robocop ahh
-guy who shoots fireballs from his hands looks like a high tech robot with
-a non robot head, cook guy is dressed like a chef with a mustache OR a
-worker at the local creme of the cow icecream/fastfood place, sporeslinger
-wears a lab coat and black pants with a white shirt and his left arm is
-made of mushroomy fungusy whatever stuff, and i dont want to get into any
-non playable characters but mr god wears a black top hat with a purple
-stripe on it and has a comically large "Hi, I'm ____" sticker on his chest
-with the blank filled in with G O D or a comically large "Hi, my name is"
-sticker with the blank filled in with Mr. God. thats what to expect from
-me art-wise. that is, if i even finish this and dont leave it like tophat
+guy who shoots fireballs from his hands looks like a high tech robot with a
+non robot head, cook guy is dressed like a chef with a mustache OR a worker
+at the local creme of the cow icecream/fastfood place, sporeslinger wears a
+lab coat and black pants with a white shirt and his left arm is made of
+mushroomy fungusy whatever stuff, and i dont want to get into any non
+playable characters but mr god wears a black top hat with a purple stripe
+on it and has a comically large "Hi, I'm ____" sticker on his chest with
+the blank filled in with G O D or a comically large "Hi, my name is"
+sticker with the blank filled in with Mr. God. thats what to expect from me
+art-wise. that is, if i even finish this and dont leave it like tophat
 clicker, although i guess i do have the actual tophat turmoil to worry
 about so maybe im not gonna flesh this one out too much.
+
+i think i gotta address somethin else too. many of you might be wonderin
+why i write so personally in these rant docs and i just gotta say
+NOBODY's gonna even wanna look at these rant documents or care about what i
+say. in fact, if youre readin this youre probs a close friend or somethin.
+like no-ones gonna give a meowin nya about inner kitta or my mental issues
+or anythin because no one even knows me. and i dont give a meowin nya bout
+that either. i dont want fame i just wanna be happy. i dont even know what
+im writin about anymore actually so im just gonna yap bout tophat turmoil.
+for those of you who dont know about the second game which is the one im
+workin on right now in roblox, its a pve shooter action whatever game.
+while tophat tournament was inspired by how fun phighting was to me, this
+one is completely separate as phighting dont got a pve mode in it (yet???)
+the enemies are robots because my brain defaults to aliens then robots for
+generic enemy and tophat turmoil 1 was supposed to have aliens, now changed
+to mr gods accidental creations from his boredom. i made evyle way before i
+thought of the second game, in fact i based the second games plot around
+him. i needed a creator for darkitta who i recently (like around 2 days)
+thought up of and i thought of a generic stereotypical guy who hates every
+thing and wants to rule the world and is handsome. then i thought of his
+incompetency which was inspired from dave the intern from sonic boom and
+i thought of givin him 2 personalities like sensui or cop from lego movie
+but i decided against it cause i thought it would be offensive but now im
+doin that again but instead of an incompetent male perso and a competent
+fem perso im now thinkin of somethin like launch from dragon ball where 1
+perso is good and 1 perso is bad(evil). now i just thought up of makin a
+change to darkittas backstory: darkitta was made by nyse (the good evyle)
+but changed (incompetently) to like violence by evyle so that she was evil.
+also changing personalities for nysevyle (just thought of that name) only
+occurs at times of large shock like when nyse changed to evyle after the
+gods creations wreaked havoc and when evyle changed to nyse after he was
+defeated by the turmoilers. and no evyle and his robots are not inspired by
+eggman robotnik kintobor ivo whatever. welp i think i needa catch up on my
+homework so im gonna yap more at an unspecified time.
 */
