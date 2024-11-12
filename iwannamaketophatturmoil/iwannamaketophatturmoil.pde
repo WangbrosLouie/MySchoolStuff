@@ -103,7 +103,7 @@ void makeChunk(int i,int j) {
     slo.vertex(128,128);
     slo.setFriction(0.1);
     slo.setName("00");
-    jmp = new FLine(0,128,128,0);
+    jmp = new FLine(0,128,127,1);
     jmp.setName("01");
     chunks[chunk].addBody(slo);
     chunks[chunk].addBody(jmp);
@@ -119,7 +119,7 @@ void makeChunk(int i,int j) {
     slo.vertex(0,128);
     slo.setFriction(0.1);
     slo.setName("00");
-    jmp = new FLine(0,0,128,128);
+    jmp = new FLine(1,1,128,128);
     jmp.setName("01");
     chunks[chunk].addBody(slo);
     chunks[chunk].addBody(jmp);
