@@ -72,6 +72,7 @@ void makeLevel() {
   player.setRotatable(false);
   player.setFriction(100);
   player.setName("00");
+  player.attachImage(loadImage("spr/r0.png"));
   world.add(player);
 }
 
