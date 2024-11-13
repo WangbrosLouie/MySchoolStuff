@@ -37,7 +37,7 @@ void draw() {
     if(loading){
       loading = false;
       map = loadBytes(maps[0]);
-      mapName = tostring(char(subset(map,33,map[32]+1)));
+      mapName = tostring(char(subset(map,map.length-33-map[map.length-26],map[map.length-26]+1)));
       println(mapName);
       makeLevel();
       playerVec = new PVector(player.getX(),player.getY());
@@ -57,8 +57,8 @@ void draw() {
 }
 
 void makeLevel() {
-  int lWidth = bi(map[16])+1;
-  int lHeight = bi(map[17])+1;
+  int lWidth = bi(map[map.length-32])+1;
+  int lHeight = bi(map[map.length-31])+1;
   println(lWidth,lHeight);
   chunks = new FCompound[lWidth*lHeight];
   world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
@@ -68,7 +68,7 @@ void makeLevel() {
     }
   }
   player = new FBox(32,64);
-  player.setPosition(256*bi(map[18])+bi(map[19]),256*bi(map[20])+bi(map[21]));
+  player.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
   player.setRotatable(false);
   player.setFriction(100);
   player.setName("00");
@@ -77,9 +77,9 @@ void makeLevel() {
 }
 
 void makeChunk(int i,int j) {
-  int lWidth = bi(map[16])+1;
+  int lWidth = bi(map[map.length-32])+1;
   int chunk = j*lWidth+i;
-  byte ID = map[chunk+34+bi(map[32])];
+  byte ID = map[chunk];
   switch(ID){
   case 0:
     chunks[chunk] = null;
