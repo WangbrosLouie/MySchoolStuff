@@ -45,11 +45,20 @@ chunk reference
 4 = slope down
 5 = flat half
 6 = floorless half
+7 = icy flat ground
+8 = icy floorless ground
+9 = icy slope up
+A = icy slope down
+B = icy flat half
+C = icy floorless half
+D = zappy floor
+E = timed zappy wall
+F = win zone
 
 nameflag reference (big endian)
 0 = replenishes jump
-1 = climbable???
-2 = hurts nyowch
+1 = hurts nyowch
+2 = undecided
 3 = undecided
 4 = undecided
 5 = undecided

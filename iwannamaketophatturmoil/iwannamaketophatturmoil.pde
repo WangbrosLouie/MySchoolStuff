@@ -14,7 +14,7 @@ void settings() {
 
 boolean loading = true;
 boolean debug = false;
-String[] maps = new String[]{"map01.lvl"};
+String[] maps = new String[]{"map02.lvl"};
 byte[] map;
 String mapName;
 color[] pal1 = new color[]{color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0)};
@@ -29,6 +29,7 @@ FCompound[] chunks;
 void setup() {
   lucid = createFont("Lucida Console",14,false);
   Fisica.init(this);
+  image(loadImage("spr/loudo.png"),0,0,width,height);
   //draw thy loading screen
 }
 
@@ -144,23 +145,23 @@ void makeChunk(int i,int j) {
   case 5:
     chunks[chunk] = new FCompound();
     gnd = new FBox(128,63);
-    gnd.setPosition(65,31.5);
+    gnd.setPosition(65,97.5);
     gnd.setName("00");
-    jmp = new FLine(1,1,129,1);
+    jmp = new FLine(1,65,129,65);
     jmp.setName("01");
     chunks[chunk].addBody(gnd);
     chunks[chunk].addBody(jmp);
-    chunks[chunk].setPosition(128*i-1,128*j-17);
+    chunks[chunk].setPosition(128*i-1,128*j-1);
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
     break;
   case 6:
     chunks[chunk] = new FCompound();
     gnd = new FBox(128,64);
-    gnd.setPosition(64,32);
+    gnd.setPosition(64,112);
     gnd.setName("00");
     chunks[chunk].addBody(gnd);
-    chunks[chunk].setPosition(128*i,128*j-16);
+    chunks[chunk].setPosition(128*i,128*j-1);
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
     break;
@@ -202,11 +203,11 @@ void processKeys() {
     if(bod.getBody1()==player){
       String name = bod.getBody2().getName();
       flags = name!=null?unbinary(name):0;
-      println(bod.getBody2());
+      //println(bod.getBody2());
     } else {
       String name = bod.getBody1().getName();
       flags = name!=null?unbinary(name):0;
-      println(bod.getBody1());
+      //println(bod.getBody1());
     }
     //if(flags%0x2/1>0) bittest template
     if(flags%0x2/1>0)keys[3] = false;
