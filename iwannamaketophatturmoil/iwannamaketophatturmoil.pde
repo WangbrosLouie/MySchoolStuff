@@ -198,14 +198,13 @@ void processKeys() {
   keys[3] = true;
   for(FContact bod:touchings) {
     int flags = 0;
-    if(bod.getBody1()==player) {
-      if(!(bod.getBody1() instanceof FPoly))
-      flags = unbinary(bod.getBody2().getName());
-     else 
-      flags = 0;
+    if(bod.getBody1()==player){
+      String name = bod.getBody2().getName();
+      flags = name!=null?unbinary(name):0;
       println(bod.getBody2());
     } else {
-      flags = unbinary(bod.getBody1().getName());
+      String name = bod.getBody1().getName();
+      flags = name!=null?unbinary(name):0;
       println(bod.getBody1());
     }
     //if(flags%0x2/1>0) bittest template
