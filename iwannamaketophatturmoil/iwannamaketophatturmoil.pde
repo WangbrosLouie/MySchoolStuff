@@ -17,6 +17,7 @@ boolean debug = false;
 String[] maps = new String[]{"map02.lvl"};
 byte[] map;
 String mapName;
+byte mapNum = 0;
 color[] pal1 = new color[]{color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0)};
 boolean[] keys = new boolean[13];
 PFont lucid;
@@ -37,7 +38,7 @@ void draw() {
   try {
     if(loading){
       loading = false;
-      map = loadBytes(maps[0]);
+      map = loadBytes(maps[mapNum]);
       mapName = tostring(char(subset(map,map.length-33-map[map.length-26],map[map.length-26]+1)));
       println(mapName);
       makeLevel();

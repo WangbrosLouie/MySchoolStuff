@@ -18,18 +18,20 @@ is developed. This document may be behind or ahead of the engine.
 -Engine Features
 
     /-level data format-/
-  The engine expects a header with the string "Tophat Turmoil 1" to start
-each file. This is to ensure that a valid file is being loaded in. The byte
-immediately proceeding it is the length of the level name minus one, since
-it is expected that every level has a name of at least one character. The
-name of the level follows, with the length specified. If a level name is
-not desired, simply specify a name length of 0 and name it with a space.
-After the name comes the level parameters. The length of the parameters
-will change as the engine develops, but currently it is only 2 bytes, with
-one for level width and one for level height. The rest of the file must be
-exactly as long as the width multiplied as the height, as an extra file
-corruption guard. The level chunks must be specified in hexidecimal, so a
-hex editor is strongly recommended.
+  The engine expects a footer with the string "Tophat Turmoil 1" to end a
+valid level file. There will be support for levels with the footer string
+"Tophat Turmoil 2" with extra features sometime. The 16 bytes preceeding
+the footer are the level parameter bytes. The specifics are in -reference-.
+The level name comes before the parameter bytes, and the length is stored
+in a level parameter byte. There is no safeguard implemented to prevent
+invalid names such as names too long which leak into level data or a non
+existant name, so make sure the name is correctly specified. The data from
+the start of the file ending at the start of the level name are the chunks.
+The width and height of the level are specified in the level parameters,
+but there currently is no check to verify if the level is long enough for
+the width and height, so if you load your level and get a blue screen for a
+non existant array element before you can move then make sure the level is
+the correct length and the width and height are correctly specified.
 
     /-engine features-/
 The engine is a platformer engine. It is physics based, using the Fisica
@@ -37,7 +39,8 @@ library. Level chunk loading from files may be implemented in the future
 for level making purposes. The engine pregenerates every chunk in each
 level.
 
-chunk reference
+    /-reference-/
+Chunk IDs
 0 = air
 1 = flat ground
 2 = floorless ground
@@ -55,7 +58,7 @@ D = zappy floor
 E = timed zappy wall
 F = win zone
 
-nameflag reference (big endian)
+Chunk Flag Bits (from right to left)
 0 = replenishes jump
 1 = hurts nyowch
 2 = undecided
@@ -64,4 +67,13 @@ nameflag reference (big endian)
 5 = undecided
 6 = undecided
 7 = undecided
+
+Level Parameter Bytes
+0 = Level Width - 1 (Chunks)
+1 = Level Height - 1 (Chunks)
+2 = Player Spawn X (Upper Byte)
+3 = Player Spawn X (Lower Byte)
+4 = Player Spawn Y (Upper Byte)
+5 = Player Spawn Y (Lower Byte)
+6 = Level Name Length - 1
 */
