@@ -61,12 +61,12 @@ F = win zone
 Chunk Flag Bits (from right to left)
 0 = replenishes jump
 1 = hurts nyowch
-2 = undecided
+2 = go to next level
 3 = undecided
 4 = undecided
 5 = undecided
 6 = undecided
-7 = undecided
+7 = custom texture
 
 Level Parameter Bytes
 0 = Level Width - 1 (Chunks)
@@ -76,4 +76,5 @@ Level Parameter Bytes
 4 = Player Spawn Y (Upper Byte)
 5 = Player Spawn Y (Lower Byte)
 6 = Level Name Length - 1
+7 = Number of Custom Textures
 */

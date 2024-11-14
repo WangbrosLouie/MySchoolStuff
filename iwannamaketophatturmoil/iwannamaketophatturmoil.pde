@@ -14,11 +14,11 @@ void settings() {
 
 boolean loading = true;
 boolean debug = false;
-String[] maps = new String[]{"map02.lvl"};
+String[] maps = new String[]{"map02.lvl","map03.lvl"};
 byte[] map;
 String mapName;
 byte mapNum = 0;
-color[] pal1 = new color[]{color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0),color(0)};
+PImage[] tex = new PImage[255];
 boolean[] keys = new boolean[13];
 PFont lucid;
 PVector playerVec, camVec;
@@ -28,6 +28,7 @@ FBox player;
 FCompound[] chunks;
 
 void setup() {
+  loading = true;
   lucid = createFont("Lucida Console",14,false);
   Fisica.init(this);
   image(loadImage("spr/loudo.png"),0,0,width,height);
@@ -38,7 +39,8 @@ void draw() {
   try {
     if(loading){
       loading = false;
-      map = loadBytes(maps[mapNum]);
+      println(mapNum,maps.length);
+      map = loadBytes(maps[mapNum%maps.length]);
       mapName = tostring(char(subset(map,map.length-33-map[map.length-26],map[map.length-26]+1)));
       println(mapName);
       makeLevel();
@@ -59,6 +61,7 @@ void draw() {
 }
 
 void makeLevel() {
+  if(!new String(subset(map,map.length-16,15)).equals(new String(subset(map,map.length-16,15))))throw new RuntimeException("Ayo the map invalid");
   int lWidth = bi(map[map.length-32])+1;
   int lHeight = bi(map[map.length-31])+1;
   println(lWidth,lHeight);
@@ -76,18 +79,20 @@ void makeLevel() {
   player.setName("00");
   player.attachImage(loadImage("spr/r0.png"));
   world.add(player);
+  //java.util.Arrays.fill(tex,new PImage(1,1));
+  //for(int i=0;i<map[map.length-19];i++){}
 }
 
 void makeChunk(int i,int j) {
   int lWidth = bi(map[map.length-32])+1;
   int chunk = j*lWidth+i;
   byte ID = map[chunk];
+  chunks[chunk] = new FCompound();
   switch(ID){
   case 0:
     chunks[chunk] = null;
     break;
   case 1:
-    chunks[chunk] = new FCompound();
     FBox gnd = new FBox(128,127);
     gnd.setPosition(65,65.5);
     gnd.setName("00");
@@ -100,7 +105,6 @@ void makeChunk(int i,int j) {
     world.add(chunks[chunk]);
     break;
   case 2:
-    chunks[chunk] = new FCompound();
     gnd = new FBox(128,128);
     gnd.setPosition(64,64);
     gnd.setName("00");
@@ -110,7 +114,6 @@ void makeChunk(int i,int j) {
     world.add(chunks[chunk]);
     break;
   case 3:
-    chunks[chunk] = new FCompound();
     FPoly slo = new FPoly();
     slo.vertex(1,128);
     slo.vertex(128,1);
@@ -127,7 +130,6 @@ void makeChunk(int i,int j) {
     world.add(chunks[chunk]);
     break;
   case 4:
-    chunks[chunk] = new FCompound();
     slo = new FPoly();
     slo.vertex(0,1);
     slo.vertex(127,128);
@@ -144,7 +146,6 @@ void makeChunk(int i,int j) {
     world.add(chunks[chunk]);
     break;
   case 5:
-    chunks[chunk] = new FCompound();
     gnd = new FBox(128,63);
     gnd.setPosition(65,97.5);
     gnd.setName("00");
@@ -157,10 +158,21 @@ void makeChunk(int i,int j) {
     world.add(chunks[chunk]);
     break;
   case 6:
-    chunks[chunk] = new FCompound();
     gnd = new FBox(128,64);
     gnd.setPosition(64,112);
     gnd.setName("00");
+    chunks[chunk].addBody(gnd);
+    chunks[chunk].setPosition(128*i,128*j-1);
+    chunks[chunk].setStatic(true);
+    world.add(chunks[chunk]);
+    break;
+  case 0xF:
+    chunks[chunk] = new FCompound();
+    gnd = new FBox(128,128);
+    gnd.setPosition(64,64);
+    gnd.setName("100");
+    gnd.setSensor(true);
+    gnd.setFillColor(0x7F3FFF3F);
     chunks[chunk].addBody(gnd);
     chunks[chunk].setPosition(128*i,128*j-1);
     chunks[chunk].setStatic(true);
@@ -212,7 +224,9 @@ void processKeys() {
     }
     //if(flags%0x2/1>0) bittest template
     if(flags%0x2/1>0)keys[3] = false;
+    if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
   }
+  if(debug)keys[3]=false;
   if(!(keys[0]&&keys[1])) {
     if(keys[0]) {
       player.setVelocity(-200,player.getVelocityY());
