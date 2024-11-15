@@ -54,8 +54,8 @@ Chunk IDs
 A = icy slope down
 B = icy flat half
 C = icy floorless half
-D = zappy floor
-E = timed zappy wall
+D = bouncy floor
+E = super bounce
 F = win zone
 
 Chunk Flag Bits (from right to left)
