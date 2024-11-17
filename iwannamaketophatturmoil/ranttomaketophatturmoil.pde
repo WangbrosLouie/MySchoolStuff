@@ -125,4 +125,63 @@ gods creations wreaked havoc and when evyle changed to nyse after he was
 defeated by the turmoilers. and no evyle and his robots are not inspired by
 eggman robotnik kintobor ivo whatever. welp i think i needa catch up on my
 homework so im gonna yap more at an unspecified time.
+
+meoww, i got so much homework that im gonna go meowin insane. i got a full
+scale mini production of a cooking video for a class that has nothing to do
+with cuisine, some goal setting, some book reading, my game on roblox that
+i need to finish in order to graduate, adding endless features to this game
+and so much more but i have so little time due to this one little stupid
+thing called procrastination. in fact im doin it right now but i just dont
+care. my head hurts i wanna go to sleep but i gotta do some more work cause
+i do nothing but laze around in the day(not to mention my volunteer work).
+but enough of that. i just thought of an alternate universe for the tophat
+turmoil lore.
+<<yay more useless and probably worthless lore>>
+so in this timeline, kitta is a robot cat made by aliens to observe the
+robloxians or the humans or whatever race my characters are(shocking that i
+dont even know despite me making them)so that they can take over the world
+for that classic alien trope. anyways kitta is programmed to be nice but
+she doesnt know anything about her alien origins so she has a pretty normal
+life for a robot on whatever planet the whatever race lives on, then the
+events of tophat turmoil 1 and 2 happen, but after that the aliens decide
+that they have collected enough data on the whatever race to invade them,
+so they come to earth and the tophat turmoilers fight them off. then some
+stuff about kitta learning her dark past(the trope is killin me) and then
+perhaps the trauma induced crisis that gets resolved by friendship or what
+ever. i literally cant make this more trope-y and generic but then again
+theres a reason why i didnt call this the main lore. and also this is
+unofficial because there are no au's in the official lore. but if you even
+give a nya about the lore of my game feel free to adopt the au and do what
+ever people do with au's of stuff. and now since i walk to my volunteer
+gig every saturday(methinks i might be too revealing on my personals) i get
+a lot of time to converse with inner kitta about a multitude of things
+such as the most efficient way to walk(an art that i have mastered over my
+years of walking to school)or what we think about the surroundings. but
+today i decided that i want a more definitive design for kitta because im
+quite frankly tired of drawing kitta in a less detailed way, so im just
+gonna spill all that we came up with on here. the first part we talked
+about was the head. the ears are comprised of 4 microphones, 1 per combo of
+front/back and left/right, but now the ears have some fluff inside them for
+that audio quality, the eyes are screens with a camera on mechanical rails
+in front of each eye, which means whenever kitta's eyes go into projector
+mode there are 2 spots on the projection, the screens are protected behind
+somewhat thick clear material, the nose is made of some material with a lot
+of gaps in them(like a crispy rice square)and there is a smell sensor(of
+some sort)behind it, with it connected to an air sucky blowy thing for the
+breathing action, the mouth part is made of a rubbery hard material that
+can be moved around for the mouth moving action, the inside of the mouth is
+like an eye with it having a wide screen and clear whatever in front, and
+the only part that i havent figured out is how the sound is made because
+sound does not transmit very well through thick solids, but thats for later
+probably, or when i learn more about sound travelling. i also considered
+that the clear stuff vibrates like the vibratey part of a big speaker, but
+i dont know until i do more research. the torso was originally one piece
+<<monkey tea smoothie>>
+but then got changed to a glamrock animatronic kinda stomach but now
+methinks that either the torso is just one piece
+<<thawun peece thawun peece israel>>
+again or the stomach is made of the same rubbery stuff as the mouth. the
+limb though i dont know about yet, so thats kittas internals part 1.
+and no i did not watch the jake paul versus mike tyson match i dont care.
+and thats my two cents for the day, or rather my two meows of the day.
 */
