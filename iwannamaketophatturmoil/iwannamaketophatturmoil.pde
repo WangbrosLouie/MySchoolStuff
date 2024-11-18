@@ -17,7 +17,7 @@ boolean debug = false;
 String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map04.lvl"};
 byte[] map;
 String mapName;
-byte mapNum = 0;
+byte mapNum = 2;
 PImage[] tex = new PImage[255];
 boolean[] keys = new boolean[13];
 PFont lucid;
