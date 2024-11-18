@@ -8,17 +8,69 @@
 
 import fisica.*;
 
+class Gif extends PImage {
+  int frames = 0;
+  int currentFrame = 0;
+  float interval = 0;
+  PImage[] images;
+  Gif(int FRAMES, float INTERVAL, String filename, String suffix) {
+    super(1,1,ARGB);
+    frames = FRAMES;
+    interval = INTERVAL;
+    images = new PImage[frames];
+    if(frames>1){
+      for(int i=0;i<frames;i++)images[i] = loadImage(filename+i+suffix);
+    } else images[0] = loadImage(filename+suffix);
+    super.init(images[0].width,images[0].height,ARGB);
+    images[0].loadPixels();
+    int[] temp = new int[images[0].pixels.length];
+    arrayCopy(images[0].pixels,temp);
+    images[0].updatePixels();
+    super.loadPixels();
+    arrayCopy(temp,super.pixels);
+    super.updatePixels();
+  }
+  
+  Gif() {
+    super(1,1,ARGB);
+    frames = 1;
+    interval = 1;
+    images = new PImage[]{new PImage(1,1,ARGB)};
+  }
+  
+  void update() {
+    if(images.length>1) {
+      currentFrame++;
+      int frm = floor(currentFrame/interval)%frames;
+      super.init(images[frm].width,images[frm].height,ARGB);
+      images[frm].loadPixels();
+      int[] temp = new int[images[frm].pixels.length];
+      arrayCopy(images[frm].pixels,temp);
+      images[frm].updatePixels();
+      super.loadPixels();
+      arrayCopy(temp,super.pixels);
+      super.updatePixels();
+    }
+  }
+  
+  void resizeGif(int x, int y) {
+    for(PImage pic:images) {
+      pic.resize(x,y);
+    }
+  }
+}
+
 void settings() {
   size(640,480);
 }
 
 boolean loading = true;
 boolean debug = false;
-String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map04.lvl"};
+String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map04.lvl"};
 byte[] map;
 String mapName;
-byte mapNum = 2;
-PImage[] tex = new PImage[255];
+byte mapNum = 3;
+Gif[] tex = new Gif[255];
 boolean[] keys = new boolean[13];
 PFont lucid;
 PVector playerVec, camVec;
@@ -61,10 +113,10 @@ void draw() {
 }
 
 void makeLevel() {
-  if(!new String(subset(map,map.length-16,15)).equals(new String(subset(map,map.length-16,15))))throw new RuntimeException("Ayo the map invalid");
+  if(!(new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 1")||new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 2")))throw new RuntimeException("Ayo the map invalid");
   int lWidth = bi(map[map.length-32])+1;
   int lHeight = bi(map[map.length-31])+1;
-  println(lWidth,lHeight);
+  if(new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 2"))loadTextures();
   chunks = new FCompound[lWidth*lHeight];
   world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
   for(int j=0;j<lHeight;j++){
@@ -85,8 +137,9 @@ void makeLevel() {
 
 void makeChunk(int i,int j) {
   int lWidth = bi(map[map.length-32])+1;
-  int chunk = j*lWidth+i;
+  int chunk = map[map.length-1]=='2'?(j*lWidth+i)*2:j*lWidth+i;
   byte ID = map[chunk];
+  byte texture = map[map.length-1]=='2'?0:map[chunk+1];
   chunks[chunk] = new FCompound();
   switch(ID){
   case 0:
@@ -98,6 +151,14 @@ void makeChunk(int i,int j) {
     gnd.setName("00");
     FLine jmp = new FLine(1,1,129,1);
     jmp.setName("01");
+    FBox img;
+    if(map[map.length-1]=='2'&&texture!=0){
+      img = new FBox(128,128);
+      img.attachImage(tex[texture]);
+      gnd.setNoFill();
+      gnd.setNoStroke();
+      jmp.setNoStroke();
+    }
     chunks[chunk].addBody(gnd);
     chunks[chunk].addBody(jmp);
     chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -299,12 +360,28 @@ void makeChunk(int i,int j) {
   }
 }
 
+void loadTextures() {
+  String[] texList = split(reverse(new String(subset(map,(map[map.length-32]+1)*(map[map.length-31]+1)*2,map.length-33-map[map.length-26]-((map[map.length-32]+1)*(map[map.length-31]+1)*2)))),(char)0);
+  if(texList.length>=map[map.length-25]){
+    tex = new Gif[map[map.length-25]];
+    for(int i=0;i<map[map.length-25];i++) {
+      int gifLen = int(texList[i].getBytes()[0])+127;
+      if(gifLen==1)tex[i] = new Gif(1,1,new String(subset(texList[i].getBytes(),texList[i].length()-1)),"");
+      //else tex[i] = ;
+    }
+  } else java.util.Arrays.fill(tex,new Gif());
+}
+
 String tostring(char[] chars) { //oh lua how i wish i were programming in thy scrypt
   String retVal = "";
   for(char c:chars) {
     retVal += str(c);
   }
   return retVal;
+}
+
+String reverse(String str) {
+  return new String(reverse(str.getBytes()));
 }
 
 int bi(byte b) {//byte to int

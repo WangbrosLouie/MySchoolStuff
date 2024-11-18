@@ -66,7 +66,7 @@ Chunk Flag Bits (from right to left)
 4 = undecided
 5 = undecided
 6 = undecided
-7 = custom texture
+7 = undecided
 
 Level Parameter Bytes
 0 = Level Width - 1 (Chunks)
