@@ -531,14 +531,17 @@ void makeChunk(int i,int j) {
 }
 
 void loadTextures() {
-  String[] texList = split(reverse(new String(subset(map,(map[map.length-32]+1)*(map[map.length-31]+1)*2,map.length-33-map[map.length-26]-((map[map.length-32]+1)*(map[map.length-31]+1)*2)))),(char)0);
+  //String[] texList = split(reverse(new String(subset(map,(map[map.length-32]+1)*(map[map.length-31]+1)*2,map.length-33-map[map.length-26]-((map[map.length-32]+1)*(map[map.length-31]+1)*2)))),(char)0);
+  String[] texList = split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0);
+  tex = new Gif[255];
+  java.util.Arrays.fill(tex,new Gif());
   if(texList.length>=map[map.length-25]){
-    tex = new Gif[map[map.length-25]];
+    texList = subset(texList,texList.length-map[map.length-25]);
     for(int i=0;i<map[map.length-25];i++) {
       tex[i] = new Gif(texList[i].getBytes()[0],1,new String(subset(texList[i].getBytes(),1,texList[i].length()-1)),"");
       tex[i].resize(128,128);
     }
-  } else java.util.Arrays.fill(tex,new Gif());
+  }
 }
 
 String tostring(char[] chars) { //oh lua how i wish i were programming in thy scrypt
