@@ -198,4 +198,11 @@ you probably noticed that kitta's sprites have outlines compared with
 rhythmgunner's one sprite. this is because since kitta is so monocoloured,
 it would be practically impossible to tell the different parts apart (haha)
 because they would pretty much all be the same colour. also gradient cool.
+
+oh boy im gonna ignore how i havent touched tophat turmoil 2 these last
+days and i gotta rant about a thing. the levels are supposed to have like
+lotsa textures in them for them to look good and stuff but its extremely
+slow in the software renderer. i dont wanna touch the 2d renderer yet cause
+i frankly just dont care im gonna make a workaround like i did for blast
+processing soccar. get ready to say hello to 30 fps mode again (yayy...).
 */

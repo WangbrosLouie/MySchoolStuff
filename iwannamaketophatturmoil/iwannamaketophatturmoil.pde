@@ -10,7 +10,7 @@ import fisica.*;
 
 class Gif extends PImage {
   int frames = 0;
-  int currentFrame = 0;
+  float currentFrame = 0;
   float interval = 0;
   PImage[] images;
   Gif(int FRAMES, float INTERVAL, String filename, String suffix) {
@@ -20,14 +20,11 @@ class Gif extends PImage {
     images = new PImage[frames];
     if(frames>1){
       for(int i=0;i<frames;i++)images[i] = loadImage(filename+i+suffix);
-    } else images[0] = loadImage(filename);
-    super.init(images[0].width,images[0].height,ARGB);
+    } else images[0] = loadImage(filename+suffix);
+    super.init(images[0].width,images[0].height,images[0].format);
     images[0].loadPixels();
     super.loadPixels();
-    //int[] temp = new int[images[0].pixels.length];
     arrayCopy(images[0].pixels,super.pixels);
-    images[0].updatePixels();
-    //arrayCopy(temp,super.pixels);
     images[0].updatePixels();
     super.updatePixels();
   }
@@ -39,17 +36,30 @@ class Gif extends PImage {
     images = new PImage[]{new PImage(1,1,ARGB)};
   }
   
+  //void update() {
+  //  if(images.length>1) {
+  //    currentFrame++;
+  //    int frm = floor(currentFrame/interval)%frames;
+  //    super.init(images[frm].width,images[frm].height,ARGB);
+  //    images[frm].loadPixels();
+  //    int[] temp = new int[images[frm].pixels.length];
+  //    arrayCopy(images[frm].pixels,temp);
+  //    images[frm].updatePixels();
+  //    super.loadPixels();
+  //    arrayCopy(temp,super.pixels);
+  //    super.updatePixels();
+  //  }
+  //}
+  
   void update() {
     if(images.length>1) {
-      currentFrame++;
-      int frm = floor(currentFrame/interval)%frames;
-      super.init(images[frm].width,images[frm].height,ARGB);
+      currentFrame+=interval;
+      int frm = floor(currentFrame)%frames;
+      super.init(images[frm].width,images[frm].height,images[frm].format);
       images[frm].loadPixels();
-      int[] temp = new int[images[frm].pixels.length];
-      arrayCopy(images[frm].pixels,temp);
-      images[frm].updatePixels();
       super.loadPixels();
-      arrayCopy(temp,super.pixels);
+      arrayCopy(images[frm].pixels,super.pixels);
+      images[frm].updatePixels();
       super.updatePixels();
     }
   }
@@ -86,7 +96,7 @@ void setup() {
   lucid = createFont("Lucida Console",14,false);
   Fisica.init(this);
   image(loadImage("spr/loudo.png"),0,0,width,height);
-  //draw thy loading screen //<>//
+  //draw thy loading screen
 }
 
 void draw() {
@@ -102,10 +112,11 @@ void draw() {
       camVec = new PVector(playerVec.x+sqrt2(player.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(player.getVelocityY()*30));
     }
     processKeys(); //<>//
+    for(Gif pic:tex)pic.update();
     world.step();
     background(200);
     playerVec.set(player.getX(),player.getY());
-    camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(player.getVelocityX()*30)+(camDir?50:-50),sqrt2(player.getVelocityY()*30))),00.1);
+    camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(player.getVelocityX()*30)+(camDir?50:-50),sqrt2(player.getVelocityY()*30))),0.1);
     translate(width/2-camVec.x,height/2-camVec.y);
     world.draw();
   } catch (Exception e) {
@@ -145,7 +156,19 @@ void makeChunk(int i,int j) {
   chunks[chunk] = new FCompound();
   switch(ID){
   case 0:
-    chunks[chunk] = null;
+    FBox img;
+    if(map[map.length-1]=='2'&&texture!=-1){
+      img = new FBox(128,128);
+      img.attachImage(tex[texture]);
+      img.setSensor(true);
+      img.setStatic(true);
+      img.setName("0");
+      img.setPosition(64,64);
+      chunks[chunk].addBody(img);
+    }
+    chunks[chunk].setPosition(128*i,128*j);
+    chunks[chunk].setStatic(true);
+    world.add(chunks[chunk]);
     break;
   case 1:
     FBox gnd = new FBox(128,127);
@@ -153,7 +176,6 @@ void makeChunk(int i,int j) {
     gnd.setName("00");
     FLine jmp = new FLine(1,1,129,1);
     jmp.setName("01");
-    FBox img;
     if(map[map.length-1]=='2'&&texture!=-1){
       img = new FBox(128,128);
       img.attachImage(tex[texture]);
@@ -538,8 +560,14 @@ void loadTextures() {
   if(texList.length>=map[map.length-25]){
     texList = subset(texList,texList.length-map[map.length-25]);
     for(int i=0;i<map[map.length-25];i++) {
-      tex[i] = new Gif(texList[i].getBytes()[0],1,new String(subset(texList[i].getBytes(),1,texList[i].length()-1)),"");
-      tex[i].resize(128,128);
+      int gifLen = texList[i].getBytes()[0]&0xFF;
+      if(gifLen>0) {
+        String[] fileName = split(new String(subset(texList[i].getBytes(),2,texList[i].length()-2)),'.');
+        tex[i] = new Gif(gifLen,mf(texList[i].getBytes()[1]),join(subset(fileName,0,fileName.length-1),"."),"."+fileName[fileName.length-1]);
+        tex[i].resizeGif(128,128);
+      } else {
+        tex[i] = new Gif();
+      }
     }
   }
 }
@@ -562,6 +590,11 @@ int bi(byte b) {//byte to int
 
 float sqrt2(float num) {
   return num<0?-sqrt(0-num):sqrt(num);
+}
+
+float mf(byte b) {//minifloat (only positive for now) FIX!!! I COMPLETELY MISUNDERSTOOD HOW FLOATS WORK!!!
+println((float)(b&0xFF)%0x8,(((float)(b&0xFF)%0x7F)/0x8));
+  return pow((b&0xFF)%0x8,((b&0xFF)%0x7F)/0x8);
 }
 
 //input events and controller support here
