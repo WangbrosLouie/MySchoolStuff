@@ -57,6 +57,7 @@ C = icy floorless half
 D = bouncy floor
 E = super bounce
 F = win zone
+10 = damage block
 
 Chunk Flag Bits (from right to left)
 0 = replenishes jump

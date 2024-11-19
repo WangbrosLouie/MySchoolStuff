@@ -131,7 +131,7 @@ void makeLevel() {
   player.setRotatable(false);
   player.setFriction(100);
   player.setName("00");
-  player.attachImage(loadImage("spr/r0.png"));
+  player.attachImage(loadImage("spr/k0.png"));
   world.add(player);
   //java.util.Arrays.fill(tex,new PImage(1,1));
   //for(int i=0;i<map[map.length-19];i++){}

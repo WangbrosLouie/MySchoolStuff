@@ -181,7 +181,21 @@ but then got changed to a glamrock animatronic kinda stomach but now
 methinks that either the torso is just one piece
 <<thawun peece thawun peece israel>>
 again or the stomach is made of the same rubbery stuff as the mouth. the
-limb though i dont know about yet, so thats kittas internals part 1.
+limbs though i dont know about yet, so thats kittas internals part 1.
 and no i did not watch the jake paul versus mike tyson match i dont care.
 and thats my two cents for the day, or rather my two meows of the day.
+
+okays. i just finished the kitta pixel art again because the first sprite
+was way too big (1.5 times to be exact) and now i have an out of proportion
+kitta. the head is always too big and i dont know why. look forwards to
+seeing more "cute" sprites of kitta because the game is gonna star kitta
+(as well as the other tophat turmoil characters because i need enemies in
+this one). this game is going to be right before tophat tournament in the
+canon. you fight off mr god's creations while trying to parkour to victory.
+if you play as kitta it is the equivalent of peaceful mode because there
+will be no enemies since kitta does not participate in violence. anyways
+you probably noticed that kitta's sprites have outlines compared with
+rhythmgunner's one sprite. this is because since kitta is so monocoloured,
+it would be practically impossible to tell the different parts apart (haha)
+because they would pretty much all be the same colour. also gradient cool.
 */
