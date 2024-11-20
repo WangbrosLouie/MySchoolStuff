@@ -29,27 +29,28 @@ class Gif extends PImage {
     super.updatePixels();
   }
   
+  Gif(int FRAMES, float INTERVAL, String[] filenames) {//gonna make the character files laters
+    super(1,1,ARGB);
+    frames = FRAMES;
+    interval = INTERVAL;
+    images = new PImage[frames];
+    if(frames>1){
+      for(int i=0;i<frames;i++)images[i] = loadImage(filenames[i]);
+    } else images[0] = loadImage(filenames[0]);
+    super.init(images[0].width,images[0].height,images[0].format);
+    images[0].loadPixels();
+    super.loadPixels();
+    arrayCopy(images[0].pixels,super.pixels);
+    images[0].updatePixels();
+    super.updatePixels();
+  }
+  
   Gif() {
     super(1,1,ARGB);
     frames = 1;
     interval = 1;
     images = new PImage[]{new PImage(1,1,ARGB)};
   }
-  
-  //void update() {
-  //  if(images.length>1) {
-  //    currentFrame++;
-  //    int frm = floor(currentFrame/interval)%frames;
-  //    super.init(images[frm].width,images[frm].height,ARGB);
-  //    images[frm].loadPixels();
-  //    int[] temp = new int[images[frm].pixels.length];
-  //    arrayCopy(images[frm].pixels,temp);
-  //    images[frm].updatePixels();
-  //    super.loadPixels();
-  //    arrayCopy(temp,super.pixels);
-  //    super.updatePixels();
-  //  }
-  //}
   
   void update() {
     if(images.length>1) {
@@ -64,10 +65,76 @@ class Gif extends PImage {
     }
   }
   
+  void updatePlayer() {//special for player gif
+    if(images.length>1) {
+      currentFrame+=interval;
+    }
+    int frm = floor(currentFrame)%frames;
+    super.init(images[frm].width,images[frm].height,images[frm].format);
+    images[frm].loadPixels();
+    super.loadPixels();
+    arrayCopy(camDir?images[frm].pixels:flipImagePix(images[frm]),super.pixels);
+    images[frm].updatePixels();
+    super.updatePixels();
+  }
+  
   void resizeGif(int x, int y) {
     for(PImage pic:images) {
       pic.resize(x,y);
     }
+  }
+}
+
+class player extends FBox {
+  int health = 5;
+  Gif[] anim = new Gif[4];//idle moving jumping hurting
+  player(int HEALTH) {//placeholder for now
+    super(32,64);
+    health = HEALTH;
+    //java.util.Arrays.fill(anim, new Gif(20,0.5,"tex/0x0F_",".png"));
+    java.util.Arrays.fill(anim, new Gif(3,1.0/60,"spr/k",".png"));
+    super.attachImage(anim[0]);
+    super.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
+    super.setRotatable(false);
+    super.setFriction(100);
+    super.setName("00");
+  }
+  
+  boolean[] process(boolean[] keys) {
+    for(Gif pic:anim)pic.updatePlayer();
+    ArrayList<FContact> touchings = super.getContacts();
+    keys[3] = true;
+    for(FContact bod:touchings) {
+      int flags = 0;
+      if(bod.getBody1()==this){
+        String name = bod.getBody2().getName();
+        flags = name!=null?unbinary(name):0;
+      } else {
+        String name = bod.getBody1().getName();
+        flags = name!=null?unbinary(name):0;
+      }
+      //if(flags%0x2/1>0) bittest template
+      if(flags%0x2/1>0)keys[3] = false;
+      if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
+    }
+    if(debug)keys[3]=false;
+    if(!(keys[0]&&keys[1])) {
+      if(keys[0]) {
+        super.setVelocity(-200,super.getVelocityY());
+        camDir = false;
+      }
+      if(keys[1]) {
+        super.setVelocity(200,super.getVelocityY());
+        camDir = true;
+      } else {
+        super.addForce(-super.getVelocityX()/5,0);
+      }
+    }
+    if(keys[2]&&!keys[3]) {
+        keys[3] = true;
+        super.setVelocity(super.getVelocityX(),-200);
+    }
+  return keys;
   }
 }
 
@@ -83,11 +150,14 @@ String mapName;
 byte mapNum = 3;
 Gif[] tex = new Gif[255];
 boolean[] keys = new boolean[13];
+boolean textures = true;
+boolean backgnd = true;
 PFont lucid;
 PVector playerVec, camVec;
+float scl = 1;
 boolean camDir = true;
 FWorld world;
-FBox player;
+player you;
 FCompound[] chunks;
 Gif bg;
 
@@ -108,16 +178,18 @@ void draw() {
       mapName = tostring(char(subset(map,map.length-33-map[map.length-26],map[map.length-26]+1)));
       println(mapName);
       makeLevel();
-      playerVec = new PVector(player.getX(),player.getY());
-      camVec = new PVector(playerVec.x+sqrt2(player.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(player.getVelocityY()*30));
+      playerVec = new PVector(you.getX(),you.getY());
+      camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
     }
-    processKeys(); //<>//
+    keys = you.process(keys); //<>//
     for(Gif pic:tex)pic.update();
     world.step();
     background(0xFF00FF);
-    playerVec.set(player.getX(),player.getY());
-    camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(player.getVelocityX()*30)+(camDir?50:-50),sqrt2(player.getVelocityY()*30))),0.1);
-    translate(width/2-camVec.x,height/2-camVec.y);
+    playerVec.set(you.getX(),you.getY());
+    camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(you.getVelocityX()*30)+(camDir?50:-50),sqrt2(you.getVelocityY()*30))),0.05);
+    scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
+    scale(scl);
+    translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
     world.draw();
   } catch (Exception e) {
     blueDead(e);
@@ -137,22 +209,21 @@ void makeLevel() {
       makeChunk(i,j);
     }
   }
-  player = new FBox(32,64);
-  player.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
-  player.setRotatable(false);
-  player.setFriction(100);
-  player.setName("00");
-  player.attachImage(loadImage("spr/r0.png"));
-  world.add(player);
-  //java.util.Arrays.fill(tex,new PImage(1,1));
-  //for(int i=0;i<map[map.length-19];i++){}
+  //player = new FBox(32,64);
+  //player.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
+  //player.setRotatable(false);
+  //player.setFriction(100);
+  //player.setName("00");
+  //player.attachImage(loadImage("spr/r0.png"));
+  you = new player(3);
+  world.add(you);
 }
 
 void makeChunk(int i,int j) {
   int lWidth = bi(map[map.length-32])+1;
   int chunk = j*lWidth+i;
   byte ID = map[map[map.length-1]=='1'?chunk:chunk*2];
-  int texture = map[map.length-1]=='1'?-1:map[chunk*2+1]-1;
+  int texture = map[map.length-1]=='1'||!textures?-1:map[chunk*2+1]-1;
   chunks[chunk] = new FCompound();
   switch(ID){
   case 0:
@@ -549,6 +620,28 @@ void makeChunk(int i,int j) {
     chunks[chunk].setStatic(true);
     world.add(chunks[chunk]);
     break;
+  case 0x10:
+    gnd = new FBox(128,128);
+    gnd.setPosition(64,64);
+    gnd.setName("00");
+    gnd.setFillColor(0xFFAFAFFF);
+    gnd.setFriction(0);
+    if(map[map.length-1]=='2'&&texture!=-1){
+      img = new FBox(128,128);
+      img.attachImage(tex[texture]);
+      img.setSensor(true);
+      img.setStatic(true);
+      img.setName("0");
+      img.setPosition(64,64);
+      chunks[chunk].addBody(img);
+      gnd.setNoFill();
+      gnd.setNoStroke();
+    }
+    chunks[chunk].addBody(gnd);
+    chunks[chunk].setPosition(128*i,128*j);
+    chunks[chunk].setStatic(true);
+    world.add(chunks[chunk]);
+    break;
   }
 }
 
@@ -597,6 +690,18 @@ float mf(byte b) {//myfloat (so many calculations...)
   return (flags/0x80>0?4:0)+(flags%0x80/0x40>0?2:0)+(flags%0x40/0x20>0?1:0)+(flags%0x20/0x10>0?0.5:0)+(flags%0x10/0x8>0?0.25:0)+(flags%0x8/0x4>0?0.125:0)+(flags%0x4/0x2>0?0.0625:0)+(flags%0x2>0?0.03125:0);
 }
 
+int[] flipImagePix(PImage pic) {
+  int[] flipped = new int[pic.width*pic.height];
+  pic.loadPixels();
+  for(int i=0;i<pic.height;i++) {
+    for(int j=0;j<pic.width;j++) {
+      flipped[i*pic.width+j] = pic.pixels[(i+1)*pic.width-j-1];
+    }
+  }
+  pic.updatePixels();
+  return flipped;
+}
+
 //input events and controller support here
 void blueDead(Exception e) { //funny
   noLoop();
@@ -608,42 +713,42 @@ void blueDead(Exception e) { //funny
   e.printStackTrace();
 }
 
-void processKeys() {
-  ArrayList<FContact> touchings = player.getContacts();
-  keys[3] = true;
-  for(FContact bod:touchings) {
-    int flags = 0;
-    if(bod.getBody1()==player){
-      String name = bod.getBody2().getName();
-      flags = name!=null?unbinary(name):0;
-      //println(bod.getBody2());
-    } else {
-      String name = bod.getBody1().getName();
-      flags = name!=null?unbinary(name):0;
-      //println(bod.getBody1());
-    }
-    //if(flags%0x2/1>0) bittest template
-    if(flags%0x2/1>0)keys[3] = false;
-    if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
-  }
-  if(debug)keys[3]=false;
-  if(!(keys[0]&&keys[1])) {
-    if(keys[0]) {
-      player.setVelocity(-200,player.getVelocityY());
-      camDir = false;
-    }
-    if(keys[1]) {
-      player.setVelocity(200,player.getVelocityY());
-      camDir = true;
-    } else {
-      player.addForce(-player.getVelocityX()/5,0);
-    }
-  }
-  if(keys[2]&&!keys[3]) {
-      keys[3] = true;
-      player.setVelocity(player.getVelocityX(),-200);
-  }
-}
+//void processKeys() {
+//  ArrayList<FContact> touchings = player.getContacts();
+//  keys[3] = true;
+//  for(FContact bod:touchings) {
+//    int flags = 0;
+//    if(bod.getBody1()==player){
+//      String name = bod.getBody2().getName();
+//      flags = name!=null?unbinary(name):0;
+//      //println(bod.getBody2());
+//    } else {
+//      String name = bod.getBody1().getName();
+//      flags = name!=null?unbinary(name):0;
+//      //println(bod.getBody1());
+//    }
+//    //if(flags%0x2/1>0) bittest template
+//    if(flags%0x2/1>0)keys[3] = false;
+//    if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
+//  }
+//  if(debug)keys[3]=false;
+//  if(!(keys[0]&&keys[1])) {
+//    if(keys[0]) {
+//      player.setVelocity(-200,player.getVelocityY());
+//      camDir = false;
+//    }
+//    if(keys[1]) {
+//      player.setVelocity(200,player.getVelocityY());
+//      camDir = true;
+//    } else {
+//      player.addForce(-player.getVelocityX()/5,0);
+//    }
+//  }
+//  if(keys[2]&&!keys[3]) {
+//      keys[3] = true;
+//      player.setVelocity(player.getVelocityX(),-200);
+//  }
+//}
 
 void keyPressed() {
   switch(keyCode){

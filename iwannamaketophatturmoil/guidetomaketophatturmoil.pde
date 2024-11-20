@@ -58,6 +58,8 @@ D = bouncy floor
 E = super bounce
 F = win zone
 10 = damage block
+11 = water
+12 = lava
 
 Chunk Flag Bits (from right to left)
 0 = replenishes jump
