@@ -114,7 +114,7 @@ void draw() {
     processKeys(); //<>//
     for(Gif pic:tex)pic.update();
     world.step();
-    background(200);
+    background(0xFF00FF);
     playerVec.set(player.getX(),player.getY());
     camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(player.getVelocityX()*30)+(camDir?50:-50),sqrt2(player.getVelocityY()*30))),0.1);
     translate(width/2-camVec.x,height/2-camVec.y);
@@ -142,7 +142,7 @@ void makeLevel() {
   player.setRotatable(false);
   player.setFriction(100);
   player.setName("00");
-  player.attachImage(loadImage("spr/k0.png"));
+  player.attachImage(loadImage("spr/r0.png"));
   world.add(player);
   //java.util.Arrays.fill(tex,new PImage(1,1));
   //for(int i=0;i<map[map.length-19];i++){}
@@ -560,7 +560,7 @@ void loadTextures() {
   if(texList.length>=map[map.length-25]){
     texList = subset(texList,texList.length-map[map.length-25]);
     for(int i=0;i<map[map.length-25];i++) {
-      int gifLen = texList[i].getBytes()[0]&0xFF;
+      int gifLen = texList[i].getBytes()[0]&0xFF; //<>//
       if(gifLen>0) {
         String[] fileName = split(new String(subset(texList[i].getBytes(),2,texList[i].length()-2)),'.');
         tex[i] = new Gif(gifLen,mf(texList[i].getBytes()[1]),join(subset(fileName,0,fileName.length-1),"."),"."+fileName[fileName.length-1]);
@@ -592,9 +592,9 @@ float sqrt2(float num) {
   return num<0?-sqrt(0-num):sqrt(num);
 }
 
-float mf(byte b) {//minifloat (only positive for now) FIX!!! I COMPLETELY MISUNDERSTOOD HOW FLOATS WORK!!!
-println((float)(b&0xFF)%0x8,(((float)(b&0xFF)%0x7F)/0x8));
-  return pow((b&0xFF)%0x8,((b&0xFF)%0x7F)/0x8);
+float mf(byte b) {//myfloat (so many calculations...)
+  int flags = b&0xFF;
+  return (flags/0x80>0?4:0)+(flags%0x80/0x40>0?2:0)+(flags%0x40/0x20>0?1:0)+(flags%0x20/0x10>0?0.5:0)+(flags%0x10/0x8>0?0.25:0)+(flags%0x8/0x4>0?0.125:0)+(flags%0x4/0x2>0?0.0625:0)+(flags%0x2>0?0.03125:0);
 }
 
 //input events and controller support here
