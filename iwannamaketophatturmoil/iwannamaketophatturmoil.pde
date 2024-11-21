@@ -92,7 +92,7 @@ class player extends FBox {
     super(32,64);
     health = HEALTH;
     //java.util.Arrays.fill(anim, new Gif(20,0.5,"tex/0x0F_",".png"));
-    java.util.Arrays.fill(anim, new Gif(3,1.0/60,"spr/k",".png"));
+    java.util.Arrays.fill(anim, new Gif(1,1.0/60,"spr/r0",".png"));
     super.attachImage(anim[0]);
     super.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
     super.setRotatable(false);
@@ -135,6 +135,164 @@ class player extends FBox {
         super.setVelocity(super.getVelocityX(),-200);
     }
   return keys;
+  }
+}
+
+class Button {
+  int Type = 0; //positive type is text, negative type is image
+  int X = 0;
+  int Y = 0;
+  int XSize = 0;
+  int YSize = 0;
+  float tSize = 0;
+  color Out = color(0,0,0);// idle outline
+  color In = color(0,0,0);// idle fill
+  int doWhat = 0;
+  String text = "";
+  PImage img = new PImage();
+  color TOut = color(0,0,0);// text/tint unpressed
+  color TIn = color(0,0,0);// text/tint depressed
+  color POut = color(0,0,0);// pressed outline
+  color PIn = color(0,0,0);// pressed fill
+  color THov = color(0,0,0);// text/tint hover
+  color HOut = color(0,0,0);// hover outline
+  color HIn = color(0,0,0);// hover fill
+  //text button constructor
+  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, String TEXT, float TsIZE) {
+    if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
+      Type = 1;
+    } else {
+      Type = abs(tYPE);
+      X = x;
+      Y = y;
+      XSize = xsIZE;
+      YSize = ysIZE;
+      Out = oUT;
+      In = iN;
+      doWhat = DOwHAT;
+      text = TEXT;
+      TOut = toUT;
+      THov = thOV;
+      TIn = tiN;
+      POut = poUT;
+      PIn = piN;
+      HIn = hiN;
+      HOut = hoUT;
+      tSize = TsIZE;
+    }
+  }
+  //image button constructor
+  Button(int tYPE, int DOwHAT, int x, int y, int xsIZE, int ysIZE, color oUT, color iN, color hoUT, color hiN, color poUT, color piN, color toUT, color thOV, color tiN, PImage IMG) {
+    if(tYPE<0||x<0||y<0||xsIZE<0||ysIZE<0||DOwHAT<0) {
+      Type = -1;
+    } else {
+      Type = -abs(tYPE);
+      X = x;
+      Y = y;
+      XSize = xsIZE;
+      YSize = ysIZE;
+      Out = oUT;
+      In = iN;
+      doWhat = DOwHAT;
+      img = IMG;
+      TOut = toUT;
+      THov = thOV;
+      TIn = tiN;
+      POut = poUT;
+      PIn = piN;
+      HIn = hiN;
+      HOut = hoUT;
+    }
+  }
+  
+  void draw(byte Active) {//2 is pressed, 1 is hover, 0 is idle
+    if(Type==0||Type==-0) {
+      println("Warning: Uninitialized button.");
+    } else {
+      if(Type>0) {
+        push();
+        textAlign(CENTER,CENTER);
+        //println(tSize);
+        textSize(tSize);
+        switch(Active) {
+        case 0:
+          fill(TOut);
+          push();
+          stroke(Out);
+          fill(In);
+          break;
+        case 1:
+          fill(THov);
+          push();
+          stroke(HOut);
+          fill(HIn);
+          break;
+        case 2:
+          fill(TIn);
+          push();
+          stroke(POut);
+          fill(PIn);
+          break;
+        default:
+          println("Naked grandma!");
+        }
+        switch(Type) {
+        case 1:
+          rect(X,Y,XSize,YSize);
+          pop();
+          text(text,XSize/2+X,YSize/2+Y);
+          break;
+        case 2:
+          ellipse(X,Y,XSize,YSize);
+          pop();
+          text(text,XSize/2+X,YSize/2+Y);
+        }
+        pop();
+      } else {
+        push();
+        switch(Active) {
+        case 0:
+          tint(TOut);
+          stroke(Out);//ya need to keep these parts in case of transparent images
+          fill(In);
+          break;
+        case 1:
+          tint(THov);
+          stroke(HOut);
+          fill(HIn);
+          break;
+        case 2:
+          tint(TIn);
+          stroke(POut);
+          fill(PIn);
+          break;
+        default:
+          println("Naked huh?");
+        }
+        switch(-Type) {
+        case 1:
+          rect(X,Y,XSize,YSize);
+          image(img,X,Y,XSize,YSize);
+          break;
+        case 2:
+          ellipse(X,Y,XSize,YSize);
+          text(text,XSize/2+X,YSize/2+Y);
+        }
+        pop();
+      }
+    }
+  }
+  
+  void drawHit(int i, PGraphics H) {
+    i++;
+    H.fill(color(i%0x1000000/0x10000,i%0x10000/0x100,i%0x100));
+    switch(abs(Type)) {
+    case 1:
+      H.rect(X,Y,XSize,YSize);
+      break;
+    case 2:
+      H.ellipse(X,Y,XSize,YSize);
+    }
   }
 }
 

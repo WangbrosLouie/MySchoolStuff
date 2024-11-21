@@ -205,4 +205,11 @@ lotsa textures in them for them to look good and stuff but its extremely
 slow in the software renderer. i dont wanna touch the 2d renderer yet cause
 i frankly just dont care im gonna make a workaround like i did for blast
 processing soccar. get ready to say hello to 30 fps mode again (yayy...).
+
+you know whats crazy? i cant even remember a meowin thing about how i did
+alla the stuff in blast processing soccer. the buttons, meow, what do they
+mean? im gonna make a title screen, but not only that i need a level format
+converter dang nyabbit its hard spamming the same keys in hxd to manually
+change the data and it should be easy enough to make. also its nice for
+level makers if they for some forsaken reason want to use my game engine.
 */

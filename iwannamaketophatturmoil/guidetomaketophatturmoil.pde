@@ -18,22 +18,28 @@ is developed. This document may be behind or ahead of the engine.
 -Engine Features
 
     /-level data format-/
-  The engine expects a footer with the string "Tophat Turmoil 1" to end a
-valid level file. There will be support for levels with the footer string
-"Tophat Turmoil 2" with extra features sometime. The 16 bytes preceeding
-the footer are the level parameter bytes. The specifics are in -reference-.
-The level name comes before the parameter bytes, and the length is stored
-in a level parameter byte. There is no safeguard implemented to prevent
-invalid names such as names too long which leak into level data or a non
-existant name, so make sure the name is correctly specified. The data from
-the start of the file ending at the start of the level name are the chunks.
-The width and height of the level are specified in the level parameters,
-but there currently is no check to verify if the level is long enough for
-the width and height, so if you load your level and get a blue screen for a
-non existant array element before you can move then make sure the level is
-the correct length and the width and height are correctly specified.
+  A valid level file is made of 4 parts:
+The level data - the layout of the level
+The plaintext portion - file names for textures and the level name
+The parameter bytes - level settings (listed in reference)
+The footer - the string "Tophat Turmoil " and the file type
+  The file type determines the features of the level. For now, there are
+only types 1 and 2. Type 1 is smaller, but it does not support textures.
+Type 2 is roughly double the size of Type 1, but supports up to 255 unique
+animated(or static)textures for the chunks.
+  The plaintext portion is where all of the names go. For Type 1, only the
+name is stored here. For Type 2, the textures precede the level name.
+The textures are formatted as: 00 FC SP PP..PP
+where 00 is a null byte, FC is number of animated frames(1 for static),
+SP is speed in a special format, and PP..PP is the path in text. The speed
+is calculated with SP*0.03125, and the result is the animation frames per
+program frame (draw cycle). None of the bytes other than the null byte
+should be null.
+  The level data uses 1 byte per chunk, or 2 bytes for chunk and texture if
+using Type 2. The chunk codes can be found in reference, and the texture
+number is indexed at 1, as 00 is used for no texture.
 
-    /-engine features-/
+    /-engine features-/--why is this here again? this engine is just fisica
 The engine is a platformer engine. It is physics based, using the Fisica
 library. Level chunk loading from files may be implemented in the future
 for level making purposes. The engine pregenerates every chunk in each
