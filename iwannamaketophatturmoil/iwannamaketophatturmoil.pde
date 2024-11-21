@@ -100,10 +100,10 @@ class player extends FBox {
     super.setName("00");
   }
   
-  boolean[] process(boolean[] keys) {
+  byte[] process(byte[] keys) {
     for(Gif pic:anim)pic.updatePlayer();
     ArrayList<FContact> touchings = super.getContacts();
-    keys[3] = true;
+    keys[3] = 1;
     for(FContact bod:touchings) {
       int flags = 0;
       if(bod.getBody1()==this){
@@ -114,26 +114,27 @@ class player extends FBox {
         flags = name!=null?unbinary(name):0;
       }
       //if(flags%0x2/1>0) bittest template
-      if(flags%0x2/1>0)keys[3] = false;
+      if(flags%0x2/1>0)keys[3] = 0;
       if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
     }
-    if(debug)keys[3]=false;
-    if(!(keys[0]&&keys[1])) {
-      if(keys[0]) {
+    if(debug)keys[3]=0;
+    if(!((keys[0]>1)&&(keys[1])>1)) {
+      if(keys[0]>1) {
         super.setVelocity(-200,super.getVelocityY());
         camDir = false;
       }
-      if(keys[1]) {
+      if(keys[1]>1) {
         super.setVelocity(200,super.getVelocityY());
         camDir = true;
       } else {
         super.addForce(-super.getVelocityX()/5,0);
       }
     }
-    if(keys[2]&&!keys[3]) {
-        keys[3] = true;
+    if(keys[2]>1&&keys[3]==0) {
+        keys[3] = 1;
         super.setVelocity(super.getVelocityX(),-200);
     }
+  for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
   return keys;
   }
 }
@@ -307,7 +308,7 @@ byte[] map;
 String mapName;
 byte mapNum = 3;
 Gif[] tex = new Gif[255];
-boolean[] keys = new boolean[13];
+byte[] keys = new byte[13];
 boolean textures = true;
 boolean backgnd = true;
 PFont lucid;
@@ -349,6 +350,7 @@ void draw() {
     scale(scl);
     translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
     world.draw();
+    println(keys);
   } catch (Exception e) {
     blueDead(e);
     noLoop();
@@ -911,13 +913,13 @@ void blueDead(Exception e) { //funny
 void keyPressed() {
   switch(keyCode){
   case 65:
-    keys[0] = true;
+    if(keys[0]==0)keys[0] = 1;
     break;
   case 68:
-    keys[1] = true;
+    if(keys[1]==0)keys[1] = 1;
     break;
   case 32:
-    keys[2] = true;
+    if(keys[2]==0)keys[2] = 1;
     break;
     //addin actions n stuff later
   }
@@ -926,13 +928,13 @@ void keyPressed() {
 void keyReleased() {
   switch(keyCode){
   case 65:
-    keys[0] = false;
+    keys[0] = 0;
     break;
   case 68:
-    keys[1] = false;
+    keys[1] = 0;
     break;
   case 32:
-    keys[2] = false;
+    keys[2] = 0;
     break;
   }
 }

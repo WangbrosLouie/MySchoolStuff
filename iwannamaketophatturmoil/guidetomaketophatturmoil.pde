@@ -15,7 +15,7 @@ is developed. This document may be behind or ahead of the engine.
 
     /-contents-/
 -Level Data Format
--Engine Features
+-Reference
 
     /-level data format-/
   A valid level file is made of 4 parts:
@@ -38,12 +38,6 @@ should be null.
   The level data uses 1 byte per chunk, or 2 bytes for chunk and texture if
 using Type 2. The chunk codes can be found in reference, and the texture
 number is indexed at 1, as 00 is used for no texture.
-
-    /-engine features-/--why is this here again? this engine is just fisica
-The engine is a platformer engine. It is physics based, using the Fisica
-library. Level chunk loading from files may be implemented in the future
-for level making purposes. The engine pregenerates every chunk in each
-level.
 
     /-reference-/
 Chunk IDs
