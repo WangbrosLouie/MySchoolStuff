@@ -78,6 +78,19 @@ class Gif extends PImage {
     super.updatePixels();
   }
   
+  void reset() {//reset to frame 1
+    if(images.length>1) {
+      currentFrame=0;
+    }
+    int frm = floor(currentFrame)%frames;
+    super.init(images[frm].width,images[frm].height,images[frm].format);
+    images[frm].loadPixels();
+    super.loadPixels();
+    arrayCopy(camDir?images[frm].pixels:flipImagePix(images[frm]),super.pixels);
+    images[frm].updatePixels();
+    super.updatePixels();
+  }
+  
   void resizeGif(int x, int y) {
     for(PImage pic:images) {
       pic.resize(x,y);
@@ -87,12 +100,12 @@ class Gif extends PImage {
 
 class player extends FBox {
   int health = 5;
-  Gif[] anim = new Gif[4];//idle moving jumping hurting
+  Gif[] anim = new Gif[4];//idle moving jumping idlemoving hurting
+  int animNum = 0;
   player(int HEALTH) {//placeholder for now
     super(32,64);
     health = HEALTH;
-    //java.util.Arrays.fill(anim, new Gif(20,0.5,"tex/0x0F_",".png"));
-    java.util.Arrays.fill(anim, new Gif(1,1.0/60,"spr/r0",".png"));
+    java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/k0",".png"));
     super.attachImage(anim[0]);
     super.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
     super.setRotatable(false);
@@ -101,7 +114,7 @@ class player extends FBox {
   }
   
   byte[] process(byte[] keys) {
-    for(Gif pic:anim)pic.updatePlayer();
+    animNum = 0;
     ArrayList<FContact> touchings = super.getContacts();
     keys[3] = 1;
     for(FContact bod:touchings) {
@@ -118,14 +131,17 @@ class player extends FBox {
       if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
     }
     if(debug)keys[3]=0;
+    if(abs(super.getVelocityX())>100)animNum = 3;
     if(!((keys[0]>1)&&(keys[1])>1)) {
       if(keys[0]>1) {
         super.setVelocity(-200,super.getVelocityY());
+        animNum = 1;
         camDir = false;
       }
       if(keys[1]>1) {
         super.setVelocity(200,super.getVelocityY());
         camDir = true;
+        animNum = 1;
       } else {
         super.addForce(-super.getVelocityX()/5,0);
       }
@@ -133,9 +149,11 @@ class player extends FBox {
     if(keys[2]>1&&keys[3]==0) {
         keys[3] = 1;
         super.setVelocity(super.getVelocityX(),-200);
+        animNum = 2;
     }
-  for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
-  return keys;
+    anim[animNum].updatePlayer();
+    for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
+    return keys;
   }
 }
 
@@ -340,6 +358,7 @@ void draw() {
       playerVec = new PVector(you.getX(),you.getY());
       camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
     }
+    println(keys);
     keys = you.process(keys); //<>//
     for(Gif pic:tex)pic.update();
     world.step();
@@ -350,7 +369,6 @@ void draw() {
     scale(scl);
     translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
     world.draw();
-    println(keys);
   } catch (Exception e) {
     blueDead(e);
     noLoop();
