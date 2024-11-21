@@ -100,12 +100,15 @@ class Gif extends PImage {
 
 class player extends FBox {
   int health = 5;
-  Gif[] anim = new Gif[4];//idle moving jumping idlemoving hurting
+  Gif[] anim = new Gif[5];//idle moving jumping idlemoving hurting
   int animNum = 0;
+  int invince = 0; //invincible until this frame
+  int stunned = 0; //stunned until this frame
   player(int HEALTH) {//placeholder for now
     super(32,64);
     health = HEALTH;
-    java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/k0",".png"));
+    java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
+    anim[1] = new Gif(2,2.0/60,"spr/kb",".png");
     super.attachImage(anim[0]);
     super.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
     super.setRotatable(false);
@@ -128,32 +131,81 @@ class player extends FBox {
       }
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
+      if((flags%0x4/2>0)&&(invince<=frameCount)){animNum = 4;invince=frameCount+120;stunned=frameCount+30;}
       if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
     }
     if(debug)keys[3]=0;
     if(abs(super.getVelocityX())>100)animNum = 3;
-    if(!((keys[0]>1)&&(keys[1])>1)) {
-      if(keys[0]>1) {
-        super.setVelocity(-200,super.getVelocityY());
-        animNum = 1;
-        camDir = false;
+    if(stunned<=frameCount) {
+      if(!((keys[0]>1)&&(keys[1])>1)) {
+        if(keys[0]>1) {
+          super.setVelocity(-200,super.getVelocityY());
+          animNum = 1;
+          camDir = false;
+        }
+        if(keys[1]>1) {
+          super.setVelocity(200,super.getVelocityY());
+          camDir = true;
+          animNum = 1;
+        } else {
+          super.addForce(-super.getVelocityX()/5,0);
+        }
       }
-      if(keys[1]>1) {
-        super.setVelocity(200,super.getVelocityY());
-        camDir = true;
-        animNum = 1;
-      } else {
-        super.addForce(-super.getVelocityX()/5,0);
+      if(keys[2]>1&&keys[3]==0) {
+          keys[3] = 1;
+          super.setVelocity(super.getVelocityX(),-200);
+          animNum = 2;
       }
-    }
-    if(keys[2]>1&&keys[3]==0) {
-        keys[3] = 1;
-        super.setVelocity(super.getVelocityX(),-200);
-        animNum = 2;
     }
     anim[animNum].updatePlayer();
     for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
     return keys;
+  }
+}
+
+class Enemy extends FBox {//dont use please use the subclasses
+  int health = 0;
+  Enemy(int HEALTH, int high, int wide) {
+    super(high,wide);
+    health = HEALTH;
+  }
+}
+
+class TestBot extends Enemy {
+  int speed = 0;
+  boolean dir = true;
+  int timer = 0;
+  byte state = 0;
+  
+  TestBot(int HEALTH, int TYPE) {
+    super(HEALTH,32,32);
+    switch(TYPE) {
+    default://type 0 in here too
+      speed = 50;
+    }
+  }
+  
+  void process() {
+    timer++;
+    if(random(0,500)>timer)state=(byte)(state++%2);
+    switch(state) {
+    case 0:
+      super.setVelocity(dir?50:-50,super.getVelocityY());
+      break;
+    case 1:
+      if(timer==0)new Missile(10,40).addToWorld(world);
+    default:
+      println("GUHHHHHHH???????????");
+    }
+  }
+}
+
+class Missile extends FBox {
+  int mass = 0;
+  PVector direction;
+  
+  Missile(int high, int wide) {
+    super(high,wide);
   }
 }
 
@@ -358,7 +410,7 @@ void draw() {
       playerVec = new PVector(you.getX(),you.getY());
       camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
     }
-    println(keys);
+    println(camDir);
     keys = you.process(keys); //<>//
     for(Gif pic:tex)pic.update();
     world.step();
@@ -801,7 +853,7 @@ void makeChunk(int i,int j) {
   case 0x10:
     gnd = new FBox(128,128);
     gnd.setPosition(64,64);
-    gnd.setName("00");
+    gnd.setName("10");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
     if(map[map.length-1]=='2'&&texture!=-1){
