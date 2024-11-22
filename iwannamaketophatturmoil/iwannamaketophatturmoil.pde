@@ -8,8 +8,8 @@
 
 import fisica.*;
 
-class Gif extends PImage {
-  int frames = 0;
+class Gif extends PImage { //make custom loop points
+  int frames = 0;//also custom frame orders
   float currentFrame = 0;
   float interval = 0;
   PImage[] images;
@@ -78,6 +78,19 @@ class Gif extends PImage {
     super.updatePixels();
   }
   
+  void updatePlayer(float speed) {//special for player gif
+    if(images.length>1) {
+      currentFrame+=speed;
+    }
+    int frm = floor(currentFrame)%frames;
+    super.init(images[frm].width,images[frm].height,images[frm].format);
+    images[frm].loadPixels();
+    super.loadPixels();
+    arrayCopy(camDir?images[frm].pixels:flipImagePix(images[frm]),super.pixels);
+    images[frm].updatePixels();
+    super.updatePixels();
+  }
+  
   void reset() {//reset to frame 1
     if(images.length>1) {
       currentFrame=0;
@@ -108,7 +121,7 @@ class player extends FBox {
     super(32,64);
     health = HEALTH;
     java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
-    anim[1] = new Gif(2,2.0/60,"spr/kb",".png");
+    anim[1] = new Gif(3,3.0/60,"spr/kb",".png");
     super.attachImage(anim[0]);
     super.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
     super.setRotatable(false);
@@ -158,6 +171,7 @@ class player extends FBox {
       }
     }
     anim[animNum].updatePlayer();
+    super.attachImage((invince>frameCount)&&(frameCount%4>1)?new PImage(0,0,RGB):anim[animNum]);
     for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
     return keys;
   }
