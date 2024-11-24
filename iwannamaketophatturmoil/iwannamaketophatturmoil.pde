@@ -120,8 +120,8 @@ class player extends FBox {
   player(int HEALTH) {//placeholder for now
     super(32,64);
     health = HEALTH;
-    java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
-    anim[1] = new Gif(3,3.0/60,"spr/kb",".png");
+    java.util.Arrays.fill(anim, new Gif(1,2.0/60,"spr/r0",".png"));
+    anim[1] = new Gif(1,3.0/60,"spr/r0",".png");
     super.attachImage(anim[0]);
     super.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
     super.setRotatable(false);
@@ -152,16 +152,17 @@ class player extends FBox {
     if(stunned<=frameCount) {
       if(!((keys[0]>1)&&(keys[1])>1)) {
         if(keys[0]>1) {
+          //if(super.getVelocityX()>-200)super.addForce(-12000,0);
           super.setVelocity(-200,super.getVelocityY());
           animNum = 1;
           camDir = false;
-        }
-        if(keys[1]>1) {
+        } else if(keys[1]>1) {
+          //if(super.getVelocityX()<200)super.addForce(12000,0);
           super.setVelocity(200,super.getVelocityY());
           camDir = true;
           animNum = 1;
         } else {
-          super.addForce(-super.getVelocityX()/5,0);
+          super.addImpulse(-super.getVelocityX()/5,0);
         }
       }
       if(keys[2]>1&&keys[3]==0) {
@@ -390,11 +391,12 @@ boolean debug = false;
 String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map04.lvl"};
 byte[] map;
 String mapName;
-byte mapNum = 3;
+byte mapNum = 0;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
 boolean backgnd = true;
+boolean halfFPS = true;
 PFont lucid;
 PVector playerVec, camVec;
 float scl = 1;
@@ -424,17 +426,18 @@ void draw() {
       playerVec = new PVector(you.getX(),you.getY());
       camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
     }
-    println(camDir);
     keys = you.process(keys); //<>//
     for(Gif pic:tex)pic.update();
     world.step();
-    background(0xFF00FF);
     playerVec.set(you.getX(),you.getY());
     camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(you.getVelocityX()*30)+(camDir?50:-50),sqrt2(you.getVelocityY()*30))),0.05);
     scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
-    scale(scl);
-    translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
-    world.draw();
+    if(!(frameCount%2>0&&halfFPS)) {
+      background(0xFF00FF);
+      scale(scl);
+      translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
+      world.draw();
+    }
   } catch (Exception e) {
     blueDead(e);
     noLoop();
@@ -445,6 +448,8 @@ void makeLevel() {
   if(!(new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 1")||new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 2")))throw new RuntimeException("Ayo the map invalid");
   int lWidth = bi(map[map.length-32])+1;
   int lHeight = bi(map[map.length-31])+1;
+  tex = new Gif[255];
+  java.util.Arrays.fill(tex,new Gif());
   if(map[map.length-1]=='2')loadTextures();
   chunks = new FCompound[lWidth*lHeight];
   world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
@@ -890,14 +895,11 @@ void makeChunk(int i,int j) {
 }
 
 void loadTextures() {
-  //String[] texList = split(reverse(new String(subset(map,(map[map.length-32]+1)*(map[map.length-31]+1)*2,map.length-33-map[map.length-26]-((map[map.length-32]+1)*(map[map.length-31]+1)*2)))),(char)0);
   String[] texList = split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0);
-  tex = new Gif[255];
-  java.util.Arrays.fill(tex,new Gif());
   if(texList.length>=map[map.length-25]){
     texList = subset(texList,texList.length-map[map.length-25]);
     for(int i=0;i<map[map.length-25];i++) {
-      int gifLen = texList[i].getBytes()[0]&0xFF; //<>//
+      int gifLen = texList[i].getBytes()[0]&0xFFFFFFFF; //<>//
       if(gifLen>0) {
         String[] fileName = split(new String(subset(texList[i].getBytes(),2,texList[i].length()-2)),'.');
         tex[i] = new Gif(gifLen,mf(texList[i].getBytes()[1]),join(subset(fileName,0,fileName.length-1),"."),"."+fileName[fileName.length-1]);
@@ -956,43 +958,6 @@ void blueDead(Exception e) { //funny
   text("A problem has been detected and this application has been halted to prevent\nfurther problems from occuring.\n\nThis application has thrown a(n)\n"+e.toString()+"\nand halted itself.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing console if you are running this application from Processing.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+e.getMessage()+"\n\n***    "+e.getStackTrace()[0].toString(), 0, 24);
   e.printStackTrace();
 }
-
-//void processKeys() {
-//  ArrayList<FContact> touchings = player.getContacts();
-//  keys[3] = true;
-//  for(FContact bod:touchings) {
-//    int flags = 0;
-//    if(bod.getBody1()==player){
-//      String name = bod.getBody2().getName();
-//      flags = name!=null?unbinary(name):0;
-//      //println(bod.getBody2());
-//    } else {
-//      String name = bod.getBody1().getName();
-//      flags = name!=null?unbinary(name):0;
-//      //println(bod.getBody1());
-//    }
-//    //if(flags%0x2/1>0) bittest template
-//    if(flags%0x2/1>0)keys[3] = false;
-//    if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
-//  }
-//  if(debug)keys[3]=false;
-//  if(!(keys[0]&&keys[1])) {
-//    if(keys[0]) {
-//      player.setVelocity(-200,player.getVelocityY());
-//      camDir = false;
-//    }
-//    if(keys[1]) {
-//      player.setVelocity(200,player.getVelocityY());
-//      camDir = true;
-//    } else {
-//      player.addForce(-player.getVelocityX()/5,0);
-//    }
-//  }
-//  if(keys[2]&&!keys[3]) {
-//      keys[3] = true;
-//      player.setVelocity(player.getVelocityX(),-200);
-//  }
-//}
 
 void keyPressed() {
   switch(keyCode){
