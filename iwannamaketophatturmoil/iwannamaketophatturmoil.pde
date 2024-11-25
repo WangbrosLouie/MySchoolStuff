@@ -152,12 +152,12 @@ class player extends FBox {
     if(stunned<=frameCount) {
       if(!((keys[0]>1)&&(keys[1])>1)) {
         if(keys[0]>1) {
-          //if(super.getVelocityX()>-200)super.addForce(-12000,0);
+          if(super.getVelocityX()>-200)super.setVelocity(super.getVelocityX()-10,super.getVelocityY());//super.addForce(-5000,0);
           super.setVelocity(-200,super.getVelocityY());
           animNum = 1;
           camDir = false;
         } else if(keys[1]>1) {
-          //if(super.getVelocityX()<200)super.addForce(12000,0);
+          if(super.getVelocityX()<200)super.setVelocity(super.getVelocityX()+10,super.getVelocityY());//super.addForce(5000,0);
           super.setVelocity(200,super.getVelocityY());
           camDir = true;
           animNum = 1;
@@ -388,7 +388,8 @@ void settings() {
 
 boolean loading = true;
 boolean debug = false;
-String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map04.lvl"};
+//String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map04.lvl"};
+String[] maps = new String[]{"map00.lvl"};
 byte[] map;
 String mapName;
 byte mapNum = 0;
@@ -432,12 +433,18 @@ void draw() {
     playerVec.set(you.getX(),you.getY());
     camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(you.getVelocityX()*30)+(camDir?50:-50),sqrt2(you.getVelocityY()*30))),0.05);
     scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
+    scl*=3;
     if(!(frameCount%2>0&&halfFPS)) {
       background(0xFF00FF);
       scale(scl);
+      stroke(127,127);
+      strokeWeight(0.5);
       translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
       world.draw();
+      for(int i=0;i<15;i++)line(0,i*16,640,i*16);
+      for(int i=0;i<15;i++)line(i*16,0,i*16,640);
     }
+    scl/=3;
   } catch (Exception e) {
     blueDead(e);
     noLoop();
@@ -492,7 +499,7 @@ void makeChunk(int i,int j) {
     break;
   case 1:
     FBox gnd = new FBox(128,127);
-    gnd.setPosition(65,65.5);
+    gnd.setPosition(64.75,65.25);
     gnd.setName("00");
     FLine jmp = new FLine(1,1,129,1);
     jmp.setName("01");
@@ -516,7 +523,7 @@ void makeChunk(int i,int j) {
     break;
   case 2:
     gnd = new FBox(128,128);
-    gnd.setPosition(64,64);
+    gnd.setPosition(63.75,64.75);
     gnd.setName("00");
     if(map[map.length-1]=='2'&&texture!=-1){
       img = new FBox(128,128);

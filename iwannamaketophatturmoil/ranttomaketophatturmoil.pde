@@ -212,4 +212,26 @@ mean? im gonna make a title screen, but not only that i need a level format
 converter dang nyabbit its hard spamming the same keys in hxd to manually
 change the data and it should be easy enough to make. also its nice for
 level makers if they for some forsaken reason want to use my game engine.
+
+i think that i should probably have wrote down what the various level files
+are so ima do that now. map01 is the first one that i made and it was
+originally just a small little hill to test the slopes and the other blocks
+but i added more and more and now its this incredibly hard level that has
+one super hard part and the other parts are a cakewalk. as the level name
+suggests its a test map. map02 is the tutorial map. when i draw up the
+assets it will show you how to jump climb slopes do parkour yadda yadda yad
+also its called calibration because its a kitta game and robots get
+calibrated. its not too hard but still some parts are a little difficult
+like that half block climbing part. map03 is what it says on the map name
+its slopes slopes and more slopes. i probably used quisquillious wrongly
+in the name but i dont care. but the special part about this level is that
+it has a map type 2 variant with all sorts of textures both static and
+animated. it also has the zap trap chunk that hurts you. i havent really
+implemented health yet but it will come and when you die the level will
+reload so if your computer isnt really good and its a large level then
+better not die haha. map04 is a test of the terrains, namely the ice and
+bouncerubber(with its superbounce variant). this is the first level that
+i made with branching paths. and now the new level map00 its literally just
+one chunk i need this to test the visuals of the chunks because its a lot
+easier with one chunk than many.
 */
