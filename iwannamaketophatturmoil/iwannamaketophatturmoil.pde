@@ -8,6 +8,27 @@
 
 import fisica.*;
 
+boolean loading = true;
+boolean debug = false;
+String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map04.lvl"};
+//String[] maps = new String[]{"map00.lvl"};
+byte[] map;
+String mapName;
+byte mapNum = 3;
+Gif[] tex = new Gif[255];
+byte[] keys = new byte[13];
+boolean textures = true;
+boolean backgnd = true;
+boolean halfFPS = true;
+PFont lucid;
+PVector playerVec, camVec;
+float scl = 1;
+boolean camDir = true;
+FWorld world;
+player you;
+FCompound[] chunks;
+Gif bg;
+
 class Gif extends PImage { //make custom loop points
   int frames = 0;//also custom frame orders
   float currentFrame = 0;
@@ -120,8 +141,8 @@ class player extends FBox {
   player(int HEALTH) {//placeholder for now
     super(32,64);
     health = HEALTH;
-    java.util.Arrays.fill(anim, new Gif(1,2.0/60,"spr/r0",".png"));
-    anim[1] = new Gif(1,3.0/60,"spr/r0",".png");
+    java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
+    anim[1] = new Gif(3,5.0/60,"spr/kb",".png");
     super.attachImage(anim[0]);
     super.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
     super.setRotatable(false);
@@ -171,7 +192,13 @@ class player extends FBox {
           animNum = 2;
       }
     }
-    anim[animNum].updatePlayer();
+    switch(animNum) {
+    case 1:
+      anim[animNum].updatePlayer(abs(super.getVelocityX())/2500);
+      break;
+    default:
+      anim[animNum].updatePlayer();
+    }
     super.attachImage((invince>frameCount)&&(frameCount%4>1)?new PImage(0,0,RGB):anim[animNum]);
     for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
     return keys;
@@ -386,27 +413,6 @@ void settings() {
   size(640,480);
 }
 
-boolean loading = true;
-boolean debug = false;
-//String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map04.lvl"};
-String[] maps = new String[]{"map00.lvl"};
-byte[] map;
-String mapName;
-byte mapNum = 0;
-Gif[] tex = new Gif[255];
-byte[] keys = new byte[13];
-boolean textures = true;
-boolean backgnd = true;
-boolean halfFPS = true;
-PFont lucid;
-PVector playerVec, camVec;
-float scl = 1;
-boolean camDir = true;
-FWorld world;
-player you;
-FCompound[] chunks;
-Gif bg;
-
 void setup() {
   loading = true;
   lucid = createFont("Lucida Console",14,false);
@@ -433,18 +439,17 @@ void draw() {
     playerVec.set(you.getX(),you.getY());
     camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(you.getVelocityX()*30)+(camDir?50:-50),sqrt2(you.getVelocityY()*30))),0.05);
     scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
-    scl*=3;
+    //scl*=6;
     if(!(frameCount%2>0&&halfFPS)) {
       background(0xFF00FF);
       scale(scl);
-      stroke(127,127);
-      strokeWeight(0.5);
+      //stroke(127,127);
+      //strokeWeight(0.5);
       translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
       world.draw();
-      for(int i=0;i<15;i++)line(0,i*16,640,i*16);
-      for(int i=0;i<15;i++)line(i*16,0,i*16,640);
+      //for(int i=0;i<15;i++)line(0,i*16,640,i*16);for(int i=0;i<15;i++)line(i*16,0,i*16,640);
     }
-    scl/=3;
+    //scl/=6;
   } catch (Exception e) {
     blueDead(e);
     noLoop();
@@ -480,6 +485,7 @@ void makeChunk(int i,int j) {
   int chunk = j*lWidth+i;
   byte ID = map[map[map.length-1]=='1'?chunk:chunk*2];
   int texture = map[map.length-1]=='1'||!textures?-1:map[chunk*2+1]-1;
+  println(texture);
   chunks[chunk] = new FCompound();
   switch(ID){
   case 0:
@@ -523,7 +529,7 @@ void makeChunk(int i,int j) {
     break;
   case 2:
     gnd = new FBox(128,128);
-    gnd.setPosition(63.75,64.75);
+    gnd.setPosition(63.75,63.75);
     gnd.setName("00");
     if(map[map.length-1]=='2'&&texture!=-1){
       img = new FBox(128,128);
@@ -597,7 +603,7 @@ void makeChunk(int i,int j) {
     break;
   case 5:
     gnd = new FBox(128,63);
-    gnd.setPosition(65,97.5);
+    gnd.setPosition(64.75,97.25);
     gnd.setName("00");
     jmp = new FLine(1,65,129,65);
     jmp.setName("01");
@@ -621,7 +627,7 @@ void makeChunk(int i,int j) {
     break;
   case 6:
     gnd = new FBox(128,64);
-    gnd.setPosition(64,112);
+    gnd.setPosition(63.75,111.75);
     gnd.setName("00");
     if(map[map.length-1]=='2'&&texture!=-1){
       img = new FBox(128,128);
@@ -641,7 +647,7 @@ void makeChunk(int i,int j) {
     break;
   case 7:
     gnd = new FBox(128,127);
-    gnd.setPosition(65,65.5);
+    gnd.setPosition(64.75,65.25);
     gnd.setName("00");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -668,7 +674,7 @@ void makeChunk(int i,int j) {
     break;
   case 8:
     gnd = new FBox(128,128);
-    gnd.setPosition(64,64);
+    gnd.setPosition(63.75,63.75);
     gnd.setName("00");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -752,7 +758,7 @@ void makeChunk(int i,int j) {
     break;
   case 0xB:
     gnd = new FBox(128,63);
-    gnd.setPosition(65,97.5);
+    gnd.setPosition(64.75,97.25);
     gnd.setName("00");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -779,7 +785,7 @@ void makeChunk(int i,int j) {
     break;
   case 0xC:
     gnd = new FBox(128,64);
-    gnd.setPosition(64,112);
+    gnd.setPosition(63.75,111.75);
     gnd.setName("00");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -801,7 +807,7 @@ void makeChunk(int i,int j) {
     break;
   case 0xD:
     gnd = new FBox(128,127);
-    gnd.setPosition(65,65.5);
+    gnd.setPosition(64.75,65.25);
     gnd.setName("00");
     gnd.setFillColor(0xFF000000);
     gnd.setRestitution(3);
@@ -828,7 +834,7 @@ void makeChunk(int i,int j) {
     break;
   case 0xE:
     gnd = new FBox(128,127);
-    gnd.setPosition(65,65.5);
+    gnd.setPosition(64.75,65.25);
     gnd.setName("00");
     gnd.setFillColor(0xFF3F009F);
     gnd.setRestitution(50);
@@ -856,7 +862,7 @@ void makeChunk(int i,int j) {
   case 0xF:
     chunks[chunk] = new FCompound();
     gnd = new FBox(128,128);
-    gnd.setPosition(64,64);
+    gnd.setPosition(63.75,63.75);
     gnd.setName("100");
     gnd.setSensor(true);
     gnd.setFillColor(0x7F3FFF3F);
@@ -878,7 +884,7 @@ void makeChunk(int i,int j) {
     break;
   case 0x10:
     gnd = new FBox(128,128);
-    gnd.setPosition(64,64);
+    gnd.setPosition(63.75,63.75);
     gnd.setName("10");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
