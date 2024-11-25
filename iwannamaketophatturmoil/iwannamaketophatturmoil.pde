@@ -6,6 +6,13 @@
 |* the sega genesis to processing *|
 \*_Date:_Nov.1,_2024______________*/
 
+/*to-do's (i aint usin github issues for this nonsense)
+Make File Type 3, with sections for level data headered by actual text
+  File Type 3 is also modular because it just has to check some bits to see whats in the file and it will look for the headers i hope or maybe i just make pointers
+Implement Enemy spawning
+  i hope testbot works
+*/
+
 import fisica.*;
 
 boolean loading = true;
@@ -27,6 +34,8 @@ boolean camDir = true;
 FWorld world;
 player you;
 FCompound[] chunks;
+ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+ArrayList<FBody> projs = new ArrayList<FBody>();//projectiles
 Gif bg;
 
 class Gif extends PImage { //make custom loop points
@@ -154,6 +163,7 @@ class player extends FBox {
     animNum = 0;
     ArrayList<FContact> touchings = super.getContacts();
     keys[3] = 1;
+    float oldSpeed = super.getVelocityX();
     for(FContact bod:touchings) {
       int flags = 0;
       if(bod.getBody1()==this){
@@ -165,11 +175,11 @@ class player extends FBox {
       }
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
-      if((flags%0x4/2>0)&&(invince<=frameCount)){animNum = 4;invince=frameCount+120;stunned=frameCount+30;}
+      if((flags%0x4/2>0)&&(invince<=frameCount)){hurt(1);}
       if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
     }
     if(debug)keys[3]=0;
-    if(abs(super.getVelocityX())>100)animNum = 3;
+    if(abs(super.getVelocityX())>100)animNum = 3;//if moving but no inputs
     if(stunned<=frameCount) {
       if(!((keys[0]>1)&&(keys[1])>1)) {
         if(keys[0]>1) {
@@ -194,7 +204,7 @@ class player extends FBox {
     }
     switch(animNum) {
     case 1:
-      anim[animNum].updatePlayer(abs(super.getVelocityX())/2500);
+      anim[animNum].updatePlayer(abs(oldSpeed)/1500);
       break;
     default:
       anim[animNum].updatePlayer();
@@ -202,6 +212,13 @@ class player extends FBox {
     super.attachImage((invince>frameCount)&&(frameCount%4>1)?new PImage(0,0,RGB):anim[animNum]);
     for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
     return keys;
+  }
+  
+  void hurt(int dmg) {
+    animNum = 4;
+    invince = frameCount + 120;
+    stunned = frameCount + 30;
+    health -= dmg;
   }
 }
 
@@ -219,12 +236,16 @@ class TestBot extends Enemy {
   int timer = 0;
   byte state = 0;
   
-  TestBot(int HEALTH, int TYPE) {
+  TestBot(int HEALTH, int TYPE, int x, int y) {
     super(HEALTH,32,32);
+    enemies.add(this);
     switch(TYPE) {
     default://type 0 in here too
       speed = 50;
     }
+    super.setPosition(x,y);
+    super.attachImage(loadImage("spr/t0.png"));
+    world.add(this);
   }
   
   void process() {
@@ -235,19 +256,36 @@ class TestBot extends Enemy {
       super.setVelocity(dir?50:-50,super.getVelocityY());
       break;
     case 1:
-      if(timer==0)new Missile(10,40).addToWorld(world);
+      if(timer==0)new Missile(10,40,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10).addToWorld(world);
     default:
       println("GUHHHHHHH???????????");
     }
+    if(super.isTouchingBody(you)) {
+      if(you.getY()<=super.getY()-(super.getHeight()/2)) {
+        destroy();
+      } else {
+        you.hurt(1);
+      }
+    }
+  }
+  
+  void destroy() {//just like roblox.
+    world.remove(this);
+    enemies.remove(this);
+    //then the garbage collects i hope
   }
 }
 
 class Missile extends FBox {
   int mass = 0;
   PVector direction;
+  float speed = 0;
   
-  Missile(int high, int wide) {
+  Missile(int high, int wide, PVector DIR, float SPEED) {
     super(high,wide);
+    super.setFill(0,0,255);
+    speed = SPEED;
+    direction = DIR.normalize().mult(SPEED);
   }
 }
 
@@ -470,12 +508,6 @@ void makeLevel() {
       makeChunk(i,j);
     }
   }
-  //player = new FBox(32,64);
-  //player.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
-  //player.setRotatable(false);
-  //player.setFriction(100);
-  //player.setName("00");
-  //player.attachImage(loadImage("spr/r0.png"));
   you = new player(3);
   world.add(you);
 }

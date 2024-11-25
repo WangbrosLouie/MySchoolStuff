@@ -65,7 +65,7 @@ Chunk Flag Bits (from right to left)
 0 = replenishes jump
 1 = hurts nyowch
 2 = go to next level
-3 = undecided
+3 = unstatic when touched
 4 = undecided
 5 = undecided
 6 = undecided
