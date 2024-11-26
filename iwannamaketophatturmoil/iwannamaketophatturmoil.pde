@@ -22,12 +22,12 @@ String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl",
 //String[] maps = new String[]{"map00.lvl"};
 byte[] map;
 String mapName;
-byte mapNum = 0;
+byte mapNum = 4;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
 boolean backgnd = true;
-boolean halfFPS =false;
+boolean halfFPS = false;
 PFont lucid;
 PVector playerVec, camVec;
 float scl = 1;
@@ -184,13 +184,13 @@ class player extends FBox {
     if(stunned<=frameCount) {
       if(!((keys[0]>1)&&(keys[1])>1)) {
         if(keys[0]>1) {
-          if(super.getVelocityX()>-200)super.setVelocity(super.getVelocityX()-10,super.getVelocityY());//super.addForce(-5000,0);
-          super.setVelocity(-200,super.getVelocityY());
+          if(super.getVelocityX()>200)super.setVelocity(super.getVelocityX()-100,super.getVelocityY());//super.addForce(-5000,0);
+          else super.setVelocity(-200,super.getVelocityY());
           animNum = 1;
           camDir = false;
         } else if(keys[1]>1) {
-          if(super.getVelocityX()<200)super.setVelocity(super.getVelocityX()+10,super.getVelocityY());//super.addForce(5000,0);
-          super.setVelocity(200,super.getVelocityY());
+          if(super.getVelocityX()<-200)super.setVelocity(super.getVelocityX()+100,super.getVelocityY());//super.addForce(5000,0);
+          else super.setVelocity(200,super.getVelocityY());
           camDir = true;
           animNum = 1;
         } else {
@@ -274,6 +274,7 @@ class TestBot extends Enemy {
       println(you.getY()+(you.getHeight()/2)-4,super.getY()-(super.getHeight()/2));
       if(you.getY()+(you.getHeight()/2)-4<=super.getY()-(super.getHeight()/2)) {
         destroy();
+        you.setVelocity(you.getVelocityX(),-abs(you.getVelocityY()));
       } else {
         you.hurt(1);
       }
@@ -492,7 +493,7 @@ void draw() {
     scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
     //scl*=6;
     if(!(frameCount%2>0&&halfFPS)) {
-      background(0xFF00FF);
+      background(200);
       scale(scl);
       //stroke(127,127);
       //strokeWeight(0.5);
@@ -508,30 +509,32 @@ void draw() {
 }
 
 void makeLevel() {
-  if(!(new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 1")||new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 2")))throw new RuntimeException("Ayo the map invalid");
+  if(!(new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 1")||new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 2")||new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 3")))throw new RuntimeException("Ayo the map invalid");
   int lWidth = bi(map[map.length-32])+1;
   int lHeight = bi(map[map.length-31])+1;
+  int pointer = 0;
   tex = new Gif[255];
   java.util.Arrays.fill(tex,new Gif());
   if(map[map.length-1]=='2')loadTextures();
   chunks = new FCompound[lWidth*lHeight];
   world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
   world.setGravity(map[map.length-24]*10,map[map.length-23]*10);
-  for(int j=0;j<lHeight;j++){
-    for(int i=0;i<lWidth;i++) {
-      makeChunk(i,j);
-    }
-  }
   you = new player(3);
   world.add(you);
   new TestBot(1,1,640,480);
+  for(int j=0;j<lHeight;j++){
+    for(int i=0;i<lWidth;i++) {
+      pointer = makeChunk(i,j,pointer);
+    }
+  }
 }
 
-void makeChunk(int i,int j) {
+int makeChunk(int i,int j, int p) {
   int lWidth = bi(map[map.length-32])+1;
-  int chunk = j*lWidth+i;
+  int chunk = map[map.length-1]=='3'?p:j*lWidth+i;
   byte ID = map[map[map.length-1]=='1'?chunk:chunk*2];
   int texture = map[map.length-1]=='1'||!textures?-1:map[chunk*2+1]-1;
+  p+=2;
   chunks[chunk] = new FCompound();
   switch(ID){
   case 0:
@@ -551,7 +554,7 @@ void makeChunk(int i,int j) {
     break;
   case 1:
     FBox gnd = new FBox(128,127);
-    gnd.setPosition(64.75,65.25);
+    gnd.setPosition(65,65.5);
     gnd.setName("00");
     FLine jmp = new FLine(1,1,129,1);
     jmp.setName("01");
@@ -575,7 +578,7 @@ void makeChunk(int i,int j) {
     break;
   case 2:
     gnd = new FBox(128,128);
-    gnd.setPosition(63.75,63.75);
+    gnd.setPosition(64,64);
     gnd.setName("00");
     if(map[map.length-1]=='2'&&texture!=-1){
       img = new FBox(128,128);
@@ -649,7 +652,7 @@ void makeChunk(int i,int j) {
     break;
   case 5:
     gnd = new FBox(128,63);
-    gnd.setPosition(64.75,97.25);
+    gnd.setPosition(65,97.5);
     gnd.setName("00");
     jmp = new FLine(1,65,129,65);
     jmp.setName("01");
@@ -673,7 +676,7 @@ void makeChunk(int i,int j) {
     break;
   case 6:
     gnd = new FBox(128,64);
-    gnd.setPosition(63.75,111.75);
+    gnd.setPosition(64,112);
     gnd.setName("00");
     if(map[map.length-1]=='2'&&texture!=-1){
       img = new FBox(128,128);
@@ -693,7 +696,7 @@ void makeChunk(int i,int j) {
     break;
   case 7:
     gnd = new FBox(128,127);
-    gnd.setPosition(64.75,65.25);
+    gnd.setPosition(65,65.5);
     gnd.setName("00");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -720,7 +723,7 @@ void makeChunk(int i,int j) {
     break;
   case 8:
     gnd = new FBox(128,128);
-    gnd.setPosition(63.75,63.75);
+    gnd.setPosition(64,64);
     gnd.setName("00");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -804,7 +807,7 @@ void makeChunk(int i,int j) {
     break;
   case 0xB:
     gnd = new FBox(128,63);
-    gnd.setPosition(64.75,97.25);
+    gnd.setPosition(65,97.5);
     gnd.setName("00");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -831,7 +834,7 @@ void makeChunk(int i,int j) {
     break;
   case 0xC:
     gnd = new FBox(128,64);
-    gnd.setPosition(63.75,111.75);
+    gnd.setPosition(64,112);
     gnd.setName("00");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -853,7 +856,7 @@ void makeChunk(int i,int j) {
     break;
   case 0xD:
     gnd = new FBox(128,127);
-    gnd.setPosition(64.75,65.25);
+    gnd.setPosition(65,65.5);
     gnd.setName("00");
     gnd.setFillColor(0xFF000000);
     gnd.setRestitution(3);
@@ -880,7 +883,7 @@ void makeChunk(int i,int j) {
     break;
   case 0xE:
     gnd = new FBox(128,127);
-    gnd.setPosition(64.75,65.25);
+    gnd.setPosition(65,65.5);
     gnd.setName("00");
     gnd.setFillColor(0xFF3F009F);
     gnd.setRestitution(50);
@@ -908,7 +911,7 @@ void makeChunk(int i,int j) {
   case 0xF:
     chunks[chunk] = new FCompound();
     gnd = new FBox(128,128);
-    gnd.setPosition(63.75,63.75);
+    gnd.setPosition(64,64);
     gnd.setName("100");
     gnd.setSensor(true);
     gnd.setFillColor(0x7F3FFF3F);
@@ -930,7 +933,7 @@ void makeChunk(int i,int j) {
     break;
   case 0x10:
     gnd = new FBox(128,128);
-    gnd.setPosition(63.75,63.75);
+    gnd.setPosition(64,64);
     gnd.setName("10");
     gnd.setFillColor(0xFFAFAFFF);
     gnd.setFriction(0);
@@ -951,6 +954,7 @@ void makeChunk(int i,int j) {
     world.add(chunks[chunk]);
     break;
   }
+  return p;
 }
 
 void loadTextures() {

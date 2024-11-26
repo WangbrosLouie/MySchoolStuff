@@ -18,6 +18,7 @@ of the engine. This document may be behind or ahead of the engine.
 -Reference
 
     /-level data format-/
+--Types 1 and 2
   A valid level file is made of 5 parts:
 The layout data - the chunk layout of the level
 The enemy data - locations, types, to be implemented later
@@ -28,6 +29,7 @@ The footer - the string "Tophat Turmoil " and the file type
 only types 1 and 2. Type 1 is smaller, but it does not support textures.
 Type 2 is roughly double the size of Type 1, but supports up to 255 unique
 animated(or static)textures for the chunks.
+(in hindsight since all of the levels are currently <1kb use Type 2)
   The plaintext portion is where all of the names go. For Type 1, only the
 name is stored here. For Type 2, the textures precede the level name.
 The textures are formatted as: 00 FC SP PP..PP
@@ -39,6 +41,17 @@ should be null.
   The level data uses 1 byte per chunk, or 2 bytes for chunk and texture if
 using Type 2. The chunk codes can be found in reference, and the texture
 number is indexed at 1, as 00 is used for no texture.
+--Type 3
+Layout: Chunks, Textures, Name, Settings
+  This file type is the extended file type. It will support all of the
+features of the engine. However, all of the features are specified in the
+same file segment so it will be harder to edit, until I make a level editor
+which probably won't happen.
+  The first segment is the chunks. The layout of the level is specified
+here, as well as any chunk extensions, like textures, triggers and more.
+For a single chunk, you need to specify the chunk type, and the texture.
+After that comes the extensions. They will be specified by a byte, shown
+in reference.
 
     /-reference-/
 Chunk IDs
@@ -67,7 +80,7 @@ Chunk Flag Bits (from right to left)
 1 = hurts nyowch
 2 = go to next level
 3 = unstatic when touched
-4 = undecided
+4 = teleports
 5 = undecided
 6 = undecided
 7 = undecided
@@ -83,4 +96,10 @@ Level Parameter Bytes
 7 = Number of Custom Textures
 8 = Gravity X * 2 (signed)
 9 = Gravity Y * 2 (signed)
+
+Chunk Extensions
+00 = End of Chunk
+01 = Chunk Flag Byte +1 byte chunkflags
+02 = Speech Trigger +1 byte speechpart
+03 = Teleport Location +4 bytes X&Y Position
 */
