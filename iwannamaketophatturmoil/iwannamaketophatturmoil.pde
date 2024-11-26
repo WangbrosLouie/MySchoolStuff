@@ -9,8 +9,9 @@
 /*to-do's (i aint usin github issues for this nonsense)
 Make File Type 3, with sections for level data headered by actual text
   File Type 3 is also modular because it just has to check some bits to see whats in the file and it will look for the headers i hope or maybe i just make pointers
-Implement Enemy spawning
-  i hope testbot works
+  Probably have a file location pointer that advances as the file is read and search for the first occurence of a header after whatever data so that that combo of bytes can be used in actual level data
+Make Enemy Data in level files
+Finish Missiles
 */
 
 import fisica.*;
@@ -21,12 +22,12 @@ String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl",
 //String[] maps = new String[]{"map00.lvl"};
 byte[] map;
 String mapName;
-byte mapNum = 3;
+byte mapNum = 0;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
 boolean backgnd = true;
-boolean halfFPS = true;
+boolean halfFPS =false;
 PFont lucid;
 PVector playerVec, camVec;
 float scl = 1;
@@ -175,7 +176,7 @@ class player extends FBox {
       }
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
-      if((flags%0x4/2>0)&&(invince<=frameCount)){hurt(1);}
+      if((flags%0x4/2>0)){hurt(1);}
       if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
     }
     if(debug)keys[3]=0;
@@ -215,10 +216,12 @@ class player extends FBox {
   }
   
   void hurt(int dmg) {
-    animNum = 4;
-    invince = frameCount + 120;
-    stunned = frameCount + 30;
-    health -= dmg;
+    if(invince<=frameCount) {
+      animNum = 4;
+      invince = frameCount + 120;
+      stunned = frameCount + 30;
+      health -= dmg;
+    }
   }
 }
 
@@ -226,7 +229,12 @@ class Enemy extends FBox {//dont use please use the subclasses
   int health = 0;
   Enemy(int HEALTH, int high, int wide) {
     super(high,wide);
+    super.setRotatable(false);
     health = HEALTH;
+  }
+  
+  void process() {
+    println("bro you forgot to make a process() for this enemy");
   }
 }
 
@@ -250,18 +258,21 @@ class TestBot extends Enemy {
   
   void process() {
     timer++;
-    if(random(0,500)>timer)state=(byte)(state++%2);
+    if(random(0,500)<timer){state=(byte)((state+1)%2);timer=0;}
     switch(state) {
     case 0:
       super.setVelocity(dir?50:-50,super.getVelocityY());
       break;
     case 1:
-      if(timer==0)new Missile(10,40,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10).addToWorld(world);
+      if(timer==0)new Missile(10,40,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10,0).addToWorld(world);
+      dir = !dir;
+      break;
     default:
       println("GUHHHHHHH???????????");
     }
     if(super.isTouchingBody(you)) {
-      if(you.getY()<=super.getY()-(super.getHeight()/2)) {
+      println(you.getY()+(you.getHeight()/2)-4,super.getY()-(super.getHeight()/2));
+      if(you.getY()+(you.getHeight()/2)-4<=super.getY()-(super.getHeight()/2)) {
         destroy();
       } else {
         you.hurt(1);
@@ -281,7 +292,7 @@ class Missile extends FBox {
   PVector direction;
   float speed = 0;
   
-  Missile(int high, int wide, PVector DIR, float SPEED) {
+  Missile(int high, int wide, PVector DIR, float SPEED, float MASS) {
     super(high,wide);
     super.setFill(0,0,255);
     speed = SPEED;
@@ -448,10 +459,11 @@ class Button {
 }
 
 void settings() {
-  size(640,480);
+  size(640,480,P2D);//holy nya why havent i used p2d before
 }
 
 void setup() {
+  //surface.setResizable(true);
   loading = true;
   lucid = createFont("Lucida Console",14,false);
   Fisica.init(this);
@@ -472,6 +484,7 @@ void draw() {
       camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
     }
     keys = you.process(keys); //<>//
+    for(int i=0;i<enemies.size();i++)enemies.get(i).process();
     for(Gif pic:tex)pic.update();
     world.step();
     playerVec.set(you.getX(),you.getY());
@@ -503,6 +516,7 @@ void makeLevel() {
   if(map[map.length-1]=='2')loadTextures();
   chunks = new FCompound[lWidth*lHeight];
   world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
+  world.setGravity(map[map.length-24]*10,map[map.length-23]*10);
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
       makeChunk(i,j);
@@ -510,6 +524,7 @@ void makeLevel() {
   }
   you = new player(3);
   world.add(you);
+  new TestBot(1,1,640,480);
 }
 
 void makeChunk(int i,int j) {
@@ -517,7 +532,6 @@ void makeChunk(int i,int j) {
   int chunk = j*lWidth+i;
   byte ID = map[map[map.length-1]=='1'?chunk:chunk*2];
   int texture = map[map.length-1]=='1'||!textures?-1:map[chunk*2+1]-1;
-  println(texture);
   chunks[chunk] = new FCompound();
   switch(ID){
   case 0:

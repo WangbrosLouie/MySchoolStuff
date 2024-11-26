@@ -234,4 +234,23 @@ bouncerubber(with its superbounce variant). this is the first level that
 i made with branching paths. and now the new level map00 its literally just
 one chunk i need this to test the visuals of the chunks because its a lot
 easier with one chunk than many.
+
+i have done it. i have practically made a goomba. now i just need to draw
+up some sprites for ol' testbot and add in missiles and i have testbot from
+tophat turmoil the roblox one. testbot is only supposed to be a test, but
+now that i think about it it kinda fits evyles whole "incompetent villain"
+identity, using test robots for world domination. evyle at his finest.
+anyways i really have to start workin on the christmas demo of tophat
+turmoil. i literally have not thought of what the level will be like until
+today.(well, at least in detail.)so basically, snowballer invites rhythmguy
+and speedy to a winter party because they all like parties i guess and they
+have to prove themselves worthy by defeating a bunch of snow monsters that
+snowballer made. this one canonically takes place after tt1 but before tt2
+so not many other characters are present. only rg and speedy will be
+playable, and the other characters are bassblaster, snowballer, [name TBD],
+the twins and that's it. im really thinkin of callin [name TBD] artemis but
+i dont want to break the whole "name describes class" thing. but then i
+guess the twins' names dont follow that rule, and neither does darkitta.
+so idk. anyways i hope to finish the christmas demo before christmas. which
+means i gotta grind on it now.
 */

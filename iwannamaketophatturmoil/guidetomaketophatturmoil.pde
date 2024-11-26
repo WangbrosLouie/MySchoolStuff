@@ -10,16 +10,17 @@ am to write a very good game engine deserving of my game.
 supposed to hold that I am making an effort to write neatly and with proper
 English conventions.
 
-NOTE: Document is subject to change, and may not be accurate as the engine
-is developed. This document may be behind or ahead of the engine.
+NOTE: Document is subject to change, and may not reflect the current state
+of the engine. This document may be behind or ahead of the engine.
 
     /-contents-/
 -Level Data Format
 -Reference
 
     /-level data format-/
-  A valid level file is made of 4 parts:
-The level data - the layout of the level
+  A valid level file is made of 5 parts:
+The layout data - the chunk layout of the level
+The enemy data - locations, types, to be implemented later
 The plaintext portion - file names for textures and the level name
 The parameter bytes - level settings (listed in reference)
 The footer - the string "Tophat Turmoil " and the file type
@@ -80,4 +81,6 @@ Level Parameter Bytes
 5 = Player Spawn Y (Lower Byte)
 6 = Level Name Length - 1
 7 = Number of Custom Textures
+8 = Gravity X * 2 (signed)
+9 = Gravity Y * 2 (signed)
 */
