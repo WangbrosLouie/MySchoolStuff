@@ -96,6 +96,12 @@ Level Parameter Bytes
 7 = Number of Custom Textures
 8 = Gravity X * 2 (signed)
 9 = Gravity Y * 2 (signed)
+F = Data Segments (Type 3)
+
+Data Segment Bits (from right to left)
+0 = Layout Data (required)
+1 = Enemies
+2 = Texture Paths (required for textures)
 
 Chunk Extensions
 00 = End of Chunk

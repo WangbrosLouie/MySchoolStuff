@@ -18,11 +18,11 @@ import fisica.*;
 
 boolean loading = true;
 boolean debug = false;
-String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map04.lvl"};
+String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map03ext.lvl","map04.lvl"};
 //String[] maps = new String[]{"map00.lvl"};
-byte[] map;
+byte[] mapData;
 String mapName;
-byte mapNum = 4;
+byte mapNum = 3;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -154,7 +154,7 @@ class player extends FBox {
     java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
     anim[1] = new Gif(3,5.0/60,"spr/kb",".png");
     super.attachImage(anim[0]);
-    super.setPosition(256*bi(map[map.length-30])+bi(map[map.length-29]),256*bi(map[map.length-28])+bi(map[map.length-27]));
+    super.setPosition(256*bi(mapData[mapData.length-30])+bi(mapData[mapData.length-29]),256*bi(mapData[mapData.length-28])+bi(mapData[mapData.length-27]));
     super.setRotatable(false);
     super.setFriction(100);
     super.setName("00");
@@ -477,8 +477,8 @@ void draw() {
     if(loading){
       loading = false;
       println(mapNum,maps.length);
-      map = loadBytes(maps[mapNum%maps.length]);
-      mapName = tostring(char(subset(map,map.length-33-map[map.length-26],map[map.length-26]+1)));
+      mapData = loadBytes(maps[mapNum%maps.length]);
+      mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
       println(mapName);
       makeLevel();
       playerVec = new PVector(you.getX(),you.getY());
@@ -509,19 +509,35 @@ void draw() {
 }
 
 void makeLevel() {
-  if(!(new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 1")||new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 2")||new String(subset(map,map.length-16,16)).equals("Tophat Turmoil 3")))throw new RuntimeException("Ayo the map invalid");
-  int lWidth = bi(map[map.length-32])+1;
-  int lHeight = bi(map[map.length-31])+1;
+  String fileType = new String(subset(mapData,mapData.length-16,16));
+  if(!(fileType.equals("Tophat Turmoil 1")||fileType.equals("Tophat Turmoil 2")||fileType.equals("Tophat Turmoil 3")))throw new RuntimeException("Ayo the map invalid");
+  int lWidth = bi(mapData[mapData.length-32])+1;
+  int lHeight = bi(mapData[mapData.length-31])+1;
+  byte[] map = new byte[0];
+  String[] texList = new String[0];
   int p = 0;
   tex = new Gif[255];
   java.util.Arrays.fill(tex,new Gif());
-  if(map[map.length-1]=='2')loadTextures();
+  if(fileType.getBytes()[15]=='3') {
+    p = new String(mapData).indexOf("Map Layout");
+    if(p==-1)throw new RuntimeException("Ayo the map invalid");
+    map = subset(mapData,p+10,lWidth*lHeight);
+    mapData = subset(mapData,p+10+(lWidth*lHeight));
+    p = new String(mapData).indexOf("Enemies");
+    p += makeEnemies(int(subset(mapData,p+10,lWidth*lHeight)))+10;
+    mapData = subset(mapData,p);
+    p = new String(mapData).indexOf("Textures");
+    texList = split(new String(subset(mapData,p+7,mapData.length-33-mapData[mapData.length-26])),(char)0);
+    p = loadTextures(texList)+8;
+    mapData = subset(mapData,p);
+  } else {
+    map = mapData;
+    texList = split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0);
+    if(fileType.getBytes()[15]!='1'){loadTextures(texList);makeEnemies(int(subset(map,lWidth*lHeight)));}
+  }
   chunks = new FCompound[lWidth*lHeight];
   world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
-  world.setGravity(map[map.length-24]*10,map[map.length-23]*10);
-  you = new player(3);
-  world.add(you);
-  new TestBot(1,1,640,480);
+  world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
       int chunk = map[map.length-1]=='3'?p:j*lWidth+i;
@@ -949,14 +965,35 @@ void makeLevel() {
       }
     }
   }
+  you = new player(3);
+  world.add(you);
+  new TestBot(1,1,640,480);
 }
 
-void loadTextures() {
-  String[] texList = split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0);
-  if(texList.length>=map[map.length-25]){
-    texList = subset(texList,texList.length-map[map.length-25]);
-    for(int i=0;i<map[map.length-25];i++) {
+int makeEnemies(int[] bads) {
+  for(int i:bads)i=i&0xFFFFFFFF;
+  int p = 0;
+  boolean finish = false;
+  while(!finish) {
+    switch(bads[p]) {
+    case 1:
+      new TestBot(bads[p+1],bads[p+2],bads[p+4]*256+bads[p+3],bads[p+6]*256+bads[p+5]);
+      p+=7;
+      break;
+    default: //includes 00 which is finished
+      finish = true;
+    }
+  }
+  return p;
+}
+
+int loadTextures(String[] texList) {
+  int p = 0;
+  if(texList.length>=mapData[mapData.length-25]){
+    texList = subset(texList,texList.length-mapData[mapData.length-25]);
+    for(int i=0;i<mapData[mapData.length-25];i++) {
       int gifLen = texList[i].getBytes()[0]&0xFFFFFFFF; //<>//
+      p+=texList[i].length();
       if(gifLen>0) {
         String[] fileName = split(new String(subset(texList[i].getBytes(),2,texList[i].length()-2)),'.');
         tex[i] = new Gif(gifLen,mf(texList[i].getBytes()[1]),join(subset(fileName,0,fileName.length-1),"."),"."+fileName[fileName.length-1]);
@@ -966,6 +1003,7 @@ void loadTextures() {
       }
     }
   }
+  return p;
 }
 
 String tostring(char[] chars) { //oh lua how i wish i were programming in thy scrypt
