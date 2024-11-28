@@ -15,6 +15,10 @@ Finish Missiles
 */
 
 import fisica.*;
+import processing.sound.*;
+import net.java.games.input.*;
+import org.gamecontrolplus.*;
+import org.gamecontrolplus.gui.*;
 
 boolean loading = true;
 boolean debug = false;
@@ -38,6 +42,11 @@ FCompound[] chunks;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<FBody> projs = new ArrayList<FBody>();//projectiles
 Gif bg;
+
+ControlIO CtrlIO;
+ControlDevice N64;
+ControlHat DPad;
+ControlButton A, B, L, R;
 
 class Gif extends PImage { //make custom loop points
   int frames = 0;//also custom frame orders
@@ -483,6 +492,19 @@ void draw() {
       makeLevel();
       playerVec = new PVector(you.getX(),you.getY());
       camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
+    CtrlIO = ControlIO.getInstance(this);
+    ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
+    if(Controllers.length>3) {
+      N64 = Controllers[2];
+      N64.open();
+      A = N64.getButton(2);
+      B = N64.getButton(3);
+      L = N64.getButton(7);
+      R = N64.getButton(8);
+      DPad = N64.getHat(0);
+      A.plug("APressed",ControlIO.ON_PRESS);
+      A.plug("AReleased",ControlIO.ON_RELEASE);
+    }
     }
     keys = you.process(keys); //<>//
     for(int i=0;i<enemies.size();i++)enemies.get(i).process();
@@ -509,35 +531,49 @@ void draw() {
 }
 
 void makeLevel() {
-  String fileType = new String(subset(mapData,mapData.length-16,16));
-  if(!(fileType.equals("Tophat Turmoil 1")||fileType.equals("Tophat Turmoil 2")||fileType.equals("Tophat Turmoil 3")))throw new RuntimeException("Ayo the map invalid");
+  String fileFoot = new String(subset(mapData,mapData.length-16,15));
+  if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
+  char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
   int lWidth = bi(mapData[mapData.length-32])+1;
   int lHeight = bi(mapData[mapData.length-31])+1;
   byte[] map = new byte[0];
-  String[] texList = new String[0];
   int p = 0;
   tex = new Gif[255];
   java.util.Arrays.fill(tex,new Gif());
-  if(fileType.getBytes()[15]=='3') {
-    p = new String(mapData).indexOf("Map Layout");
-    if(p==-1)throw new RuntimeException("Ayo the map invalid");
-    map = subset(mapData,p+10,lWidth*lHeight);
-    mapData = subset(mapData,p+10+(lWidth*lHeight));
-    p = new String(mapData).indexOf("Enemies");
-    p += makeEnemies(int(subset(mapData,p+10,lWidth*lHeight)))+10;
-    mapData = subset(mapData,p);
-    p = new String(mapData).indexOf("Textures");
-    texList = split(new String(subset(mapData,p+7,mapData.length-33-mapData[mapData.length-26])),(char)0);
-    p = loadTextures(texList)+8;
-    mapData = subset(mapData,p);
+  if(fileType=='3') {
+    int contents = mapData[mapData.length-17]&0xFFFFFFFF;
+    while(contents!=0) {
+      p = 2147483647;//long code gooooo
+      byte nextSeg = 0;
+      int temp = 0;
+      String[] headers = {"Textures","Map Layout","Enemies"};
+      for(byte i=0;i<headers.length;i++) {
+        if(contents%pow(2,i+1)/pow(2,i)>0){temp = new String(mapData).indexOf(headers[i]);if(temp<p&&temp!=-1){p=temp;nextSeg=(byte)(i+1);}}
+      }
+      //if(contents%0x2>0){temp = new String(mapData).indexOf("Textures");if(temp<p&&temp!=-1){p=temp;nextSeg=1;}}
+      //if(contents%0x4/0x2>0){temp = new String(mapData).indexOf("Map Layout");if(temp<p&&temp!=-1){p=temp;nextSeg=2;}}
+      //if(contents%0x8/0x4>0){temp = new String(mapData).indexOf("Enemies");if(temp<p&&temp!=-1){p=temp;nextSeg=3;}}
+      switch(nextSeg) {
+      case 0:
+        p = loadTextures(split(new String(subset(mapData,p+7,mapData.length-33-mapData[mapData.length-26])),(char)0))+8;
+        break;
+      default:
+        throw new RuntimeException("Invalid Next Level Segment");
+      }
+      mapData = subset(mapData,p);
+      mapData = subset(mapData,p+10+(lWidth*lHeight));
+      p = new String(mapData).indexOf("Enemies");
+      p += makeEnemies(int(subset(mapData,p+10,lWidth*lHeight)))+10;
+      mapData = subset(mapData,p);
+    }
   } else {
     map = mapData;
-    texList = split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0);
-    if(fileType.getBytes()[15]!='1'){loadTextures(texList);makeEnemies(int(subset(map,lWidth*lHeight)));}
+    if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeEnemies(int(subset(map,lWidth*lHeight)));}
   }
   chunks = new FCompound[lWidth*lHeight];
   world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
   world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
+  //split this up again cause oh nya i am not makin code goop
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
       int chunk = map[map.length-1]=='3'?p:j*lWidth+i;
@@ -1081,4 +1117,12 @@ void keyReleased() {
     keys[2] = 0;
     break;
   }
+}
+
+void APressed(){if(keys[2]==0)keys[2]=1;}
+void AReleased(){keys[2]=0;}
+void HPressed(float x) {
+  if(x<0){if(keys[0]==0)keys[0]=1;keys[1]=0;}
+  if(x==0){keys[0]=0;keys[1]=0;}
+  if(x>0){keys[0]=0;if(keys[1]==0)keys[1]=1;}
 }

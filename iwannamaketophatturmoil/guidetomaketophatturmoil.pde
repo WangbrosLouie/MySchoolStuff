@@ -42,11 +42,23 @@ should be null.
 using Type 2. The chunk codes can be found in reference, and the texture
 number is indexed at 1, as 00 is used for no texture.
 --Type 3
-Layout: Chunks, Textures, Name, Settings
+Layout: Variable
   This file type is the extended file type. It will support all of the
 features of the engine. However, all of the features are specified in the
 same file segment so it will be harder to edit, until I make a level editor
 which probably won't happen.
+  The segments must be specified with a header, followed by data. White
+space between segments will be ignored. Possible segments are:
+Level Layout ("Map Layout") - the chunks and their features
+Chunk Textures ("Textures") - the paths to the chunk textures
+Enemies ("Enemies") - Enemies
+  The segments in the file can come in any order. However, for chunk
+textures to work, you must specify the level chunks after the texture paths
+because the chunks will be loaded and textured before the textures are
+loaded. Also, the objects will be graphically layered in the order that
+they are specified in the file, as every object that gets added to the
+physics world will be on the topmost layer. There will be a foreground
+graphics segment to take advantage of this.
   The first segment is the chunks. The layout of the level is specified
 here, as well as any chunk extensions, like textures, triggers and more.
 For a single chunk, you need to specify the chunk type, and the texture.
@@ -99,9 +111,9 @@ Level Parameter Bytes
 F = Data Segments (Type 3)
 
 Data Segment Bits (from right to left)
-0 = Layout Data (required)
-1 = Enemies
-2 = Texture Paths (required for textures)
+0 = Texture Paths (required for textures)
+1 = Layout Data (required)
+2 = Enemies
 
 Chunk Extensions
 00 = End of Chunk

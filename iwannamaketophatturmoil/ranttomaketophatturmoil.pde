@@ -253,4 +253,14 @@ i dont want to break the whole "name describes class" thing. but then i
 guess the twins' names dont follow that rule, and neither does darkitta.
 so idk. anyways i hope to finish the christmas demo before christmas. which
 means i gotta grind on it now.
+
+oh dear i dont think ima gonna finish the whole level before christmas. i
+got too much procrastination to do and my brain is melting more every day.
+i am just too disorganised. not even Kitta can save me at this point.
+and i think i know why. its because of HALF LIFE 2 WHY IS IT SO FUN
+ever since i got it on the last day of it being free, i have spent 21 hours
+total on just the first game. episode one i have spent roughly an hour on.
+but the achievements in half life 2 are so easy. i have 30/32 achievements
+already. all i gotta do is use the op radiator grav gun combo in ravenbrook
+and find every single lambda cache, which im obviously not going to do.
 */
