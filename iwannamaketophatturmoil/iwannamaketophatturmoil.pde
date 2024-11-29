@@ -540,6 +540,8 @@ void makeLevel() {
   int p = 0;
   tex = new Gif[255];
   java.util.Arrays.fill(tex,new Gif());
+  world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
+  world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
   if(fileType=='3') {
     int contents = mapData[mapData.length-17]&0xFFFFFFFF;
     while(contents!=0) {
@@ -557,450 +559,25 @@ void makeLevel() {
       case 0:
         p = loadTextures(split(new String(subset(mapData,p+7,mapData.length-33-mapData[mapData.length-26])),(char)0))+8;
         break;
+      case 1:
+        p = makeChunks(mapData,lWidth,lHeight,fileType)+10;
+        break;
+      case 2:
+        p += makeEnemies(int(subset(mapData,p+10,lWidth*lHeight)))+7;
+        break;
       default:
         throw new RuntimeException("Invalid Next Level Segment");
       }
       mapData = subset(mapData,p);
       mapData = subset(mapData,p+10+(lWidth*lHeight));
       p = new String(mapData).indexOf("Enemies");
-      p += makeEnemies(int(subset(mapData,p+10,lWidth*lHeight)))+10;
       mapData = subset(mapData,p);
     }
   } else {
     map = mapData;
-    if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeEnemies(int(subset(map,lWidth*lHeight)));}
+    if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeChunks(mapData,lWidth,lHeight,fileType);makeEnemies(int(subset(map,lWidth*lHeight)));}
   }
-  chunks = new FCompound[lWidth*lHeight];
-  world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
-  world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
   //split this up again cause oh nya i am not makin code goop
-  for(int j=0;j<lHeight;j++){
-    for(int i=0;i<lWidth;i++) {
-      int chunk = map[map.length-1]=='3'?p:j*lWidth+i;
-      byte ID = map[map[map.length-1]=='1'?chunk:chunk*2];
-      int texture = map[map.length-1]=='1'||!textures?-1:map[chunk*2+1]-1;
-      p+=2;
-      chunks[chunk] = new FCompound();
-      switch(ID){
-      case 0:
-        FBox img;
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-        }
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 1:
-        FBox gnd = new FBox(128,127);
-        gnd.setPosition(65,65.5);
-        gnd.setName("00");
-        FLine jmp = new FLine(1,1,129,1);
-        jmp.setName("01");
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i-1,128*j-1);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 2:
-        gnd = new FBox(128,128);
-        gnd.setPosition(64,64);
-        gnd.setName("00");
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 3:
-        FPoly slo = new FPoly();
-        slo.vertex(1,128);
-        slo.vertex(128,1);
-        slo.vertex(128,128);
-        slo.vertex(1,128);
-        slo.setName("00");
-        jmp = new FLine(0,128,127,1);
-        jmp.setName("01");
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          slo.setNoFill();
-          slo.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(slo);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 4:
-        slo = new FPoly();
-        slo.vertex(0,1);
-        slo.vertex(127,128);
-        slo.vertex(0,128);
-        slo.vertex(0,1);
-        slo.setName("00");
-        jmp = new FLine(1,1,128,128);
-        jmp.setName("01");
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          slo.setNoFill();
-          slo.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(slo);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 5:
-        gnd = new FBox(128,63);
-        gnd.setPosition(65,97.5);
-        gnd.setName("00");
-        jmp = new FLine(1,65,129,65);
-        jmp.setName("01");
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i-1,128*j-1);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 6:
-        gnd = new FBox(128,64);
-        gnd.setPosition(64,112);
-        gnd.setName("00");
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].setPosition(128*i,128*j-1);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 7:
-        gnd = new FBox(128,127);
-        gnd.setPosition(65,65.5);
-        gnd.setName("00");
-        gnd.setFillColor(0xFFAFAFFF);
-        gnd.setFriction(0);
-        jmp = new FLine(1,1,129,1);
-        jmp.setName("01");
-        jmp.setFriction(0);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i-1,128*j-1);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 8:
-        gnd = new FBox(128,128);
-        gnd.setPosition(64,64);
-        gnd.setName("00");
-        gnd.setFillColor(0xFFAFAFFF);
-        gnd.setFriction(0);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 9:
-        slo = new FPoly();
-        slo.vertex(1,128);
-        slo.vertex(128,1);
-        slo.vertex(128,128);
-        slo.vertex(1,128);
-        slo.setFriction(0);
-        slo.setName("00");
-        slo.setFillColor(0xFFAFAFFF);
-        slo.setFriction(0);
-        jmp = new FLine(0,128,127,1);
-        jmp.setName("01");
-        jmp.setFriction(0);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          slo.setNoFill();
-          slo.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(slo);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 0xA:
-        slo = new FPoly();
-        slo.vertex(0,1);
-        slo.vertex(127,128);
-        slo.vertex(0,128);
-        slo.vertex(0,1);
-        slo.setFriction(0);
-        slo.setName("00");
-        slo.setFillColor(0xFFAFAFFF);
-        slo.setFriction(0);
-        jmp = new FLine(1,1,128,128);
-        jmp.setName("01");
-        jmp.setFriction(0);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          slo.setNoFill();
-          slo.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(slo);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 0xB:
-        gnd = new FBox(128,63);
-        gnd.setPosition(65,97.5);
-        gnd.setName("00");
-        gnd.setFillColor(0xFFAFAFFF);
-        gnd.setFriction(0);
-        jmp = new FLine(1,65,129,65);
-        jmp.setName("01");
-        jmp.setFriction(0);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i-1,128*j-1);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 0xC:
-        gnd = new FBox(128,64);
-        gnd.setPosition(64,112);
-        gnd.setName("00");
-        gnd.setFillColor(0xFFAFAFFF);
-        gnd.setFriction(0);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 0xD:
-        gnd = new FBox(128,127);
-        gnd.setPosition(65,65.5);
-        gnd.setName("00");
-        gnd.setFillColor(0xFF000000);
-        gnd.setRestitution(3);
-        jmp = new FLine(1,1,129,1);
-        jmp.setName("01");
-        jmp.setRestitution(3);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i-1,128*j-1);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 0xE:
-        gnd = new FBox(128,127);
-        gnd.setPosition(65,65.5);
-        gnd.setName("00");
-        gnd.setFillColor(0xFF3F009F);
-        gnd.setRestitution(50);
-        jmp = new FLine(1,1,129,1);
-        jmp.setName("01");
-        jmp.setRestitution(50);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-          jmp.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].addBody(jmp);
-        chunks[chunk].setPosition(128*i-1,128*j-1);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 0xF:
-        chunks[chunk] = new FCompound();
-        gnd = new FBox(128,128);
-        gnd.setPosition(64,64);
-        gnd.setName("100");
-        gnd.setSensor(true);
-        gnd.setFillColor(0x7F3FFF3F);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      case 0x10:
-        gnd = new FBox(128,128);
-        gnd.setPosition(64,64);
-        gnd.setName("10");
-        gnd.setFillColor(0xFFAFAFFF);
-        gnd.setFriction(0);
-        if(map[map.length-1]=='2'&&texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("0");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-          gnd.setNoFill();
-          gnd.setNoStroke();
-        }
-        chunks[chunk].addBody(gnd);
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
-      }
-    }
-  }
   you = new player(3);
   world.add(you);
   new TestBot(1,1,640,480);
@@ -1036,6 +613,440 @@ int loadTextures(String[] texList) {
         tex[i].resizeGif(128,128);
       } else {
         tex[i] = new Gif();
+      }
+    }
+  }
+  return p;
+}
+
+int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
+  int p = 0;
+  chunks = new FCompound[lWidth*lHeight];
+  for(int j=0;j<lHeight;j++){
+    for(int i=0;i<lWidth;i++) {
+      int chunk = fileType=='3'?p:j*lWidth+i;
+      byte ID = map[fileType=='3'?p:chunk*(fileType=='1'?1:2)];
+      println(chunk*(fileType=='1'?1:2),1+(fileType=='2'?chunk*2:p));
+      int texture = fileType=='1'?-1:map[1+(fileType=='2'?chunk*2:p)];
+      p+=2;
+      chunks[chunk] = new FCompound();
+      switch(ID){
+      case 0:
+        FBox img;
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+        }
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 1:
+        FBox gnd = new FBox(128,127);
+        gnd.setPosition(65,65.5);
+        gnd.setName("00");
+        FLine jmp = new FLine(1,1,129,1);
+        jmp.setName("01");
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(65,65);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i-1,128*j-1);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 2:
+        gnd = new FBox(128,128);
+        gnd.setPosition(64,64);
+        gnd.setName("00");
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 3:
+        FPoly slo = new FPoly();
+        slo.vertex(1,128);
+        slo.vertex(128,1);
+        slo.vertex(128,128);
+        slo.vertex(1,128);
+        slo.setName("00");
+        jmp = new FLine(0,128,127,1);
+        jmp.setName("01");
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          slo.setNoFill();
+          slo.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(slo);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 4:
+        slo = new FPoly();
+        slo.vertex(0,1);
+        slo.vertex(127,128);
+        slo.vertex(0,128);
+        slo.vertex(0,1);
+        slo.setName("00");
+        jmp = new FLine(1,1,128,128);
+        jmp.setName("01");
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          slo.setNoFill();
+          slo.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(slo);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 5:
+        gnd = new FBox(128,63);
+        gnd.setPosition(65,97.5);
+        gnd.setName("00");
+        jmp = new FLine(1,65,129,65);
+        jmp.setName("01");
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(65,65);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i-1,128*j-1);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 6:
+        gnd = new FBox(128,64);
+        gnd.setPosition(64,112);
+        gnd.setName("00");
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j-1);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 7:
+        gnd = new FBox(128,127);
+        gnd.setPosition(65,65.5);
+        gnd.setName("00");
+        gnd.setFillColor(0xFFAFAFFF);
+        gnd.setFriction(0);
+        jmp = new FLine(1,1,129,1);
+        jmp.setName("01");
+        jmp.setFriction(0);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(65,65);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i-1,128*j-1);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 8:
+        gnd = new FBox(128,128);
+        gnd.setPosition(64,64);
+        gnd.setName("00");
+        gnd.setFillColor(0xFFAFAFFF);
+        gnd.setFriction(-1);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 9:
+        slo = new FPoly();
+        slo.vertex(1,128);
+        slo.vertex(128,1);
+        slo.vertex(128,128);
+        slo.vertex(1,128);
+        slo.setFriction(0);
+        slo.setName("00");
+        slo.setFillColor(0xFFAFAFFF);
+        slo.setFriction(0);
+        jmp = new FLine(0,128,127,1);
+        jmp.setName("01");
+        jmp.setFriction(0);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          slo.setNoFill();
+          slo.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(slo);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0xA:
+        slo = new FPoly();
+        slo.vertex(0,1);
+        slo.vertex(127,128);
+        slo.vertex(0,128);
+        slo.vertex(0,1);
+        slo.setFriction(0);
+        slo.setName("00");
+        slo.setFillColor(0xFFAFAFFF);
+        slo.setFriction(0);
+        jmp = new FLine(1,1,128,128);
+        jmp.setName("01");
+        jmp.setFriction(0);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          slo.setNoFill();
+          slo.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(slo);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0xB:
+        gnd = new FBox(128,63);
+        gnd.setPosition(65,97.5);
+        gnd.setName("00");
+        gnd.setFillColor(0xFFAFAFFF);
+        gnd.setFriction(0);
+        jmp = new FLine(1,65,129,65);
+        jmp.setName("01");
+        jmp.setFriction(0);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(65,65);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i-1,128*j-1);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0xC:
+        gnd = new FBox(128,64);
+        gnd.setPosition(64,112);
+        gnd.setName("00");
+        gnd.setFillColor(0xFFAFAFFF);
+        gnd.setFriction(0);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0xD:
+        gnd = new FBox(128,127);
+        gnd.setPosition(65,65.5);
+        gnd.setName("00");
+        gnd.setFillColor(0xFF000000);
+        gnd.setRestitution(3);
+        jmp = new FLine(1,1,129,1);
+        jmp.setName("01");
+        jmp.setRestitution(3);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(65,65);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i-1,128*j-1);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0xE:
+        gnd = new FBox(128,127);
+        gnd.setPosition(65,65.5);
+        gnd.setName("00");
+        gnd.setFillColor(0xFF3F009F);
+        gnd.setRestitution(50);
+        jmp = new FLine(1,1,129,1);
+        jmp.setName("01");
+        jmp.setRestitution(50);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(65,65);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+          jmp.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].addBody(jmp);
+        chunks[chunk].setPosition(128*i-1,128*j-1);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0xF:
+        chunks[chunk] = new FCompound();
+        gnd = new FBox(128,128);
+        gnd.setPosition(64,64);
+        gnd.setName("100");
+        gnd.setSensor(true);
+        gnd.setFillColor(0x7F3FFF3F);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0x10:
+        gnd = new FBox(128,128);
+        gnd.setPosition(64,64);
+        gnd.setName("10");
+        gnd.setFillColor(0xFFAFAFFF);
+        gnd.setFriction(0);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("0");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
       }
     }
   }
