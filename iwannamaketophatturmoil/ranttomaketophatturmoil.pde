@@ -263,4 +263,13 @@ total on just the first game. episode one i have spent roughly an hour on.
 but the achievements in half life 2 are so easy. i have 30/32 achievements
 already. all i gotta do is use the op radiator grav gun combo in ravenbrook
 and find every single lambda cache, which im obviously not going to do.
+
+okies, now that i finished making file type 3 (for now cause i gotta make
+more segments) i wanna write more rant. i feel like i deserve a break for
+some reason even though what i just coded was so incredibly simple. im
+gonna make some sprites for testbot based on its appearance in the roblox
+games, but the thing is i forgot what colours they sport, so im gonna make
+them when i get home. i think to relax ill make some more kitta sprites
+especially one of her jumping. i really need one of those because kitta
+simply flying in the air while standing just doesnt look right.
 */

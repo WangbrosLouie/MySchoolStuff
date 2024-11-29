@@ -162,6 +162,7 @@ class player extends FBox {
     health = HEALTH;
     java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
     anim[1] = new Gif(3,5.0/60,"spr/kb",".png");
+    anim[2] = new Gif(1,5.0/60,"spr/kc",".png");
     super.attachImage(anim[0]);
     super.setPosition(256*bi(mapData[mapData.length-30])+bi(mapData[mapData.length-29]),256*bi(mapData[mapData.length-28])+bi(mapData[mapData.length-27]));
     super.setRotatable(false);
