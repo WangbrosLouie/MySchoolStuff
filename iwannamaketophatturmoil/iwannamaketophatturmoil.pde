@@ -26,7 +26,7 @@ String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl",
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 3;
+byte mapNum = 4;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -552,35 +552,52 @@ void makeLevel() {
       for(byte i=0;i<headers.length;i++) {
         if(contents%pow(2,i+1)/pow(2,i)>0){temp = new String(mapData).indexOf(headers[i]);if(temp<p&&temp!=-1){p=temp;nextSeg=(byte)(i+1);}}
       }
-      //if(contents%0x2>0){temp = new String(mapData).indexOf("Textures");if(temp<p&&temp!=-1){p=temp;nextSeg=1;}}
-      //if(contents%0x4/0x2>0){temp = new String(mapData).indexOf("Map Layout");if(temp<p&&temp!=-1){p=temp;nextSeg=2;}}
-      //if(contents%0x8/0x4>0){temp = new String(mapData).indexOf("Enemies");if(temp<p&&temp!=-1){p=temp;nextSeg=3;}}
       switch(nextSeg) {
-      case 0:
-        p = loadTextures(split(new String(subset(mapData,p+7,mapData.length-33-mapData[mapData.length-26])),(char)0))+8;
-        break;
       case 1:
-        p = makeChunks(mapData,lWidth,lHeight,fileType)+10;
+        p = loadTextures(split(new String(subset(mapData,p+8)),(char)0))+8;
+        contents^=0x1;
         break;
       case 2:
-        p += makeEnemies(int(subset(mapData,p+10,lWidth*lHeight)))+7;
+        p = makeChunks(subset(mapData,10),lWidth,lHeight,fileType)+10;
+        contents^=0x2;
+        break;
+      case 3:
+        p += makeEnemies(int(subset(mapData,p+7)))+7;
+        contents^=0x4;
         break;
       default:
         throw new RuntimeException("Invalid Next Level Segment");
       }
       mapData = subset(mapData,p);
-      mapData = subset(mapData,p+10+(lWidth*lHeight));
-      p = new String(mapData).indexOf("Enemies");
-      mapData = subset(mapData,p);
     }
   } else {
     map = mapData;
-    if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeChunks(mapData,lWidth,lHeight,fileType);makeEnemies(int(subset(map,lWidth*lHeight)));}
+    if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeEnemies(int(subset(map,lWidth*lHeight)));}
+    makeChunks(mapData,lWidth,lHeight,fileType);
   }
-  //split this up again cause oh nya i am not makin code goop
   you = new player(3);
   world.add(you);
-  new TestBot(1,1,640,480);
+  //new TestBot(1,1,640,480);
+}
+
+int loadTextures(String[] texList) {
+  int p = 0;
+  if(texList.length>=mapData[mapData.length-25]){
+    //texList = subset(texList,0,mapData[mapData.length-25]);
+    for(int i=0;i<mapData[mapData.length-25];i++) {
+      int gifLen = texList[i].getBytes()[0]&0xFFFFFFFF;
+      p+=texList[i].length();
+      if(gifLen>0) {
+        String[] fileName = split(new String(subset(texList[i].getBytes(),2,texList[i].length()-2)),'.');
+        p+=fileName.length-1;
+        tex[i] = new Gif(gifLen,mf(texList[i].getBytes()[1]),join(subset(fileName,0,fileName.length-1),"."),"."+fileName[fileName.length-1]);
+        tex[i].resizeGif(128,128);
+      } else {
+        tex[i] = new Gif();
+      }
+    }
+  }
+  return p+1;
 }
 
 int makeEnemies(int[] bads) {
@@ -590,30 +607,11 @@ int makeEnemies(int[] bads) {
   while(!finish) {
     switch(bads[p]) {
     case 1:
-      new TestBot(bads[p+1],bads[p+2],bads[p+4]*256+bads[p+3],bads[p+6]*256+bads[p+5]);
+      new TestBot(bads[p+1],bads[p+2],bads[p+3]*256+bads[p+4],bads[p+5]*256+bads[p+6]);
       p+=7;
       break;
     default: //includes 00 which is finished
       finish = true;
-    }
-  }
-  return p;
-}
-
-int loadTextures(String[] texList) {
-  int p = 0;
-  if(texList.length>=mapData[mapData.length-25]){
-    texList = subset(texList,texList.length-mapData[mapData.length-25]);
-    for(int i=0;i<mapData[mapData.length-25];i++) {
-      int gifLen = texList[i].getBytes()[0]&0xFFFFFFFF; //<>//
-      p+=texList[i].length();
-      if(gifLen>0) {
-        String[] fileName = split(new String(subset(texList[i].getBytes(),2,texList[i].length()-2)),'.');
-        tex[i] = new Gif(gifLen,mf(texList[i].getBytes()[1]),join(subset(fileName,0,fileName.length-1),"."),"."+fileName[fileName.length-1]);
-        tex[i].resizeGif(128,128);
-      } else {
-        tex[i] = new Gif();
-      }
     }
   }
   return p;
@@ -624,12 +622,12 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
   chunks = new FCompound[lWidth*lHeight];
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
-      int chunk = fileType=='3'?p:j*lWidth+i;
+      int chunk = fileType=='3'?p/2:j*lWidth+i;
       byte ID = map[fileType=='3'?p:chunk*(fileType=='1'?1:2)];
-      println(chunk*(fileType=='1'?1:2),1+(fileType=='2'?chunk*2:p));
-      int texture = fileType=='1'?-1:map[1+(fileType=='2'?chunk*2:p)];
+      int texture = fileType=='1'?-1:map[1+(fileType=='2'?chunk*2:p)]-1;
+      texture&=0xFFFFFFFF;
       p+=2;
-      chunks[chunk] = new FCompound();
+      chunks[chunk] = new FCompound(); //<>//
       switch(ID){
       case 0:
         FBox img;

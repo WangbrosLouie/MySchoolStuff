@@ -122,5 +122,7 @@ Chunk Extensions
 03 = Teleport Location +4 bytes X&Y Position
 04 = Fill Colour (in ARGB) +1 byte hex colour
 05 = Fill Colour (in HSB?) +1 byte hex colour
-06 = Chunk Friction +
+06 = Stroke Colour (in ARGB) +1 byte hex colour
+07 = Stroke Colour (in HSB?) +1 byte hex colour
+08 = Chunk Friction +1 byte integer
 */
