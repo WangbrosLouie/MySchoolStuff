@@ -7,11 +7,9 @@
 \*_Date:_Nov.1,_2024______________*/
 
 /*to-do's (i aint usin github issues for this nonsense)
-Make File Type 3, with sections for level data headered by actual text
-  File Type 3 is also modular because it just has to check some bits to see whats in the file and it will look for the headers i hope or maybe i just make pointers
-  Probably have a file location pointer that advances as the file is read and search for the first occurence of a header after whatever data so that that combo of bytes can be used in actual level data
-Make Enemy Data in level files
 Finish Missiles
+Add Lava Entities
+checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 */
 
 import fisica.*;
