@@ -493,19 +493,19 @@ void draw() {
       makeLevel();
       playerVec = new PVector(you.getX(),you.getY());
       camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
-    CtrlIO = ControlIO.getInstance(this);
-    ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
-    if(Controllers.length>3) {
-      N64 = Controllers[2];
-      N64.open();
-      A = N64.getButton(2);
-      B = N64.getButton(3);
-      L = N64.getButton(7);
-      R = N64.getButton(8);
-      DPad = N64.getHat(0);
-      A.plug("APressed",ControlIO.ON_PRESS);
-      A.plug("AReleased",ControlIO.ON_RELEASE);
-    }
+      //CtrlIO = ControlIO.getInstance(this);
+      //ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
+      //if(Controllers.length>3) {
+      //  N64 = Controllers[2];
+      //  N64.open();
+      //  A = N64.getButton(2);
+      //  B = N64.getButton(3);
+      //  L = N64.getButton(7);
+      //  R = N64.getButton(8);
+      //  DPad = N64.getHat(0);
+      //  A.plug("APressed",ControlIO.ON_PRESS);
+      //  A.plug("AReleased",ControlIO.ON_RELEASE);
+      //}my controller adapter broke :|
     }
     keys = you.process(keys); //<>//
     for(int i=0;i<enemies.size();i++)enemies.get(i).process();
