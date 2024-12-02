@@ -7,6 +7,7 @@
 \*_Date:_Nov.1,_2024______________*/
 
 /*to-do's (i aint usin github issues for this nonsense)
+Finish the dingin' type 3
 Finish Missiles
 Add Lava Entities
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
@@ -662,6 +663,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
+        while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1047,6 +1051,28 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         break;
       }
     }
+  }
+  return p;
+}
+
+int extendChunk(byte[] stuff, FBody[] parts) {
+  int p = 0;
+  switch(stuff[p]){
+  case 1:
+    //get flags and | everything
+    p+=2;
+    break;
+  case 2:
+    //gotta implement speech itself first...
+    //playSpeech(p+1);
+    p+=2;
+    break;
+  case 3:
+    //guh...
+    p+=5;
+    break;    
+  case 4:
+    //for(FBody part:parts)part.setFillColor();
   }
   return p;
 }

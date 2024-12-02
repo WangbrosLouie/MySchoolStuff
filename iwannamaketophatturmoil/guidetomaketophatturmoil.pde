@@ -120,10 +120,11 @@ Chunk Extensions
 00 = End of Chunk
 01 = Chunk Flag Byte +1 byte chunkflags
 02 = Speech Trigger +1 byte speechpart
-03 = Teleport Location +4 bytes X&Y Position
-04 = Fill Colour (in ARGB) +1 byte hex colour
-05 = Fill Colour (in HSB?) +1 byte hex colour
-06 = Stroke Colour (in ARGB) +1 byte hex colour
-07 = Stroke Colour (in HSB?) +1 byte hex colour
+03 = Teleport Location +4 bytes X&Y Position --oh wait how do i make this even
+04 = Fill Colour (in ARGB) +4 byte hex colour
+05 = Fill Colour (in HSB?) +4 byte hex colour
+06 = Stroke Colour (in ARGB) +4 byte hex colour
+07 = Stroke Colour (in HSB?) +4 byte hex colour
 08 = Chunk Friction +1 byte integer
+09 = Chunk Restitution +1 byte integer
 */
