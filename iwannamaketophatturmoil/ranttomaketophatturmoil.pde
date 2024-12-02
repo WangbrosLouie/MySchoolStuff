@@ -284,7 +284,12 @@ and the 15-20 fps. not to mention that i gotta run it in the smallest
 roblox window possible to even achieve that, i think alladat makes the mac
 experience for me not even close to the true roblox experience. but theres
 a cool new npc that makes you jump randomly, and 2 new floors that i
-havent seen yet(just like the 2 new one in the update before) so thats
-cool i guess. at least now i have over 80k coins. so whoopee i guess. and
-no, im never playing phighting again on my mac.
+havent seen yet(just like the 2 new one in the update before) so thats cool
+i guess. at least now i have over 80k coins. so whoopee i guess. and no, im
+never playing phighting again on my mac.
+
+oh boy i just finished dumping seven meowillion songs in listeningmusics
+that are old old old. i kinda just wanna listen to some musics that i
+sequenced cause why not. also i added a readme to my profile. get ready to
+use that old pentagram if you require my prescence.
 */

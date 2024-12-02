@@ -62,8 +62,8 @@ graphics segment to take advantage of this.
   The chunks segment contains the layout of the chunks, as well as any
 chunk extensions, like textures, triggers, teleports, damage and more.
 For a single chunk, you need to specify the chunk type, and the texture.
-After that comes the extensions. They will be specified by a byte, shown
-in reference. You must terminate every chunk with 0x00, or else the parser
+After that comes the extensions. They will be specified by a byte, shown in
+reference. You must terminate every chunk with 0x00, or else the parser
 will interpret the next chunk as an extension.
 
     /-reference-/
