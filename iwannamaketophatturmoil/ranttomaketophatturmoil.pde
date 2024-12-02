@@ -272,4 +272,19 @@ games, but the thing is i forgot what colours they sport, so im gonna make
 them when i get home. i think to relax ill make some more kitta sprites
 especially one of her jumping. i really need one of those because kitta
 simply flying in the air while standing just doesnt look right.
+
+oh and by the way i lied im not finished type 3 yet i just made it so that
+i can load it i still have to make a bit of stuff but this document aint
+for yappin about the game development its yappin about stuff that i wanna
+yap about such as the new regretevator update. hoo boy, i have not grinded
+on regretevator for a long time, and that still holds true. i have yet to
+play it on my actual pc yet cause im usin my ancient mac mini, so im not
+really gettin the true experience, especially with the 1 second input lag
+and the 15-20 fps. not to mention that i gotta run it in the smallest
+roblox window possible to even achieve that, i think alladat makes the mac
+experience for me not even close to the true roblox experience. but theres
+a cool new npc that makes you jump randomly, and 2 new floors that i
+havent seen yet(just like the 2 new one in the update before) so thats
+cool i guess. at least now i have over 80k coins. so whoopee i guess. and
+no, im never playing phighting again on my mac.
 */

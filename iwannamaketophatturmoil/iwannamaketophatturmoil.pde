@@ -10,6 +10,7 @@
 Finish Missiles
 Add Lava Entities
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
+Make some dialogs
 */
 
 import fisica.*;
@@ -279,7 +280,6 @@ class TestBot extends Enemy {
       println("GUHHHHHHH???????????");
     }
     if(super.isTouchingBody(you)) {
-      println(you.getY()+(you.getHeight()/2)-4,super.getY()-(super.getHeight()/2));
       if(you.getY()+(you.getHeight()/2)-4<=super.getY()-(super.getHeight()/2)) {
         destroy();
         you.setVelocity(you.getVelocityX(),-abs(you.getVelocityY()));
@@ -621,7 +621,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
   chunks = new FCompound[lWidth*lHeight];
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
-      int chunk = fileType=='3'?p/2:j*lWidth+i;
+      //int chunk = fileType=='3'?p/2:j*lWidth+i;
+      int chunk = j*lWidth+1;
       byte ID = map[fileType=='3'?p:chunk*(fileType=='1'?1:2)];
       int texture = fileType=='1'?-1:map[1+(fileType=='2'?chunk*2:p)]-1;
       texture&=0xFFFFFFFF;

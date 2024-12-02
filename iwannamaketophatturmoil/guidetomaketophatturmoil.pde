@@ -59,11 +59,12 @@ loaded. Also, the objects will be graphically layered in the order that
 they are specified in the file, as every object that gets added to the
 physics world will be on the topmost layer. There will be a foreground
 graphics segment to take advantage of this.
-  The first segment is the chunks. The layout of the level is specified
-here, as well as any chunk extensions, like textures, triggers and more.
+  The chunks segment contains the layout of the chunks, as well as any
+chunk extensions, like textures, triggers, teleports, damage and more.
 For a single chunk, you need to specify the chunk type, and the texture.
 After that comes the extensions. They will be specified by a byte, shown
-in reference.
+in reference. You must terminate every chunk with 0x00, or else the parser
+will interpret the next chunk as an extension.
 
     /-reference-/
 Chunk IDs
