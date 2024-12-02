@@ -7,7 +7,7 @@
 \*_Date:_Nov.1,_2024______________*/
 
 /*to-do's (i aint usin github issues for this nonsense)
-Finish the dingin' type 3
+Finish the dingin' chunk extensions
 Finish Missiles
 Add Lava Entities
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
@@ -42,6 +42,8 @@ FCompound[] chunks;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<FBody> projs = new ArrayList<FBody>();//projectiles
 Gif bg;
+SoundFile[] snd;
+color backcolour = color(0);
 
 ControlIO CtrlIO;
 ControlDevice N64;
@@ -175,20 +177,23 @@ class player extends FBox {
     ArrayList<FContact> touchings = super.getContacts();
     keys[3] = 1;
     float oldSpeed = super.getVelocityX();
-    for(FContact bod:touchings) {
+    for(int i=touchings.size()-1;i>-1;i--) {
       int flags = 0;
-      if(bod.getBody1()==this){
-        String name = bod.getBody2().getName();
+      if(touchings.get(i).getBody1()==this){
+        String name = touchings.get(i).getBody2().getName();
         flags = name!=null?unbinary(name):0;
       } else {
-        String name = bod.getBody1().getName();
+        String name = touchings.get(i).getBody1().getName();
         flags = name!=null?unbinary(name):0;
       }
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
-      if((flags%0x4/2>0)){hurt(1);}
+      if(flags%0x4/2>0){hurt(1);}
       if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
+      if(flags%0x10/8>0)touchings.remove(i);
     }
+    if(touchings.size()==0)keys[3]=2;
+    println(touchings.size());
     if(debug)keys[3]=0;
     if(abs(super.getVelocityX())>100)animNum = 3;//if moving but no inputs
     if(stunned<=frameCount) {
@@ -196,13 +201,17 @@ class player extends FBox {
         if(keys[0]>1) {
           if(super.getVelocityX()>200)super.setVelocity(super.getVelocityX()-100,super.getVelocityY());//super.addForce(-5000,0);
           else super.setVelocity(-200,super.getVelocityY());
-          animNum = 1;
           camDir = false;
+          animNum = 1;
+          if(keys[3]==2){animNum=1;if(!snd[0].isPlaying())snd[0].play();}
+          else{animNum = 2;snd[0].stop();}
         } else if(keys[1]>1) {
           if(super.getVelocityX()<-200)super.setVelocity(super.getVelocityX()+100,super.getVelocityY());//super.addForce(5000,0);
           else super.setVelocity(200,super.getVelocityY());
           camDir = true;
           animNum = 1;
+          if(keys[3]==2){animNum=1;if(!snd[0].isPlaying())snd[0].play();}
+          else{animNum = 2;snd[0].stop();}
         } else {
           super.addImpulse(-super.getVelocityX()/5,0);
         }
@@ -211,6 +220,9 @@ class player extends FBox {
           keys[3] = 1;
           super.setVelocity(super.getVelocityX(),-200);
           animNum = 2;
+          snd[0].stop();
+          snd[1].stop();
+          snd[1].play();
       }
     }
     switch(animNum) {
@@ -231,6 +243,7 @@ class player extends FBox {
       invince = frameCount + 120;
       stunned = frameCount + 30;
       health -= dmg;
+      snd[2].play();
     }
   }
 }
@@ -492,6 +505,7 @@ void draw() {
       makeLevel();
       playerVec = new PVector(you.getX(),you.getY());
       camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
+      snd = new SoundFile[]{new SoundFile(this,"snd/kwlk.wav"),new SoundFile(this,"snd/kjmp.wav"),new SoundFile(this,"snd/khrt.wav")};
       //CtrlIO = ControlIO.getInstance(this);
       //ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
       //if(Controllers.length>3) {
@@ -515,7 +529,7 @@ void draw() {
     scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
     //scl*=6;
     if(!(frameCount%2>0&&halfFPS)) {
-      background(200);
+      background(backcolour);
       scale(scl);
       //stroke(127,127);
       //strokeWeight(0.5);
@@ -536,6 +550,7 @@ void makeLevel() {
   char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
   int lWidth = bi(mapData[mapData.length-32])+1;
   int lHeight = bi(mapData[mapData.length-31])+1;
+  backcolour = color(int(mapData[mapData.length-22])&0xFFFFFFFF,int(mapData[mapData.length-21])&0xFFFFFFFF,int(mapData[mapData.length-20])&0xFFFFFFFF);
   byte[] map = new byte[0];
   int p = 0;
   tex = new Gif[255];
@@ -623,12 +638,12 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
       //int chunk = fileType=='3'?p/2:j*lWidth+i;
-      int chunk = j*lWidth+1;
+      int chunk = j*lWidth+i;
       byte ID = map[fileType=='3'?p:chunk*(fileType=='1'?1:2)];
       int texture = fileType=='1'?-1:map[1+(fileType=='2'?chunk*2:p)]-1;
       texture&=0xFFFFFFFF;
       p+=2;
-      chunks[chunk] = new FCompound(); //<>//
+      chunks[chunk] = new FCompound();
       switch(ID){
       case 0:
         FBox img;
@@ -637,7 +652,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
         }
@@ -656,14 +671,14 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        while(map[p]!=0x0) {
+        if(fileType==3)while(map[p]!=0x0) {
           p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -681,7 +696,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -706,7 +721,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           slo.setNoFill();
@@ -733,7 +748,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           slo.setNoFill();
@@ -757,7 +772,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -779,7 +794,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -804,7 +819,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -828,7 +843,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -857,7 +872,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           slo.setNoFill();
@@ -888,7 +903,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           slo.setNoFill();
@@ -915,7 +930,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -939,7 +954,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -964,7 +979,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -991,7 +1006,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1016,7 +1031,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1038,7 +1053,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("0");
+          img.setName("1000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();

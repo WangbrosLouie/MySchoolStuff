@@ -93,7 +93,7 @@ Chunk Flag Bits (from right to left)
 1 = hurts nyowch
 2 = go to next level
 3 = unstatic when touched
-4 = teleports
+4 = is decoration
 5 = undecided
 6 = undecided
 7 = undecided
@@ -106,9 +106,12 @@ Level Parameter Bytes
 4 = Player Spawn Y (Upper Byte)
 5 = Player Spawn Y (Lower Byte)
 6 = Level Name Length - 1
-7 = Number of Custom Textures
+7 = Number of Custom Textures (Type 2 & 3)
 8 = Gravity X * 2 (signed)
 9 = Gravity Y * 2 (signed)
+A = Background Colour Red
+B = Background Colour Green
+C = Background Colour Blue
 F = Data Segments (Type 3)
 
 Data Segment Bits (from right to left)
