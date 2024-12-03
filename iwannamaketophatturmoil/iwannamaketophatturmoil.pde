@@ -193,7 +193,6 @@ class player extends FBox {
       if(flags%0x10/8>0)touchings.remove(i);
     }
     if(touchings.size()==0)keys[3]=2;
-    println(touchings.size());
     if(debug)keys[3]=0;
     if(abs(super.getVelocityX())>100)animNum = 3;//if moving but no inputs
     if(stunned<=frameCount) {
@@ -261,6 +260,12 @@ class Enemy extends FBox {//dont use please use the subclasses
   void process() {
     println("bro you forgot to make a process() for this enemy");
   }
+  
+  void destroy() {//just like roblox.
+    world.remove(this);
+    enemies.remove(this);
+    //then the garbage collects i hope
+  }
 }
 
 class TestBot extends Enemy {
@@ -297,18 +302,12 @@ class TestBot extends Enemy {
     }
     if(super.isTouchingBody(you)) {
       if(you.getY()+(you.getHeight()/2)-4<=super.getY()-(super.getHeight()/2)) {
-        destroy();
+        super.destroy();
         you.setVelocity(you.getVelocityX(),-abs(you.getVelocityY()));
       } else {
         you.hurt(1);
       }
     }
-  }
-  
-  void destroy() {//just like roblox.
-    world.remove(this);
-    enemies.remove(this);
-    //then the garbage collects i hope
   }
 }
 
@@ -522,7 +521,7 @@ void draw() {
       //  A.plug("AReleased",ControlIO.ON_RELEASE);
       //}my controller adapter broke :|
     }
-    keys = you.process(keys); //<>//
+    keys = you.process(keys);
     for(int i=0;i<enemies.size();i++)enemies.get(i).process();
     for(Gif pic:tex)pic.update();
     world.step();
@@ -547,6 +546,7 @@ void draw() {
 }
 
 void makeLevel() {
+  for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
   String fileFoot = new String(subset(mapData,mapData.length-16,15));
   if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
   char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
