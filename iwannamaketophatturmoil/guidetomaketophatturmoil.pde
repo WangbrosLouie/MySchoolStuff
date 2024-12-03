@@ -18,7 +18,7 @@ of the engine. This document may be behind or ahead of the engine.
 -Reference
 
     /-level data format-/
---Types 1 and 2
+--Types 1 and 2(OUTDATED USE TYPE 3 INSTEAD)
   A valid level file is made of 5 parts:
 The layout data - the chunk layout of the level
 The enemy data - locations, types, to be implemented later

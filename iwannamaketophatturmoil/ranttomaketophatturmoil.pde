@@ -292,4 +292,37 @@ oh boy i just finished dumping seven meowillion songs in listeningmusics
 that are old old old. i kinda just wanna listen to some musics that i
 sequenced cause why not. also i added a readme to my profile. get ready to
 use that old pentagram if you require my prescence.
+
+hooray i now have a new way to rant. make sure to crack open those type 3
+levels if you want more rant even though i only have one right now and it
+is very minimal. i should just start a blog or somethin i just have too
+much to say about too much stuff 'n' stuff. speaking of too much stuff 'n'
+stuff the name comes from my roblox tycoon brand name where i take one
+thing about the game (like stuff for retail tycoon) and i put 'n' and the
+same thing again in front of it. i only got like 5 names from 5 games that
+i played like that i think i forgot it has been a long time. however stuff
+'n' stuff is special because it is the only one confirmed canon in the
+tophat turmoil universe so far. and yes even i dont know if food 'n' food
+is gonna make it or not. i forgot to mention my mouse scroll wheel is
+broken. this is a total nightmare for me and you know why? one. my code for
+this game is so long that the scroll bar is reduced to like 3 pixels in
+windowed mode and the middle mouse button does diddly squat in processing.
+second. roblox studio allows for use of the scroll wheel to move back and
+forth in the workplace editor. middle mouse simply pans or whatevers the
+camera and i gotta use the arrow keys or w and s. third. windows explorer
+uses the middle mouse button as a double click. fourth. i keep opening
+links by accident on the web browser when i use the middle click. its just
+annoying and i think im gonna grab another mouse on the weekend or some
+thing. or maybe, i could send it to best buy because its probably under
+warranty or something, it being a literal office mouse after all. the
+saddest thing is that this mouse is unservicable by me cause theres no
+screws or anything im pretty sure this mouse is like glued shut or some
+thing cause if i opened it i probably could clean it or fix it or something
+man its just a dingin' shame. all of my other mice have somethin wrong with
+them. one of them has a frayed wire that works half the time, one of them
+has a loose internal connection, one of them has a broken battery holder,
+one of them has a borked left mouse button, one of them has a crushed usb
+plug, one of them has the hardest to remove a battery from battery holder,
+and the one i have here which doesnt scroll. this is just crazy i should
+just use a gaming mouse so that nothing will go wrong with it.
 */

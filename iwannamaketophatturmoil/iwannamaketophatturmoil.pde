@@ -203,17 +203,19 @@ class player extends FBox {
           else super.setVelocity(-200,super.getVelocityY());
           camDir = false;
           animNum = 1;
-          if(keys[3]==2){animNum=1;if(!snd[0].isPlaying())snd[0].play();}
-          else{animNum = 2;snd[0].stop();}
+          if(keys[3]==2){animNum = 2;snd[0].stop();}
+          else{animNum=1;if(!snd[0].isPlaying())snd[0].play();}
         } else if(keys[1]>1) {
           if(super.getVelocityX()<-200)super.setVelocity(super.getVelocityX()+100,super.getVelocityY());//super.addForce(5000,0);
           else super.setVelocity(200,super.getVelocityY());
           camDir = true;
           animNum = 1;
-          if(keys[3]==2){animNum=1;if(!snd[0].isPlaying())snd[0].play();}
-          else{animNum = 2;snd[0].stop();}
+          if(keys[3]==2){animNum = 2;snd[0].stop();}
+          else{animNum=1;if(!snd[0].isPlaying())snd[0].play();}
         } else {
           super.addImpulse(-super.getVelocityX()/5,0);
+          if(keys[3]==2){animNum = 2;snd[0].stop();}
+          else{animNum=1;snd[0].stop();}
         }
       }
       if(keys[2]>1&&keys[3]==0) {
@@ -269,7 +271,7 @@ class TestBot extends Enemy {
   
   TestBot(int HEALTH, int TYPE, int x, int y) {
     super(HEALTH,32,32);
-    enemies.add(this);
+    enemies.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     switch(TYPE) {
     default://type 0 in here too
       speed = 50;
@@ -565,7 +567,10 @@ void makeLevel() {
       int temp = 0;
       String[] headers = {"Textures","Map Layout","Enemies"};
       for(byte i=0;i<headers.length;i++) {
-        if(contents%pow(2,i+1)/pow(2,i)>0){temp = new String(mapData).indexOf(headers[i]);if(temp<p&&temp!=-1){p=temp;nextSeg=(byte)(i+1);}}
+        if(contents%pow(2,i+1)/pow(2,i)>0) {
+          temp = new String(mapData).indexOf(headers[i]);
+          if(temp<p&&temp!=-1){p=temp;nextSeg=(byte)(i+1);}
+        }
       }
       switch(nextSeg) {
       case 1:
@@ -573,7 +578,7 @@ void makeLevel() {
         contents^=0x1;
         break;
       case 2:
-        p = makeChunks(subset(mapData,10),lWidth,lHeight,fileType)+10;
+        p = makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType)+10;
         contents^=0x2;
         break;
       case 3:
