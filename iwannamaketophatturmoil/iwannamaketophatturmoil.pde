@@ -707,6 +707,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -733,6 +736,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
+        }p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
@@ -760,6 +766,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
+        }p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
@@ -784,6 +793,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -805,6 +817,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j-1);
         chunks[chunk].setStatic(true);
@@ -831,6 +846,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -854,6 +872,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -884,6 +905,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
+        }p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
@@ -915,6 +939,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
+        }p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
@@ -942,6 +969,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -965,6 +995,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -991,6 +1024,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1018,6 +1054,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1042,6 +1081,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1064,6 +1106,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
+        if(fileType==3)while(map[p]!=0x0) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
