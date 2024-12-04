@@ -43,8 +43,8 @@ FCompound[] chunks;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<FBody> projs = new ArrayList<FBody>();//projectiles
 Gif bg;
-SoundFile[] snd;
 color backcolour = color(0);
+PApplet dis = this;
 
 ControlIO CtrlIO;
 ControlDevice N64;
@@ -157,10 +157,27 @@ class Gif extends PImage { //make custom loop points
 class player extends FBox {
   int health = 5;
   Gif[] anim = new Gif[5];//idle moving jumping idlemoving hurting
+  SoundFile[] snd = new SoundFile[5];
   int animNum = 0;
   int invince = 0; //invincible until this frame
   int stunned = 0; //stunned until this frame
+  int[] animLookup = {0,1,2,3,4};
+  int[] sndLookup = {0,1,2,3,4};
   player(int HEALTH, float x, float y) {//placeholder for now
+    super(32,64);
+    health = HEALTH;
+    java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
+    anim[1] = new Gif(3,5.0/60,"spr/kb",".png");
+    anim[2] = new Gif(1,5.0/60,"spr/kc",".png");
+    snd = new SoundFile[]{new SoundFile(dis,"snd/kwlk.wav"),new SoundFile(dis,"snd/kjmp.wav"),new SoundFile(dis,"snd/khrt.wav")};
+    super.attachImage(anim[0]);
+    super.setPosition(x,y);
+    super.setRotatable(false);
+    super.setFriction(100);
+    super.setName("00");
+  }
+  
+  player(int HEALTH, float x, float y, byte[] fichier) {//placeholder for now
     super(32,64);
     health = HEALTH;
     java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
@@ -500,14 +517,11 @@ void draw() {
   try {
     if(loading){
       loading = false;
-      println(mapNum,maps.length);
       mapData = loadBytes(maps[mapNum%maps.length]);
-      mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
-      println(mapName);
       makeLevel();
+      println(mapName);
       playerVec = new PVector(you.getX(),you.getY());
       camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
-      snd = new SoundFile[]{new SoundFile(this,"snd/kwlk.wav"),new SoundFile(this,"snd/kjmp.wav"),new SoundFile(this,"snd/khrt.wav")};
       //CtrlIO = ControlIO.getInstance(this);
       //ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
       //if(Controllers.length>3) {
@@ -522,15 +536,18 @@ void draw() {
       //  A.plug("AReleased",ControlIO.ON_RELEASE);
       //}my controller adapter broke :|
     }
+    //processing objects
     keys = you.process(keys);
     for(int i=0;i<enemies.size();i++)enemies.get(i).process();
     for(Gif pic:tex)pic.update();
     world.step();
+    //camera stuff
     playerVec.set(you.getX(),you.getY());
     camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(you.getVelocityX()*30)+(camDir?50:-50),sqrt2(you.getVelocityY()*30))),0.05);
     scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
     //scl/=6;
     if(!(frameCount%2>0&&halfFPS)) {
+      push();
       background(backcolour);
       scale(scl);
       //stroke(127,127);
@@ -538,6 +555,7 @@ void draw() {
       translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
       world.draw();
       //for(int i=0;i<15;i++)line(0,i*16,640,i*16);for(int i=0;i<15;i++)line(i*16,0,i*16,640);
+      pop();
     }
     //scl*=6;
   } catch (Exception e) {
@@ -549,10 +567,12 @@ void draw() {
 void makeLevel() {
   for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
   String fileFoot = new String(subset(mapData,mapData.length-16,15));
+  mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
   if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
   char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
   int lWidth = bi(mapData[mapData.length-32])+1;
   int lHeight = bi(mapData[mapData.length-31])+1;
+  println(lWidth, lHeight);
   backcolour = color(int(mapData[mapData.length-22])&0xFF,int(mapData[mapData.length-21])&0xFF,int(mapData[mapData.length-20])&0xFF);
   byte[] map = new byte[0];
   int p = 0;
@@ -646,7 +666,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
       //int chunk = fileType=='3'?p/2:j*lWidth+i;
       int chunk = j*lWidth+i;
       byte ID = map[fileType=='3'?p:chunk*(fileType=='1'?1:2)];
-      int texture = fileType=='1'?-1:map[1+(fileType=='2'?chunk*2:p)]; //<>//
+      int texture = fileType=='1'?0:map[1+(fileType=='2'?chunk*2:p)]; //<>//
       texture&=0xFF;
       texture-=1;
       p+=2;

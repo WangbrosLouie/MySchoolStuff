@@ -15,6 +15,7 @@ of the engine. This document may be behind or ahead of the engine.
 
     /-contents-/
 -Level Data Format
+-Character File Format
 -Reference
 
     /-level data format-/
@@ -65,6 +66,24 @@ For a single chunk, you need to specify the chunk type, and the texture.
 After that comes the extensions. They will be specified by a byte, shown in
 reference. You must terminate every chunk with 0xFF, or else the parser
 will interpret the next chunk as an extension.
+
+    /-character file format-/
+To make custom characters, one can either replace the sprites and sounds of
+an existing character in the files, but the best way to make a custom
+character is to make your own character file. You can customise the
+graphics and sounds in a character. If I make attacks, you can also
+customise what attacks are bound to what keys and such.
+  The file is split into three for graphics, sounds and triggers.
+For the graphics, you need to header the data with "Textures". To make an
+animation, you need to specify which animation ID (minus 1) to load into
+with hex, then list every frame's path (repeats allowed because no custom
+frame durations) delimited with a CR(0x0D), and terminated with a LF(0x0A).
+The whole section is terminated with a null (0x00).
+The sounds follow the same format but is headered with "Sounds" instead.
+(well not exactly but i dont care enough to write more right now)
+The triggers are what cause the animations or sounds to play. There are 2
+trigger types, one for graphics and one for audio. Triggers include moving,
+jumping and getting hurt.
 
     /-reference-/
 Chunk IDs
