@@ -27,7 +27,7 @@ String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl",
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 4;
+byte mapNum = 5;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -596,7 +596,7 @@ void makeLevel() {
     if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeEnemies(int(subset(map,lWidth*lHeight)));}
     makeChunks(mapData,lWidth,lHeight,fileType);
   }
-  you = new player(3,256*bi(mapData[mapData.length-30])+bi(mapData[mapData.length-29]),256*bi(mapData[mapData.length-28])+bi(mapData[mapData.length-27]));
+  you = new player(3,(256*bi(mapData[mapData.length-30]))+bi(mapData[mapData.length-29]),(256*bi(mapData[mapData.length-28]))+bi(mapData[mapData.length-27]));
   world.add(you);
   //new TestBot(1,1,640,480);
 }
