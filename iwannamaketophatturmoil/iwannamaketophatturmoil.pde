@@ -12,6 +12,7 @@ Finish Missiles
 Add Lava Entities
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
+Make a sonic crackers title card (while blocking worldprocessing during that with a bool)
 */
 
 import fisica.*;
@@ -159,14 +160,14 @@ class player extends FBox {
   int animNum = 0;
   int invince = 0; //invincible until this frame
   int stunned = 0; //stunned until this frame
-  player(int HEALTH) {//placeholder for now
+  player(int HEALTH, float x, float y) {//placeholder for now
     super(32,64);
     health = HEALTH;
     java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
     anim[1] = new Gif(3,5.0/60,"spr/kb",".png");
     anim[2] = new Gif(1,5.0/60,"spr/kc",".png");
     super.attachImage(anim[0]);
-    super.setPosition(256*bi(mapData[mapData.length-30])+bi(mapData[mapData.length-29]),256*bi(mapData[mapData.length-28])+bi(mapData[mapData.length-27]));
+    super.setPosition(x,y);
     super.setRotatable(false);
     super.setFriction(100);
     super.setName("00");
@@ -528,7 +529,7 @@ void draw() {
     playerVec.set(you.getX(),you.getY());
     camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(you.getVelocityX()*30)+(camDir?50:-50),sqrt2(you.getVelocityY()*30))),0.05);
     scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
-    //scl*=6;
+    //scl/=6;
     if(!(frameCount%2>0&&halfFPS)) {
       background(backcolour);
       scale(scl);
@@ -538,7 +539,7 @@ void draw() {
       world.draw();
       //for(int i=0;i<15;i++)line(0,i*16,640,i*16);for(int i=0;i<15;i++)line(i*16,0,i*16,640);
     }
-    //scl/=6;
+    //scl*=6;
   } catch (Exception e) {
     blueDead(e);
     noLoop();
@@ -552,7 +553,7 @@ void makeLevel() {
   char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
   int lWidth = bi(mapData[mapData.length-32])+1;
   int lHeight = bi(mapData[mapData.length-31])+1;
-  backcolour = color(int(mapData[mapData.length-22])&0xFFFFFFFF,int(mapData[mapData.length-21])&0xFFFFFFFF,int(mapData[mapData.length-20])&0xFFFFFFFF);
+  backcolour = color(int(mapData[mapData.length-22])&0xFF,int(mapData[mapData.length-21])&0xFF,int(mapData[mapData.length-20])&0xFF);
   byte[] map = new byte[0];
   int p = 0;
   tex = new Gif[255];
@@ -560,7 +561,7 @@ void makeLevel() {
   world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
   world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
   if(fileType=='3') {
-    int contents = mapData[mapData.length-17]&0xFFFFFFFF;
+    int contents = mapData[mapData.length-17]&0xFF;
     while(contents!=0) {
       p = 2147483647;//long code gooooo
       byte nextSeg = 0;
@@ -595,7 +596,7 @@ void makeLevel() {
     if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeEnemies(int(subset(map,lWidth*lHeight)));}
     makeChunks(mapData,lWidth,lHeight,fileType);
   }
-  you = new player(3);
+  you = new player(3,256*bi(mapData[mapData.length-30])+bi(mapData[mapData.length-29]),256*bi(mapData[mapData.length-28])+bi(mapData[mapData.length-27]));
   world.add(you);
   //new TestBot(1,1,640,480);
 }
@@ -605,7 +606,7 @@ int loadTextures(String[] texList) {
   if(texList.length>=mapData[mapData.length-25]){
     //texList = subset(texList,0,mapData[mapData.length-25]);
     for(int i=0;i<mapData[mapData.length-25];i++) {
-      int gifLen = texList[i].getBytes()[0]&0xFFFFFFFF;
+      int gifLen = texList[i].getBytes()[0]&0xFF;
       p+=texList[i].length();
       if(gifLen>0) {
         String[] fileName = split(new String(subset(texList[i].getBytes(),2,texList[i].length()-2)),'.');
@@ -621,7 +622,7 @@ int loadTextures(String[] texList) {
 }
 
 int makeEnemies(int[] bads) {
-  for(int i:bads)i=i&0xFFFFFFFF;
+  for(int i:bads)i=i&0xFF;
   int p = 0;
   boolean finish = false;
   while(!finish) {
@@ -645,8 +646,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
       //int chunk = fileType=='3'?p/2:j*lWidth+i;
       int chunk = j*lWidth+i;
       byte ID = map[fileType=='3'?p:chunk*(fileType=='1'?1:2)];
-      int texture = fileType=='1'?-1:map[1+(fileType=='2'?chunk*2:p)]-1;
-      texture&=0xFFFFFFFF;
+      int texture = fileType=='1'?-1:map[1+(fileType=='2'?chunk*2:p)]; //<>//
+      texture&=0xFF;
+      texture-=1;
       p+=2;
       chunks[chunk] = new FCompound();
       switch(ID){
@@ -661,6 +663,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
         }
+        if(fileType==3)while(bi(map[p])!=0xFF) {
+          p += extendChunk(subset(map,p),new FBody[]{});
+        }p++;
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
@@ -683,7 +688,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -707,7 +712,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -736,7 +741,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
         }p++;
         chunks[chunk].addBody(slo);
@@ -766,7 +771,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
         }p++;
         chunks[chunk].addBody(slo);
@@ -793,7 +798,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -817,7 +822,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -846,7 +851,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -872,7 +877,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -905,7 +910,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
         }p++;
         chunks[chunk].addBody(slo);
@@ -939,7 +944,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
         }p++;
         chunks[chunk].addBody(slo);
@@ -969,7 +974,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -995,7 +1000,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -1024,7 +1029,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -1054,7 +1059,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -1081,7 +1086,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -1106,7 +1111,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(map[p]!=0x0) {
+        if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{gnd});
         }p++;
         chunks[chunk].addBody(gnd);
@@ -1155,7 +1160,8 @@ String reverse(String str) {
 }
 
 int bi(byte b) {//byte to int
-  return unbinary(binary(b));
+  //return unbinary(binary(b));
+  return (int)(b)&0xFF;
 }//alas, unsigned byte problem, i hath defeated thee!
 
 float sqrt2(float num) {
