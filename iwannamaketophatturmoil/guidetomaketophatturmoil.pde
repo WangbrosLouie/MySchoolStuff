@@ -42,12 +42,11 @@ should be null.
   The level data uses 1 byte per chunk, or 2 bytes for chunk and texture if
 using Type 2. The chunk codes can be found in reference, and the texture
 number is indexed at 1, as 00 is used for no texture.
---Type 3
-Layout: Variable
+--Type 3 (READ THIS ONE!!!)
   This file type is the extended file type. It will support all of the
 features of the engine. However, all of the features are specified in the
 same file segment so it will be harder to edit, until I make a level editor
-which probably won't happen.
+which probably won't happen. (gotta rewrite this one)
   The segments must be specified with a header, followed by data. White
 space between segments will be ignored. Possible segments are:
 Level Layout ("Map Layout") - the chunks and their features
@@ -66,6 +65,19 @@ For a single chunk, you need to specify the chunk type, and the texture.
 After that comes the extensions. They will be specified by a byte, shown in
 reference. You must terminate every chunk with 0xFF, or else the parser
 will interpret the next chunk as an extension.
+  The textures segment contains all of the texture paths. Every texture
+starts with 2 bytes, one for the speed in frames per redraw cycle
+multiplied by 32, and one for the amount of frames in the animation. For
+static textures the amount of frames is one. Then the full path of the
+file(s) are specified. The path is null terminated. If the texture has more
+than one frame, rename the frames so that the textures have the same
+prefix, have a number corresponding to what frame it is (indexed at 1), and
+the same extension, and in the file the number is omitted. For example, to
+load in a texture with 2 frames named "a1.png" and "a2.png" at a speed of 1
+frame per redraw, you put in the file (in hex):
+  10 02 61 2E 70 6E 67 00
+I will not be converting that to ASCII because some of the characters are
+undrawable.
 
     /-character file format-/
 To make custom characters, one can either replace the sprites and sounds of

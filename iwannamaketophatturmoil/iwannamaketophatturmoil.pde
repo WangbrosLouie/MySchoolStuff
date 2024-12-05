@@ -23,11 +23,11 @@ import org.gamecontrolplus.gui.*;
 
 boolean loading = true;
 boolean debug = false;
-String[] maps = new String[]{"map01.lvl","map02.lvl","map03.lvl","map03tex.lvl","map03ext.lvl","map04.lvl"};
+String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03.lvl","map03tex.lvl","map03ext.lvl","map04.lvl"};
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 5;
+byte mapNum = 1;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -189,7 +189,7 @@ class player extends FBox {
     super.setName("00");
   }
   
-  byte[] process(byte[] keys) {
+  byte[] process(byte[] keys) { //change this stuff so the pointers work
     animNum = 0;
     ArrayList<FContact> touchings = super.getContacts();
     keys[3] = 1;
@@ -211,7 +211,7 @@ class player extends FBox {
     }
     if(touchings.size()==0)keys[3]=2;
     if(debug)keys[3]=0;
-    if(abs(super.getVelocityX())>100)animNum = 3;//if moving but no inputs
+    if(abs(super.getVelocityX())>100)animNum = 2;//if moving but no inputs
     if(stunned<=frameCount) {
       if(!((keys[0]>1)&&(keys[1])>1)) {
         if(keys[0]>1) {
@@ -509,6 +509,7 @@ void setup() {
   lucid = createFont("Lucida Console",14,false);
   Fisica.init(this);
   image(loadImage("spr/loudo.png"),0,0,width,height);
+  //convert(loadBytes("map02.lvl"),3,"map02ext.lvl");
   //draw thy loading screen
 }
 
@@ -1213,6 +1214,50 @@ void blueDead(Exception e) { //funny
   textAlign(LEFT,TOP);
   text("A problem has been detected and this application has been halted to prevent\nfurther problems from occuring.\n\nThis application has thrown a(n)\n"+e.toString()+"\nand halted itself.\n\nIf this is the first time you've seen this STOP error screen,\nrestart the application. If this screen appears again, try these steps:\n\nCheck to make sure that you haven't modified the application in any way\nshape or form. It may be corrupted. Check that there are no warnings in the\nProcessing console if you are running this application from Processing.\n\nIf problems continue, contact the developer of the application and see if\nthey have an updated version of the application that has bug fixes that may\npertain to this issue. Alternatively, give the information below to the\ndeveloper to aid them in the fixing of this problem.\n\nTechnical information:\n\n*** STOP: "+e.getMessage()+"\n\n***    "+e.getStackTrace()[0].toString(), 0, 24);
   e.printStackTrace();
+}
+
+byte[] convert(byte[] map, int toversion, String output) {//only old to new for now, sorry
+  char fileType = new String(subset(map,map.length-1)).charAt(0);
+  int lWidth = bi(map[map.length-32])+1;
+  int lHeight = bi(map[map.length-31])+1;
+  byte[] converted = new byte[0];
+  switch(fileType) {
+  case '1':
+    byte[] chunks = subset(map,0,lWidth*lHeight-1);
+    byte[] footer = subset(map,map.length-33-map[map.length-26]);
+    switch(toversion) {
+    case 1:
+      println("Erm, actually, the file is already in the file type you wanted it to be.");
+      converted = map;
+      break;
+    case 2:
+      map[map.length-25] = 0;
+      arrayCopy(chunks,converted);
+      for(int i=chunks.length;i>0;i--)converted = (byte[])splice(converted,(byte)0,i);
+      converted = concat(converted,footer);
+      break;
+    case 3:
+      map[map.length-25] = 0;
+      converted = new byte[chunks.length];
+      arrayCopy(chunks,converted);
+      for(int i=converted.length;i>0;i--){converted = (byte[])splice(converted,(byte)0xFF,i);converted = (byte[])splice(converted,(byte)0,i);}
+      converted = concat(new String("Map Layout").getBytes(),converted);
+      converted = concat(converted,footer);
+      converted[converted.length-17] = (byte)2;
+      converted[converted.length-1] = "3".getBytes()[0];
+      break;
+    default:
+      println("file type not supported bro");
+    }
+    break;
+    
+  default:
+    println("guh...nya?");
+  }
+  if(output!=null)saveBytes(output,converted);
+  return converted;
+  //if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeEnemies(int(subset(map,lWidth*lHeight)));}
+  //makeChunks(mapData,lWidth,lHeight,fileType);
 }
 
 void keyPressed() {
