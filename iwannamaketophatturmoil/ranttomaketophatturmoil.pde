@@ -325,4 +325,11 @@ one of them has a borked left mouse button, one of them has a crushed usb
 plug, one of them has the hardest to remove a battery from battery holder,
 and the one i have here which doesnt scroll. this is just crazy i should
 just use a gaming mouse so that nothing will go wrong with it.
+
+hoo boy im really feelin the apathy now i cant do anything at all. i just
+really don't want to get anything done despite also wanting to at the same
+time but its just my conscious says yes but my subconscious says no. i
+really hate it and i wish it begone but it will always haunt me one way or
+another. rather these rants are made because i just dont wanna do stuff or
+i actually got somethin to yap about but most of the time its laziness. gr.
 */

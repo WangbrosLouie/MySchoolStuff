@@ -75,15 +75,31 @@ graphics and sounds in a character. If I make attacks, you can also
 customise what attacks are bound to what keys and such.
   The file is split into three for graphics, sounds and triggers.
 For the graphics, you need to header the data with "Textures". To make an
-animation, you need to specify which animation ID (minus 1) to load into
-with hex, then list every frame's path (repeats allowed because no custom
-frame durations) delimited with a CR(0x0D), and terminated with a LF(0x0A).
-The whole section is terminated with a null (0x00).
-The sounds follow the same format but is headered with "Sounds" instead.
-(well not exactly but i dont care enough to write more right now)
+animation, you need to specify which animation ID to load into with hex,
+specify the speed in frames per redraw cycle divided by 32 (except for ID 1
+which speed varies with player speed, used for walking), then list every
+frame's path (use repeats for repeat frames) delimited with a CR(0x0D), and
+terminated with a LF(0x0A). The whole part is terminated with null(0x00).
+The sounds follow a similar format but don't have frames (obviously) and
+the part is headered with "Sounds" instead.
 The triggers are what cause the animations or sounds to play. There are 2
 trigger types, one for graphics and one for audio. Triggers include moving,
-jumping and getting hurt.
+jumping and getting hurt. The audio triggers are headered with "ATriggers"
+and graphics triggers are headered with "GTriggers". Every event has one
+byte in each trigger part, and the event number determines which byte is
+used. (better explanation: Event 1 will use the animation and sound IDs
+specified in the second byte in each part [as Events are indexed at 0])
+Note that you need to fill every trigger slot since it is generally not
+considered good to be intentionally leaving a used animation or sound
+blank, and also it will massively complicate the file if every trigger was
+declared explicitly. However, 0x00 can be used to make an audio trigger
+silent or to make a graphics trigger play Kitta's idle animation.
+If any animation or sound ID is used by a trigger but is not specified in
+the file, Kitta's equivalent will be used as a placeholder instead.
+If you simply want to mod a part of Kitta, only include the parts you want
+to mod (i.e. if you just want to change an animation make a file with only
+the graphics part and list only the animation you want to change in it)
+The current trigger part length is: 5
 
     /-reference-/
 Chunk IDs
@@ -149,4 +165,11 @@ Chunk Extensions
 07 = Stroke Colour (in HSB?) +4 byte hex colour
 08 = Chunk Friction +1 byte integer
 09 = Chunk Restitution +1 byte integer
+
+Events (for animations and sound)
+00 = Idle
+01 = Walking
+02 = Jumping
+03 = Idle-Moving
+04 = Hurt
 */

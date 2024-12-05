@@ -72,9 +72,9 @@ class Gif extends PImage { //make custom loop points
     super.updatePixels();
   }
   
-  Gif(int FRAMES, float INTERVAL, String[] filenames) {//gonna make the character files laters
+  Gif(float INTERVAL, String[] filenames) {//gonna make the character files laters
     super(1,1,ARGB);
-    frames = FRAMES;
+    frames = filenames.length;
     interval = INTERVAL;
     images = new PImage[frames];
     if(frames>1){
@@ -156,20 +156,19 @@ class Gif extends PImage { //make custom loop points
 
 class player extends FBox {
   int health = 5;
-  Gif[] anim = new Gif[5];//idle moving jumping idlemoving hurting
-  SoundFile[] snd = new SoundFile[5];
+  Gif[] anim = new Gif[]{new Gif(2.0/60,new String[]{"spr/ka0.png","spr/ka1.png","spr/ka2.png","spr/ka1.png"}),new Gif(2.0/60,new String[]{"spr/ka0.png","spr/kb0.png","spr/kb1.png","spr/kb0.png"}),new Gif(5.0/60,new String[]{"spr/kc.png"})};
+  SoundFile[] snd = new SoundFile[]{new SoundFile(dis,"snd/kwlk.wav"),new SoundFile(dis,"snd/kjmp.wav"),new SoundFile(dis,"snd/khrt.wav")};
   int animNum = 0;
   int invince = 0; //invincible until this frame
   int stunned = 0; //stunned until this frame
-  int[] animLookup = {0,1,2,3,4};
-  int[] sndLookup = {0,1,2,3,4};
+  int[] animLookup = {0,1,2,0,0};
+  int[] sndLookup = {0,1,2,0,0};
   player(int HEALTH, float x, float y) {//placeholder for now
     super(32,64);
     health = HEALTH;
-    java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
-    anim[1] = new Gif(3,5.0/60,"spr/kb",".png");
-    anim[2] = new Gif(1,5.0/60,"spr/kc",".png");
-    snd = new SoundFile[]{new SoundFile(dis,"snd/kwlk.wav"),new SoundFile(dis,"snd/kjmp.wav"),new SoundFile(dis,"snd/khrt.wav")};
+    java.util.Arrays.fill(anim, new Gif(2.0/60,new String[]{"spr/ka0.png","spr/ka1.png","spr/ka2.png","spr/ka1.png"}));
+    anim[1] = new Gif(2.0/60,new String[]{"spr/ka0.png","spr/kb0.png","spr/kb1.png","spr/kb0.png"});
+    anim[2] = new Gif(5.0/60,new String[]{"spr/kc.png"});
     super.attachImage(anim[0]);
     super.setPosition(x,y);
     super.setRotatable(false);
@@ -177,7 +176,7 @@ class player extends FBox {
     super.setName("00");
   }
   
-  player(int HEALTH, float x, float y, byte[] fichier) {//placeholder for now
+  player(int HEALTH, float x, float y, byte[] fichier) {//and the one taking its place now
     super(32,64);
     health = HEALTH;
     java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
