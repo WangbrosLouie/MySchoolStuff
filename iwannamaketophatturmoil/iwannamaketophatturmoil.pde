@@ -311,7 +311,7 @@ class TestBot extends Enemy {
       super.setVelocity(dir?50:-50,super.getVelocityY());
       break;
     case 1:
-      if(timer==0)new Missile(super.getX(),super.getY()-10,10,40,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10,0);
+      //if(timer==0)new Missile(super.getX(),super.getY()-10,10,40,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10,0);
       dir = !dir;
       break;
     default:
@@ -647,7 +647,7 @@ int loadTextures(String[] texList) {
 }
 
 int makeEnemies(int[] bads) {
-  for(int i:bads)i=i&0xFF;
+  for(int i=0;i<bads.length;i++)bads[i]&=0xFF;
   int p = 0;
   boolean finish = false;
   while(!finish) {

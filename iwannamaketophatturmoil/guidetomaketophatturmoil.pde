@@ -52,6 +52,7 @@ space between segments will be ignored. Possible segments are:
 Level Layout ("Map Layout") - the chunks and their features
 Chunk Textures ("Textures") - the paths to the chunk textures
 Enemies ("Enemies") - Enemies
+Music ("Music") - bgms for level and winning and maybe more.
   The segments in the file can come in any order. However, for chunk
 textures to work, you must specify the level chunks after the texture paths
 because the chunks will be loaded and textured before the textures are
@@ -166,6 +167,7 @@ Data Segment Bits (from right to left)
 0 = Texture Paths (required for textures)
 1 = Layout Data (required)
 2 = Enemies
+3 = BGM
 
 Chunk Extensions
 00 = End of Chunk
