@@ -133,9 +133,10 @@ D = bouncy floor
 E = super bounce
 F = win zone
 10 = damage block
-11 = water
-12 = lava
-13 = ladder
+11 = jumpable damage
+12 = water
+13 = lava
+14 = ladder
 
 Chunk Flag Bits (from right to left)
 0 = replenishes jump
@@ -143,7 +144,7 @@ Chunk Flag Bits (from right to left)
 2 = go to next level
 3 = unstatic when touched
 4 = is decoration
-5 = undecided
+5 = is liquid
 6 = undecided
 7 = undecided
 

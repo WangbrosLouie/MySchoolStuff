@@ -10,6 +10,7 @@
 Finish the dingin' chunk extensions
 Finish Missiles
 Add Lava Entities
+Make liquids
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
 Make a sonic crackers title card (while blocking worldprocessing during that with a bool)
@@ -194,6 +195,7 @@ class player extends FBox {
     ArrayList<FContact> touchings = super.getContacts();
     keys[3] = 1;
     float oldSpeed = super.getVelocityX();
+    float massy = 1.0;
     for(int i=touchings.size()-1;i>-1;i--) {
       int flags = 0;
       if(touchings.get(i).getBody1()==this){
@@ -208,10 +210,13 @@ class player extends FBox {
       if(flags%0x4/2>0){hurt(1);}
       if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
       if(flags%0x10/8>0)touchings.remove(i);
+      if(flags%0x20/10>0)massy = 0.5;
     }
+    super.setDensity(massy); //this doesnt work???
+    print(getDensity());
     if(touchings.size()==0)keys[3]=2;
     if(debug)keys[3]=0;
-    if(abs(super.getVelocityX())>100)animNum = 2;//if moving but no inputs
+    if(abs(super.getVelocityX())>100)animNum = animLookup[2];//if moving but no inputs
     if(stunned<=frameCount) {
       if(!((keys[0]>1)&&(keys[1])>1)) {
         if(keys[0]>1) {
@@ -219,25 +224,25 @@ class player extends FBox {
           else super.setVelocity(-200,super.getVelocityY());
           camDir = false;
           animNum = 1;
-          if(keys[3]==2){animNum = 2;snd[0].stop();}
-          else{animNum=1;if(!snd[0].isPlaying())snd[0].play();}
+          if(keys[3]==2){animNum = 2;snd[sndLookup[0]].stop();}
+          else{animNum=1;if(!snd[sndLookup[0]].isPlaying())snd[sndLookup[0]].play();}
         } else if(keys[1]>1) {
           if(super.getVelocityX()<-200)super.setVelocity(super.getVelocityX()+100,super.getVelocityY());//super.addForce(5000,0);
           else super.setVelocity(200,super.getVelocityY());
           camDir = true;
           animNum = 1;
-          if(keys[3]==2){animNum = 2;snd[0].stop();}
+          if(keys[3]==2){animNum = animLookup[2];snd[0].stop();}
           else{animNum=1;if(!snd[0].isPlaying())snd[0].play();}
         } else {
           super.addImpulse(-super.getVelocityX()/5,0);
-          if(keys[3]==2){animNum = 2;snd[0].stop();}
-          else{animNum=1;snd[0].stop();}
+          if(keys[3]==2){animNum = 2;snd[sndLookup[0]].stop();}
+          else{animNum=1;snd[sndLookup[0]].stop();}
         }
       }
       if(keys[2]>1&&keys[3]==0) {
           keys[3] = 1;
           super.setVelocity(super.getVelocityX(),-200);
-          animNum = 2;
+          animNum = animLookup[2];
           snd[0].stop();
           snd[1].stop();
           snd[1].play();
@@ -245,12 +250,12 @@ class player extends FBox {
     }
     switch(animNum) {
     case 1:
-      anim[animNum].updatePlayer(abs(oldSpeed)/1500);
+      anim[animLookup[animNum]].updatePlayer(abs(oldSpeed)/1500);
       break;
     default:
-      anim[animNum].updatePlayer();
+      anim[animLookup[animNum]].updatePlayer();
     }
-    super.attachImage((invince>frameCount)&&(frameCount%4>1)?new PImage(0,0,RGB):anim[animNum]);
+    super.attachImage((invince>frameCount)&&(frameCount%4>1)?new PImage(0,0,RGB):anim[animLookup[animNum]]);
     for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
     return keys;
   }
@@ -1108,6 +1113,32 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("10");
         gnd.setFillColor(0xFFAFAFFF);
         gnd.setFriction(0);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("1000");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        if(fileType==3)while(bi(map[p])!=0xFF) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0x12:
+        gnd = new FBox(128,128);
+        gnd.setPosition(64,64);
+        gnd.setName("00100001");
+        gnd.setFillColor(0xFF7F7FFF);
+        gnd.setFriction(0);
+        gnd.setSensor(true);
         if(texture!=-1){
           img = new FBox(128,128);
           img.attachImage(tex[texture]);
