@@ -169,6 +169,8 @@ Data Segment Bits (from right to left)
 1 = Layout Data (required)
 2 = Enemies
 3 = BGM
+4 = Background
+5 = Script (story)
 
 Chunk Extensions
 00 = End of Chunk

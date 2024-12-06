@@ -28,7 +28,7 @@ String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03.lvl","map03tex.lv
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 6;
+byte mapNum = 3;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -46,6 +46,7 @@ ArrayList<FBody> projs = new ArrayList<FBody>();//projectiles
 Gif bg;
 color backcolour = color(0);
 PApplet dis = this;
+int mode = 0;
 
 ControlIO CtrlIO;
 ControlDevice N64;
@@ -168,7 +169,7 @@ class player extends FBox {
     super(32,64);
     health = HEALTH;
     java.util.Arrays.fill(anim, new Gif(2.0/60,new String[]{"spr/ka0.png","spr/ka1.png","spr/ka2.png","spr/ka1.png"}));
-    anim[1] = new Gif(2.0/60,new String[]{"spr/ka0.png","spr/kb0.png","spr/kb1.png","spr/kb0.png"});
+    anim[1] = new Gif(2.0/60,new String[]{"spr/ka0.png","spr/kb0.png","spr/kb1.png","spr/kb0.png","spr/ka0.png","spr/kb2.png","spr/kb3.png","spr/kb2.png"});
     anim[2] = new Gif(5.0/60,new String[]{"spr/kc.png"});
     super.attachImage(anim[0]);
     super.setPosition(x,y);
@@ -209,11 +210,11 @@ class player extends FBox {
       if(flags%0x2/1>0)keys[3] = 0;
       if(flags%0x4/2>0){hurt(1);}
       if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
-      if(flags%0x10/8>0)touchings.remove(i);
-      if(flags%0x20/10>0)massy = 0.5;
+      //make dat unstatic thingy
+      if(flags%0x20/0x10>0)touchings.remove(i);
+      if(flags%0x40/0x20>0)massy = 2;
     }
-    super.setDensity(massy); //this doesnt work???
-    print(getDensity());
+    super.setDensity(massy); //nvm me stupid
     if(touchings.size()==0)keys[3]=2;
     if(debug)keys[3]=0;
     if(abs(super.getVelocityX())>100)animNum = animLookup[2];//if moving but no inputs
@@ -235,8 +236,9 @@ class player extends FBox {
           else{animNum=1;if(!snd[0].isPlaying())snd[0].play();}
         } else {
           super.addImpulse(-super.getVelocityX()/5,0);
-          if(keys[3]==2){animNum = 2;snd[sndLookup[0]].stop();}
-          else{animNum=1;snd[sndLookup[0]].stop();}
+          snd[sndLookup[0]].stop();
+          if(keys[3]==2)animNum = 2;
+          else animNum=0;
         }
       }
       if(keys[2]>1&&keys[3]==0) {
@@ -284,6 +286,7 @@ class Enemy extends FBox {//dont use please use the subclasses
   }
   
   void destroy() {//just like roblox.
+    loadSound("snd/boom.wav").play();
     world.remove(this);
     enemies.remove(this);
     //then the garbage collects i hope
@@ -525,49 +528,46 @@ void setup() {
 
 void draw() {
   try {
-    if(loading){
-      loading = false;
-      mapData = loadBytes(maps[mapNum%maps.length]);
-      makeLevel();
-      println(mapName);
-      playerVec = new PVector(you.getX(),you.getY());
-      camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
-      //CtrlIO = ControlIO.getInstance(this);
-      //ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
-      //if(Controllers.length>3) {
-      //  N64 = Controllers[2];
-      //  N64.open();
-      //  A = N64.getButton(2);
-      //  B = N64.getButton(3);
-      //  L = N64.getButton(7);
-      //  R = N64.getButton(8);
-      //  DPad = N64.getHat(0);
-      //  A.plug("APressed",ControlIO.ON_PRESS);
-      //  A.plug("AReleased",ControlIO.ON_RELEASE);
-      //}my controller adapter broke :|
+    switch(mode) {
+    case 0:
+      //do the buttons the menus the yaddas not the nyaddas
+      mode = 1;
+    case 1://maybe do the loading while the intro is introing with a thread or something like that
+      if(loading){
+        loading = false;
+        mapData = loadBytes(maps[mapNum%maps.length]);
+        makeLevel();
+        println(mapName);
+        playerVec = new PVector(you.getX(),you.getY());
+        camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
+        mode = 2;
+      }
+      break;
+    case 2:
+      //processing objects
+      keys = you.process(keys);
+      for(int i=0;i<enemies.size();i++)enemies.get(i).process();
+      for(Gif pic:tex)pic.update();
+      world.step();
+      //camera stuff
+      playerVec.set(you.getX(),you.getY());
+      camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(you.getVelocityX()*30)+(camDir?50:-50),sqrt2(you.getVelocityY()*30))),0.05);
+      scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
+      //scl/=6;
+      if(!(frameCount%2>0&&halfFPS)) {//draw?
+        push();
+        background(backcolour);
+        scale(scl);
+        //stroke(127,127);
+        //strokeWeight(0.5);
+        translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
+        world.draw();
+        //for(int i=0;i<15;i++)line(0,i*16,640,i*16);for(int i=0;i<15;i++)line(i*16,0,i*16,640);
+        pop();
+      }
+      //scl*=6;
+      break;
     }
-    //processing objects
-    keys = you.process(keys);
-    for(int i=0;i<enemies.size();i++)enemies.get(i).process();
-    for(Gif pic:tex)pic.update();
-    world.step();
-    //camera stuff
-    playerVec.set(you.getX(),you.getY());
-    camVec.lerp(PVector.add(playerVec,new PVector(sqrt2(you.getVelocityX()*30)+(camDir?50:-50),sqrt2(you.getVelocityY()*30))),0.05);
-    scl = lerp(scl,constrain(1.0-dist(0,0,you.getVelocityX()/2500.0,you.getVelocityY()/2500.0),0.5,1),0.1);
-    //scl/=6;
-    if(!(frameCount%2>0&&halfFPS)) {
-      push();
-      background(backcolour);
-      scale(scl);
-      //stroke(127,127);
-      //strokeWeight(0.5);
-      translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
-      world.draw();
-      //for(int i=0;i<15;i++)line(0,i*16,640,i*16);for(int i=0;i<15;i++)line(i*16,0,i*16,640);
-      pop();
-    }
-    //scl*=6;
   } catch (Exception e) {
     blueDead(e);
     noLoop();
@@ -623,7 +623,8 @@ void makeLevel() {
     }
   } else {
     map = mapData;
-    if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeEnemies(int(subset(map,lWidth*lHeight)));}
+    //nobody touch the code below its a monster
+    if(fileType!='1'){String[]s = split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0);loadTextures(subset(s,s.length-map[map.length-25]));makeEnemies(int(subset(map,lWidth*lHeight)));}
     makeChunks(mapData,lWidth,lHeight,fileType);
   }
   you = new player(3,(256*bi(mapData[mapData.length-30]))+bi(mapData[mapData.length-29]),(256*bi(mapData[mapData.length-28]))+bi(mapData[mapData.length-27]));
@@ -1294,6 +1295,10 @@ byte[] convert(byte[] map, int toversion, String output) {//only old to new for 
   return converted;
   //if(fileType!='1'){loadTextures(split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0));makeEnemies(int(subset(map,lWidth*lHeight)));}
   //makeChunks(mapData,lWidth,lHeight,fileType);
+}
+
+SoundFile loadSound(String path) {
+  return new SoundFile(this,path);
 }
 
 void keyPressed() {
