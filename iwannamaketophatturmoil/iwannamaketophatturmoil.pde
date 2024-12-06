@@ -23,11 +23,11 @@ import org.gamecontrolplus.gui.*;
 
 boolean loading = true;
 boolean debug = false;
-String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03.lvl","map03tex.lvl","map03ext.lvl","map04.lvl"};
+String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03.lvl","map03tex.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 1;
+byte mapNum = 6;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -311,7 +311,7 @@ class TestBot extends Enemy {
       super.setVelocity(dir?50:-50,super.getVelocityY());
       break;
     case 1:
-      if(timer==0)new Missile(10,40,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10,0).addToWorld(world);
+      if(timer==0)new Missile(super.getX(),super.getY()-10,10,40,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10,0);
       dir = !dir;
       break;
     default:
@@ -333,11 +333,16 @@ class Missile extends FBox {
   PVector direction;
   float speed = 0;
   
-  Missile(int high, int wide, PVector DIR, float SPEED, float MASS) {
+  Missile(float x, float y, int high, int wide, PVector DIR, float SPEED, float MASS) {
     super(high,wide);
     super.setFill(0,0,255);
+    super.setPosition(x,y);
     speed = SPEED;
     direction = DIR.normalize().mult(SPEED);
+    projs.add(this);
+    super.setDensity(super.getMass()*world.getGravity().y/(high*wide));
+    super.setVelocity(direction.x,direction.y);
+    super.addToWorld(world);
   }
 }
 
@@ -672,30 +677,13 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
       p+=2;
       chunks[chunk] = new FCompound();
       switch(ID){
-      case 0:
-        FBox img;
-        if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("1000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
-        }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{});
-        }p++;
-        chunks[chunk].setPosition(128*i,128*j);
-        chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
-        break;
       case 1:
         FBox gnd = new FBox(128,127);
         gnd.setPosition(65,65.5);
         gnd.setName("00");
         FLine jmp = new FLine(1,1,129,1);
         jmp.setName("01");
+        FBox img;
         if(texture!=-1){
           img = new FBox(128,128);
           img.attachImage(tex[texture]);
@@ -1135,6 +1123,23 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           p += extendChunk(subset(map,p),new FBody[]{gnd});
         }p++;
         chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      default: //air for unimplemented chunks
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("1000");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+        }
+        if(fileType==3)while(bi(map[p])!=0xFF) {
+          p += extendChunk(subset(map,p),new FBody[]{});
+        }p++;
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);

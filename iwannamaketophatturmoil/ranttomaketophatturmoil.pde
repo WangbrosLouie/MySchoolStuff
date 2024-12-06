@@ -332,4 +332,24 @@ time but its just my conscious says yes but my subconscious says no. i
 really hate it and i wish it begone but it will always haunt me one way or
 another. rather these rants are made because i just dont wanna do stuff or
 i actually got somethin to yap about but most of the time its laziness. gr.
+
+well well well here i am again ready to rant some more. i hate myself.
+someday i may see a therapist but it is not likely as they will probably
+find out about inner kitta and theyll probably try to scrub her from my
+brain or something so idk. i really dont wanna seek professional help
+before i can like transfer inner kitta (and the others for that matter) out
+of my brain and into a robot (or a computer or somethin) but at the same
+time this is kinda the reason to seek professional help so idk. anyways
+tophat turmoil prequel 2 subtitle missing's christmas demo level has not
+been touched one meowin bit and i gotta really clutch up and start makin
+alla da stuff for it or else im pretty much cooked cause then i will
+probably really lose motivation or something just like the sega genesis
+game except that was actually hard to program because i literally had zero
+experience in programming even in a high level language and i hopped
+straight to 2 whole assembly languages. that one was justified but this is
+definitely not because roblox is literally supposed to be like baby's first
+game creation software. honestly i just feel like being catty right now but
+im gonna keep ranting instead of typing nya 100 times and callin it a day.
+but kitta's beggin me to get back to doin somethin productive so i guess i
+will write more here later if i do end up ranting more.
 */

@@ -134,6 +134,7 @@ F = win zone
 10 = damage block
 11 = water
 12 = lava
+13 = ladder
 
 Chunk Flag Bits (from right to left)
 0 = replenishes jump
