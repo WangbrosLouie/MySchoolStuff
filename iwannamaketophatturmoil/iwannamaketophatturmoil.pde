@@ -209,7 +209,7 @@ class player extends FBox {
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
       if(flags%0x4/2>0){hurt(1);}
-      if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;}
+      if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;mode=3;}
       //make dat unstatic thingy
       if(flags%0x20/0x10>0)touchings.remove(i);
       if(flags%0x40/0x20>0)massy = 2;
@@ -566,6 +566,11 @@ void draw() {
         pop();
       }
       //scl*=6;
+      break;
+    case 3:
+      //a winner is you gotta play dat win animation and score?? what score this aint sonic the hedgehog
+      frameCount = -1;
+      mode = 1;
       break;
     }
   } catch (Exception e) {
