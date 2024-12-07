@@ -18,9 +18,6 @@ Make a sonic crackers title card (while blocking worldprocessing during that wit
 
 import fisica.*;
 import processing.sound.*;
-import net.java.games.input.*;
-import org.gamecontrolplus.*;
-import org.gamecontrolplus.gui.*;
 
 boolean loading = true;
 boolean debug = false;
@@ -47,11 +44,6 @@ Gif bg;
 color backcolour = color(0);
 PApplet dis = this;
 int mode = 0;
-
-ControlIO CtrlIO;
-ControlDevice N64;
-ControlHat DPad;
-ControlButton A, B, L, R;
 
 class Gif extends PImage { //make custom loop points
   int frames = 0;//also custom frame orders
@@ -1342,3 +1334,19 @@ void HPressed(float x) {
   if(x==0){keys[0]=0;keys[1]=0;}
   if(x>0){keys[0]=0;if(keys[1]==0)keys[1]=1;}
 }
+
+/*
+Credits! (because i thought it would be nice.)
+
+Me - literally everything used in the game
+Richard Marxer - the fisica library
+Processing contributors - the sound library
+um thats it unless you count Kitta for emotional support
+
+Tools Used
+
+Furnace - all sound effects and music
+MS Paint - simple graphics
+GIMP - advanced graphics
+Processing - y'know, the thing that runs this code
+*/

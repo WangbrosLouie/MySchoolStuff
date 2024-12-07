@@ -352,4 +352,28 @@ game creation software. honestly i just feel like being catty right now but
 im gonna keep ranting instead of typing nya 100 times and callin it a day.
 but kitta's beggin me to get back to doin somethin productive so i guess i
 will write more here later if i do end up ranting more.
+
+yahoy it is quite some time later. i think i like makin my game now. it is
+now quite polished looking, just from adding in some hastily made textures
+and some sound effects. i bet that if you didnt think about it you wouldnt
+have known that the water texture is just a recolour of the dirt texture.
+probably the coolest thing though is the boom sound effect. i was
+originally gonna use the metal pipe sound effect because funny then the
+vine boom because i though the video where the metal pipe came from was the
+vine boom's video then i fired up furnace and i experimented for like 5
+minutes in the opn instrument editor then i got the boom sound effect that
+doesnt even sound very fm-y. okay maybe its a little fm-y but it almost
+sounds like a sample. now obviously i cant get the most realistic explosion
+from fm instruments but its the best i got right now. also speaking of
+music stuff i am incredibly miffed that all of the gameboy songs that i
+exported sound awful with the vgm format. the worst thing is to have a nice
+sounding gameboy chiptune i need to use deflemask to export a gbs but the
+thing is deflemask doesnt support hardware envelopes so im left with two
+versions that dont sound like how i made them. i like chiptuning if you
+couldnt tell. i have so many unfinished tunes just waiting for me to have
+the time to come back to them and finish them well but i just dont wanna.
+after all i can just make new ones that sound better cause i have a lot
+more music experience than before. i really think i should take a music
+theory class though i think that may be important for music making.
+and now its too late to yap more if i do im gonna fall asleep at the chair
 */
