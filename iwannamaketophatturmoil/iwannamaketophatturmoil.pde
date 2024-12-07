@@ -28,7 +28,7 @@ String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03.lvl","map03tex.lv
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 3;
+byte mapNum = 6;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
