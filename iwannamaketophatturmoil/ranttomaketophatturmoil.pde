@@ -392,4 +392,9 @@ sleep) and an idiot (101% accuracy). the place which i am in is called
 nekomachi which is cattown or catcity or whatever and the country i cant
 actually remember the name of cause i used takoboto to search up characters
 that i dont know as i commonly do to make japanese puns.
+
+the name means fake country by the way. i am in cattown, fakountry. also
+starting january im gonna try to make a weekly funny issue on github
+because funny. i like making funny stuff and misusing githubs nice dev
+tools.
 */

@@ -13,6 +13,7 @@ Add Lava Entities
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
 Make a sonic crackers title card (while blocking worldprocessing during that with a bool)
+The top half of half-blocks are detected as solid ground for animations
 */
 
 import fisica.*;
