@@ -376,4 +376,20 @@ after all i can just make new ones that sound better cause i have a lot
 more music experience than before. i really think i should take a music
 theory class though i think that may be important for music making.
 and now its too late to yap more if i do im gonna fall asleep at the chair
+
+dec8 no not the computer(even tho im pretty sure its the dec 10) this is a
+timestamp. i read the first couple lines of this rant and i realized that
+never once did i specify that they was written on november 1. it makes a
+lot more sense why i said that i didnt eat much candy in that context cause
+its right after halloween. also if youre a stalker you would have noticed
+that my name and a bunch of other stuff on my page changed. this is for the
+funny and i will explain it here cause its extremely difficult to
+understand cause yes. my name is now "NeKoMi BaKa" which kanjically
+translates to "Cat-Watching Idiot" but the name is a pun because nekomi can
+mean asleep in japanese and baka is obviously idiot. so i not only watch
+cats (even though i dont) i am also asleep (which is false cause i barely
+sleep) and an idiot (101% accuracy). the place which i am in is called
+nekomachi which is cattown or catcity or whatever and the country i cant
+actually remember the name of cause i used takoboto to search up characters
+that i dont know as i commonly do to make japanese puns.
 */

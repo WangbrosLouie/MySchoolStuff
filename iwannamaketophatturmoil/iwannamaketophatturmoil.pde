@@ -10,7 +10,6 @@
 Finish the dingin' chunk extensions
 Finish Missiles
 Add Lava Entities
-Make liquids
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
 Make a sonic crackers title card (while blocking worldprocessing during that with a bool)
@@ -1130,10 +1129,61 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
         break;
+      case 0x11:
+        gnd = new FBox(128,128);
+        gnd.setPosition(64,64);
+        gnd.setName("11");
+        gnd.setFillColor(0xDF9F9FFF);
+        gnd.setFriction(0);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("1000");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        if(fileType==3)while(bi(map[p])!=0xFF) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
       case 0x12:
         gnd = new FBox(128,128);
         gnd.setPosition(64,64);
         gnd.setName("00100001");
+        gnd.setFillColor(0xFF7F7FFF);
+        gnd.setFriction(0);
+        gnd.setSensor(true);
+        if(texture!=-1){
+          img = new FBox(128,128);
+          img.attachImage(tex[texture]);
+          img.setSensor(true);
+          img.setStatic(true);
+          img.setName("1000");
+          img.setPosition(64,64);
+          chunks[chunk].addBody(img);
+          gnd.setNoFill();
+          gnd.setNoStroke();
+        }
+        if(fileType==3)while(bi(map[p])!=0xFF) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd});
+        }p++;
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        break;
+      case 0x13:
+        gnd = new FBox(128,128);
+        gnd.setPosition(64,64);
+        gnd.setName("00100011");
         gnd.setFillColor(0xFF7F7FFF);
         gnd.setFriction(0);
         gnd.setSensor(true);

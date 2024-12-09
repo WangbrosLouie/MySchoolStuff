@@ -13,10 +13,14 @@ English conventions.
 NOTE: Document is subject to change, and may not reflect the current state
 of the engine. This document may be behind or ahead of the engine.
 
+P.S. This is probably the only types of texts that I will make in formal
+language.
+
     /-contents-/
 -Level Data Format
 -Character File Format
 -Reference
+-Changelog
 
     /-level data format-/
 --Types 1 and 2(OUTDATED USE TYPE 3 INSTEAD)
@@ -190,4 +194,25 @@ Events (for animations and sound)
 02 = Jumping
 03 = Idle-Moving
 04 = Hurt
+
+    /-changelog-/
+Wowza, I'm finally tracking my progress after months of abusing Git's
+commit messages. I'm not gonna stop though. I never will.
+
+--Pre Alpha--
+|-Made the whole shebang. The shebang includes, but is not limited to:
+||-3 different file types
+||-The camera system
+||-The chunk system
+||-The loading system
+||-Textures
+||-Minimal sound effects
+||-(internal) Level names
+||-Health system framework
+''-evyles trusty testbot pre-prototype
+--Alpha 0.0.0 (the one right now)
+|-Character files (in progress)
+|-The mode framework shoehorned in (in progress)
+|-Menus with buttons (in progress)
+'-Level music (in progress)
 */
