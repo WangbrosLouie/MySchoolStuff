@@ -535,60 +535,68 @@ void draw() {
         println(mapName);
         playerVec = new PVector(you.getX(),you.getY());
         camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
-        mode = 2;
+        camDir = false;
+        //mode = 2;
       }
       if(!camDir){
-        
-        if(frameCount<60) {
-          
-        }
+        push();
+        //background(0);
+        noStroke();
+        fill(63,63,95);
+        if(frameCount<=30) {
+          rect(0,-height+(height*frameCount/30.0),width,height);
+        } else if(frameCount<=60) {
+          rect(0,0,width,height);
+          fill(159,159,191);
+          rect(width-(width*(frameCount-30)/30.0),0,width,height/5);
+        } else if(frameCount<=75) {
+          rect(0,0,width,height);
+          fill(159,159,191);
+          rect(0,0,width,height/5);
+          fill(255);
+          rect(((-75+frameCount)/60.0)*width,0,width/4,height);
+        } else if(frameCount<=90) {
+          rect(0,0,width,height);
+          fill(159,159,191);
+          rect(0,0,width,height/5);
+          fill(255);
+          rect(0,0,width/4,height);
+          fill(127,127,255,127);
+          rect(width*(1.63-(frameCount/120.0)),0,width*0.125,height);
+          rect(0,height*(2.25-(frameCount/60.0)),width,height*0.25);
+          fill(255,31,31);
+          rect(width*(6.175-(frameCount/15.0)),height/4,width*33/40,height/14);
+        } else if(keyPressed) camDir = true;
+        pop();
         //colours 63, 63, 95|159, 159, 191|255, 255, 255|255, 31, 31|127, 127, 255|127, 127, 255
         //sizes {1, 0},{1, 0}|{1, 0},{0.179, 0}|{0.25, 0},{1, 0}|{0.825, 0},{0.071, 0}|{0.125, 0},{1, 0}|{1, 0},{0.125, 0}
-//for i=1,10 do
-//  Eye.A.Position = UDim2.new(0,0,-1+(i/10))
-//  wait(0.01)
-//end
-//for i=1,10 do
-//  Eye.B.Position = UDim2.new(1-(i/10))
-//  wait(0.01)
-//end
-//for i=1,5 do
-//  Eye.C.Position = UDim2.new((-5+i)/20)
-//  wait(0.01)
-//end
-//for i=1,5 do
-//  Eye.D.Position = UDim2.new(1-(i*0.165),0,0.25)
-//  Eye.E.Position = UDim2.new(1.7-(i*0.165))
-//  Eye.F.Position = UDim2.new(0,0,1.7-(i*0.165))
-//  wait(0.01)
-//end
       } else {
-//for i=4,0,-1 do
-//  Eye.D.Position = UDim2.new(1-(i*0.165),0,0.25)
-//  Eye.E.Position = UDim2.new(1.7-(i*0.165))
-//  Eye.F.Position = UDim2.new(0,0,1.7-(i*0.165))
-//  wait(0.01)
-//end
-//for i=4,0,-1 do
-//  Eye.C.Position = UDim2.new((-5+i)/20)
-//  wait(0.01)
-//end
-//for i=9,0,-1 do
-//  Eye.B.Position = UDim2.new(1-(i/10))
-//  wait(0.01)
-//end
-//for i=9,0,-1 do
-//  Eye.A.Position = UDim2.new(0,0,-1+(i/10))
-//  wait(0.01)
-//end
-      }
-      if(!(frameCount%2>0&&halfFPS)) {//draw?
         push();
         background(backcolour);
         scale(scl);
         translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
         world.draw();
         pop();
+        //and theres so much more
+        mode = 2;
+//for i=4,0,-1 do
+//  Eye.D.Position = UDim2.new(1-(i*0.165),0,0.25)
+//  Eye.E.Position = UDim2.new(1.7-(i*0.165))
+//  Eye.F.Position = UDim2.new(0,0,1.7-(i*0.165))
+//  wait(0.01)
+//end
+//for i=4,0,-1 do
+//  Eye.C.Position = UDim2.new((-5+i)/20)
+//  wait(0.01)
+//end
+//for i=9,0,-1 do
+//  Eye.B.Position = UDim2.new(1-(i/10))
+//  wait(0.01)
+//end
+//for i=9,0,-1 do
+//  Eye.A.Position = UDim2.new(0,0,-1+(i/10))
+//  wait(0.01)
+//end
       }
       break;
     case 2:
