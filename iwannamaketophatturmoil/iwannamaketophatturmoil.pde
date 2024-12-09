@@ -10,6 +10,7 @@
 Finish the dingin' chunk extensions
 Finish Missiles
 Add Lava Entities
+Add bgm processing (imagine vgm processing in processing)
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
 Make a sonic crackers title card (while blocking worldprocessing during that with a bool)
@@ -189,6 +190,7 @@ class player extends FBox {
     keys[3] = 1;
     float oldSpeed = super.getVelocityX();
     float massy = 1.0;
+    
     for(int i=touchings.size()-1;i>-1;i--) {
       int flags = 0;
       if(touchings.get(i).getBody1()==this){
@@ -524,6 +526,7 @@ void draw() {
     case 0:
       //do the buttons the menus the yaddas not the nyaddas
       mode = 1;
+      frameCount = 0;
     case 1://maybe do the loading while the intro is introing with a thread or something like that
       if(loading){
         loading = false;
@@ -533,6 +536,59 @@ void draw() {
         playerVec = new PVector(you.getX(),you.getY());
         camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
         mode = 2;
+      }
+      if(!camDir){
+        
+        if(frameCount<60) {
+          
+        }
+        //colours 63, 63, 95|159, 159, 191|255, 255, 255|255, 31, 31|127, 127, 255|127, 127, 255
+        //sizes {1, 0},{1, 0}|{1, 0},{0.179, 0}|{0.25, 0},{1, 0}|{0.825, 0},{0.071, 0}|{0.125, 0},{1, 0}|{1, 0},{0.125, 0}
+//for i=1,10 do
+//  Eye.A.Position = UDim2.new(0,0,-1+(i/10))
+//  wait(0.01)
+//end
+//for i=1,10 do
+//  Eye.B.Position = UDim2.new(1-(i/10))
+//  wait(0.01)
+//end
+//for i=1,5 do
+//  Eye.C.Position = UDim2.new((-5+i)/20)
+//  wait(0.01)
+//end
+//for i=1,5 do
+//  Eye.D.Position = UDim2.new(1-(i*0.165),0,0.25)
+//  Eye.E.Position = UDim2.new(1.7-(i*0.165))
+//  Eye.F.Position = UDim2.new(0,0,1.7-(i*0.165))
+//  wait(0.01)
+//end
+      } else {
+//for i=4,0,-1 do
+//  Eye.D.Position = UDim2.new(1-(i*0.165),0,0.25)
+//  Eye.E.Position = UDim2.new(1.7-(i*0.165))
+//  Eye.F.Position = UDim2.new(0,0,1.7-(i*0.165))
+//  wait(0.01)
+//end
+//for i=4,0,-1 do
+//  Eye.C.Position = UDim2.new((-5+i)/20)
+//  wait(0.01)
+//end
+//for i=9,0,-1 do
+//  Eye.B.Position = UDim2.new(1-(i/10))
+//  wait(0.01)
+//end
+//for i=9,0,-1 do
+//  Eye.A.Position = UDim2.new(0,0,-1+(i/10))
+//  wait(0.01)
+//end
+      }
+      if(!(frameCount%2>0&&halfFPS)) {//draw?
+        push();
+        background(backcolour);
+        scale(scl);
+        translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
+        world.draw();
+        pop();
       }
       break;
     case 2:
@@ -1400,4 +1456,15 @@ Furnace - all sound effects and music
 MS Paint - simple graphics
 GIMP - advanced graphics
 Processing - y'know, the thing that runs this code
+
+temporary planning part
+
+checkpoint
+
+when kitta die she respawn at the last checkpoint she touched
+this is stored in the level file
+the checkpoint changes the spawn point part of the level file
+then the level reloads
+when the checkpoint is touched it changes picture
+the checkpoint is an entity
 */

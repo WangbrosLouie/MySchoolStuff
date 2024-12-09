@@ -150,7 +150,11 @@ Chunk Flag Bits (from right to left)
 4 = is decoration
 5 = is liquid
 6 = undecided
-7 = undecided
+7 = is entity (0)
+
+Entity Flag Bits (from right to left)
+0-6 = entity type
+7 = is entity (1)
 
 Level Parameter Bytes
 0 = Level Width - 1 (Chunks)
