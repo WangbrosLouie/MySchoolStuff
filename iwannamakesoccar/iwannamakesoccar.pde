@@ -277,7 +277,7 @@ ControlButton A, B, L, R;
 
 void settings() {
   Fisica.init(this);
-  size(640,480);
+  size(640,480,P2D);
 }
 
 void setup() {
@@ -357,21 +357,21 @@ void draw() {
     CtrlIO = ControlIO.getInstance(this);
     ControlDevice[] Controllers = CtrlIO.getDevices().toArray(new ControlDevice[0]); 
     if(Controllers.length>3) {
-      N64 = Controllers[2];
-      N64.open();
-      A = N64.getButton(2);
-      B = N64.getButton(3);
-      L = N64.getButton(7);
-      R = N64.getButton(8);
-      DPad = N64.getHat(0);
-      A.plug("APressed",ControlIO.ON_PRESS);
-      L.plug("LPressed",ControlIO.ON_PRESS);
-      R.plug("RPressed",ControlIO.ON_PRESS);
-      B.plug("BPressed",ControlIO.ON_PRESS);
-      A.plug("AReleased",ControlIO.ON_RELEASE);
-      L.plug("LReleased",ControlIO.ON_RELEASE);
-      R.plug("RReleased",ControlIO.ON_RELEASE);
-      B.plug("BReleased",ControlIO.ON_RELEASE);
+      //N64 = Controllers[2];
+      //N64.open();
+      //A = N64.getButton(2);
+      //B = N64.getButton(3);
+      //L = N64.getButton(7);
+      //R = N64.getButton(8);
+      //DPad = N64.getHat(0);
+      //A.plug("APressed",ControlIO.ON_PRESS);
+      //L.plug("LPressed",ControlIO.ON_PRESS);
+      //R.plug("RPressed",ControlIO.ON_PRESS);
+      //B.plug("BPressed",ControlIO.ON_PRESS);
+      //A.plug("AReleased",ControlIO.ON_RELEASE);
+      //L.plug("LReleased",ControlIO.ON_RELEASE);
+      //R.plug("RReleased",ControlIO.ON_RELEASE);
+      //B.plug("BReleased",ControlIO.ON_RELEASE);
     }
     ttl.loop();
     loading = false;

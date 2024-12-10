@@ -26,7 +26,7 @@ String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03.lvl","map03tex.lv
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 6;
+byte mapNum = 0;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -512,10 +512,10 @@ void settings() {
 
 void setup() {
   //surface.setResizable(true);
-  loading = true;
   lucid = createFont("Lucida Console",14,false);
-  Fisica.init(this);
-  image(loadImage("spr/loudo.png"),0,0,width,height);
+  camDir = false;
+  thread("makeLevel");
+  println(mapName);
   //convert(loadBytes("map02.lvl"),3,"map02ext.lvl");
   //draw thy loading screen
 }
@@ -528,19 +528,8 @@ void draw() {
       mode = 1;
       frameCount = 0;
     case 1://maybe do the loading while the intro is introing with a thread or something like that
-      if(loading){
-        loading = false;
-        mapData = loadBytes(maps[mapNum%maps.length]);
-        makeLevel();
-        println(mapName);
-        playerVec = new PVector(you.getX(),you.getY());
-        camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
-        camDir = false;
-        //mode = 2;
-      }
       if(!camDir){
         push();
-        //background(0);
         noStroke();
         fill(63,63,95);
         if(frameCount<=30) {
@@ -566,10 +555,17 @@ void draw() {
           rect(0,height*(2.25-(frameCount/60.0)),width,height*0.25);
           fill(255,31,31);
           rect(width*(6.175-(frameCount/15.0)),height/4,width*33/40,height/14);
-        } else if(keyPressed) camDir = true;
+          textAlign(LEFT,CENTER);
+          textSize(48);
+          fill(255);
+          stroke(0);
+          strokeWeight(3);
+          text(mapName,width*(6.175-(frameCount/15.0)),height*2/7);
+        } else if(!loading) {
+          
+          if(keyPressed){camDir = true;frameCount=0;}
+        }
         pop();
-        //colours 63, 63, 95|159, 159, 191|255, 255, 255|255, 31, 31|127, 127, 255|127, 127, 255
-        //sizes {1, 0},{1, 0}|{1, 0},{0.179, 0}|{0.25, 0},{1, 0}|{0.825, 0},{0.071, 0}|{0.125, 0},{1, 0}|{1, 0},{0.125, 0}
       } else {
         push();
         background(backcolour);
@@ -577,26 +573,35 @@ void draw() {
         translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
         world.draw();
         pop();
-        //and theres so much more
-        mode = 2;
-//for i=4,0,-1 do
-//  Eye.D.Position = UDim2.new(1-(i*0.165),0,0.25)
-//  Eye.E.Position = UDim2.new(1.7-(i*0.165))
-//  Eye.F.Position = UDim2.new(0,0,1.7-(i*0.165))
-//  wait(0.01)
-//end
-//for i=4,0,-1 do
-//  Eye.C.Position = UDim2.new((-5+i)/20)
-//  wait(0.01)
-//end
-//for i=9,0,-1 do
-//  Eye.B.Position = UDim2.new(1-(i/10))
-//  wait(0.01)
-//end
-//for i=9,0,-1 do
-//  Eye.A.Position = UDim2.new(0,0,-1+(i/10))
-//  wait(0.01)
-//end
+        push();
+        fill(63,63,95);
+        noStroke();
+        fill(63,63,95);
+        if(frameCount<=15) {
+          rect(0,0,width,height);
+          fill(159,159,191);
+          rect(0,0,width,height/5);
+          fill(255);
+          rect(0,0,width/4,height);
+          fill(127,127,255,127);
+          rect(width*(0.875+(frameCount/120.0)),0,width*0.125,height);
+          rect(0,height*(0.75+(frameCount/60.0)),width,height*0.25);
+          fill(255,31,31);
+          rect(width*(0.175+(frameCount/15.0)),height/4,width*33/40,height/14);
+        } else if(frameCount<=30) {
+          rect(0,0,width,height);
+          fill(159,159,191);
+          rect(0,0,width,height/5);
+          fill(255);
+          rect(((15-frameCount)/60.0)*width,0,width/4,height);
+        } else if(frameCount<=60) {
+          rect(0,0,width,height);
+          fill(159,159,191);
+          rect((width*(frameCount-30)/30.0),0,width,height/5);
+        } else if(frameCount<=90) {
+          rect(0,height*((60-frameCount)/30.0),width,height);
+        } else {mode = 2;frameCount=0;}
+        pop();
       }
       break;
     case 2:
@@ -636,61 +641,73 @@ void draw() {
 }
 
 void makeLevel() {
-  for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
-  String fileFoot = new String(subset(mapData,mapData.length-16,15));
-  mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
-  if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
-  char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
-  int lWidth = bi(mapData[mapData.length-32])+1;
-  int lHeight = bi(mapData[mapData.length-31])+1;
-  println(lWidth, lHeight);
-  backcolour = color(int(mapData[mapData.length-22])&0xFF,int(mapData[mapData.length-21])&0xFF,int(mapData[mapData.length-20])&0xFF);
-  byte[] map = new byte[0];
-  int p = 0;
-  tex = new Gif[255];
-  java.util.Arrays.fill(tex,new Gif());
-  world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
-  world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
-  if(fileType=='3') {
-    int contents = mapData[mapData.length-17]&0xFF;
-    while(contents!=0) {
-      p = 2147483647;//long code gooooo
-      byte nextSeg = 0;
-      int temp = 0;
-      String[] headers = {"Textures","Map Layout","Enemies"};
-      for(byte i=0;i<headers.length;i++) {
-        if(contents%pow(2,i+1)/pow(2,i)>0) {
-          temp = new String(mapData).indexOf(headers[i]);
-          if(temp<p&&temp!=-1){p=temp;nextSeg=(byte)(i+1);}
+  try {
+    loading = true;
+    mapName = "man your storage device is slow";
+    mapData = loadBytes(maps[mapNum%maps.length]);
+    String fileFoot = new String(subset(mapData,mapData.length-16,15));
+    mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
+    if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
+    for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
+    Fisica.init(this);
+    char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
+    int lWidth = bi(mapData[mapData.length-32])+1;
+    int lHeight = bi(mapData[mapData.length-31])+1;
+    println(lWidth, lHeight);
+    backcolour = color(int(mapData[mapData.length-22])&0xFF,int(mapData[mapData.length-21])&0xFF,int(mapData[mapData.length-20])&0xFF);
+    byte[] map = new byte[0];
+    int p = 0;
+    tex = new Gif[255];
+    java.util.Arrays.fill(tex,new Gif());
+    world = new FWorld(-128,-128,lWidth*128+128,lHeight*128+128);
+    world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
+    if(fileType=='3') {
+      int contents = mapData[mapData.length-17]&0xFF;
+      while(contents!=0) {
+        p = 2147483647;//long code gooooo
+        byte nextSeg = 0;
+        int temp = 0;
+        String[] headers = {"Textures","Map Layout","Enemies"};
+        for(byte i=0;i<headers.length;i++) {
+          if(contents%pow(2,i+1)/pow(2,i)>0) {
+            temp = new String(mapData).indexOf(headers[i]);
+            if(temp<p&&temp!=-1){p=temp;nextSeg=(byte)(i+1);}
+          }
         }
+        print(nextSeg);
+        switch(nextSeg) {
+        case 1:
+          p = loadTextures(split(new String(subset(mapData,p+8)),(char)0))+8;
+          contents^=0x1;
+          break;
+        case 2:
+          p = makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType)+10;
+          contents^=0x2;
+          break;
+        case 3:
+          p += makeEnemies(int(subset(mapData,p+7)))+7;
+          contents^=0x4;
+          break;
+        default:
+          throw new RuntimeException("Invalid Next Level Segment");
+        }
+        mapData = subset(mapData,p);
       }
-      switch(nextSeg) {
-      case 1:
-        p = loadTextures(split(new String(subset(mapData,p+8)),(char)0))+8;
-        contents^=0x1;
-        break;
-      case 2:
-        p = makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType)+10;
-        contents^=0x2;
-        break;
-      case 3:
-        p += makeEnemies(int(subset(mapData,p+7)))+7;
-        contents^=0x4;
-        break;
-      default:
-        throw new RuntimeException("Invalid Next Level Segment");
-      }
-      mapData = subset(mapData,p);
+    } else {
+      map = mapData;
+      //nobody touch the code below its a monster
+      if(fileType!='1'){String[]s = split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0);loadTextures(subset(s,s.length-map[map.length-25]));makeEnemies(int(subset(map,lWidth*lHeight)));}
+      makeChunks(mapData,lWidth,lHeight,fileType);
     }
-  } else {
-    map = mapData;
-    //nobody touch the code below its a monster
-    if(fileType!='1'){String[]s = split(new String(subset(map,0,map.length-33-map[map.length-26])),(char)0);loadTextures(subset(s,s.length-map[map.length-25]));makeEnemies(int(subset(map,lWidth*lHeight)));}
-    makeChunks(mapData,lWidth,lHeight,fileType);
+    you = new player(3,(256*bi(mapData[mapData.length-30]))+bi(mapData[mapData.length-29]),(256*bi(mapData[mapData.length-28]))+bi(mapData[mapData.length-27]));
+    world.add(you);
+    playerVec = new PVector(you.getX(),you.getY());
+    camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
+    loading = false;
+  } catch (Exception e) {
+    blueDead(e);
+    noLoop();
   }
-  you = new player(3,(256*bi(mapData[mapData.length-30]))+bi(mapData[mapData.length-29]),(256*bi(mapData[mapData.length-28]))+bi(mapData[mapData.length-27]));
-  world.add(you);
-  //new TestBot(1,1,640,480);
 }
 
 int loadTextures(String[] texList) {

@@ -397,4 +397,40 @@ the name means fake country by the way. i am in cattown, fakountry. also
 starting january im gonna try to make a weekly funny issue on github
 because funny. i like making funny stuff and misusing githubs nice dev
 tools.
+
+dec9 you know what makes me not happy? spanish irregular conjugations. im
+learning spanish right now for the fun of it and oh boy is it hard. there
+are 3 types of verbs like in french but the conjugations are harder to
+memorize because half of the verbs have a random i in some of the
+conjugations and then the ir verbes end in er verb conjugations for yo tu
+el and who knows what elso. at least there arent silent sounds like in
+french. like seriously who decided the ent at the end of iels conjugations
+should be silent it sounds the same as the iel one and it doesnt help that
+the s in iels is silent too. anyways enough about languages im here to talk
+about more tophat turmoil stuff. as you may have noticed in this current
+point in time i am stealing the sonic crackers title card once more. thats
+right once more. im already usin it in the roblox games hence the luau code
+that was once around the drawing code but im probably gonna change it cause
+otherwise that usin someone elses work and i really dont do that. i mean
+REALLY dont do that. if i just allowed myself to use pre-existing code id
+probably already have the demo finished done and over. but im stubborn and
+i want to do everything myself and me only(including kitta and the others).
+anyways yo quiero tiempo infinito y yo soy stupido. yo amo gatitos y gatos.
+Gatata. es Kitta en espanol. yo no puedo hablar espanol muy bueno.
+meeeow its late and im feelin catty again like i always am. im workin on
+the roblox tophat turmoil right now cause i really gotta do somethin for it
+this week because it is getting really meowin close to christmas and i
+absolutely cannot afford to miss the christmas demo release. i dont want it
+to be a new years demo. that would not be very meowin nice. not nyansical.
+not ailuric. not catty. no buenya. im currently stuck on the enemies like i
+have been for the past few weeks cause roblox is a lot different than
+processing. theres the ability to wait for the next frame in roblox cause
+all of the programmings run on their own threads instead of being linear
+like java and i feel like using the mode framework for something like an
+enemy for my game is just fundamentally wrong. like i feel like there is a
+significantly more elegant way to do it. but i guess im just schitzophrenic
+or something probably because there is a reason why im bein forced to shove
+the mode framework into everything. im not actually forced but it kinda is
+very emphasized so i get the feeling its a very important thing. so yeah
+thats my meowings for the day. im gonna take a cat nap now. nyawesome baby.
 */
