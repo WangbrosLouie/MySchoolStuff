@@ -83,6 +83,24 @@ frame per redraw, you put in the file (in hex):
   10 02 61 2E 70 6E 67 00
 I will not be converting that to ASCII because some of the characters are
 undrawable.
+  The script segment is split into two subsegments. The first segment is
+made of the animations that are displayed when text is displayed. This
+segment is required if you want a picture displayed on the side of the text
+but if you only want text it is fine to omit this section. There are a max
+of 254 animations that you can specify. An animation is made of its speed
+in frames per redraw cycle*32 specified in one byte, then for each picture
+its the number of gif frames that the picture displays for followed by the
+path to the frame and a CR(0x0D) byte. The whole animation is terminated
+with a LF(0x0A) byte. The subsegment is terminated with a null(0x00) byte.
+If you dont want any pictures then just use a null byte. The second sub
+section is where the actual text is. Every script is made of one or more
+script parts. Every script part starts with the animation ID to play
+followed by the text to display. The text has to be newlined by CRLFs until
+I figure out how to newline them automatically. The text is terminated with
+a null byte. The script part is terminated with a null as well. The whole
+segment is terminated with a null as well. If you don't want an animation
+to be displayed specify 0 as the animation number.
+
 
     /-character file format-/
 To make custom characters, one can either replace the sprites and sounds of
@@ -149,12 +167,17 @@ Chunk Flag Bits (from right to left)
 3 = unstatic when touched
 4 = is decoration
 5 = is liquid
-6 = undecided
+6 = special chunk
 7 = is entity (0)
+8-9 = special chunk type
 
 Entity Flag Bits (from right to left)
 0-6 = entity type
 7 = is entity (1)
+
+Special Chunk Types
+0 = Dialog Trigger A-F = Dialog ID
+1 =  
 
 Level Parameter Bytes
 0 = Level Width - 1 (Chunks)

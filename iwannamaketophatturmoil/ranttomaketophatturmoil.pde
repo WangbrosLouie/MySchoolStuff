@@ -433,4 +433,8 @@ or something probably because there is a reason why im bein forced to shove
 the mode framework into everything. im not actually forced but it kinda is
 very emphasized so i get the feeling its a very important thing. so yeah
 thats my meowings for the day. im gonna take a cat nap now. nyawesome baby.
+
+dec10 oh yeah oh baby i fixed a biggy buggy and now the level loading works
+fine again I HOPE cause i actually havent tested it past the quickest test
+case but i count it as fixed for now.
 */

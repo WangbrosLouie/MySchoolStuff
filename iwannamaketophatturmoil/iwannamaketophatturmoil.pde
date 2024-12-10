@@ -13,7 +13,6 @@ Add Lava Entities
 Add bgm processing (imagine vgm processing in processing)
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
-Make a sonic crackers title card (while blocking worldprocessing during that with a bool)
 The top half of half-blocks are detected as solid ground for animations
 */
 
@@ -21,12 +20,12 @@ import fisica.*;
 import processing.sound.*;
 
 boolean loading = true;
-boolean debug = false;
-String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03.lvl","map03tex.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
+boolean debug = true;
+String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 0;
+byte mapNum = 1;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -630,7 +629,6 @@ void draw() {
       break;
     case 3:
       //a winner is you gotta play dat win animation and score?? what score this aint sonic the hedgehog
-      frameCount = -1;
       mode = 1;
       break;
     }
@@ -646,9 +644,10 @@ void makeLevel() {
     mapName = "man your storage device is slow";
     mapData = loadBytes(maps[mapNum%maps.length]);
     String fileFoot = new String(subset(mapData,mapData.length-16,15));
-    mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
     if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
+    mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
     for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
+    if(you!=null)world.remove(you);
     Fisica.init(this);
     char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
     int lWidth = bi(mapData[mapData.length-32])+1;
@@ -663,6 +662,7 @@ void makeLevel() {
     world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
     if(fileType=='3') {
       int contents = mapData[mapData.length-17]&0xFF;
+      print(hex(contents));
       while(contents!=0) {
         p = 2147483647;//long code gooooo
         byte nextSeg = 0;
@@ -671,10 +671,10 @@ void makeLevel() {
         for(byte i=0;i<headers.length;i++) {
           if(contents%pow(2,i+1)/pow(2,i)>0) {
             temp = new String(mapData).indexOf(headers[i]);
-            if(temp<p&&temp!=-1){p=temp;nextSeg=(byte)(i+1);}
+            if(temp<p&&temp>-1){p=temp;nextSeg=(byte)(i+1);}
           }
         }
-        print(nextSeg);
+        println(nextSeg);
         switch(nextSeg) {
         case 1:
           p = loadTextures(split(new String(subset(mapData,p+8)),(char)0))+8;
