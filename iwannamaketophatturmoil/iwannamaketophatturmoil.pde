@@ -20,12 +20,12 @@ import fisica.*;
 import processing.sound.*;
 
 boolean loading = true;
-boolean debug = true;
+boolean debug = false;
 String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 1;
+byte mapNum = 4;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -667,7 +667,7 @@ void makeLevel() {
         p = 2147483647;//long code gooooo
         byte nextSeg = 0;
         int temp = 0;
-        String[] headers = {"Textures","Map Layout","Enemies"};
+        String[] headers = {"Textures","Map Layout","Enemies","Sounds","Script"};
         for(byte i=0;i<headers.length;i++) {
           if(contents%pow(2,i+1)/pow(2,i)>0) {
             temp = new String(mapData).indexOf(headers[i]);

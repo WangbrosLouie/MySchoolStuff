@@ -437,4 +437,22 @@ thats my meowings for the day. im gonna take a cat nap now. nyawesome baby.
 dec10 oh yeah oh baby i fixed a biggy buggy and now the level loading works
 fine again I HOPE cause i actually havent tested it past the quickest test
 case but i count it as fixed for now.
+oh man i have not really worked hard on this project yet. nevermind the
+sprites or the textures or the music or the sounds or the 1000+ lines of
+code, i havent made Kitta talk yet. that is not acceptable. i must give the
+ability of communication by sound wave modulation to this electrically
+animated metallic anthromorphic feline replication. now i know its probably
+not sound wave modulation and something else entirely but i wanna make a
+funny so dang nya i will try. anyways on a more goofy note i literally have
+to constantly refer to the documentation that i wrote myself to be able to
+develop more things for my game. you know its bad when not even the creator
+of the program can make something without referring to the documentation.
+right now im tryna make some dialog but i havent even made it in the file
+yet. im doin it right now and i know exactly what to write down. mainly
+because Kitta is here and shes the one talkin in the level im makin. also
+the character files are on the bottom of my priority list because literally
+nobody has even looked at my github since like the first of this month and
+i dont care too much about how the animations and sounds and stuff are now.
+when i make attacks im gonna make some character files. but nows not even
+close to that time.
 */

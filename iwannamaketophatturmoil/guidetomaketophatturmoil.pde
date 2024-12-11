@@ -98,9 +98,9 @@ script parts. Every script part starts with the animation ID to play
 followed by the text to display. The text has to be newlined by CRLFs until
 I figure out how to newline them automatically. The text is terminated with
 a null byte. The script part is terminated with a null as well. The whole
-segment is terminated with a null as well. If you don't want an animation
-to be displayed specify 0 as the animation number.
-
+segment is terminated with a null as well. The animation IDs are indexed at
+2 because 00 is for terminating the segment and 01 is for no animation,
+just text.
 
     /-character file format-/
 To make custom characters, one can either replace the sprites and sounds of
@@ -236,6 +236,7 @@ commit messages. I'm not gonna stop though. I never will.
 ||-Minimal sound effects
 ||-(internal) Level names
 ||-Health system framework
+||-Kitta
 ''-evyles trusty testbot pre-prototype
 --Alpha 0.0.0 (the one right now)
 |-Title Card (placeholder[?])
@@ -243,5 +244,6 @@ commit messages. I'm not gonna stop though. I never will.
 |-Character files (in progress)
 |-The mode framework shoehorned in (in progress)
 |-Menus with buttons (in progress)
+|-Dialogs
 '-Level music (in progress)
 */
