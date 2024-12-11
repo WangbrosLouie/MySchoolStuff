@@ -20,6 +20,7 @@ language.
 -Level Data Format
 -Character File Format
 -Reference
+-Workarounds
 -Changelog
 
     /-level data format-/
@@ -57,6 +58,7 @@ Level Layout ("Map Layout") - the chunks and their features
 Chunk Textures ("Textures") - the paths to the chunk textures
 Enemies ("Enemies") - Enemies
 Music ("Music") - bgms for level and winning and maybe more.
+
   The segments in the file can come in any order. However, for chunk
 textures to work, you must specify the level chunks after the texture paths
 because the chunks will be loaded and textured before the textures are
@@ -64,12 +66,14 @@ loaded. Also, the objects will be graphically layered in the order that
 they are specified in the file, as every object that gets added to the
 physics world will be on the topmost layer. There will be a foreground
 graphics segment to take advantage of this.
+
   The chunks segment contains the layout of the chunks, as well as any
 chunk extensions, like textures, triggers, teleports, damage and more.
 For a single chunk, you need to specify the chunk type, and the texture.
 After that comes the extensions. They will be specified by a byte, shown in
 reference. You must terminate every chunk with 0xFF, or else the parser
 will interpret the next chunk as an extension.
+
   The textures segment contains all of the texture paths. Every texture
 starts with 2 bytes, one for the speed in frames per redraw cycle
 multiplied by 32, and one for the amount of frames in the animation. For
@@ -83,6 +87,14 @@ frame per redraw, you put in the file (in hex):
   10 02 61 2E 70 6E 67 00
 I will not be converting that to ASCII because some of the characters are
 undrawable.
+
+  The sounds segment contains all of the sounds for the level to play when
+things happen. To specify a sound, you need to have the sound ID as the
+first byte(more on that below)and the path to the sound followed by a null
+byte(0x00). The sound ID is what that sound is played for. You can find all
+of the triggers in the reference section. The whole segment is terminated
+with a null byte. If you don't want any sounds just put a null byte.
+
   The script segment is split into two subsegments. The first segment is
 made of the animations that are displayed when text is displayed. This
 segment is required if you want a picture displayed on the side of the text
@@ -215,12 +227,22 @@ Chunk Extensions
 08 = Chunk Friction +1 byte integer
 09 = Chunk Restitution +1 byte integer
 
+Sound IDs
+01 = Level BGM
+02 = Level Finished
+03 = Death
+04 = Checkpoint
+
 Events (for animations and sound)
 00 = Idle
 01 = Walking
 02 = Jumping
 03 = Idle-Moving
 04 = Hurt
+
+    /-workarounds-/
+Here are the various tricks that I found that are useful.
+Byte[](file) to String: Make a new String with the array as the parameter.
 
     /-changelog-/
 Wowza, I'm finally tracking my progress after months of abusing Git's
@@ -244,6 +266,6 @@ commit messages. I'm not gonna stop though. I never will.
 |-Character files (in progress)
 |-The mode framework shoehorned in (in progress)
 |-Menus with buttons (in progress)
-|-Dialogs
+|-Dialogs (in progress)
 '-Level music (in progress)
 */

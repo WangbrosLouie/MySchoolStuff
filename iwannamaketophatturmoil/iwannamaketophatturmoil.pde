@@ -44,6 +44,7 @@ Gif bg;
 color backcolour = color(0);
 PApplet dis = this;
 int mode = 0;
+SoundFile[] mus = new SoundFile[4];
 
 class Gif extends PImage { //make custom loop points
   int frames = 0;//also custom frame orders
@@ -648,6 +649,7 @@ void makeLevel() {
     mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
     for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
     if(you!=null)world.remove(you);
+    if(mus[0]!=null){mus[0].stop();mus[0] = null;}
     Fisica.init(this);
     char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
     int lWidth = bi(mapData[mapData.length-32])+1;
@@ -677,16 +679,24 @@ void makeLevel() {
         println(nextSeg);
         switch(nextSeg) {
         case 1:
-          p = loadTextures(split(new String(subset(mapData,p+8)),(char)0))+8;
+          p += loadTextures(split(new String(subset(mapData,p+8)),(char)0))+8;
           contents^=0x1;
           break;
         case 2:
-          p = makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType)+10;
+          p += makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType)+10;
           contents^=0x2;
           break;
         case 3:
           p += makeEnemies(int(subset(mapData,p+7)))+7;
           contents^=0x4;
+          break;
+        case 4:
+          p += loadMusic(subset(mapData,p+6))+6;
+          contents^=0x8;
+          break;
+        case 5:
+          //p += loadScript(subset(mapData,p+6))+6;
+          contents^=0x10;
           break;
         default:
           throw new RuntimeException("Invalid Next Level Segment");
@@ -703,6 +713,7 @@ void makeLevel() {
     world.add(you);
     playerVec = new PVector(you.getX(),you.getY());
     camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
+    if(mus[0]!=null)mus[0].loop();
     loading = false;
   } catch (Exception e) {
     blueDead(e);
@@ -743,6 +754,26 @@ int makeEnemies(int[] bads) {
     default: //includes 00 which is finished
       finish = true;
     }
+  }
+  return p;
+}
+
+int loadMusic(byte[] mussy) {
+  int p = 0;
+  while(mussy[p]!=0) {
+    String path = new String(subset(mussy,p+1));
+    path = path.substring(0,path.indexOf((char)0));
+    switch(mussy[p]) {//prob gonna have different audio variables later so gonna use a switch here
+    case 1:
+      mus[0] = new SoundFile(this,path);
+      break;
+    case 2:
+      mus[1] = new SoundFile(this,path);
+      break;
+    default:
+      print("hey this aint a valid trigger (yet?)");
+    }
+    p+=1+path.length();
   }
   return p;
 }
