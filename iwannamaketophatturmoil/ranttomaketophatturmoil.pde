@@ -456,5 +456,18 @@ of this month and i dont care too much about how the animations and sounds
 and stuff are now. when i make attacks im gonna make some character files.
 but nows not even close to that time.
 
-
+dec11 yayos i just finished makin some very rudimentary tutorial textures
+that animate way too fast. i guess i gotta adjust the myfloat because who
+needs a 4 frames per screen refresh anyway? thats way too fast to even
+display all of the frames in a nice order. also you may notice that all of
+the Kittas in the textures seem to be drawn in different styles. this is
+because i am impressively inconsistent in my style when i draw freehand. i
+cant even handwrite using the same style after a break half of the time. i
+also got kittas autograph today cause i had nothing to do in class and i
+was curious what her signature would be. i made a terrible replication in
+the root folder of this project.
+i meowin hate burnout. i am too stressed about stuff and i just lose the
+will to do anything. it took me 10 minutes to write 5 lines of code for the
+roblox game. i think i might be cooked. i really wish i just can work
+without being extremely bored within a minute.
 */

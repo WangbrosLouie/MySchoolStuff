@@ -20,12 +20,13 @@ import fisica.*;
 import processing.sound.*;
 
 boolean loading = true;
+boolean drawing = false;
 boolean debug = false;
 String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 4;
+byte mapNum = 1;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -203,7 +204,7 @@ class player extends FBox {
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
       if(flags%0x4/2>0){hurt(1);}
-      if(flags%0x8/4>0&&frameCount!=-1){frameCount=-1;mapNum+=1;mode=3;}
+      if(flags%0x8/4>0&&frameCount!=0){frameCount=0;mapNum+=1;mode=3;}
       //make dat unstatic thingy
       if(flags%0x20/0x10>0)touchings.remove(i);
       if(flags%0x40/0x20>0)massy = 2;
@@ -515,13 +516,13 @@ void setup() {
   lucid = createFont("Lucida Console",14,false);
   camDir = false;
   thread("makeLevel");
-  println(mapName);
   //convert(loadBytes("map02.lvl"),3,"map02ext.lvl");
   //draw thy loading screen
 }
 
 void draw() {
   try {
+    drawing = true;
     switch(mode) {
     case 0:
       //do the buttons the menus the yaddas not the nyaddas
@@ -557,12 +558,10 @@ void draw() {
           rect(width*(6.175-(frameCount/15.0)),height/4,width*33/40,height/14);
           textAlign(LEFT,CENTER);
           textSize(48);
-          fill(255);
-          stroke(0);
-          strokeWeight(3);
           text(mapName,width*(6.175-(frameCount/15.0)),height*2/7);
+          fill(255);
+          text(mapName,width*(6.175-(frameCount/15.0))+2,height*2/7-2);
         } else if(!loading) {
-          
           if(keyPressed){camDir = true;frameCount=0;}
         }
         pop();
@@ -588,6 +587,11 @@ void draw() {
           rect(0,height*(0.75+(frameCount/60.0)),width,height*0.25);
           fill(255,31,31);
           rect(width*(0.175+(frameCount/15.0)),height/4,width*33/40,height/14);
+          textAlign(LEFT,CENTER);
+          textSize(48);
+          text(mapName,width*(0.175+(frameCount/15.0)),height*2/7);
+          fill(255);
+          text(mapName,width*(0.175+(frameCount/15.0))+2,height*2/7-2);
         } else if(frameCount<=30) {
           rect(0,0,width,height);
           fill(159,159,191);
@@ -600,7 +604,7 @@ void draw() {
           rect((width*(frameCount-30)/30.0),0,width,height/5);
         } else if(frameCount<=90) {
           rect(0,height*((60-frameCount)/30.0),width,height);
-        } else {mode = 2;frameCount=0;}
+        } else {mode = 2;frameCount=0;if(mus[0]!=null)mus[0].loop();}
         pop();
       }
       break;
@@ -631,8 +635,10 @@ void draw() {
     case 3:
       //a winner is you gotta play dat win animation and score?? what score this aint sonic the hedgehog
       mode = 1;
+      thread("makeLevel");
       break;
     }
+    drawing = false;
   } catch (Exception e) {
     blueDead(e);
     noLoop();
@@ -641,12 +647,17 @@ void draw() {
 
 void makeLevel() {
   try {
+    while(drawing) {
+      wait();
+    }
     loading = true;
     mapName = "man your storage device is slow";
     mapData = loadBytes(maps[mapNum%maps.length]);
     String fileFoot = new String(subset(mapData,mapData.length-16,15));
     if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
     mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
+    println(mapName);
+    camDir = false;
     for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
     if(you!=null)world.remove(you);
     if(mus[0]!=null){mus[0].stop();mus[0] = null;}
@@ -664,7 +675,6 @@ void makeLevel() {
     world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
     if(fileType=='3') {
       int contents = mapData[mapData.length-17]&0xFF;
-      print(hex(contents));
       while(contents!=0) {
         p = 2147483647;//long code gooooo
         byte nextSeg = 0;
@@ -713,7 +723,6 @@ void makeLevel() {
     world.add(you);
     playerVec = new PVector(you.getX(),you.getY());
     camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
-    if(mus[0]!=null)mus[0].loop();
     loading = false;
   } catch (Exception e) {
     blueDead(e);
@@ -738,7 +747,7 @@ int loadTextures(String[] texList) {
       }
     }
   }
-  return p+1;
+  return p;
 }
 
 int makeEnemies(int[] bads) {
