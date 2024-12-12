@@ -509,6 +509,15 @@ class Button {
   }
 }
 
+class Dialog {
+  int pic = 0;
+  String whatSay = "";
+  Dialog(int PIC, String WHATsAY) {
+    pic = PIC;
+    whatSay = WHATsAY;
+  }
+}
+
 void settings() {
   size(640,480,P2D);//holy nya why havent i used p2d before
 }
@@ -796,11 +805,20 @@ int loadScript(byte[] stuff) {
     p++;
     float gifSpeed = mf(stuff[p]);
     String filePath = new String(subset(stuff,p+1));//dont forget that there are multiple frames
-    String filePaths = split(filePath,(char)0x0A);
+    String[] filePaths = split(filePath,(char)0x0A);
     filePaths = split(filePaths[0],(char)0x0D);
     dial[a] = new Gif(gifSpeed,filePaths);
+    p+=String.join("",filePaths).length();
   }
   p++;
+  while(stuff[p]!=0) {
+    p++;
+    while(stuff[p]!=0) {
+      int animNum = bi(stuff[p]);
+      String text = new String(subset(stuff,p));
+      text = text.substring(0,text.indexOf((char)0x00));
+    }
+  }
   return p;
 }
 

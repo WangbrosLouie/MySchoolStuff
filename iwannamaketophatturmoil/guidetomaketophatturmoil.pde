@@ -109,7 +109,7 @@ section is where the actual text is. Every script is made of one or more
 script parts. Every script part starts with the animation ID to play
 followed by the text to display. The text has to be newlined by CRLFs until
 I figure out how to newline them automatically. The text is terminated with
-a null byte. The script part is terminated with a null as well. The whole
+a null byte. The script is terminated with a null as well. The whole
 segment is terminated with a null as well. The animation IDs are indexed at
 2 because 00 is for terminating the segment and 01 is for no animation,
 just text.
