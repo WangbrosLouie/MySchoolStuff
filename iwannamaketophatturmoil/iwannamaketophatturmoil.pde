@@ -46,6 +46,8 @@ color backcolour = color(0);
 PApplet dis = this;
 int mode = 0;
 SoundFile[] mus = new SoundFile[4];
+Gif[] dial = new Gif[254];
+Dialog[][] talks;
 
 class Gif extends PImage { //make custom loop points
   int frames = 0;//also custom frame orders
@@ -784,6 +786,21 @@ int loadMusic(byte[] mussy) {
     }
     p+=1+path.length();
   }
+  return p;
+}
+
+int loadScript(byte[] stuff) {
+  int p = 0;
+  int a = 0;
+  while(stuff[p]!=0) {
+    p++;
+    float gifSpeed = mf(stuff[p]);
+    String filePath = new String(subset(stuff,p+1));//dont forget that there are multiple frames
+    String filePaths = split(filePath,(char)0x0A);
+    filePaths = split(filePaths[0],(char)0x0D);
+    dial[a] = new Gif(gifSpeed,filePaths);
+  }
+  p++;
   return p;
 }
 
