@@ -181,15 +181,10 @@ Chunk Flag Bits (from right to left)
 5 = is liquid
 6 = special chunk
 7 = is entity (0)
-8-9 = special chunk type
 
 Entity Flag Bits (from right to left)
 0-6 = entity type
 7 = is entity (1)
-
-Special Chunk Types
-0 = Dialog Trigger A-F = Dialog ID
-1 =  
 
 Level Parameter Bytes
 0 = Level Width - 1 (Chunks)

@@ -189,20 +189,21 @@ class player extends FBox {
   
   byte[] process(byte[] keys) { //change this stuff so the pointers work
     animNum = 0;
-    ArrayList<FContact> touchings = super.getContacts();
+    ArrayList<FBody> touchings = super.getTouching();//super.getContacts();
     keys[3] = 1;
     float oldSpeed = super.getVelocityX();
     float massy = 1.0;
     
     for(int i=touchings.size()-1;i>-1;i--) {
-      int flags = 0;
-      if(touchings.get(i).getBody1()==this){
-        String name = touchings.get(i).getBody2().getName();
-        flags = name!=null?unbinary(name):0;
-      } else {
-        String name = touchings.get(i).getBody1().getName();
-        flags = name!=null?unbinary(name):0;
-      }
+      String name = touchings.get(i).getName();
+      int flags = name!=null?unbinary(name):0;
+      //if(touchings.get(i).getBody1()==this){
+      //  String name = touchings.get(i).getBody2().getName();
+      //  flags = name!=null?unbinary(name):0;
+      //} else {
+      //  String name = touchings.get(i).getBody1().getName();
+      //  flags = name!=null?unbinary(name):0;
+      //}
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
       if(flags%0x4/2>0){hurt(1);}
@@ -333,7 +334,7 @@ class TestBot extends Enemy {
   }
 }
 
-class Missile extends FBox {
+class Missile extends FBox {// the attack of the testbot
   int mass = 0;
   PVector direction;
   float speed = 0;
@@ -345,9 +346,20 @@ class Missile extends FBox {
     super.setPosition(x,y);
     speed = SPEED;
     direction = DIR.normalize().mult(SPEED);
-    super.setDensity(super.getMass()*world.getGravity().y/-(high*wide));
+    //super.setDensity(super.getMass()*world.getGravity().y/-(high*wide));
+    super.setDensity(0.0001);
     super.setVelocity(direction.x,direction.y);
     projs.add(this);
+  }
+}
+
+class ChunkSensor extends FBox { //chunk extensions go here!
+  int dialog = 0;
+  
+  ChunkSensor(int DIAL) {
+    super(128,128);
+    super.setSensor(true);
+    dialog = DIAL;
   }
 }
 
