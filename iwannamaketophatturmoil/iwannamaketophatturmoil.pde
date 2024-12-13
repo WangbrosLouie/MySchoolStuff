@@ -177,6 +177,11 @@ class player extends FBox {
   player(int HEALTH, float x, float y, byte[] fichier) {//and the one taking its place now
     super(32,64);
     health = HEALTH;
+    int what = -1;
+    while(what!=0) {
+      what = 0;
+      
+    }
     java.util.Arrays.fill(anim, new Gif(3,2.0/60,"spr/ka",".png"));
     anim[1] = new Gif(3,5.0/60,"spr/kb",".png");
     anim[2] = new Gif(1,5.0/60,"spr/kc",".png");
