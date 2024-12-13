@@ -26,7 +26,7 @@ String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lv
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 1;
+byte mapNum = 4;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -310,13 +310,13 @@ class TestBot extends Enemy {
   
   void process() {
     timer++;
-    if(random(0,500)<timer){state=(byte)((state+1)%2);timer=0;}
+    if(random(0,2500)<timer){state=(byte)((state+1)%2);timer=0;}
     switch(state) {
     case 0:
       super.setVelocity(dir?50:-50,super.getVelocityY());
       break;
     case 1:
-      //if(timer==0)new Missile(super.getX(),super.getY()-10,10,40,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10,0);
+      if(timer==0)new Missile(super.getX(),super.getY()-10,10,4,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10,0);
       dir = !dir;
       break;
     default:
@@ -338,16 +338,16 @@ class Missile extends FBox {
   PVector direction;
   float speed = 0;
   
-  Missile(float x, float y, int high, int wide, PVector DIR, float SPEED, float MASS) {
-    super(high,wide);
+  Missile(float x, float y, int wide, int high, PVector DIR, float SPEED, float MASS) {
+    super(wide,high);
+    world.addBody(this);
     super.setFill(0,0,255);
     super.setPosition(x,y);
     speed = SPEED;
     direction = DIR.normalize().mult(SPEED);
-    projs.add(this);
-    super.setDensity(super.getMass()*world.getGravity().y/(high*wide));
+    super.setDensity(super.getMass()*world.getGravity().y/-(high*wide));
     super.setVelocity(direction.x,direction.y);
-    super.addToWorld(world);
+    projs.add(this);
   }
 }
 
