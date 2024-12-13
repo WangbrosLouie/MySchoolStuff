@@ -1,7 +1,7 @@
 # heyo listen here dingus  
 this is the code of conduct. i dont think this needs one but you never know.  
 ### expected behaviour  
-###### read: what not to do  
+###### read: what to do  
 dont harass other people here. you have discord for that.  
 dont be askin me for crazy stuff such as readable code because im not _that_ competent  
 dont harass me for my rant documents cause im allowed my yaps on my own repository  
