@@ -10,7 +10,6 @@
 Finish the dingin' chunk extensions
 Finish Missiles
 Add Lava Entities
-Add bgm processing (imagine vgm processing in processing)
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
 The top half of half-blocks are detected as solid ground for animations

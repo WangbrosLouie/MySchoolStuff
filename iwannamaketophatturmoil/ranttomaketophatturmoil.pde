@@ -470,4 +470,9 @@ i meowin hate burnout. i am too stressed about stuff and i just lose the
 will to do anything. it took me 10 minutes to write 5 lines of code for the
 roblox game. i think i might be cooked. i really wish i just can work
 without being extremely bored within a minute.
+
+dec16 i have been grinding schoolwork for so long i havent got a chance to
+write more rants. womp womp for me i guess. i have been listening to buddy
+holly by weezer for so long that i probably listened to it more than kittas
+songs by now. and i just started listening to it on saturday.
 */
