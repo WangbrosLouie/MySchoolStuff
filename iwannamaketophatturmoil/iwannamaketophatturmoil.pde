@@ -25,7 +25,7 @@ String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lv
 //String[] maps = new String[]{"map00.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 4;
+byte mapNum = 2;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -39,7 +39,7 @@ FWorld world;
 player you;
 FCompound[] chunks;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-ArrayList<FBody> projs = new ArrayList<FBody>();//projectiles
+ArrayList<Projectile> projs = new ArrayList<Projectile>();//projectiles
 Gif bg;
 color backcolour = color(0);
 PApplet dis = this;
@@ -201,13 +201,6 @@ class player extends FBox {
     for(int i=touchings.size()-1;i>-1;i--) {
       String name = touchings.get(i).getName();
       int flags = name!=null?unbinary(name):0;
-      //if(touchings.get(i).getBody1()==this){
-      //  String name = touchings.get(i).getBody2().getName();
-      //  flags = name!=null?unbinary(name):0;
-      //} else {
-      //  String name = touchings.get(i).getBody1().getName();
-      //  flags = name!=null?unbinary(name):0;
-      //}
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
       if(flags%0x4/2>0){hurt(1);}
@@ -321,7 +314,7 @@ class TestBot extends Enemy {
       super.setVelocity(dir?50:-50,super.getVelocityY());
       break;
     case 1:
-      if(timer==0)new Missile(super.getX(),super.getY()-10,10,4,new PVector(you.getX()-super.getX(),you.getY()-super.getY()-16),10,0);
+      if(timer==0)new Missile(super.getX(),super.getY()-10,10,4,new PVector(you.getX()-super.getX(),you.getY()-super.getY()),50,0,this);
       dir = !dir;
       break;
     default:
@@ -338,22 +331,70 @@ class TestBot extends Enemy {
   }
 }
 
-class Missile extends FBox {// the attack of the testbot
-  int mass = 0;
+class Projectile {
   PVector direction;
-  float speed = 0;
+  FBody hit;
   
-  Missile(float x, float y, int wide, int high, PVector DIR, float SPEED, float MASS) {
-    super(wide,high);
-    world.addBody(this);
-    super.setFill(0,0,255);
-    super.setPosition(x,y);
+  Projectile(FBody HIT) {
+    hit = HIT;
+  }
+  
+  void process() {
+    println("bro you forgot to make a process() for this projectile");
+  }
+}
+
+class Missile extends Projectile {// the attack of the testbot
+  int mass = 0;
+  float speed = 0;
+  FBody creator;
+  
+  Missile(float x, float y, int wide, int high, PVector DIR, float SPEED, float MASS, FBody CREATOR) {
+    super(new FBox(wide,high));
+    world.addBody(hit);
+    hit.setFill(0,0,255);
+    hit.setPosition(x,y);
     speed = SPEED;
     direction = DIR.normalize().mult(SPEED);
+    creator = CREATOR;
     //super.setDensity(super.getMass()*world.getGravity().y/-(high*wide));
-    super.setDensity(0.0001);
-    super.setVelocity(direction.x,direction.y);
+    hit.setRotation(degrees(DIR.heading()));
+    hit.setDensity(0.0001);
+    hit.setVelocity(direction.x,direction.y);
+    hit.setAngularVelocity(0);
     projs.add(this);
+  }
+  
+  void process() {
+    hit.setVelocity(direction.x,direction.y);
+    hit.setAngularVelocity(0);
+    ArrayList<FBody> touchings = hit.getTouching();
+    for(int i=touchings.size()-1;i>-1;i--){
+      String name = touchings.get(i).getName();
+      if((name!=null?unbinary(name):0)%0x20/0x10>0)touchings.remove(i);
+    }
+    if(touchings.size() != 0 && !hit.isTouchingBody(creator)) {
+      loadSound("snd/boom.wav").play();
+      new Explosion(hit.getX(),hit.getY(),new FCircle(50));
+      projs.remove(this);
+      world.remove(hit);
+    }
+  }
+}
+
+class Explosion extends Projectile {//daibakuhatsu
+  Explosion(float x, float y, FBody hitbox) {
+    super(hitbox);
+    hit.setPosition(x,y);
+    hit.setSensor(true);
+    projs.add(this);
+    world.addBody(hit);
+  }
+  
+  void process() {
+    if(hit.isTouchingBody(you))you.hurt(1);
+    projs.remove(this);
+    world.remove(hit);
   }
 }
 
@@ -638,7 +679,8 @@ void draw() {
     case 2:
       //processing objects
       keys = you.process(keys);
-      for(int i=0;i<enemies.size();i++)enemies.get(i).process();
+      for(int i=enemies.size();i>0;i--)enemies.get(i-1).process();
+      for(int i=projs.size();i>0;i--)projs.get(i-1).process();
       for(Gif pic:tex)pic.update();
       world.step();
       //camera stuff
