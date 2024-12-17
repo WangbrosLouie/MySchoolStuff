@@ -8,7 +8,6 @@
 
 /*to-do's (i aint usin github issues for this nonsense)
 Finish the dingin' chunk extensions
-Finish Missiles
 Add Lava Entities
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
@@ -856,10 +855,10 @@ int loadMusic(byte[] mussy) {
   return p;
 }
 
-int loadScript(byte[] stuff) {
-  int p = 0;
-  int a = 0;
-  while(stuff[p]!=0) {
+int loadScripts(byte[] stuff) {
+  int p = 0;//pointer to be returned
+  int a = 0;//pointer for what gif/dialog is being loaded
+  while(stuff[p]!=0) {//load them picture gifs (for now only dem single images i think at least)
     p++;
     float gifSpeed = mf(stuff[p]);
     String filePath = new String(subset(stuff,p+1));//dont forget that there are multiple frames
@@ -867,13 +866,14 @@ int loadScript(byte[] stuff) {
     filePaths = split(filePaths[0],(char)0x0D);
     dial[a] = new Gif(gifSpeed,filePaths);
     p+=String.join("",filePaths).length();
+    a++;
   }
   p++;
-  while(stuff[p]!=0) {
+  while(stuff[p]!=0) {//load them scripts
     p++;
-    while(stuff[p]!=0) {
-      int animNum = bi(stuff[p]);
-      String text = new String(subset(stuff,p));
+    while(stuff[p]!=0) {//load one script
+      int animNum = bi(stuff[p]); //what animation to display
+      String text = new String(subset(stuff,p)); //what is said
       text = text.substring(0,text.indexOf((char)0x00));
     }
   }

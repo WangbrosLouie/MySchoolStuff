@@ -475,4 +475,23 @@ dec16 i have been grinding schoolwork for so long i havent got a chance to
 write more rants. womp womp for me i guess. i have been listening to buddy
 holly by weezer for so long that i probably listened to it more than kittas
 songs by now. and i just started listening to it on saturday.
+i have decided during lunch today that this platformer game will be a kitta
+game if its not finished enough by the deadline. and along with that, comes
+so SO much lore that its meowin crazy. so basically kitta wakes up in a
+room and looks around and catches evyle offguard through a window. evyle
+explains that he has trapped her so that he can make an improved duplicate
+of her that will do evil things. kitta is quite upset but she is more upset
+that she is trapped in an "inescapable chamber" so she finds a way out to
+evyles annoyance. then she excapes the evylair(evyles base)and briefly
+meets eyes with another kitta but with her opposite colour(darkitta).
+thats the whole game. obviously since what i made here is an engine, i can
+just simply make the other stuff if i wanna which i probably wont cause me
+dont think mes gonna wanna.
+oh nya i think im cooked. i wanna finish alla da dialogs but i just looked
+over the code and i cant even comprehend whats happening. you know its bad
+when i cant even understand what it does. also im makin a chiptune flipside
+cover of buddy holly because i cant stand not procrastinating. be ready for
+dommy valky or flippy side-y or whatever. this came from me not knowing
+what lead instrument to use for it so i chose the flipside ahh one. i think
+its pretty good cause im biased probably. whats with these phighters dissin
 */
