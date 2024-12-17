@@ -104,20 +104,20 @@ class Gif extends PImage { //make custom loop points
     }
   }
   
-  void updatePlayer() {//special for player gif
-    if(images.length>1) {
+  void updatePlayer(boolean dir) {//special for turning gifs
+    if(images.length>1) {//advance that gif
       currentFrame+=interval;
     }
-    int frm = floor(currentFrame)%frames;
+    int frm = floor(currentFrame)%frames;//what frame is it mr wolf
     super.init(images[frm].width,images[frm].height,images[frm].format);
     images[frm].loadPixels();
     super.loadPixels();
-    arrayCopy(camDir?images[frm].pixels:flipImagePix(images[frm]),super.pixels);
+    arrayCopy(dir?images[frm].pixels:flipImagePix(images[frm]),super.pixels);
     images[frm].updatePixels();
     super.updatePixels();
   }
   
-  void updatePlayer(float speed) {//special for player gif
+  void updatePlayer(float speed, boolean dir) {//special for turning gifs
     if(images.length>1) {
       currentFrame+=speed;
     }
@@ -125,7 +125,7 @@ class Gif extends PImage { //make custom loop points
     super.init(images[frm].width,images[frm].height,images[frm].format);
     images[frm].loadPixels();
     super.loadPixels();
-    arrayCopy(camDir?images[frm].pixels:flipImagePix(images[frm]),super.pixels);
+    arrayCopy(dir?images[frm].pixels:flipImagePix(images[frm]),super.pixels);
     images[frm].updatePixels();
     super.updatePixels();
   }
@@ -246,10 +246,10 @@ class player extends FBox {
     }
     switch(animNum) {
     case 1:
-      anim[animLookup[animNum]].updatePlayer(abs(oldSpeed)/1500);
+      anim[animLookup[animNum]].updatePlayer(abs(oldSpeed)/1500,camDir);
       break;
     default:
-      anim[animLookup[animNum]].updatePlayer();
+      anim[animLookup[animNum]].updatePlayer(camDir);
     }
     super.attachImage((invince>frameCount)&&(frameCount%4>1)?new PImage(0,0,RGB):anim[animLookup[animNum]]);
     for(int i=0;i<keys.length;i++)if(keys[i]==1)keys[i]=2;
@@ -292,6 +292,7 @@ class TestBot extends Enemy {
   boolean dir = true;
   int timer = 0;
   byte state = 0;
+  Gif anims[] = new Gif[2];
   
   TestBot(int HEALTH, int TYPE, int x, int y) {
     super(HEALTH,32,32);
@@ -301,7 +302,8 @@ class TestBot extends Enemy {
       speed = 50;
     }
     super.setPosition(x,y);
-    super.attachImage(loadImage("spr/t0.png"));
+    anims[0] = new Gif(2,1.0/20,"spr/t",".png");
+    super.attachImage(anims[0]);
     world.add(this);
   }
   
@@ -313,12 +315,15 @@ class TestBot extends Enemy {
       super.setVelocity(dir?50:-50,super.getVelocityY());
       break;
     case 1:
-      if(timer==0)new Missile(super.getX(),super.getY()-10,10,4,new PVector(you.getX()-super.getX(),you.getY()-super.getY()),50,0,this);
-      dir = !dir;
+      if(timer==0) {
+        new Missile(super.getX(),super.getY()-10,10,4,new PVector(you.getX()-super.getX(),you.getY()-super.getY()),50,0,this);
+        dir = !dir;
+      }
       break;
     default:
       println("GUHHHHHHH???????????");
     }
+    anims[0].updatePlayer(dir);
     if(super.isTouchingBody(you)) {
       if(you.getY()+(you.getHeight()/2)-4<=super.getY()-(super.getHeight()/2)) {
         super.destroy();
@@ -347,6 +352,7 @@ class Missile extends Projectile {// the attack of the testbot
   int mass = 0;
   float speed = 0;
   FBody creator;
+  SoundFile sound;
   
   Missile(float x, float y, int wide, int high, PVector DIR, float SPEED, float MASS, FBody CREATOR) {
     super(new FBox(wide,high));
@@ -356,6 +362,8 @@ class Missile extends Projectile {// the attack of the testbot
     speed = SPEED;
     direction = DIR.normalize().mult(SPEED);
     creator = CREATOR;
+    sound = new SoundFile(dis,"snd/disconnect.mp3");
+    sound.loop();
     //super.setDensity(super.getMass()*world.getGravity().y/-(high*wide));
     hit.setRotation(degrees(DIR.heading()));
     hit.setDensity(0.0001);
@@ -373,6 +381,8 @@ class Missile extends Projectile {// the attack of the testbot
       if((name!=null?unbinary(name):0)%0x20/0x10>0)touchings.remove(i);
     }
     if(touchings.size() != 0 && !hit.isTouchingBody(creator)) {
+      sound.stop();
+      sound = null;
       loadSound("snd/boom.wav").play();
       new Explosion(hit.getX(),hit.getY(),new FCircle(50));
       projs.remove(this);
@@ -757,7 +767,7 @@ void makeLevel() {
         println(nextSeg);
         switch(nextSeg) {
         case 1:
-          p += loadTextures(split(new String(subset(mapData,p+8)),(char)0))+8;
+          if(textures)p += loadTextures(split(new String(subset(mapData,p+8)),(char)0))+8;
           contents^=0x1;
           break;
         case 2:
@@ -862,7 +872,7 @@ int loadScripts(byte[] stuff) {
     p++;
     float gifSpeed = mf(stuff[p]);
     String filePath = new String(subset(stuff,p+1));//dont forget that there are multiple frames
-    String[] filePaths = split(filePath,(char)0x0A);
+    String[] filePaths = split(filePath,(char)0x0A);//i hope this works
     filePaths = split(filePaths[0],(char)0x0D);
     dial[a] = new Gif(gifSpeed,filePaths);
     p+=String.join("",filePaths).length();
@@ -888,7 +898,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
       //int chunk = fileType=='3'?p/2:j*lWidth+i;
       int chunk = j*lWidth+i;
       byte ID = map[fileType=='3'?p:chunk*(fileType=='1'?1:2)];
-      int texture = fileType=='1'?0:map[1+(fileType=='2'?chunk*2:p)]; //<>//
+      int texture = fileType=='1'||!textures?0:map[1+(fileType=='2'?chunk*2:p)]; //<>//
       texture&=0xFF;
       texture-=1;
       p+=2;
