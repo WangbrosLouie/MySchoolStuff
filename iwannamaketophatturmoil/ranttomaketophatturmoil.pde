@@ -494,4 +494,45 @@ cover of buddy holly because i cant stand not procrastinating. be ready for
 dommy valky or flippy side-y or whatever. this came from me not knowing
 what lead instrument to use for it so i chose the flipside ahh one. i think
 its pretty good cause im biased probably. whats with these phighters dissin
+
+dec17 oh dear its creepin closer to christmas but the progress of my game
+sure aint creepin further. i have 8 days to finish the christmas demo if i
+wanna release it on time. i think its impossible but hopefully the school
+work will lighten significantly by the end of this week. to manage alla dis
+stress ive been playin the new slime rancher 2 update though sadly ive only
+been able to play it for 3 days, which are the 12th the 16th and today. i
+only realized that the update came out on the 12th which means i missed out
+on a whole 5 days of slime rancher 2 into the labyrinth but oh well i guess
+its nothin. ive already finished the whole thing yesterday and today i was
+farmin the shadow plorts and opening plort doors. the best way to farm
+shadow plorts is in that first tunnel that you find the new character whose
+name i already forgot about in. if you open the plort door that goes
+straight(and also reveal the map thing for there)shadow slimes will spawn
+in the corridor. using the little dead-end with the rock slime statue in it
+you can fill it up with plorts and food cause shadow plorts are made when
+shadow slimes come into contact with food and plorts almost like a gold
+slime. then you can drag a shadow slime while staying far enough for it to
+not run away and then fling it into the corridor and watch it bounce around
+hitting the food and plorts and makin a lot of shadow plorts. the easiest
+way(and most efficient one at that)is to have alla da stuff pushed past the
+point where the two pillars are as in here(marked with an @) [O@:^|
+where the [O is the rock slime statue and wall and the ^| is the wall and
+other rubble that you see before you walk into there. then you can drag the
+stuff in the air like rainfall and watch that shadow slime get thoroughly
+milked for its shadow plorts. thats how i managed to get like 60 shadow
+plorts every time i go back there. i think my favourite slime of the new
+update has to be the sloomber slime. i made a sloomber tabby largo and it
+is so very cute. it is even cutiful(cute beautiful). i feel like the new
+update has made it a lot easier to get gold plorts cause i ran across 2
+gold slimes already and once i literally just found 3 gold plorts lying on
+the floor from a gold slime that touched a piece of food. dont judge me for
+my lowly sureshot III i cant get more sunsap cause im too lazy. i dont even
+use gold plorts for anything im pretty sure i only used them to make a gold
+tabby statue. also once i went to my chicken auxiliary farm and in the
+thundercluck-sea hen enclosure there were literally over 100 thundercluck
+chicks and over 50 sea chicks just there. i dont know what those hens and
+roosters were doin while i was explorin the labyrinth but i respect it
+cause it brought me many chicks which will turn into chickens. my favourite
+slime is still the hunter slime cause meow but wild. those eyes and the
+invisibility and that big big smile is so meowin cute.
 */
