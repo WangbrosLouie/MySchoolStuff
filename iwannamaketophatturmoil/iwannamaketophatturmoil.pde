@@ -903,6 +903,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
       texture-=1;
       p+=2;
       chunks[chunk] = new FCompound();
+      float xPos = 0;//for the background images
+      float yPos = 0;
       switch(ID){
       case 1:
         FBox gnd = new FBox(128,127);
@@ -910,15 +912,9 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("00");
         FLine jmp = new FLine(1,1,129,1);
         jmp.setName("01");
-        FBox img;
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
+          xPos = 65;
+          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -930,20 +926,14 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
-        world.add(chunks[chunk]);
         break;
       case 2:
         gnd = new FBox(128,128);
         gnd.setPosition(64,64);
         gnd.setName("00");
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -965,13 +955,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(0,128,127,1);
         jmp.setName("01");
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           slo.setNoFill();
           slo.setNoStroke();
           jmp.setNoStroke();
@@ -995,13 +980,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(1,1,128,128);
         jmp.setName("01");
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           slo.setNoFill();
           slo.setNoStroke();
           jmp.setNoStroke();
@@ -1022,13 +1002,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(1,65,129,65);
         jmp.setName("01");
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
+          xPos = 65;
+          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1047,13 +1022,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setPosition(64,112);
         gnd.setName("00");
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1075,13 +1045,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp.setName("01");
         jmp.setFriction(0);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
+          xPos = 65;
+          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1102,13 +1067,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setFillColor(0xFFAFAFFF);
         gnd.setFriction(-1);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1134,13 +1094,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp.setName("01");
         jmp.setFriction(0);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           slo.setNoFill();
           slo.setNoStroke();
           jmp.setNoStroke();
@@ -1168,13 +1123,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp.setName("01");
         jmp.setFriction(0);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           slo.setNoFill();
           slo.setNoStroke();
           jmp.setNoStroke();
@@ -1198,13 +1148,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp.setName("01");
         jmp.setFriction(0);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
+          xPos = 65;
+          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1225,13 +1170,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setFillColor(0xFFAFAFFF);
         gnd.setFriction(0);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1253,13 +1193,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp.setName("01");
         jmp.setRestitution(3);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
+          xPos = 65;
+          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1283,13 +1218,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp.setName("01");
         jmp.setRestitution(50);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(65,65);
-          chunks[chunk].addBody(img);
+          xPos = 65;
+          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1311,13 +1241,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setSensor(true);
         gnd.setFillColor(0x7F3FFF3F);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1336,13 +1261,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setFillColor(0xFFAFAFFF);
         gnd.setFriction(0);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1361,13 +1281,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setFillColor(0xDF9F9FFF);
         gnd.setFriction(0);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1387,13 +1302,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setFriction(0);
         gnd.setSensor(true);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1413,13 +1323,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setFriction(0);
         gnd.setSensor(true);
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1433,13 +1338,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         break;
       default: //air for unimplemented chunks
         if(texture!=-1){
-          img = new FBox(128,128);
-          img.attachImage(tex[texture]);
-          img.setSensor(true);
-          img.setStatic(true);
-          img.setName("10000");
-          img.setPosition(64,64);
-          chunks[chunk].addBody(img);
+          xPos = 64;
+          yPos = 64;
         }
         if(fileType==3)while(bi(map[p])!=0xFF) {
           p += extendChunk(subset(map,p),new FBody[]{});
@@ -1447,8 +1347,17 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        break;
       }
+      if(texture!=-1) {
+        FBox img = new FBox(128,128);
+        img.attachImage(tex[texture]);
+        img.setSensor(true);
+        img.setStatic(true);
+        img.setName("10000");
+        img.setPosition(xPos,yPos);
+        chunks[chunk].addBody(img);
+      }
+      world.add(chunks[chunk]);
     }
   }
   return p;
