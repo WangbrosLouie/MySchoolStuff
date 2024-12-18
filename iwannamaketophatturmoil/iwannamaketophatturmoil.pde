@@ -916,7 +916,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -941,7 +941,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -969,7 +969,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           slo.setNoFill();
@@ -999,7 +999,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           slo.setNoFill();
@@ -1026,7 +1026,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1051,7 +1051,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1079,7 +1079,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1106,7 +1106,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1138,7 +1138,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           slo.setNoFill();
@@ -1172,7 +1172,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           slo.setNoFill();
@@ -1202,7 +1202,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1229,7 +1229,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1257,7 +1257,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1287,7 +1287,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(65,65);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1315,7 +1315,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1340,7 +1340,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1365,7 +1365,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1391,7 +1391,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1417,7 +1417,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
           gnd.setNoFill();
@@ -1437,7 +1437,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           img.attachImage(tex[texture]);
           img.setSensor(true);
           img.setStatic(true);
-          img.setName("1000");
+          img.setName("10000");
           img.setPosition(64,64);
           chunks[chunk].addBody(img);
         }
