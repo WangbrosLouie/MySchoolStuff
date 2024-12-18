@@ -259,7 +259,7 @@ commit messages. I'm not gonna stop though. I never will.
 |-Title Card (placeholder[?])
 |-Level loading overhaul
 |-Character files (in progress)
-|-The mode framework shoehorned in (in progress)
+|-The mode framework shoehorned in
 |-Menus with buttons (in progress)
 |-Dialogs (in progress)
 '-Level music (in progress)

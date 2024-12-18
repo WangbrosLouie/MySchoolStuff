@@ -535,4 +535,8 @@ roosters were doin while i was explorin the labyrinth but i respect it
 cause it brought me many chicks which will turn into chickens. my favourite
 slime is still the hunter slime cause meow but wild. those eyes and the
 invisibility and that big big smile is so meowin cute.
+
+dec18 i havent really realized how much code i wrote for this until now.
+either i actually added a lot of stuff or my code is incredibly unoptimized
+guess which one i think it is.
 */

@@ -13,15 +13,20 @@ checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes 
 Make some dialogs
 The top half of half-blocks are detected as solid ground for animations
 */
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Libraries
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 import fisica.*;
 import processing.sound.*;
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Variables
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 boolean loading = true;
 boolean drawing = false;
 boolean debug = false;
-String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
+//String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
 //String[] maps = new String[]{"map00.lvl"};
+String[] maps = new String[]{"kit/01.lvl"};
 byte[] mapData;
 String mapName;
 byte mapNum = 2;
@@ -46,7 +51,9 @@ int mode = 0;
 SoundFile[] mus = new SoundFile[4];
 Gif[] dial = new Gif[254];
 Dialog[][] talks;
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Classes
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Gif extends PImage { //make custom loop points
   int frames = 0;//also custom frame orders
   float currentFrame = 0;
@@ -346,6 +353,10 @@ class Projectile {
   void process() {
     println("bro you forgot to make a process() for this projectile");
   }
+  
+  void deatroy() {
+    println("bro you forgot to make a destroy() for this projectile");
+  }
 }
 
 class Missile extends Projectile {// the attack of the testbot
@@ -380,14 +391,16 @@ class Missile extends Projectile {// the attack of the testbot
       String name = touchings.get(i).getName();
       if((name!=null?unbinary(name):0)%0x20/0x10>0)touchings.remove(i);
     }
-    if(touchings.size() != 0 && !hit.isTouchingBody(creator)) {
-      sound.stop();
-      sound = null;
-      loadSound("snd/boom.wav").play();
-      new Explosion(hit.getX(),hit.getY(),new FCircle(50));
-      projs.remove(this);
-      world.remove(hit);
-    }
+    if(touchings.size() != 0 && !hit.isTouchingBody(creator))destroy();
+  }
+  
+  void destroy() {
+    sound.stop();
+    sound = null;
+    loadSound("snd/boom.wav").play();
+    new Explosion(hit.getX(),hit.getY(),new FCircle(50));
+    projs.remove(this);
+    world.remove(hit);
   }
 }
 
@@ -583,7 +596,9 @@ class Dialog {
     whatSay = WHATsAY;
   }
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Main Program
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void settings() {
   size(640,480,P2D);//holy nya why havent i used p2d before
 }
@@ -722,7 +737,9 @@ void draw() {
     noLoop();
   }
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Supplementary Functions
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void makeLevel() {
   try {
     while(drawing) {
@@ -1336,6 +1353,39 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
         break;
+      case 0x14:
+        gnd = new FBox(126,128);
+        gnd.setPosition(65,65);
+        gnd.setName("00");
+        jmp = new FLine(1,1,129,1);
+        jmp.setName("01");
+        FLine jm2 = new FLine(1,33,129,33);
+        jm2.setName("01");
+        FLine jm3 = new FLine(1,63,129,63);
+        jm3.setName("01");
+        FLine jm4 = new FLine(1,95,129,95);
+        jm4.setName("01");
+        if(texture!=-1){
+          xPos = 65;
+          yPos = 65;
+          gnd.setNoFill();
+          gnd.setNoStroke();
+          jmp.setNoStroke();
+          jm2.setNoStroke();
+          jm3.setNoStroke();
+          jm4.setNoStroke();
+        }
+        if(fileType==3)while(bi(map[p])!=0xFF) {
+          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        }p++;
+        chunks[chunk].addBody(gnd);
+        chunks[chunk].addBody(jmp);
+        //chunks[chunk].addBody(jm2);
+        //chunks[chunk].addBody(jm3);
+        //chunks[chunk].addBody(jm4);
+        chunks[chunk].setPosition(128*i-1,128*j-1);
+        chunks[chunk].setStatic(true);
+        break;
       default: //air for unimplemented chunks
         if(texture!=-1){
           xPos = 64;
@@ -1544,4 +1594,6 @@ the checkpoint changes the spawn point part of the level file
 then the level reloads
 when the checkpoint is touched it changes picture
 the checkpoint is an entity
+the checkpoint changes itself in the level file to reflect its toggledness
+note changes to the level file are only in ram the actual file is untouched
 */
