@@ -600,7 +600,7 @@ class Dialog {
 // Main Program
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void settings() {
-  size(640,480,P2D);//holy nya why havent i used p2d before
+  size(640,480);//holy nya why havent i used p2d before
 }
 
 void setup() {
@@ -800,7 +800,7 @@ void makeLevel() {
           contents^=0x8;
           break;
         case 6:
-          p += loadScripts(subset(mapData,p+6))+6;
+          p += loadScripts(subset(mapData,p+7))+7;
           contents^=0x20;
           break;
         default:
@@ -885,19 +885,19 @@ int loadMusic(byte[] mussy) {
 int loadScripts(byte[] stuff) {
   int p = 0;//pointer to be returned
   int a = 0;//pointer for what gif/dialog is being loaded
-  int b = 0;//pointer for what script part is being loaded(is this even needed?)
+  //int b = 0;//pointer for what script part is being loaded(is this even needed?)
   while(stuff[p]!=0) {//load them picture gifs (for now only dem single images i think at least)
     String filePaths[] = new String[0];
     float gifSpeed = mf(stuff[p]);
     p++;
     while(stuff[p]!=0x00) {
-      int frames = bi(byte[p]);
+      int frames = bi(stuff[p]);
       String filePath = new String(subset(stuff,p+1));//dont forget that there are multiple frames
-      filePath = filePath.substring(filePath.indexOf((char)0x0D));
-      for(i=0;i<frames;i++) {
-        append(filePaths,filePath);
+      filePath = filePath.substring(0,filePath.indexOf((char)0x0D));
+      for(int i=0;i<frames;i++) {
+        filePaths = append(filePaths,filePath);
       }
-      p+=filePath+1;
+      p+=filePath.length()+2;
       //String[] filePaths = split(filePath,(char)0x0A);//i hope this works
       //String[] filePaths = split(filePath,(char)0x0D);
     }
@@ -905,16 +905,18 @@ int loadScripts(byte[] stuff) {
     //p+=String.join("",filePaths).length();
     a++;
   }
-  p++;a=0;
+  p+=2;
+  talks = new Dialog[0][0];
   while(stuff[p]!=0) {//load them scripts
-    p++;
-    while(stuff[p]!=0) {//load one script
+    Dialog[] temp = new Dialog[0];
+    while(stuff[p]!=0) {//load one script part
       int animNum = bi(stuff[p]); //what animation to display
       String text = new String(subset(stuff,p+1)); //what is said
-      p+=2+text.indexOf((char)0x00);
       text = text.substring(0,text.indexOf((char)0x00));
-      talks[a] = (Dialog[])append(talks[a],new Dialog(animNum,text));
+      p+=text.length()+2;
+      temp = (Dialog[])append(temp,new Dialog(animNum,text));
     }
+    talks = (Dialog[][])append(talks,temp);
   }
   return p;
 }
@@ -927,7 +929,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
       //int chunk = fileType=='3'?p/2:j*lWidth+i;
       int chunk = j*lWidth+i;
       byte ID = map[fileType=='3'?p:chunk*(fileType=='1'?1:2)];
-      int texture = fileType=='1'||!textures?0:map[1+(fileType=='2'?chunk*2:p)]; //<>//
+      int texture = fileType=='1'||!textures?0:map[1+(fileType=='2'?chunk*2:p)];
       texture&=0xFF;
       texture-=1;
       p+=2;

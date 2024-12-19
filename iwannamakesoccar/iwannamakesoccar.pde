@@ -277,7 +277,7 @@ ControlButton A, B, L, R;
 
 void settings() {
   Fisica.init(this);
-  size(640,480,P2D);
+  size(640,480);
 }
 
 void setup() {

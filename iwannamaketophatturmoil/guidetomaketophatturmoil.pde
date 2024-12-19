@@ -103,7 +103,7 @@ of 254 animations that you can specify. An animation is made of its speed
 in frames per redraw cycle*32 specified in one byte, then for each picture
 the number of gif frames that the picture displays for -1 followed by the
 path to the frame and a CR(0x0D) byte. The whole animation is terminated
-with a LF(0x0A) byte. The subsegment is terminated with a null(0x00) byte.
+with a null(0x00) byte. The subsegment is terminated with a null byte.
 If you dont want any pictures then just use a null byte. The second sub
 section is where the actual text is. Every script is made of one or more
 script parts. Every script part starts with the animation ID to play +2
@@ -255,12 +255,15 @@ commit messages. I'm not gonna stop though. I never will.
 ||-Health system framework
 ||-Kitta
 ''-evyles trusty testbot pre-prototype
+
 --Alpha 0.0.0 (the one right now)
 |-Title Card (placeholder[?])
 |-Level loading overhaul
-|-Character files (in progress)
 |-The mode framework shoehorned in
-|-Menus with buttons (in progress)
 |-Dialogs (in progress)
-'-Level music (in progress)
+'-Level music
+
+--Future Versions
+|-Character files
+'-Menus with buttons (in progress)
 */
