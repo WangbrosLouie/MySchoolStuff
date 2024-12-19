@@ -101,12 +101,12 @@ segment is required if you want a picture displayed on the side of the text
 but if you only want text it is fine to omit this section. There are a max
 of 254 animations that you can specify. An animation is made of its speed
 in frames per redraw cycle*32 specified in one byte, then for each picture
-its the number of gif frames that the picture displays for followed by the
+the number of gif frames that the picture displays for -1 followed by the
 path to the frame and a CR(0x0D) byte. The whole animation is terminated
 with a LF(0x0A) byte. The subsegment is terminated with a null(0x00) byte.
 If you dont want any pictures then just use a null byte. The second sub
 section is where the actual text is. Every script is made of one or more
-script parts. Every script part starts with the animation ID to play
+script parts. Every script part starts with the animation ID to play +2
 followed by the text to display. The text has to be newlined by CRLFs until
 I figure out how to newline them automatically. The text is terminated with
 a null byte. The script is terminated with a null as well. The whole

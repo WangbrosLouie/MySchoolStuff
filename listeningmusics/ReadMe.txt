@@ -1,5 +1,10 @@
 Don't Steal My Songs!
 
+NOTE: this is outdated my songs are kaneko1 kaneko2 kittacatmeow kittheme muahaha ponger & too much stuff n stuff
+all other songs are either covers i made of songs not by me or just other songs by people who are not me.
+basically credit me please when using my songs if you choose to credit someone and if you use a cover or an other song
+credit the original authors before me cause its their songs
+
 Note: This does not apply to "Azure Temple.mid", "Armored Sensui.mid", "untitled.opus" and "يا طارشي.mid"; those songs are not mine.
 
 By putting my songs here on my repo, I am allowing you to download and listen to them for free.

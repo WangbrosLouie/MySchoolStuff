@@ -774,7 +774,7 @@ void makeLevel() {
         p = 2147483647;//long code gooooo
         byte nextSeg = 0;
         int temp = 0;
-        String[] headers = {"Textures","Map Layout","Enemies","Sounds","Script"};
+        String[] headers = {"Textures","Map Layout","Enemies","Sounds","Background","Script"};
         for(byte i=0;i<headers.length;i++) {
           if(contents%pow(2,i+1)/pow(2,i)>0) {
             temp = new String(mapData).indexOf(headers[i]);
@@ -799,9 +799,9 @@ void makeLevel() {
           p += loadMusic(subset(mapData,p+6))+6;
           contents^=0x8;
           break;
-        case 5:
-          //p += loadScript(subset(mapData,p+6))+6;
-          contents^=0x10;
+        case 6:
+          p += loadScripts(subset(mapData,p+6))+6;
+          contents^=0x20;
           break;
         default:
           throw new RuntimeException("Invalid Next Level Segment");
@@ -885,23 +885,27 @@ int loadMusic(byte[] mussy) {
 int loadScripts(byte[] stuff) {
   int p = 0;//pointer to be returned
   int a = 0;//pointer for what gif/dialog is being loaded
+  int b = 0;//pointer for what script part is being loaded(is this even needed?)
   while(stuff[p]!=0) {//load them picture gifs (for now only dem single images i think at least)
     p++;
     float gifSpeed = mf(stuff[p]);
+    
     String filePath = new String(subset(stuff,p+1));//dont forget that there are multiple frames
     String[] filePaths = split(filePath,(char)0x0A);//i hope this works
-    filePaths = split(filePaths[0],(char)0x0D);
+    filePaths = split(filePaths[a],(char)0x0D);
     dial[a] = new Gif(gifSpeed,filePaths);
     p+=String.join("",filePaths).length();
     a++;
   }
-  p++;
+  p++;a=0;
   while(stuff[p]!=0) {//load them scripts
     p++;
     while(stuff[p]!=0) {//load one script
       int animNum = bi(stuff[p]); //what animation to display
-      String text = new String(subset(stuff,p)); //what is said
+      String text = new String(subset(stuff,p+1)); //what is said
+      p+=2+text.indexOf((char)0x00);
       text = text.substring(0,text.indexOf((char)0x00));
+      talks[a] = (Dialog[])append(talks[a],new Dialog(animNum,text));
     }
   }
   return p;
@@ -1358,8 +1362,10 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setPosition(65,65);
         gnd.setName("00");
         jmp = new FLine(1,1,129,1);
+        jmp = new FLine(1,65,129,65);
         jmp.setName("01");
         FLine jm2 = new FLine(1,33,129,33);
+        jm2 = new FLine(1,129,129,129);
         jm2.setName("01");
         FLine jm3 = new FLine(1,63,129,63);
         jm3.setName("01");
@@ -1380,7 +1386,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         }p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
-        //chunks[chunk].addBody(jm2);
+        chunks[chunk].addBody(jm2);
         //chunks[chunk].addBody(jm3);
         //chunks[chunk].addBody(jm4);
         chunks[chunk].setPosition(128*i-1,128*j-1);
