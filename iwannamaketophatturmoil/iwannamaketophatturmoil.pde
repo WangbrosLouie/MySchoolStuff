@@ -887,14 +887,22 @@ int loadScripts(byte[] stuff) {
   int a = 0;//pointer for what gif/dialog is being loaded
   int b = 0;//pointer for what script part is being loaded(is this even needed?)
   while(stuff[p]!=0) {//load them picture gifs (for now only dem single images i think at least)
-    p++;
+    String filePaths[] = new String[0];
     float gifSpeed = mf(stuff[p]);
-    
-    String filePath = new String(subset(stuff,p+1));//dont forget that there are multiple frames
-    String[] filePaths = split(filePath,(char)0x0A);//i hope this works
-    filePaths = split(filePaths[a],(char)0x0D);
+    p++;
+    while(stuff[p]!=0x00) {
+      int frames = bi(byte[p]);
+      String filePath = new String(subset(stuff,p+1));//dont forget that there are multiple frames
+      filePath = filePath.substring(filePath.indexOf((char)0x0D));
+      for(i=0;i<frames;i++) {
+        append(filePaths,filePath);
+      }
+      p+=filePath+1;
+      //String[] filePaths = split(filePath,(char)0x0A);//i hope this works
+      //String[] filePaths = split(filePath,(char)0x0D);
+    }
     dial[a] = new Gif(gifSpeed,filePaths);
-    p+=String.join("",filePaths).length();
+    //p+=String.join("",filePaths).length();
     a++;
   }
   p++;a=0;
