@@ -11,7 +11,6 @@ Finish the dingin' chunk extensions
 Add Lava Entities
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
 Make some dialogs
-The top half of half-blocks are detected as solid ground for animations
 */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Libraries
@@ -26,10 +25,10 @@ boolean drawing = false;
 boolean debug = false;
 //String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
 //String[] maps = new String[]{"map00.lvl"};
-String[] maps = new String[]{"kit/01.lvl"};
+String[] maps = new String[]{"map02ext.lvl","map05.lvl","kit/01.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 2;
+byte mapNum = 0;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -720,6 +719,8 @@ void draw() {
         //strokeWeight(0.5);
         translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
         world.draw();
+        stroke(133,234,82);
+        line(128,2048-128,256,2048-128);
         //for(int i=0;i<15;i++)line(0,i*16,640,i*16);for(int i=0;i<15;i++)line(i*16,0,i*16,640);
         pop();
       }

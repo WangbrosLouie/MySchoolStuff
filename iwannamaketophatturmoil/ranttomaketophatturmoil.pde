@@ -539,4 +539,8 @@ invisibility and that big big smile is so meowin cute.
 dec18 i havent really realized how much code i wrote for this until now.
 either i actually added a lot of stuff or my code is incredibly unoptimized
 guess which one i think it is.
+
+dec19 oh boy i am definetely not makin that christmas deadline for snow
+days 2024. at least i called it snow days 2024 and not christmas 2024 so i
+guess i can be a little late hehe.
 */
