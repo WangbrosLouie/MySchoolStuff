@@ -543,4 +543,11 @@ guess which one i think it is.
 dec19 oh boy i am definetely not makin that christmas deadline for snow
 days 2024. at least i called it snow days 2024 and not christmas 2024 so i
 guess i can be a little late hehe.
+the one thing stopping me from doin this is the stupid lag that roblox has.
+like when a snowball is thrown by a snowman it hits me like 10 studs away.
+also the scripts dont even replicate outside of studio but thats another
+critical problem for another yap. on a side note i am finally finished that
+dang flipside cover of buddy holly. it sounds cool to me which means im
+gonna listen to this for at most 3 days straight cause i listened to buddy
+holly for a couple days now.
 */
