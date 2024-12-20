@@ -265,5 +265,7 @@ commit messages. I'm not gonna stop though. I never will.
 
 --Future Versions
 |-Character files
-'-Menus with buttons (in progress)
+|-Menus with buttons (in progress)
+'-Checkpoints
+
 */

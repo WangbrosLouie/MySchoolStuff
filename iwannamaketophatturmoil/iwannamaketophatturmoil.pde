@@ -28,7 +28,7 @@ boolean debug = false;
 String[] maps = new String[]{"map02ext.lvl","map05.lvl","kit/01.lvl"};
 byte[] mapData;
 String mapName;
-byte mapNum = 0;
+byte mapNum = 2;
 Gif[] tex = new Gif[255];
 byte[] keys = new byte[13];
 boolean textures = true;
@@ -719,12 +719,14 @@ void draw() {
         //strokeWeight(0.5);
         translate((int)(width/2-camVec.x-((width-(width/scl))/2)),(int)(height/2-camVec.y-((height-(height/scl))/2)));
         world.draw();
-        stroke(133,234,82);
-        line(128,2048-128,256,2048-128);
+        //stroke(133,234,82);
+        //line(128,2048-128,256,2048-128);
         //for(int i=0;i<15;i++)line(0,i*16,640,i*16);for(int i=0;i<15;i++)line(i*16,0,i*16,640);
         pop();
       }
       //scl*=6;
+      dispDialog(new Dialog(0,"Nya!"));
+      
       break;
     case 3:
       //a winner is you gotta play dat win animation and score?? what score this aint sonic the hedgehog
@@ -739,7 +741,7 @@ void draw() {
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Supplementary Functions
+// Main Functions
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void makeLevel() {
   try {
@@ -752,7 +754,7 @@ void makeLevel() {
     String fileFoot = new String(subset(mapData,mapData.length-16,15));
     if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
     mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
-    println(mapName);
+    println("Map Name: "+mapName);
     camDir = false;
     for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
     if(you!=null)world.remove(you);
@@ -761,7 +763,7 @@ void makeLevel() {
     char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
     int lWidth = bi(mapData[mapData.length-32])+1;
     int lHeight = bi(mapData[mapData.length-31])+1;
-    println(lWidth, lHeight);
+    println("Width: "+lWidth+" Height: "+lHeight);
     backcolour = color(int(mapData[mapData.length-22])&0xFF,int(mapData[mapData.length-21])&0xFF,int(mapData[mapData.length-20])&0xFF);
     byte[] map = new byte[0];
     int p = 0;
@@ -775,7 +777,7 @@ void makeLevel() {
         p = 2147483647;//long code gooooo
         byte nextSeg = 0;
         int temp = 0;
-        String[] headers = {"Textures","Map Layout","Enemies","Sounds","Background","Script"};
+        String[] headers = {"Textures","Map Layout","Enemies","Sounds","Background","Scripts"};
         for(byte i=0;i<headers.length;i++) {
           if(contents%pow(2,i+1)/pow(2,i)>0) {
             temp = new String(mapData).indexOf(headers[i]);
@@ -902,6 +904,7 @@ int loadScripts(byte[] stuff) {
       //String[] filePaths = split(filePath,(char)0x0A);//i hope this works
       //String[] filePaths = split(filePath,(char)0x0D);
     }
+    //println(a);
     dial[a] = new Gif(gifSpeed,filePaths);
     //p+=String.join("",filePaths).length();
     a++;
@@ -911,7 +914,7 @@ int loadScripts(byte[] stuff) {
   while(stuff[p]!=0) {//load them scripts
     Dialog[] temp = new Dialog[0];
     while(stuff[p]!=0) {//load one script part
-      int animNum = bi(stuff[p]); //what animation to display
+      int animNum = bi(stuff[p])-2; //what animation to display
       String text = new String(subset(stuff,p+1)); //what is said
       text = text.substring(0,text.indexOf((char)0x00));
       p+=text.length()+2;
@@ -1452,6 +1455,26 @@ int extendChunk(byte[] stuff, FBody[] parts) {
   return p;
 }
 
+void dispDialog(Dialog what) {
+  push();
+  fill(127,127);
+  noStroke();
+  rect(width/10,height/16*12,width/10*8,height/16*3);
+  textAlign(LEFT,TOP);
+  if(what.pic<0) {
+    text(what.whatSay,width/10,height/16*12);
+  } else {
+    image(dial[what.pic],width/10,height/16*12,height/16*3,height/16*3);
+    text(what.whatSay,(width/10)+(height/16*3),height/16*12);
+    dial[what.pic].update();
+  }
+  pop();
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Side Functions
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 String tostring(char[] chars) { //oh lua how i wish i were programming in thy scrypt
   String retVal = "";
   for(char c:chars) {
@@ -1578,13 +1601,13 @@ void keyReleased() {
   }
 }
 
-void APressed(){if(keys[2]==0)keys[2]=1;}
-void AReleased(){keys[2]=0;}
-void HPressed(float x) {
-  if(x<0){if(keys[0]==0)keys[0]=1;keys[1]=0;}
-  if(x==0){keys[0]=0;keys[1]=0;}
-  if(x>0){keys[0]=0;if(keys[1]==0)keys[1]=1;}
-}
+//void APressed(){if(keys[2]==0)keys[2]=1;}
+//void AReleased(){keys[2]=0;}
+//void HPressed(float x) {
+//  if(x<0){if(keys[0]==0)keys[0]=1;keys[1]=0;}
+//  if(x==0){keys[0]=0;keys[1]=0;}
+//  if(x>0){keys[0]=0;if(keys[1]==0)keys[1]=1;}
+//}
 
 /*
 Credits! (because i thought it would be nice.)
