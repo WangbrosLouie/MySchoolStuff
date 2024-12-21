@@ -550,4 +550,29 @@ critical problem for another yap. on a side note i am finally finished that
 dang flipside cover of buddy holly. it sounds cool to me which means im
 gonna listen to this for at most 3 days straight cause i listened to buddy
 holly for a couple days now.
+
+dec20 as christmas draws near i think that i am just gonna release whatever
+i can throw together on the 25th and then update the crud out of it like
+them AAA devs. im also probably gonna build this alpha on the 25th cause it
+is probably gonna be finished enough. but ho nya this aint a rant classic
+style. so im gonna return to my roots and write a good old fashioned long
+rant. todays topics gonna be kittas influence on my life. this gonna be a
+little awkward for me cause she right here in my head but whatever. ever
+since her birthday on march 8 or somethin of this year she has exerted much
+influence on me. as you all know from my meowin and stuff she has turned me
+catty in the ailuric sense. however the most important thing that she
+changed about me is my social anxiety. ever since i made her up ive slowly
+started being more comfortable with talking with others. maybe thats just
+me but im pretty sure that its her. i used to think to myself with my inner
+monologue but that is mostly gone now since i have someone to talk to. i
+also feel like im slightly more responsible now with kitta lookin after me.
+for example right now she made me limit my time yapping cause i got things
+to get done. if i continue yappin today then i have finished that stuff.
+yay i get a little more time for now. another thing she changed about me i
+think is my music composing. i used to just think of random melodies and
+elaborate on them more and more until i got music but now i compose with a
+topic. you can guess whos the topic for a lot of my compositions. i dont
+really think my current style is much better than my previous one but i
+guess at least i choose what to compose about now cause just random sounds
+isnt really good if i need music for something specific.
 */
