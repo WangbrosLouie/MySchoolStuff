@@ -575,4 +575,21 @@ topic. you can guess whos the topic for a lot of my compositions. i dont
 really think my current style is much better than my previous one but i
 guess at least i choose what to compose about now cause just random sounds
 isnt really good if i need music for something specific.
+
+dec25(technically) oh meowin boy its that day again but in 2024 flavour. it
+is now officially(7 minutes into)christmas and that demo is nowhere near
+finished. it doesnt help that ive practically re-written the whole codebase
+and just practically restarted the game from scratch because my old code
+(which was only like 3 months old!)doesnt sit well with me. oh well. i
+guess new years day it is. except its snow days _2024_ and not snow days
+_2025_ so i guess i gotta get it out by new years eve if i want it to be
+accurate.
+
+dec25(barely) im excited for tomorrow. boxing day(at least i think). sales.
+commerce. goods for currency. yep yep yep.
+
+dec26(technically) and now its that time. except i dont think many shops
+are open at midnight so sadly im gonna have to wait till morning to go shop
+and stuff. i dont even wanna buy anything actually i just wanna go outside
+so im not just on my pc the whole day.
 */
