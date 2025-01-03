@@ -592,4 +592,62 @@ dec26(technically) and now its that time. except i dont think many shops
 are open at midnight so sadly im gonna have to wait till morning to go shop
 and stuff. i dont even wanna buy anything actually i just wanna go outside
 so im not just on my pc the whole day.
+
+dec30 its been quite a while. im real scared of a merge nightmare happening
+again cause i forgot to push my changes from my other computer and now i
+dont have access to it for an undetermined length of time. oh noes for me.
+im writin the rant in the reference here right now cause i know that this
+(or that when i move this to the rant doc)file is the only text in this
+project sketch whatever that i definitely have not touched in the time
+between the last commit pushed and the work that i have done on the other
+pc. so yeah. messy messy meow. immediately to a subject that will have no
+relevance to me(at least not right now)i do not like openmpt much. i know
+that as i learn how to use it i will like it more but for now there is a
+very meowin large roadblock speed bump that i need to get around and that
+is using samples. if you have listened to any of my music(which entirely
+consists of chiptunes)you will know that even when i make chiptunes for
+chips that support samples i NEVER use any. its not that i hate samples it
+just i really dislike using them because why use samples when i can just do
+whatever sound i want in the limitations of whatever chip im using? i can
+do drums in fm synthesis or white noise or a square wave or whatever.
+actually the only time ive used a sample in the listeningmusics at this
+point is the meow in one of the Kitta songs. and even that is made from
+wave synthesis in furnace. so theres a big problem cause i dont have
+samples of instruments. i guess i could just sample instruments from
+furnace though. i think ill do just that. but still thats a bunch of time
+spent on makin them. i just thought about how many aliases that i use in my
+work. if youve seen the tagging on the vgms and stuff for the listening
+musics you know that i use the handle "Yoplar" for music stuff. the name
+comes from a random name that i hastily thought up for my nintendo account
+that may have been inspired by the name of a yogurt company. if you see my
+github you know that i use "Wangbros Louie" or "WangbrosLouie" for a lot of
+stuff. its a funny little name that i came up when i was very little, like
+below double digit age little. and eagerfuriousdestroye's my roblox name
+cause i watched a lot of popularmmos when i was little. and now for some
+thing a little more serious. i am nowhere near finishing the meowin snow
+days 2024 tophat turmoil 2 evyles insert cliche term demo. the most
+progress i got recently was getting an ancient piece of code to work with
+the rewrite which now makes the game function like how i had it previously
+with the early stage 1-1. speakin of the early stage 1-1 i have not yapped
+about that on here and for good reason. im not gonna spoil the game much at
+least i think so. i already forgot how much i leaked previously and im too
+lazy to go back and look so for now its radio silence about the other stuff
+in the game. right now im in the middle of struggling to code a very simple
+attack because of my procrastination so im tryin somethin new by gettin
+inner Kitta to write it for me so that i dont get affected by my
+procrastination much while still technically writing it. so i guess the
+first thing to do would be to stop yapping here. so i guess ill have a
+break from the yaps and get codeify premium. and i just looked up codeify
+to see if its a real thing and apparently codify without the e is a thing
+to translate roblox instances to code or something to do with ai or what
+ever. that was completely unintentional but whatever.
+
+dec31 yay the merge was relatively painless. i am happy.
+
+2024jan1 woohoo its the new year. how very cool.
+
+jan2(technically) and now its not. that was a meowin fine new years day of
+playin gta v for 10 hours straight. i regret meowin nothing. i really feel
+like i shouldnt be playin gta v at all at this point cause i feel mentally
+changed.
 */
