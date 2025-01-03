@@ -322,7 +322,10 @@ void draw() {
     whsav.resize(width,height);
     Hitbox = createGraphics(width,height);
     Hitbox.noSmooth();
+    Hitbox.beginDraw();
     Hitbox.noStroke();
+    Hitbox.background(0);
+    Hitbox.endDraw();
     AWidth = width*4;//note to self: dont use width or height outside of a function if settings() is used
     AHeight = height*3;
     goalHeight = height;
