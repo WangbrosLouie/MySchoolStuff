@@ -451,7 +451,7 @@ void draw() {
       if(frameCount-replayFrame>replay.length-1) {
         replaying=false;
         if(replay.length==replayLength) {
-          float[] temp = new float[replayLength];
+          float[][] temp = new float[replayLength][0];
           arrayCopy(replay,frameCount%replayLength,temp,0,replayLength-(frameCount%replayLength));
           arrayCopy(replay,0,temp,(replayLength-(frameCount%replayLength)),frameCount%replayLength);
           arrayCopy(temp,replay);
