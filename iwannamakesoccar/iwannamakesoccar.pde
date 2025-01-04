@@ -578,7 +578,7 @@ void draw() {
       fill(255);
       textAlign(CENTER,CENTER);
       textSize(70);
-      text("Player "+(scor1>scor2?"1":"2")+"\nA WINNER IS YOU",width/2,100);
+      text("Player "+(scor1>scor2?"1":"2")+"\nA WINNER IS YOU "+scor1+" "+scor2,width/2,100);
       pop();
       //draw winner text and maybe logo
     } else {
@@ -826,8 +826,8 @@ void reset() {
   if(false)print("A");//bookmarks
   push();
   colorMode(RGB);
-  myWorld.clear();
-  clearFWorld(myWorld);
+  //myWorld.clear();
+  myWorld = clearFWorld(myWorld);
   ball = new FCircle(60);
   ball.setPosition(width/2,height-31);
   ball.setFriction(0.5);
@@ -848,7 +848,7 @@ void reset() {
 
 void results() {
   if(false)print("A");//bookmarks
-  clearFWorld(myWorld);
+  myWorld = clearFWorld(myWorld);
   myWorld.step();
   ((scor1>scor2)?frame:fram2).setPosition(width/2-50,height-80);//im going to do whats called a pro gamer move
   ((scor1>scor2)?tire1:tire3).setPosition(width/2-30,height-30);
@@ -877,12 +877,41 @@ void results() {
   if(debug)println("endgame initiated");
 }
 
-void clearFWorld(FWorld seikai) {
-  seikai.clear();//get rid of somethin probs
-  ArrayList<FBody> bodies = seikai.getBodies();
-  for(FBody body : bodies) {
-    //body.removeFromWorld(); is this ALSO not implemented either??? i wonder whats next...
-  }
+void gameInit() {
+  Fisica.init(this);
+  reset();
+  Btn = 0;
+  scor1 = 0;
+  scor2 = 0;
+  boos1 = 100;
+  boos2 = 100;
+  jmp1 = 0;
+  jmp2 = 0;
+  ballVelo = 0;
+  camX = 0;
+  camY = 0;
+  paused = false;
+  afterParty = false;
+  overtime = false;
+  replaying = false;
+  replayFrame = 0;
+  lastGoal = 0;
+  replay = new float[0][0];
+  replays = new float[0][0];
+  Keys = new boolean[22]; //0-5 keys 6&7 debounce for jump key 8-11 wheels touching floor? 12&13 can jump? 14&&15 body touching floor? 16-19 boost keys 20&21 brake keys
+}
+
+FWorld clearFWorld(FWorld seikai) {
+  //seikai.clear();//get rid of somethin probs
+  //ArrayList<FBody> bodies = seikai.getBodies();
+  //for(FBody body : bodies) {
+  //  seikai.remove(body);
+  //  //body.removeFromWorld(); is this ALSO not implemented either??? i wonder whats next...
+  //}
+  seikai = new FWorld(-AWidth/2+width-500,-AHeight+height-100,AWidth/2+width+500,height+100);
+  seikai.setGrabbable(false);
+  seikai.setGravity(0,500);
+  return seikai;
 }
 
 void saveReplayFrame() {
@@ -1146,6 +1175,7 @@ void mouseReleased() {
         frameRate(30);
         ttl.stop();
         bgm.loop();
+        gameInit();
         //from the
         screen = 1;
         //to the
@@ -1161,6 +1191,7 @@ void mouseReleased() {
         frameRate(60);
         ttl.stop();
         bgm.loop();
+        gameInit();
         screen = 1;
         break;
       case 3://turn that frown upside down :3
@@ -1180,6 +1211,7 @@ void mouseReleased() {
         frameRate(42069);//ehehe
         ttl.stop();
         bgm.loop();
+        gameInit();
         screen = 1;
         break;
       case 5:
@@ -1204,6 +1236,7 @@ void mouseReleased() {
         frameRate(60);
         ttl.stop();
         bgm.loop();
+        gameInit();
         screen = 1;
         break;
       default:
@@ -1240,12 +1273,12 @@ void contactStarted(FContact contact) { //add boost if car is on ground and not 
   if(contact.contains(tire4,ball))jmp2=2;
   if(contact.contains(frame,floor))Keys[14]=true;
   if(contact.contains(fram2,floor))Keys[15]=true;
-  if(!afterParty) {
+  if(!afterParty&&!(screen==2)) {
     if(contact.contains(ball,rgoal)){scor1++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
     if(contact.contains(ball,lgoal)){scor2++;ball.setNoStroke();lastGoal=replayFrame;replayFrame=frameCount;afterParty=true;goalSpeed=round(dist(0,0,ball.getVelocityX(),ball.getVelocityY()));}
     if(contact.contains(ball,floor)&&(halfFPS?30*300:60*300)<=frameCount&&!overtime) {
       if(scor1==scor2){overtime=true;frameCount=halfFPS?30*300:60*300;reset();}
-      else {screen=2;while(drawing){print("");}frameCount=0;}
+      else {screen=2;frameCount=0;}
     }
   }
 }
@@ -1255,7 +1288,7 @@ void contactPersisted(FContact contact) {
   if(contact.contains(fram2,floor))Keys[15]=true;
   if(contact.contains(ball,floor)&&(halfFPS?30*300:60*300)<=frameCount&&!overtime&&!afterParty) {
     if(scor1==scor2){overtime=true;frameCount=halfFPS?30*300:60*300;reset();}
-    else {screen=2;while(drawing){print("");}frameCount=0;}
+    else {screen=2;frameCount=0;}
   }
 }
 
