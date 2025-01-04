@@ -4,6 +4,12 @@
 |* league sideswipe ahh    *|
 \*_Date:_Oct.10,_2024______*/
 
+//to-dos (maybe)
+//rebindable keys
+//nonbuggy replays
+//car colour customization
+//resizable window
+
 import fisica.*;
 import processing.sound.*;
 import net.java.games.input.*;
