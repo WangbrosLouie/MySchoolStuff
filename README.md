@@ -1,37 +1,45 @@
-FINE ill add a readme
+> ### `W E L C O M E   T O`
+# *myschoolstuff*
+###### -the github repository-
+---
+> # ***`The 5 W's (+H)`***
+## What is it?
+This repository contains all of the [stuff](#the-stuff) that I make for my programming course.  
+It also has [music](#the-music), some made by me and some made by other people.
+## When is it?
+This repository was created on the 5th of September of 2024 AD. Creation dates for individual applications can be found in their source file (prefixed by `iwanna`) in the header block.
+## Why is it?
+This repository serves two purposes.
+1. I can have the world see and run my crudtastic code creations.
+2. I can do all sorts of silly things on GitHub that probably shouldn't be done.
+## Where is it?
+I'm too lazy to search up where GitHub's servers are or which server(s) is/are hosting my files.
+## Who is it?
+Lookit my profile you dingus.
+## How is it?
+Using some black magic with the much less documented white magic to form græy magic, I formed a legal græy area which I pulled an unactivated copy of Windows 11 and a school laptop out of. I then exploited the græy magic's internet connectivity ability to sign up for a GitHub account and make this repository.
 
-hello. this is some stuff that im doing for school.  
-at school i need to do stuff and this is that stuff.  
-if i didnt have to do this stuff,  
-this stuff would not exist.  
-by me creating this stuff,  
-im making this stuff exist.  
-if i wasnt taught about how to code,  
-i would not have coded this code.  
-but since i was taught programming,  
-i possess that knowledge.  
-every day i get get up early,  
-and march my way to school.  
-had i not got up one day,  
-i wouldve missed a class.  
-alas, i have ran this text  
-longer than i should,  
-if i dont get back to my code,  
-i would not be programming.  
+---
+> # ***`The Stuff`***
+| Application | Description |
+|-|-|
+| iwannahouse | A cool little animated scene of a house undergoing time acceleration thanks to Made In Heaven. |
+| iwannadrawkitta | Kitta drawn by a 5 year old using the rounded rectangle tool in paint. |
+| iwannamakepatterns | Some patterns that can look cool.|
+| iwannabeaballer | A simple basketball game that uses three whole dimensions in 2D. |
+| iwannaseekeys | A key to character/keycode/ascii viewer. |
+| iwannamakeamover | Movers that can move, change size and strobe colours, as well as a toggleable hall of mirrors effect. |
+| iwannamakebuttons | Buttons that can do things. |
+| iwannausegifs | My first go at making a gif class. |
+| iwannamakearraylists | An experiment with ArrayLists which were completely foreign to me and now are only partially so. |
+| iwannahavephysics | Where the nightmares start. My first fisica project. |
+| iwannamakesoccar | Rocket League if it was made by an 10 year old in Scratch. |
+| iwannatestthelibraries | My first go at using tabs which taught me to never use tabs for code. |
+| iwannamaketophatturmoil | The game I keep hyping up a release that never comes for. |
 
-Now that the non stupidity-appreciators have left, I think that I will actually make a good readme. This (as mentioned before) is the repository for all of the applications that I have made for class. They are probably not very well coded (which is why I'm in a class) so if you look at the sources beware. Now, the list of projects with their descriptions. If you want the funny descriptions, check the sources.  
-1. iwannahouse: A simple house with a cool backdrop.  
-2. iwannadrawkitta: A barebones graphics showcase.  
-3. iwannamakepatterns: A barebones graphics showcase.  
-4. iwannabeaballer: A simple little basketball game.  
-5. iwannaseekeys: A key character/code/ascii viewer.  
-6. iwannamakeamover: An interactable mover showcase.  
-7. iwannamakebuttons: A small button class showcase.  
-8. iwannausegifs: An unfinished prototype gif class.  
-9. iwannamakearraylists: A try at using arraylists.  
-10. iwannahavephysics: A simple physics sandbox.  
-11. iwannamakesoccar: A version of Rocket League.  
-12. iwannatestthelibraries: A try at using tabs.  
-13. iwannamaketophatturmoil: An action-platformer.
-
-Excuse me for some poor descriptions, I like to keep the consistency of the line lengths. I compile releases for some of the better apps. I try to get every version that I can, including separate versions for different architectures, OS's and with/without a bundled Java runtime for size. Feel free to request a certain release if it is not available and I might make all of them.  
+---
+> # ***`The Music`***
+| Filename | Author | Name |
+|-|-|-|
+| Aerobase Zone Accurate Edition.vgm | Masanoru Hikichi cv. Yoplar | Aerobase Zone Accurate Edition.vgm |
+im too lazy to finish the rest of this right now
