@@ -256,7 +256,7 @@ commit messages. I'm not gonna stop though. I never will.
 ||-Kitta
 ''-evyles trusty testbot pre-prototype
 
---Alpha 0.0.0 (the one right now)
+--Alpha 0.0 (the one right now)
 |-Title Card (placeholder[?])
 |-Level loading overhaul
 |-The mode framework shoehorned in
