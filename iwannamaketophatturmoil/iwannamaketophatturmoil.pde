@@ -372,13 +372,14 @@ class Missile extends Projectile {// the attack of the testbot
     speed = SPEED;
     direction = DIR.normalize().mult(SPEED);
     creator = CREATOR;
-    sound = new SoundFile(dis,"snd/disconnect.mp3");
-    sound.loop();
+    //sound = new SoundFile(dis,"snd/disconnect.mp3");
+    //sound.loop();
     //super.setDensity(super.getMass()*world.getGravity().y/-(high*wide));
     hit.setRotation(degrees(DIR.heading()));
     hit.setDensity(0.0001);
     hit.setVelocity(direction.x,direction.y);
     hit.setAngularVelocity(0);
+    hit.setRotatable(false);
     projs.add(this);
   }
   
@@ -394,7 +395,7 @@ class Missile extends Projectile {// the attack of the testbot
   }
   
   void destroy() {
-    sound.stop();
+    //sound.stop();
     sound = null;
     loadSound("snd/boom.wav").play();
     new Explosion(hit.getX(),hit.getY(),new FCircle(50));
@@ -599,14 +600,14 @@ class Dialog {
 // Main Program
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void settings() {
-  size(640,480);//holy nya why havent i used p2d before
+  size(640,480,P2D);//holy nya why havent i used p2d before
 }
 
 void setup() {
   //surface.setResizable(true);
   lucid = createFont("Lucida Console",14,false);
   camDir = false;
-  thread("makeLevel");
+  thread("loadLevelFile");
   //convert(loadBytes("map02.lvl"),3,"map02ext.lvl");
   //draw thy loading screen
 }
@@ -731,7 +732,7 @@ void draw() {
     case 3:
       //a winner is you gotta play dat win animation and score?? what score this aint sonic the hedgehog
       mode = 1;
-      thread("makeLevel");
+      thread("loadLevelFile");
       break;
     }
     drawing = false;
@@ -743,6 +744,11 @@ void draw() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Main Functions
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void makeLevel(File level) {
+  mapData = loadBytes(level.getAbsolutePath());
+  makeLevel();
+}
+
 void makeLevel() {
   try {
     while(drawing) {
@@ -750,7 +756,7 @@ void makeLevel() {
     }
     loading = true;
     mapName = "man your storage device is slow";
-    mapData = loadBytes(maps[mapNum%maps.length]);
+    //mapData = loadBytes(maps[mapNum%maps.length]);
     String fileFoot = new String(subset(mapData,mapData.length-16,15));
     if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
     mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
@@ -1456,19 +1462,19 @@ int extendChunk(byte[] stuff, FBody[] parts) {
 }
 
 void dispDialog(Dialog what) {
-  push();
-  fill(127,127);
-  noStroke();
-  rect(width/10,height/16*12,width/10*8,height/16*3);
-  textAlign(LEFT,TOP);
-  if(what.pic<0) {
-    text(what.whatSay,width/10,height/16*12);
-  } else {
-    image(dial[what.pic],width/10,height/16*12,height/16*3,height/16*3);
-    text(what.whatSay,(width/10)+(height/16*3),height/16*12);
-    dial[what.pic].update();
-  }
-  pop();
+  //push();
+  //fill(127,127);
+  //noStroke();
+  //rect(width/10,height/16*12,width/10*8,height/16*3);
+  //textAlign(LEFT,TOP);
+  //if(what.pic<0) {
+  //  text(what.whatSay,width/10,height/16*12);
+  //} else {
+  //  image(dial[what.pic],width/10,height/16*12,height/16*3,height/16*3);
+  //  text(what.whatSay,(width/10)+(height/16*3),height/16*12);
+  //  dial[what.pic].update();
+  //}
+  //pop();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1572,6 +1578,10 @@ SoundFile loadSound(String path) {
   return new SoundFile(this,path);
 }
 
+void loadLevelFile() {a
+  selectInput("Select a level file (ends with a .lvl)","makeLevel");
+}
+
 void keyPressed() {
   switch(keyCode){
   case 65:
@@ -1600,14 +1610,6 @@ void keyReleased() {
     break;
   }
 }
-
-//void APressed(){if(keys[2]==0)keys[2]=1;}
-//void AReleased(){keys[2]=0;}
-//void HPressed(float x) {
-//  if(x<0){if(keys[0]==0)keys[0]=1;keys[1]=0;}
-//  if(x==0){keys[0]=0;keys[1]=0;}
-//  if(x>0){keys[0]=0;if(keys[1]==0)keys[1]=1;}
-//}
 
 /*
 Credits! (because i thought it would be nice.)

@@ -260,12 +260,12 @@ commit messages. I'm not gonna stop though. I never will.
 |-Title Card (placeholder[?])
 |-Level loading overhaul
 |-The mode framework shoehorned in
-|-Dialogs (in progress)
 '-Level music
 
 --Future Versions
 |-Character files
 |-Menus with buttons (in progress)
+|-Dialogs (in progress)
 '-Checkpoints
 
 */

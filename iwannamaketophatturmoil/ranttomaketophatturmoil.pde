@@ -650,4 +650,15 @@ jan2(technically) and now its not. that was a meowin fine new years day of
 playin gta v for 10 hours straight. i regret meowin nothing. i really feel
 like i shouldnt be playin gta v at all at this point cause i feel mentally
 changed.
+
+jan4 i feel great. i have finished makin basic gui stuff in tophat turmoil
+and fixed a couple bugs in blast processing soccar. im gonna do so much
+stuff in tophat turmoil that its going to actually be playable. can you
+believe it!? something i make is actually going to be on the verge of
+acceptable!? anyways im wanting to make the repo page on the github look
+actually nice. im gonna put my garbage on full display.
+
+jan5 i am really on a roll with the tophat turmoil coding. i can now code
+like 100 lines per day! thats like a 10x increase! anyways im gonna get
+back to coding this game again real soon. like today soon.
 */
