@@ -1578,7 +1578,7 @@ SoundFile loadSound(String path) {
   return new SoundFile(this,path);
 }
 
-void loadLevelFile() {a
+void loadLevelFile() {
   selectInput("Select a level file (ends with a .lvl)","makeLevel");
 }
 
