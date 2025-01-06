@@ -6,7 +6,7 @@
 |* the sega genesis to processing *|
 \*_Date:_Nov.1,_2024______________*/
 
-/*to-do's (i aint usin github issues for this nonsense)
+/*to-do's (i aint usin github projects for this nonsense)
 Finish the dingin' chunk extensions
 Add Lava Entities
 checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
