@@ -35,11 +35,11 @@ Using some black magic with the much less documented white magic to form græy m
 | iwannahavephysics | Where the nightmares start. My first fisica project. |
 | iwannamakesoccar | Rocket League if it was made by an 10 year old in Scratch. |
 | iwannatestthelibraries | My first go at using tabs which taught me to never use tabs for code. |
-| iwannamaketophatturmoil | The game I keep hyping up a release that never comes for. |
+| iwannamaketophatturmoil | The game I keep hyping up a release that came once so far for. |
 
 ---
 > # ***`The Music`***
 | Filename | Author | Name |
 |-|-|-|
-| Aerobase Zone Accurate Edition.vgm | Masanoru Hikichi cv. Yoplar | Aerobase Zone Accurate Edition.vgm |
+| Aerobase Zone Accurate Edition.vgm | Masanoru Hikichi cv. Yoplar | NeoGeo Pocket Cover of Death Egg Act 2 from Sonic 3 |
 im too lazy to finish the rest of this right now
