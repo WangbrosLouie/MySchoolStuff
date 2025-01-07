@@ -2,7 +2,7 @@
 |* Author: Louie Wang                  *|
 |* Description: you know what they say *|
 |* with new project comes longer title *|
-\*_Date:_Jan.7,_2025___________________*/
+\*_Date:_Jan.6,_2025___________________*/
 
 PVector camPos = new PVector();
 PVector camOri = new PVector();
@@ -25,6 +25,10 @@ void draw() {
   sphere(10);
   pop();
   println(camPos,camOri,Dir);
+}
+
+PVector XZY(PVector v) {
+  return new PVector(v.x,v.z,v.y);
 }
 
 void keyPressed() {
