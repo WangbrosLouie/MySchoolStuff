@@ -618,7 +618,7 @@ void draw() {
     switch(mode) {
     case 0:
       //do the buttons the menus the yaddas not the nyaddas
-      mode = 1;
+      mode = 4;
       frameCount = 0;
     case 1://maybe do the loading while the intro is introing with a thread or something like that
       if(!camDir){
@@ -731,9 +731,12 @@ void draw() {
       break;
     case 3:
       //a winner is you gotta play dat win animation and score?? what score this aint sonic the hedgehog
-      mode = 1;
+      mode = 4;
       thread("loadLevelFile");
       break;
+    case 4:
+      frameCount = 0;
+      mode = loading?4:1;
     }
     drawing = false;
   } catch (Exception e) {
@@ -745,15 +748,17 @@ void draw() {
 // Main Functions
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void makeLevel(File level) {
+  if(level!=null) {
   mapData = loadBytes(level.getAbsolutePath());
   makeLevel();
+  } else thread("loadLevelFile");
 }
 
 void makeLevel() {
   try {
-    while(drawing) {
-      wait();
-    }
+    //while(drawing) {
+    //  print("");
+    //}
     loading = true;
     mapName = "man your storage device is slow";
     //mapData = loadBytes(maps[mapNum%maps.length]);
@@ -1579,7 +1584,7 @@ SoundFile loadSound(String path) {
 }
 
 void loadLevelFile() {
-  selectInput("Select a level file (ends with a .lvl)","makeLevel");
+  selectInput("Select a level file (ends with a .lvl)","makeLevel");//calls callback before file is chosen on linux?
 }
 
 void keyPressed() {
@@ -1615,6 +1620,7 @@ void keyReleased() {
 Credits! (because i thought it would be nice.)
 
 Me - literally everything used in the game
+Johang727 - bug reporting
 Richard Marxer - the fisica library
 Processing contributors - the sound library
 um thats it unless you count Kitta for emotional support
