@@ -208,8 +208,8 @@ class player extends FBox {
       int flags = name!=null?unbinary(name):0;
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
-      if(flags%0x4/2>0){hurt(1);}
-      if(flags%0x8/4>0&&frameCount!=0){frameCount=0;mapNum+=1;mode=3;}
+      if(flags%0x4/2>0)hurt(1);
+      if(flags%0x8/4>0&&frameCount!=0)mode=3;
       //make dat unstatic thingy
       if(flags%0x20/0x10>0)touchings.remove(i);
       if(flags%0x40/0x20>0)massy = 2;
@@ -736,7 +736,6 @@ void draw() {
       break;
     case 4:
       frameCount = 0;
-      mode = loading?4:1;
     }
     drawing = false;
   } catch (Exception e) {
@@ -750,7 +749,8 @@ void draw() {
 void makeLevel(File level) {
   if(level!=null) {
   mapData = loadBytes(level.getAbsolutePath());
-  makeLevel();
+  thread("makeLevel");
+  mode = 4;
   } else thread("loadLevelFile");
 }
 
@@ -832,6 +832,7 @@ void makeLevel() {
     world.add(you);
     playerVec = new PVector(you.getX(),you.getY());
     camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
+    mode = 1;
     loading = false;
   } catch (Exception e) {
     blueDead(e);
