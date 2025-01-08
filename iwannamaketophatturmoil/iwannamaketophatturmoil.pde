@@ -273,11 +273,18 @@ class player extends FBox {
   }
 }
 
-class Enemy extends FBox {//dont use please use the subclasses
+class Entity extends FBox {
+  
+  Entity(int high, int wide) {
+    super(high,wide);
+    super.setRotatable(false);
+  }
+}
+
+class Enemy extends Entity {//dont use please use the subclasses
   int health = 0;
   Enemy(int HEALTH, int high, int wide) {
     super(high,wide);
-    super.setRotatable(false);
     health = HEALTH;
   }
   
@@ -301,6 +308,54 @@ class TestBot extends Enemy {
   Gif anims[] = new Gif[2];
   
   TestBot(int HEALTH, int TYPE, int x, int y) {
+    super(HEALTH,32,32);
+    enemies.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
+    switch(TYPE) {
+    default://type 0 in here too
+      speed = 50;
+    }
+    super.setPosition(x,y);
+    anims[0] = new Gif(2,1.0/20,"spr/t",".png");
+    super.attachImage(anims[0]);
+    world.add(this);
+  }
+  
+  void process() {
+    timer++;
+    if(random(0,2500)<timer){state=(byte)((state+1)%2);timer=0;}
+    switch(state) {
+    case 0:
+      super.setVelocity(dir?50:-50,super.getVelocityY());
+      break;
+    case 1:
+      if(timer==0) {
+        new Missile(super.getX(),super.getY()-10,10,4,new PVector(you.getX()-super.getX(),you.getY()-super.getY()),50,0,this);
+        dir = !dir;
+      }
+      break;
+    default:
+      println("GUHHHHHHH???????????");
+    }
+    anims[0].updatePlayer(dir);
+    if(super.isTouchingBody(you)) {
+      if(you.getY()+(you.getHeight()/2)-4<=super.getY()-(super.getHeight()/2)) {
+        super.destroy();
+        you.setVelocity(you.getVelocityX(),-abs(you.getVelocityY()));
+      } else {
+        you.hurt(1);
+      }
+    }
+  }
+}
+
+class Lava extends Enemy {
+  int speed = 0;
+  boolean dir = true;
+  int timer = 0;
+  byte state = 0;
+  Gif anims[] = new Gif[2];
+  
+  Lava(int HEALTH, int TYPE, int x, int y) {
     super(HEALTH,32,32);
     enemies.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     switch(TYPE) {
@@ -1625,6 +1680,7 @@ Johang727 - bug reporting
 Richard Marxer - the fisica library
 Processing contributors - the sound library
 um thats it unless you count Kitta for emotional support
+Current title card lovingly stolen from Sonic Crackers
 
 Tools Used
 

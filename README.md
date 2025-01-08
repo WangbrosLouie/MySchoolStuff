@@ -35,7 +35,7 @@ Using some black magic with the much less documented white magic to form græy m
 | iwannahavephysics | Where the nightmares start. My first fisica project. |
 | iwannamakesoccar | Rocket League if it was made by an 10 year old in Scratch. |
 | iwannatestthelibraries | My first go at using tabs which taught me to never use tabs for code. |
-| iwannamaketophatturmoil | The game I keep hyping up a release that came once so far for. |
+| iwannamaketophatturmoil | The game I keep hyping up a release that came 1 1/2 times so far for. |
 
 ---
 > # ***`The Music`***
