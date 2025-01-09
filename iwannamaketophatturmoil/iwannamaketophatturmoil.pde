@@ -279,6 +279,15 @@ class Entity extends FBox {
     super(high,wide);
     super.setRotatable(false);
   }
+  
+  void process() {
+    println("yo is this entity supposed to process somethin");
+  }
+  
+  void destroy() {
+    println("yo is this entity supposed to be destroyed");
+  }
+  
 }
 
 class Enemy extends Entity {//dont use please use the subclasses
@@ -365,30 +374,7 @@ class Lava extends Entity {
   }
   
   void process() {
-    timer++;
-    if(random(0,2500)<timer){state=(byte)((state+1)%2);timer=0;}
-    switch(state) {
-    case 0:
-      super.setVelocity(dir?50:-50,super.getVelocityY());
-      break;
-    case 1:
-      if(timer==0) {
-        new Missile(super.getX(),super.getY()-10,10,4,new PVector(you.getX()-super.getX(),you.getY()-super.getY()),50,0,this);
-        dir = !dir;
-      }
-      break;
-    default:
-      println("GUHHHHHHH???????????");
-    }
-    anims[0].updatePlayer(dir);
-    if(super.isTouchingBody(you)) {
-      if(you.getY()+(you.getHeight()/2)-4<=super.getY()-(super.getHeight()/2)) {
-        super.destroy();
-        you.setVelocity(you.getVelocityX(),-abs(you.getVelocityY()));
-      } else {
-        you.hurt(1);
-      }
-    }
+    anim.update();
   }
 }
 
@@ -813,10 +799,10 @@ void makeLevel() {
     loading = true;
     mapName = "man your storage device is slow";
     //mapData = loadBytes(maps[mapNum%maps.length]);
-    String fileFoot = new String(subset(mapData,mapData.length-16,15));
+    String fileFoot = new String(subset(mapData,mapData.length-16,15)); //make sure that level valid
     if(!(fileFoot.equals("Tophat Turmoil ")))throw new RuntimeException("Level Footer Not Found");
-    mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
-    println("Map Name: "+mapName);
+    mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));//load the map name first so the title card can work better
+    if(debug)println("Map Name: "+mapName);
     camDir = false;
     for(int i=0;i<entities.size();i++)entities.get(i).destroy();
     if(you!=null)world.remove(you);
@@ -835,6 +821,7 @@ void makeLevel() {
     world.setGravity(mapData[mapData.length-24]*10,mapData[mapData.length-23]*10);
     if(fileType=='3') {
       int contents = mapData[mapData.length-17]&0xFF;
+      PVector[] entityList = new PVector[0];
       while(contents!=0) {
         p = 2147483647;//long code gooooo
         byte nextSeg = 0;
@@ -853,7 +840,8 @@ void makeLevel() {
           contents^=0x1;
           break;
         case 2:
-          p += makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType)+10;
+          entityList = makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType)+10;
+          p += entityList[0].x+10;
           contents^=0x2;
           break;
         case 3:
@@ -873,6 +861,7 @@ void makeLevel() {
         }
         mapData = subset(mapData,p);
       }
+      makeEntities(entityList);
     } else {
       map = mapData;
       //nobody touch the code below its a monster

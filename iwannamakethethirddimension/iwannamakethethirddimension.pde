@@ -6,7 +6,7 @@
 
 PVector camPos = new PVector();
 PVector camOri = new PVector();
-float Dir = 0; //camera direction
+PVector camDir = new PVector();
 boolean[] Keys = new boolean[256];
 float Speed = 1.0;
 PImage img;
@@ -19,15 +19,14 @@ void settings() {
 }
 
 void setup() {
-  perspective(PI/2.0, (float)width/(float)height, 5.0, 1000.0);
+  mytricks = getMatrix(mytricks);//thanks google
   img = loadImage("testbot my beloved.png");
-  ThreeD = createGraphics(width,height,P3D);//if i cant figure out how to draw 2D graphics im gonna use this
-  oriCube = createGraphics(50,50,P3D);
-  mytricks = getMatrix(mytricks);
+  oriCube = createGraphics(75,75,P3D);
 }
 
 void draw() {
   pushMatrix();
+  perspective(PI/2.0, (float)width/(float)height, 5.0, 1000.0);
   process();
   camera(camPos.x,camPos.y,camPos.z,camOri.x,camOri.y,camOri.z,0,1,0);
   background(200);
@@ -36,6 +35,7 @@ void draw() {
   ball(30,30,30,10);
   popMatrix();
   this.setMatrix(mytricks);
+  perspective();
   PVector oriPos = PVector.sub(camOri,camPos).mult(25);
   oriCube.beginDraw();
   oriCube.background(0);
@@ -43,8 +43,8 @@ void draw() {
   oriCube.camera(-oriPos.x,-oriPos.y,-oriPos.z,0,0,0,0,1,0);
   oriCube.endDraw();
   imageMode(CORNER);
-  image(oriCube,mouseX,mouseY,50,50);
-  println(camPos,camOri,Dir);
+  image(oriCube,width-75,0,75,75);
+  println(camPos,camOri,camDir);
 }
 
 void process() {
@@ -53,16 +53,28 @@ void process() {
     s*=.2;
   }
   if(Keys[87]) {
-    camPos.add(XZY(PVector.fromAngle(radians(Dir))).mult(s));
+    camPos.add(XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
   }
   if(Keys[83]) {
-    camPos.sub(XZY(PVector.fromAngle(radians(Dir))).mult(s));
+    camPos.sub(XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+  }
+  if(Keys[74]) {
+    camPos.add(XZY(PVector.fromAngle(radians(camDir.x-90))).mult(s));
+  }
+  if(Keys[76]) {
+    camPos.add(XZY(PVector.fromAngle(radians(camDir.x+90))).mult(s));
   }
   if(Keys[65]) {
-    Dir -= 2*s;
+    camDir.x -= 2*s;
   }
   if(Keys[68]) {
-    Dir += 2*s;
+    camDir.x += 2*s;
+  }
+  if(Keys[73]) {
+    camDir.y -= 2*s;
+  }
+  if(Keys[75]) {
+    camDir.y += 2*s;
   }
   if(Keys[69]) {
     camPos.add(new PVector(0,-1,0).mult(s));
@@ -72,7 +84,16 @@ void process() {
     camPos.add(new PVector(0,1,0).mult(s));
     camOri.add(new PVector(0,1,0).mult(s));
   }
-    camOri = PVector.add(camPos,XZY(PVector.fromAngle(radians(Dir)).normalize()));
+    PVector Pos = new PVector();
+    Pos = XZY(PVector.fromAngle(radians(camDir.x)).normalize());
+    PVector Y = PVector.fromAngle(radians(camDir.y)).normalize();
+    Pos.setMag(Y.x);
+    Pos.y = Y.y;
+    Pos.normalize();
+    camOri = PVector.add(camPos,Pos);
+    //this took me so meowin long ToT
+    //camOri = PVector.add(camPos,XZY(PVector.fromAngle(radians(camDir.x)).normalize()));
+    //camOri = PVector.add(camOri,ZXY(PVector.fromAngle(radians(camDir.y)).normalize()));
 }
 
 void cube(float x, float y, float z, float size) {
