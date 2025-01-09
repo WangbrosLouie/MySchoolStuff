@@ -41,7 +41,7 @@ boolean camDir = true;
 FWorld world;
 player you;
 FCompound[] chunks;
-ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+ArrayList<Entity> entities = new ArrayList<Entity>();
 ArrayList<Projectile> projs = new ArrayList<Projectile>();//projectiles
 Gif bg;
 color backcolour = color(0);
@@ -295,7 +295,7 @@ class Enemy extends Entity {//dont use please use the subclasses
   void destroy() {//just like roblox.
     loadSound("snd/boom.wav").play();
     world.remove(this);
-    enemies.remove(this);
+    entities.remove(this);
     //then the garbage collects i hope
   }
 }
@@ -309,7 +309,7 @@ class TestBot extends Enemy {
   
   TestBot(int HEALTH, int TYPE, int x, int y) {
     super(HEALTH,32,32);
-    enemies.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
+    entities.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     switch(TYPE) {
     default://type 0 in here too
       speed = 50;
@@ -348,23 +348,19 @@ class TestBot extends Enemy {
   }
 }
 
-class Lava extends Enemy {
+class Lava extends Entity {
   int speed = 0;
   boolean dir = true;
   int timer = 0;
   byte state = 0;
-  Gif anims[] = new Gif[2];
+  Gif anim;
   
-  Lava(int HEALTH, int TYPE, int x, int y) {
-    super(HEALTH,32,32);
-    enemies.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
-    switch(TYPE) {
-    default://type 0 in here too
-      speed = 50;
-    }
+  Lava(int x, int y, int damage) {
+    super(32,32);
+    entities.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     super.setPosition(x,y);
-    anims[0] = new Gif(2,1.0/20,"spr/t",".png");
-    super.attachImage(anims[0]);
+    anim = new Gif(1,1,"tex/lazylava",".png");
+    super.attachImage(anim);
     world.add(this);
   }
   
@@ -758,7 +754,7 @@ void draw() {
     case 2:
       //processing objects
       keys = you.process(keys);
-      for(int i=enemies.size();i>0;i--)enemies.get(i-1).process();
+      for(int i=entities.size();i>0;i--)entities.get(i-1).process();
       for(int i=projs.size();i>0;i--)projs.get(i-1).process();
       for(Gif pic:tex)pic.update();
       world.step();
@@ -822,7 +818,7 @@ void makeLevel() {
     mapName = tostring(char(subset(mapData,mapData.length-33-mapData[mapData.length-26],mapData[mapData.length-26]+1)));
     println("Map Name: "+mapName);
     camDir = false;
-    for(int i=0;i<enemies.size();i++)enemies.get(i).destroy();
+    for(int i=0;i<entities.size();i++)entities.get(i).destroy();
     if(you!=null)world.remove(you);
     if(mus[0]!=null){mus[0].stop();mus[0] = null;}
     Fisica.init(this);

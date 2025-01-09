@@ -256,16 +256,28 @@ commit messages. I'm not gonna stop though. I never will.
 ||-Kitta
 ''-evyles trusty testbot pre-prototype
 
---Alpha 0.0 (the one right now)
+--Alpha 0.0
 |-Title Card (placeholder[?])
 |-Level loading overhaul
+|-Temporary Level Select
 |-The mode framework shoehorned in
 '-Level music
 
+--Alpha 0.0a
+'-Level loading fix
+
+--Alpha 0.1
+|-Lava (in progress)
+|-Entity Rework (in progress)
+|-Dialogs (in progress)
+'-Toggleable Level Music
+
 --Future Versions
 |-Character files
-|-Menus with buttons (in progress)
-|-Dialogs (in progress)
+|-More Characters?
+|-Kitta's EMP Scratch Attack
+|-Menus with buttons
+|-Cutscenes
 '-Checkpoints
 
 */
