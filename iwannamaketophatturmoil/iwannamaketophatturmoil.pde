@@ -357,24 +357,54 @@ class TestBot extends Enemy {
   }
 }
 
-class Lava extends Entity {
-  int speed = 0;
-  boolean dir = true;
-  int timer = 0;
-  byte state = 0;
-  Gif anim;
+class Water extends Entity {
+  //Gif anim;
   
-  Lava(int x, int y, int damage) {
-    super(32,32);
+  Water(int x, int y) {
+    super(128,128);
     entities.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     super.setPosition(x,y);
-    anim = new Gif(1,1,"tex/lazylava",".png");
-    super.attachImage(anim);
+    super.setNoFill();
+    super.setNoStroke();
+    //anim = new Gif(1,1,"tex/lazylava",".png");
+    //super.attachImage(anim);
     world.add(this);
   }
   
   void process() {
-    anim.update();
+    if(super.isTouchingBody(you)) {
+      //make some particles of them colours
+    }
+    //anim.update();
+  }
+}
+
+class Lava extends Entity {
+  int speed = 0;
+  int timer = 0;
+  //Gif anim;
+  
+  Lava(int x, int y) {
+    super(128,128);
+    entities.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
+    super.setPosition(x,y);
+    super.setNoFill();
+    super.setNoStroke();
+    speed = round(random(120,240));
+    //anim = new Gif(1,1,"tex/lazylava",".png");
+    //super.attachImage(anim);
+    world.add(this);
+  }
+  
+  void process() {
+    timer++;
+    if(random(0,speed)<timer) {
+      //spit out a lava thing
+    }
+    if(super.isTouchingBody(you)) {
+      //make some particles of them colours
+    }
+    //anim.update();
   }
 }
 
@@ -390,7 +420,7 @@ class Projectile {
     println("bro you forgot to make a process() for this projectile");
   }
   
-  void deatroy() {
+  void destroy() {
     println("bro you forgot to make a destroy() for this projectile");
   }
 }
@@ -840,8 +870,9 @@ void makeLevel() {
           contents^=0x1;
           break;
         case 2:
-          entityList = makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType)+10;
+          entityList = makeChunks(subset(mapData,p+10),lWidth,lHeight,fileType);
           p += entityList[0].x+10;
+          entityList = (PVector[])subset(entityList,1,entityList.length-1);
           contents^=0x2;
           break;
         case 3:
@@ -898,6 +929,19 @@ int loadTextures(String[] texList) {
     }
   }
   return p;
+}
+
+void makeEntities(PVector[] ents) {
+  for(PVector itis:ents) {
+    switch(round(itis.x)){
+    case 1: //water
+      
+      break;
+    case 2:
+      intentional_error();
+      break;
+    }
+  }
 }
 
 int makeEnemies(int[] bads) {
@@ -977,8 +1021,9 @@ int loadScripts(byte[] stuff) {
   return p;
 }
 
-int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
+PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
   int p = 0;
+  PVector[] ret = new PVector[]{new PVector()};
   chunks = new FCompound[lWidth*lHeight];
   for(int j=0;j<lHeight;j++){
     for(int i=0;i<lWidth;i++) {
@@ -1401,12 +1446,13 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        append(ret,new PVector(1,128*i,128*j));
         break;
       case 0x13:
         gnd = new FBox(128,128);
         gnd.setPosition(64,64);
         gnd.setName("00100011");
-        gnd.setFillColor(0xFF7F7FFF);
+        gnd.setFillColor(0xFFFF3F3F);
         gnd.setFriction(0);
         gnd.setSensor(true);
         if(texture!=-1){
@@ -1422,6 +1468,7 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        append(ret,new PVector(2,128*i,128*j));
         break;
       case 0x14:
         gnd = new FBox(126,128);
@@ -1482,7 +1529,8 @@ int makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
       world.add(chunks[chunk]);
     }
   }
-  return p;
+  ret[0].x = p;
+  return ret;
 }
 
 int extendChunk(byte[] stuff, FBody[] parts) {

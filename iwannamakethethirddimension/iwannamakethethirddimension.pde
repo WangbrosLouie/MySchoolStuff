@@ -92,10 +92,10 @@ void process() {
   Pos.y = Y.y;
   Pos.normalize();
   if(Keys[kW]) { //MOVE FORWARD
-    camPos.add(XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+    camPos.add(mousePressed?Pos:XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
   }
   if(Keys[kS]) { //MOVE BACK
-    camPos.sub(XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+    camPos.sub(mousePressed?Pos:XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
   }
   if(Keys[kA]) { //MOVE LEFT
     camPos.add(XZY(PVector.fromAngle(radians(camDir.x-90))).mult(s));
