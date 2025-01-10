@@ -34,7 +34,7 @@ void setup() {
   noCursor();
 }
 
-void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mouseY;}//gotta find a workaround to this one fast
+void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mouseY;camDir=new PVector();}//gotta find a workaround to this one fast
   perspective(PI/2.0,(float)width/height,5.0,1000.0); //FOV=???
   process();
   camera(camPos.x,camPos.y,camPos.z,camOri.x,camOri.y,camOri.z,0,1,0);
@@ -92,10 +92,10 @@ void process() {
   Pos.y = Y.y;
   Pos.normalize();
   if(Keys[kW]) { //MOVE FORWARD
-    camPos.add(mousePressed?Pos:XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+    camPos.add(mousePressed?Pos.copy().mult(s):XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
   }
   if(Keys[kS]) { //MOVE BACK
-    camPos.sub(mousePressed?Pos:XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+    camPos.sub(mousePressed?Pos.copy().mult(s):XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
   }
   if(Keys[kA]) { //MOVE LEFT
     camPos.add(XZY(PVector.fromAngle(radians(camDir.x-90))).mult(s));
@@ -104,10 +104,10 @@ void process() {
     camPos.add(XZY(PVector.fromAngle(radians(camDir.x+90))).mult(s));
   }
   if(Keys[kE]) { //MOVE UP
-    camPos.add(new PVector(0,-1,0).mult(s));
+    camPos.add(mousePressed?XZY(PVector.fromAngle(radians(camDir.x)).normalize()).setMag(PVector.fromAngle(radians(camDir.y-90)).normalize().x).add(new PVector(0,PVector.fromAngle(radians(camDir.y-90)).normalize().y,0)).mult(s):new PVector(0,-1,0).mult(s));
   }
   if(Keys[kQ]) { //MOVE DOWN
-    camPos.add(new PVector(0,1,0).mult(s));
+    camPos.sub(mousePressed?XZY(PVector.fromAngle(radians(camDir.x)).normalize()).setMag(PVector.fromAngle(radians(camDir.y-90)).normalize().x).add(new PVector(0,PVector.fromAngle(radians(camDir.y-90)).normalize().y,0)).mult(s):new PVector(0,-1,0).mult(s));
   }
   camOri = PVector.add(camPos,Pos); //CAMERA ORIENTATION
   //this took me so meowin long ToT
@@ -168,6 +168,10 @@ void cube(float x, float y, float z, float size, PImage tex) {
   vertex(-h,h,-h,0,1);
   endShape(CLOSE);
   pop();
+}
+
+PVector XnYZ(PVector v) {
+  return new PVector(v.x,-v.y,v.z);
 }
 
 PVector XZY(PVector v) {

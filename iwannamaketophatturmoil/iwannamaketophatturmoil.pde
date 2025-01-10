@@ -273,6 +273,35 @@ class player extends FBox {
   }
 }
 
+class Particle extends FBox {
+  float originY;
+  Particle(float x, float y, float size, color colour, float veloW, float veloH) {
+    super(size,size);
+    super.setPosition(x,y);
+    super.setNoStroke();
+    super.setFill(colour);
+    super.setDensity(100);
+    super.setVelocity(veloW,veloH);
+    super.setSensor(true);
+    originY = y;
+    world.add(this);
+    print("make me");
+  }
+  
+  int process() {
+    if(super.getY()>originY+2) {
+      print("destroy me");
+      return this.destroy();
+    }
+    return 0;
+  }
+  
+  int destroy() {
+    world.remove(this);
+    return 1;
+  }
+}
+
 class Entity extends FBox {
   
   Entity(int high, int wide) {
@@ -360,12 +389,13 @@ class TestBot extends Enemy {
 class Water extends Entity {
   //Gif anim;
   
-  Water(int x, int y) {
+  Water(float x, float y) {
     super(128,128);
     entities.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     super.setPosition(x,y);
     super.setNoFill();
     super.setNoStroke();
+    super.setStatic(true);
     //anim = new Gif(1,1,"tex/lazylava",".png");
     //super.attachImage(anim);
     world.add(this);
@@ -377,19 +407,26 @@ class Water extends Entity {
     }
     //anim.update();
   }
+  
+  void destroy() {
+    world.remove(this);
+    entities.remove(this);
+  }
 }
 
 class Lava extends Entity {
   int speed = 0;
   int timer = 0;
+  ArrayList<Particle> parts = new ArrayList<Particle>();
   //Gif anim;
   
-  Lava(int x, int y) {
+  Lava(float x, float y) {
     super(128,128);
     entities.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     super.setPosition(x,y);
     super.setNoFill();
     super.setNoStroke();
+    super.setStatic(true);
     speed = round(random(120,240));
     //anim = new Gif(1,1,"tex/lazylava",".png");
     //super.attachImage(anim);
@@ -401,10 +438,21 @@ class Lava extends Entity {
     if(random(0,speed)<timer) {
       //spit out a lava thing
     }
-    if(super.isTouchingBody(you)) {
+    if(isTouchingBody(you)) {
+      print("A");
+      parts.add(new Particle(you.getX(),super.getY()-64,2,color(random(128,255),random(64,128),random(0,32)),random(-100,100),random(-100,0)));
       //make some particles of them colours
     }
+    for(int i=parts.size()-1;i>-1;i--) {
+      int retVal = parts.get(i).process();
+      if(retVal==1)parts.remove(i);
+    }
     //anim.update();
+  }
+  
+  void destroy() {
+    world.remove(this);
+    entities.remove(this);
   }
 }
 
@@ -770,6 +818,7 @@ void draw() {
     case 2:
       //processing objects
       keys = you.process(keys);
+      print(entities.size());
       for(int i=entities.size();i>0;i--)entities.get(i-1).process();
       for(int i=projs.size();i>0;i--)projs.get(i-1).process();
       for(Gif pic:tex)pic.update();
@@ -935,10 +984,10 @@ void makeEntities(PVector[] ents) {
   for(PVector itis:ents) {
     switch(round(itis.x)){
     case 1: //water
-      
+      new Water(itis.y,itis.z);
       break;
     case 2:
-      intentional_error();
+      new Lava(itis.y,itis.z);
       break;
     }
   }
@@ -1427,8 +1476,8 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         world.add(chunks[chunk]);
         break;
       case 0x12:
-        gnd = new FBox(128,128);
-        gnd.setPosition(64,64);
+        gnd = new FBox(128,126);
+        gnd.setPosition(64,65);
         gnd.setName("00100001");
         gnd.setFillColor(0xFF7F7FFF);
         gnd.setFriction(0);
@@ -1446,11 +1495,11 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        append(ret,new PVector(1,128*i,128*j));
+        ret = (PVector[])append(ret,new PVector(1,128*i,128*j));
         break;
       case 0x13:
-        gnd = new FBox(128,128);
-        gnd.setPosition(64,64);
+        gnd = new FBox(128,126);
+        gnd.setPosition(64,65);
         gnd.setName("00100011");
         gnd.setFillColor(0xFFFF3F3F);
         gnd.setFriction(0);
@@ -1468,7 +1517,7 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        append(ret,new PVector(2,128*i,128*j));
+        ret = (PVector[])append(ret,new PVector(2,128*i+64,128*j+64));
         break;
       case 0x14:
         gnd = new FBox(126,128);

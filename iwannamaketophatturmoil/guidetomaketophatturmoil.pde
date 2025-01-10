@@ -267,10 +267,11 @@ commit messages. I'm not gonna stop though. I never will.
 '-Level loading fix
 
 --Alpha 0.1
-|-Lava (in progress)
-|-Entity Rework (in progress)
+|-Lava
+|-Entity Rework
+|-Particles
 |-Dialogs (in progress)
-'-Toggleable Level Music
+'-Toggleable Level Music (in progress)
 
 --Future Versions
 |-Character files
