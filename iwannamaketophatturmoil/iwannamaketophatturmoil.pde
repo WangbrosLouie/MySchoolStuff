@@ -285,12 +285,10 @@ class Particle extends FBox {
     super.setSensor(true);
     originY = y;
     world.add(this);
-    print("make me");
   }
   
   int process() {
     if(super.getY()>originY+2) {
-      print("destroy me");
       return this.destroy();
     }
     return 0;
@@ -387,25 +385,23 @@ class TestBot extends Enemy {
 }
 
 class Water extends Entity {
-  //Gif anim;
+  ArrayList<Particle> parts = new ArrayList<Particle>();
   
   Water(float x, float y) {
-    super(128,128);
+    super(128,126);
     entities.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     super.setPosition(x,y);
     super.setNoFill();
     super.setNoStroke();
     super.setStatic(true);
-    //anim = new Gif(1,1,"tex/lazylava",".png");
-    //super.attachImage(anim);
+    super.setSensor(true);
     world.add(this);
   }
   
   void process() {
-    if(super.isTouchingBody(you)) {
-      //make some particles of them colours
+    if(isTouchingBody(you)) {
+      parts.add(new Particle(you.getX(),constrain(you.getY(),super.getY()-64,super.getY()),2,color(random(0,32),random(64,128),random(128,255)),random(-100,100),random(-100,0)));
     }
-    //anim.update();
   }
   
   void destroy() {
@@ -421,12 +417,13 @@ class Lava extends Entity {
   //Gif anim;
   
   Lava(float x, float y) {
-    super(128,128);
+    super(128,126);
     entities.add(this);//i wonder if its smart or stupid to allocate this object in the constructor
     super.setPosition(x,y);
     super.setNoFill();
     super.setNoStroke();
     super.setStatic(true);
+    super.setSensor(true);
     speed = round(random(120,240));
     //anim = new Gif(1,1,"tex/lazylava",".png");
     //super.attachImage(anim);
@@ -436,11 +433,10 @@ class Lava extends Entity {
   void process() {
     timer++;
     if(random(0,speed)<timer) {
-      //spit out a lava thing
+      parts.add(new Particle(random(0,64)+super.getX(),super.getY()-64,2,color(random(230,255),random(96,108),random(0,32)),random(-100,100),random(-100,0)));
     }
     if(isTouchingBody(you)) {
-      print("A");
-      parts.add(new Particle(you.getX(),super.getY()-64,2,color(random(128,255),random(64,128),random(0,32)),random(-100,100),random(-100,0)));
+      parts.add(new Particle(you.getX(),constrain(you.getY(),super.getY()-64,super.getY()),2,color(random(230,255),random(96,108),random(0,32)),random(-100,100),random(-100,0)));
       //make some particles of them colours
     }
     for(int i=parts.size()-1;i>-1;i--) {
@@ -1495,7 +1491,7 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        ret = (PVector[])append(ret,new PVector(1,128*i,128*j));
+        ret = (PVector[])append(ret,new PVector(1,128*i+64,128*j+66));
         break;
       case 0x13:
         gnd = new FBox(128,126);
@@ -1517,7 +1513,7 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        ret = (PVector[])append(ret,new PVector(2,128*i+64,128*j+64));
+        ret = (PVector[])append(ret,new PVector(2,128*i+64,128*j+66));
         break;
       case 0x14:
         gnd = new FBox(126,128);
