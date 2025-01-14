@@ -35,27 +35,44 @@ void setup() {
 }
 
 void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mouseY;camDir=new PVector();}//gotta find a workaround to this one fast
-  perspective(PI/2.0,(float)width/height,5.0,1000.0); //FOV=???
+  perspective(PI/2.0,(float)width/height,5.0,10000.0); //FOV=???
   process();
   camera(camPos.x,camPos.y,camPos.z,camOri.x,camOri.y,camOri.z,0,1,0);
   background(200);
   cube(-10,10,-10,10);//good ol white cube
   cube(20,20,-20,10,img);//testbot my beloved
   ball(30,30,30,10);//baller
+  //grid(0,50000,10);
   this.setMatrix(mytricks);//grab that unmodified matrix
   perspective();//reset FOV
-  PVector oriPos = PVector.sub(camOri,camPos).mult(15);//orientation cube stuff
+  PVector oriPos = PVector.sub(camOri,camPos).mult(150);//orientation cube stuff
   oriCube.beginDraw();
   oriCube.clear();
   oriCube.perspective(PI/2.0,1,5.0,1000.0);
-  cube(0,0,0,10,oriCube);
+  oriCube.fill(255);
+  cube(0,0,0,100,oriCube);
+  oriCube.textAlign(CENTER,CENTER);
+  oriCube.fill(0);
+  oriCube.textSize(32);
+  oriCube.text("Back",0,0,50.1);
+  oriCube.rotateY(radians(90));
+  oriCube.text("Right",0,0,50.1);
+  oriCube.rotateY(radians(90));
+  oriCube.text("Front",0,0,50.1);
+  oriCube.rotateY(radians(90));
+  oriCube.text("Left",0,0,50.1);
+  oriCube.rotateY(radians(90));
+  oriCube.rotateX(radians(90));
+  oriCube.text("Top",0,0,50.1);
+  oriCube.rotateX(radians(-180));
+  oriCube.text("Bottom",0,0,50.1);
   oriCube.camera(-oriPos.x,-oriPos.y,-oriPos.z,0,0,0,0,1,0);
   oriCube.endDraw();
   push();
   imageMode(CORNER);
   textAlign(CENTER,CENTER);
   fill(127);
-  /*old fashioned ahh*/text("If the camera is moving automatically restart program and make sure mouse does not move while booting program.\nTo close program:\nPush the Esc key or,\nUnfocus program and close with taskbar, task manager, stop button (if applicable), etc. or,\nuse OS dependent keyboard combination if present.\nCONTROLS:\nPositional Movement on the: Z Axis = WS. X Axis = AD. Y Axis = EQ\nCamera Movement on the: X Axis = JL. Y Axis = IK.\nShift to go slower. Use mouse if present for camera.",width/2,height-100);
+  /*old fashioned ahh*/text("If the camera is moving automatically, restart program and make sure mouse does not move while booting program.\nTo close program:\nPush the Esc key or,\nUnfocus program and close with taskbar, task manager, stop button (if applicable), etc. or,\nuse OS dependent keyboard combination if present.\nCONTROLS:\nPositional Movement on the: Z Axis = WS. X Axis = AD. Y Axis = EQ\nCamera Movement on the: X Axis = JL. Y Axis = IK.\nShift to go slower. Use mouse if present for camera.",width/2,height-100);
   image(oriCube,width-75,0,75,75);
   pop();
   //println(camPos,camOri,camDir);
@@ -168,6 +185,15 @@ void cube(float x, float y, float z, float size, PImage tex) {
   vertex(-h,h,-h,0,1);
   endShape(CLOSE);
   pop();
+}
+
+void grid(float y, float d, float s) {//y coord, draw distance, size of grid block
+  for(int i=floor(camPos.x/s)-floor(d/s/2)+1;i<ceil(camPos.x/s)+floor(d/s/2);i++) {
+    line(i*s,y,(-d/2)+camPos.z,i*s,y,(d/2)+camPos.z);
+  }
+  for(int i=floor(camPos.z/s)-floor(d/s/2)+1;i<ceil(camPos.z/s)+floor(d/s/2);i++) {
+    line((-d/2)+camPos.x,y,i*s,(d/2)+camPos.x,y,i*s);
+  }
 }
 
 PVector XnYZ(PVector v) {
