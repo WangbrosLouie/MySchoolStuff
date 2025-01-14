@@ -208,19 +208,19 @@ Data Segment Bits (from right to left)
 2 = Enemies
 3 = BGM
 4 = Background
-5 = Script (story)
+5 = Script
 
 Chunk Extensions
-00 = End of Chunk
-01 = Chunk Flag Byte +1 byte chunkflags
-02 = Speech Trigger +1 byte speechpart
-03 = Teleport Location +4 bytes X&Y Position --oh wait how do i make this even
-04 = Fill Colour (in ARGB) +4 byte hex colour
-05 = Fill Colour (in HSB?) +4 byte hex colour
-06 = Stroke Colour (in ARGB) +4 byte hex colour
-07 = Stroke Colour (in HSB?) +4 byte hex colour
-08 = Chunk Friction +1 byte integer
-09 = Chunk Restitution +1 byte integer
+00 = Chunk Flag Byte +1 byte chunkflags
+01 = Speech Trigger +1 byte speechpart
+02 = Teleport Location +4 bytes X&Y Position
+03 = Fill Colour (in ARGB) +4 byte hex colour
+04 = Fill Colour (in HSB?) +4 byte hex colour
+05 = Stroke Colour (in ARGB) +4 byte hex colour
+06 = Stroke Colour (in HSB?) +4 byte hex colour
+07 = Chunk Friction +1 byte integer
+08 = Chunk Restitution +1 byte integer
+FF = End of Chunk
 
 Sound IDs
 01 = Level BGM

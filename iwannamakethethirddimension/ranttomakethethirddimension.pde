@@ -36,4 +36,8 @@ jan14 hehe schoolwork has really crushed my ability to work hard on my
 programmin stuff lately. i sincerely hope that i will have more time to
 work on my garbage because it makes me happy. working on stuff like this
 really relaxes me and makes me satisfied when i get something to work.
+
+i havent even realised that now tophat turmoil is about 1500 lines of code.
+the rest of them are either whitespace or comments i know for a fact. that
+is my way of coding.
 */

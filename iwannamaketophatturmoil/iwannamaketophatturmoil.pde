@@ -6,12 +6,6 @@
 |* the sega genesis to processing *|
 \*_Date:_Nov.1,_2024______________*/
 
-/*to-do's (i aint usin github projects for this nonsense)
-Finish the dingin' chunk extensions
-Add Lava Entities
-checkpoint/goalpost idea: big tv with camera on top, as player goes by it takes a picture and the tv shows the head of the character
-Make some dialogs
-*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Libraries
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,36 +14,37 @@ import processing.sound.*;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Variables
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Game Control and Parameters
+int mode = 0;
 boolean loading = true;
 boolean drawing = false;
 boolean debug = false;
-//String[] maps = new String[]{"map01.lvl","map02ext.lvl","map03ext.lvl","map04.lvl","map05.lvl"};
-//String[] maps = new String[]{"map00.lvl"};
-String[] maps = new String[]{"map02ext.lvl","map05.lvl","kit/01.lvl"};
-byte[] mapData;
-String mapName;
-byte mapNum = 2;
-Gif[] tex = new Gif[255];
-byte[] keys = new byte[13];
 boolean textures = true;
 boolean backgnd = true;
 boolean halfFPS = false;
-PFont lucid;
+byte mapNum = 2;
+float scl = 1; //render scale
 PVector playerVec, camVec;
-float scl = 1;
 boolean camDir = true;
-FWorld world;
-player you;
-FCompound[] chunks;
-ArrayList<Entity> entities = new ArrayList<Entity>();
-ArrayList<Projectile> projs = new ArrayList<Projectile>();//projectiles
+//Map Variables and Assets
+String[] maps = new String[]{"map02ext.lvl","map05.lvl","kit/01.lvl"};
+byte[] mapData;
+String mapName;
+Gif[] tex = new Gif[255];
 Gif bg;
 color backcolour = color(0);
-PApplet dis = this;
-int mode = 0;
 SoundFile[] mus = new SoundFile[4];
 Gif[] dial = new Gif[254];
 Dialog[][] talks;
+PFont lucid;
+byte[] keys = new byte[13];
+//Physics Variables
+FWorld world;
+FCompound[] chunks;
+player you;
+ArrayList<Entity> entities = new ArrayList<Entity>();
+ArrayList<Projectile> projs = new ArrayList<Projectile>();//projectiles
+PApplet dis = this;//for referencing inside of classes
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Classes
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,7 +200,8 @@ class player extends FBox {
     
     for(int i=touchings.size()-1;i>-1;i--) {
       String name = touchings.get(i).getName();
-      int flags = name!=null?unbinary(name):0;
+      String[] names = name!=null?splitTokens(name,","):new String[]{"0"};
+      int flags = unbinary(names[0]);
       //if(flags%0x2/1>0) bittest template
       if(flags%0x2/1>0)keys[3] = 0;
       if(flags%0x4/2>0)hurt(1);
@@ -213,6 +209,17 @@ class player extends FBox {
       //make dat unstatic thingy
       if(flags%0x20/0x10>0)touchings.remove(i);
       if(flags%0x40/0x20>0)massy = 2;
+      if(names.length>1) {
+        for(int j=1;j<names.length;j++) {
+          switch(names[j].getBytes()[0]) {
+          case 'S'://peech
+            dispDialog(new Dialog(0,"Nya!"));
+            break;
+          case 'T'://eleport
+            break;
+          }
+        }
+      }
     }
     super.setDensity(massy); //nvm me stupid
     if(touchings.size()==0)keys[3]=2;
@@ -838,7 +845,7 @@ void draw() {
         pop();
       }
       //scl*=6;
-      dispDialog(new Dialog(0,"Nya!"));
+      //dispDialog(new Dialog(0,"Nya!"));
       
       break;
     case 3:
@@ -863,7 +870,10 @@ void makeLevel(File level) {
   mapData = loadBytes(level.getAbsolutePath());
   thread("makeLevel");
   mode = 4;
-  } else thread("loadLevelFile");
+  } else {
+    exit();
+    //thread("loadLevelFile");
+  }
 }
 
 void makeLevel() {
@@ -884,6 +894,7 @@ void makeLevel() {
     if(mus[0]!=null){mus[0].stop();mus[0] = null;}
     Fisica.init(this);
     char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
+    i must convert filetype to a number or change all of them ifs and whiles and all those compares WAAAAAAAAAHHHH
     int lWidth = bi(mapData[mapData.length-32])+1;
     int lHeight = bi(mapData[mapData.length-31])+1;
     println("Width: "+lWidth+" Height: "+lHeight);
@@ -1096,9 +1107,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1114,9 +1125,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1138,9 +1149,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
+        //}p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
@@ -1163,9 +1174,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
+        //}p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
@@ -1185,9 +1196,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1204,9 +1215,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j-1);
         chunks[chunk].setStatic(true);
@@ -1228,9 +1239,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1249,9 +1260,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1277,9 +1288,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
+        //}p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
@@ -1306,9 +1317,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
+        //}p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
@@ -1331,9 +1342,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1352,9 +1363,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1376,9 +1387,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1401,9 +1412,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
@@ -1423,9 +1434,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1443,9 +1454,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1463,9 +1474,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1484,9 +1495,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1506,9 +1517,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1539,14 +1550,12 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           jm3.setNoStroke();
           jm4.setNoStroke();
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
+        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].addBody(jm2);
-        //chunks[chunk].addBody(jm3);
-        //chunks[chunk].addBody(jm4);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         break;
@@ -1555,22 +1564,28 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           xPos = 64;
           yPos = 64;
         }
-        if(fileType==3)while(bi(map[p])!=0xFF) {
-          p += extendChunk(subset(map,p),new FBody[]{});
-        }p++;
+        //if(fileType==3)while(bi(map[p])!=0xFF) {
+        //  p += extendChunk(subset(map,p),new FBody[]{});
+        //}p++;
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
       }
+      FBox img = new FBox(128,128);
       if(texture!=-1) {
-        FBox img = new FBox(128,128);
         img.attachImage(tex[texture]);
-        img.setSensor(true);
-        img.setStatic(true);
-        img.setName("10000");
-        img.setPosition(xPos,yPos);
-        chunks[chunk].addBody(img);
+      } else {
+        img.setNoFill();
+        img.setNoStroke();
       }
+      img.setSensor(true);
+      img.setStatic(true);
+      img.setName("10000");
+      img.setPosition(xPos,yPos);
+      if(fileType==3)while(bi(map[p])!=0xFF) {        
+        p += extendChunk(subset(map,p),chunks[chunk].getBodies(),img);
+      }p++;
+      chunks[chunk].addBody(img);
       world.add(chunks[chunk]);
     }
   }
@@ -1578,42 +1593,78 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
   return ret;
 }
 
-int extendChunk(byte[] stuff, FBody[] parts) {
+int extendChunk(byte[] stuff, ArrayList<FBody> parts, FBody img) {//i think me screwed up here these variables are probably copies of the original so i gotta return them again
+  //make all of these add a segment to the name of the fbody seperated with a delimiter
+  //the first letter of a segment is the segment type except the first segment which is always flags
+  //splittokens returns the flags if no delimiter is found so its a safe choice yaya meow nya
   int p = 0;
-  switch(stuff[p]){
-  case 1:
+  switch(stuff[0]){
+  case 0:
     //get flags and | everything
+    for(FBody part:parts) {
+      String[] names = splitTokens(part.getName(),",");
+      int namae = unbinary(names[0]);
+      namae |= stuff[1];
+      names[0] = binary(namae);
+      part.setName(join(names,"")); 
+    }
+    p+=2;
+    break;
+  case 1:
+    //gotta implement speech itself first...
+    int which = stuff[1] & 0xFF;
+    img.setName(img.getName()+",S"+which);
     p+=2;
     break;
   case 2:
-    //gotta implement speech itself first...
-    //playSpeech(p+1);
-    p+=2;
+    //guh...
+    int x = stuff[1]&0xFF;
+    x *= 0x100;
+    x += stuff[2]&0xFF;
+    int y = stuff[3]&0xFF;
+    y *= 0x100;
+    y += stuff[4]&0xFF;
+    img.setName(img.getName()+"T"+x+":"+y);
+    p+=5;
     break;
   case 3:
-    //guh...
-    p+=5;
-    break;    
+    color iro = color(stuff[1]&0xFF,stuff[2]&0xFF,stuff[3]&0xFF,stuff[4]&0xFF);
+    for(FBody part:parts)part.setFillColor(iro);
+    break;
   case 4:
-    //for(FBody part:parts)part.setFillColor();
+    println("Sorries no HSB yet me too lazy to push pop colours");
+    break;
+  case 5:
+    iro = color(stuff[1]&0xFF,stuff[2]&0xFF,stuff[3]&0xFF,stuff[4]&0xFF);
+    for(FBody part:parts)part.setStrokeColor(iro);
+    break;
+  case 6:
+    println("Sorries no HSB yet me too lazy to push pop colours");
+    break;
+  case 7:
+    for(FBody part:parts)part.setFriction(stuff[1]&0xFF);
+    break;
+  case 8:
+    for(FBody part:parts)part.setFriction(stuff[1]&0xFF);
+    break;
   }
   return p;
 }
 
 void dispDialog(Dialog what) {
-  //push();
-  //fill(127,127);
-  //noStroke();
-  //rect(width/10,height/16*12,width/10*8,height/16*3);
-  //textAlign(LEFT,TOP);
-  //if(what.pic<0) {
-  //  text(what.whatSay,width/10,height/16*12);
-  //} else {
-  //  image(dial[what.pic],width/10,height/16*12,height/16*3,height/16*3);
-  //  text(what.whatSay,(width/10)+(height/16*3),height/16*12);
-  //  dial[what.pic].update();
-  //}
-  //pop();
+  push();
+  fill(127,127);
+  noStroke();
+  rect(width/10,height/16*12,width/10*8,height/16*3);
+  textAlign(LEFT,TOP);
+  if(what.pic<0) {
+    text(what.whatSay,width/10,height/16*12);
+  } else {
+    image(dial[what.pic],width/10,height/16*12,height/16*3,height/16*3);
+    text(what.whatSay,(width/10)+(height/16*3),height/16*12);
+    dial[what.pic].update();
+  }
+  pop();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
