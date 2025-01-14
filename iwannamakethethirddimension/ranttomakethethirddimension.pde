@@ -31,4 +31,9 @@ inner kittas gonna be called kittulpa here. im still just gonna call her
 kitta in my mind though. that will never change until i think of a nickname
 like kitts or somethin.
 rhythmgunners weapon is his headphones that can face forwards
+
+jan14 hehe schoolwork has really crushed my ability to work hard on my
+programmin stuff lately. i sincerely hope that i will have more time to
+work on my garbage because it makes me happy. working on stuff like this
+really relaxes me and makes me satisfied when i get something to work.
 */
