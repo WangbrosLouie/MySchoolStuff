@@ -213,7 +213,9 @@ class player extends FBox {
         for(int j=1;j<names.length;j++) {
           switch(names[j].getBytes()[0]) {
           case 'S'://peech
-            dispDialog(new Dialog(0,"Nya!"));
+            dispDialog(new Dialog(-1,"Nya!"));//this displays under everything GRRR
+            //i just gotta make some variables and timers methinks to be able to delay the display
+            //until everything else is drawn
             break;
           case 'T'://eleport
             break;
@@ -538,13 +540,70 @@ class Explosion extends Projectile {//daibakuhatsu
   }
 }
 
-class ChunkSensor extends FBox { //chunk extensions go here!
-  int dialog = 0;
+class Sensor extends FBox { //chunk extension method is here!
   
-  ChunkSensor(int DIAL) {
-    super(128,128);
-    super.setSensor(true);
-    dialog = DIAL;
+  Sensor(float x, float y, float xPos, float yPos) {
+    super(x,y);
+    setPosition(xPos,yPos);
+    setSensor(true);
+    setStatic(true);
+    setName("10000");
+  }
+  
+  int extendChunk(byte[] stuff, int chunkNum) {
+    ArrayList<FBody> parts = chunks[chunkNum].getBodies();//i modify your variables directly!
+    int p = 0;
+    switch(stuff[0]){
+    case 0:
+      //get flags and | everything
+      for(FBody part:parts) {
+        String[] names = splitTokens(part.getName(),",");
+        int namae = unbinary(names[0]);
+        namae |= stuff[1];
+        names[0] = binary(namae);
+        part.setName(join(names,"")); 
+      }
+      p+=2;
+      break;
+    case 1:
+      //gotta implement speech itself first...
+      int which = stuff[1] & 0xFF;
+      setName(getName()+",S"+which);
+      p+=2;
+      break;
+    case 2:
+      //guh...
+      int x = stuff[1]&0xFF;
+      x *= 0x100;
+      x += stuff[2]&0xFF;
+      int y = stuff[3]&0xFF;
+      y *= 0x100;
+      y += stuff[4]&0xFF;
+      setName(getName()+"T"+x+":"+y);
+      p+=5;
+      break;
+    case 3:
+      color iro = color(stuff[1]&0xFF,stuff[2]&0xFF,stuff[3]&0xFF,stuff[4]&0xFF);
+      for(FBody part:parts)part.setFillColor(iro);
+      break;
+    case 4:
+      println("Sorries no HSB yet me too lazy to push pop colours");
+      break;
+    case 5:
+      iro = color(stuff[1]&0xFF,stuff[2]&0xFF,stuff[3]&0xFF,stuff[4]&0xFF);
+      for(FBody part:parts)part.setStrokeColor(iro);
+      break;
+    case 6:
+      println("Sorries no HSB yet me too lazy to push pop colours");
+      break;
+    case 7:
+      for(FBody part:parts)part.setFriction(stuff[1]&0xFF);
+      break;
+    case 8:
+      for(FBody part:parts)part.setFriction(stuff[1]&0xFF);
+      break;
+    }
+    return p;
   }
 }
 
@@ -821,7 +880,6 @@ void draw() {
     case 2:
       //processing objects
       keys = you.process(keys);
-      print(entities.size());
       for(int i=entities.size();i>0;i--)entities.get(i-1).process();
       for(int i=projs.size();i>0;i--)projs.get(i-1).process();
       for(Gif pic:tex)pic.update();
@@ -894,7 +952,6 @@ void makeLevel() {
     if(mus[0]!=null){mus[0].stop();mus[0] = null;}
     Fisica.init(this);
     char fileType = new String(subset(mapData,mapData.length-1)).charAt(0);
-    i must convert filetype to a number or change all of them ifs and whiles and all those compares WAAAAAAAAAHHHH
     int lWidth = bi(mapData[mapData.length-32])+1;
     int lHeight = bi(mapData[mapData.length-31])+1;
     println("Width: "+lWidth+" Height: "+lHeight);
@@ -1571,19 +1628,15 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
       }
-      FBox img = new FBox(128,128);
+      Sensor img = new Sensor(128,128,xPos,yPos);
       if(texture!=-1) {
         img.attachImage(tex[texture]);
       } else {
         img.setNoFill();
         img.setNoStroke();
       }
-      img.setSensor(true);
-      img.setStatic(true);
-      img.setName("10000");
-      img.setPosition(xPos,yPos);
-      if(fileType==3)while(bi(map[p])!=0xFF) {        
-        p += extendChunk(subset(map,p),chunks[chunk].getBodies(),img);
+      if(fileType=='3')while(bi(map[p])!=0xFF) {        
+        p += img.extendChunk(subset(map,p),chunk);
       }p++;
       chunks[chunk].addBody(img);
       world.add(chunks[chunk]);
