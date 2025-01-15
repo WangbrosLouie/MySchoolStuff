@@ -36,6 +36,9 @@ color backcolour = color(0);
 SoundFile[] mus = new SoundFile[4];
 Gif[] dial = new Gif[254];
 Dialog[][] talks;
+int dialNum = 0;
+int subDialNum = 0;
+int talkTimer = 0;
 PFont lucid;
 byte[] keys = new byte[13];
 //Physics Variables
@@ -1646,64 +1649,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
   return ret;
 }
 
-int extendChunk(byte[] stuff, ArrayList<FBody> parts, FBody img) {//i think me screwed up here these variables are probably copies of the original so i gotta return them again
-  //make all of these add a segment to the name of the fbody seperated with a delimiter
-  //the first letter of a segment is the segment type except the first segment which is always flags
-  //splittokens returns the flags if no delimiter is found so its a safe choice yaya meow nya
-  int p = 0;
-  switch(stuff[0]){
-  case 0:
-    //get flags and | everything
-    for(FBody part:parts) {
-      String[] names = splitTokens(part.getName(),",");
-      int namae = unbinary(names[0]);
-      namae |= stuff[1];
-      names[0] = binary(namae);
-      part.setName(join(names,"")); 
-    }
-    p+=2;
-    break;
-  case 1:
-    //gotta implement speech itself first...
-    int which = stuff[1] & 0xFF;
-    img.setName(img.getName()+",S"+which);
-    p+=2;
-    break;
-  case 2:
-    //guh...
-    int x = stuff[1]&0xFF;
-    x *= 0x100;
-    x += stuff[2]&0xFF;
-    int y = stuff[3]&0xFF;
-    y *= 0x100;
-    y += stuff[4]&0xFF;
-    img.setName(img.getName()+"T"+x+":"+y);
-    p+=5;
-    break;
-  case 3:
-    color iro = color(stuff[1]&0xFF,stuff[2]&0xFF,stuff[3]&0xFF,stuff[4]&0xFF);
-    for(FBody part:parts)part.setFillColor(iro);
-    break;
-  case 4:
-    println("Sorries no HSB yet me too lazy to push pop colours");
-    break;
-  case 5:
-    iro = color(stuff[1]&0xFF,stuff[2]&0xFF,stuff[3]&0xFF,stuff[4]&0xFF);
-    for(FBody part:parts)part.setStrokeColor(iro);
-    break;
-  case 6:
-    println("Sorries no HSB yet me too lazy to push pop colours");
-    break;
-  case 7:
-    for(FBody part:parts)part.setFriction(stuff[1]&0xFF);
-    break;
-  case 8:
-    for(FBody part:parts)part.setFriction(stuff[1]&0xFF);
-    break;
-  }
-  return p;
-}
-
 void dispDialog(Dialog what) {
   push();
   fill(127,127);
@@ -1718,6 +1663,25 @@ void dispDialog(Dialog what) {
     dial[what.pic].update();
   }
   pop();
+}
+
+void dispDialog() {
+  if(talkTimer>0) {
+    push();
+    fill(127,127);
+    noStroke();
+    rect(width/10,height/16*12,width/10*8,height/16*3);
+    textAlign(LEFT,TOP);
+    Dialog what = talks[dialNum][subDialNum];
+    if(what.pic<0) {
+      text(what.whatSay,width/10,height/16*12);
+    } else {
+      image(dial[what.pic],width/10,height/16*12,height/16*3,height/16*3);
+      text(what.whatSay,(width/10)+(height/16*3),height/16*12);
+      dial[what.pic].update();
+    }
+    pop();
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1870,6 +1834,7 @@ Furnace - all sound effects and music
 MS Paint - simple graphics
 GIMP - advanced graphics
 Processing - y'know, the thing that runs this code
+foobar2000 - converting audio
 
 temporary planning part
 

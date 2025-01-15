@@ -40,4 +40,18 @@ really relaxes me and makes me satisfied when i get something to work.
 i havent even realised that now tophat turmoil is about 1500 lines of code.
 the rest of them are either whitespace or comments i know for a fact. that
 is my way of coding.
+
+jan15 i remember when i used to play phighting like every day. now i dont
+even care about the boombox rework. i liked phighting back when i played it
+with the old smg medkit and the full map selection available instead of
+hourly rotations and the no sword events and the old bogio skatepark and
+space knights and roblox mall and banland i miss it. now i guess im gonna
+work on tophat turmoil all day.
+
+also im gonna make kittas theme on the genesis a lot less drummy. too much
+noise! the simpleness of the opll version is really much better. also i
+gotta export the new revision again cause it sounds much better now. and i
+just remembered that roblox is increasing the friends limit now. i was
+quite surprised to see 201 friends on my list for the first time. not that
+im gonna start accepting any request again but its cool.
 */
