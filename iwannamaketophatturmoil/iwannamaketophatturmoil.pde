@@ -216,6 +216,7 @@ class player extends FBox {
         for(int j=1;j<names.length;j++) {
           switch(names[j].getBytes()[0]) {
           case 'S'://peech
+            touchings.get(i).talkTimer = frameCount;
             dispDialog(new Dialog(-1,"Nya!"));//this displays under everything GRRR
             //i just gotta make some variables and timers methinks to be able to delay the display
             //until everything else is drawn
@@ -314,7 +315,7 @@ class Particle extends FBox {
 
 class Entity extends FBox {
   
-  Entity(int high, int wide) {
+  Entity(float high, float wide) {
     super(high,wide);
     super.setRotatable(false);
   }
@@ -544,6 +545,8 @@ class Explosion extends Projectile {//daibakuhatsu
 }
 
 class Sensor extends FBox { //chunk extension method is here!
+
+  int talkFrame = 0;
   
   Sensor(float x, float y, float xPos, float yPos) {
     super(x,y);
@@ -1665,7 +1668,7 @@ void dispDialog(Dialog what) {
   pop();
 }
 
-void dispDialog() {
+void dispDialog() {//to start the dialog make subdialnum -1
   if(talkTimer>0) {
     push();
     fill(127,127);
@@ -1681,6 +1684,10 @@ void dispDialog() {
       dial[what.pic].update();
     }
     pop();
+    talkTimer--;
+  } else if(dialNum>-1&&subDialNum<talks[dialNum].length-1) {
+    subDialNum++;
+    talkTimer = talks[dialNum][subDialNum].whatSay.length()*2;
   }
 }
 
