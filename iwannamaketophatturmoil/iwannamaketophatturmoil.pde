@@ -6,6 +6,9 @@
 |* the sega genesis to processing *|
 \*_Date:_Nov.1,_2024______________*/
 
+/* bugs list
+*/
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Libraries
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,12 +219,9 @@ class player extends FBox {
         for(int j=1;j<names.length;j++) {
           switch(names[j].getBytes()[0]) {
           case 'S'://peech
-            dialNum = 0;
+            dialNum = int(names[j].substring(1,names[j].length()-1));
             subDialNum = -1;
             talkTimer = 0;
-            dispDialog(new Dialog(-1,"Nya!"));//this displays under everything GRRR
-            //i just gotta make some variables and timers methinks to be able to delay the display
-            //until everything else is drawn
             break;
           case 'T'://eleport
             break;
@@ -548,7 +548,7 @@ class Explosion extends Projectile {//daibakuhatsu
 
 class Sensor extends FBox { //chunk extension method is here!
 
-  int talkFrame = 0;
+  int chunkID = 0;
   
   Sensor(float x, float y, float xPos, float yPos) {
     super(x,y);
@@ -576,7 +576,7 @@ class Sensor extends FBox { //chunk extension method is here!
     case 1:
       //gotta implement speech itself first...
       int which = stuff[1] & 0xFF;
-      setName(getName()+",S"+which);
+      setName(getName()+",S"+which+","+chunkNum);
       p+=2;
       break;
     case 2:
@@ -912,7 +912,6 @@ void draw() {
         dispDialog();
       }
       //scl*=6;
-      //dispDialog(new Dialog(0,"Nya!"));
       
       break;
     case 3:
@@ -1166,9 +1165,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("00");
         FLine jmp = new FLine(1,1,129,1);
         jmp.setName("01");
+        xPos = 65;
+        yPos = 65;
         if(texture!=-1){
-          xPos = 65;
-          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1177,16 +1176,14 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
-        xPos = 128*i-1;
-        yPos = 128*j-1;
         break;
       case 2:
         gnd = new FBox(128,128);
         gnd.setPosition(64,64);
         gnd.setName("00");
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1194,8 +1191,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 3:
         FPoly slo = new FPoly();
@@ -1206,9 +1201,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         slo.setName("00");
         jmp = new FLine(0,128,127,1);
         jmp.setName("01");
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           slo.setNoFill();
           slo.setNoStroke();
           jmp.setNoStroke();
@@ -1218,8 +1213,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 4:
         slo = new FPoly();
@@ -1230,9 +1223,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         slo.setName("00");
         jmp = new FLine(1,1,128,128);
         jmp.setName("01");
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           slo.setNoFill();
           slo.setNoStroke();
           jmp.setNoStroke();
@@ -1242,8 +1235,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 5:
         gnd = new FBox(128,63);
@@ -1251,9 +1242,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("00");
         jmp = new FLine(1,65,129,65);
         jmp.setName("01");
+        xPos = 65;
+        yPos = 65;
         if(texture!=-1){
-          xPos = 65;
-          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1263,16 +1254,14 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i-1;
-        yPos = 128*j-1;
         break;
       case 6:
         gnd = new FBox(128,64);
         gnd.setPosition(64,112);
         gnd.setName("00");
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1280,8 +1269,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 7:
         gnd = new FBox(128,127);
@@ -1292,9 +1279,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(1,1,129,1);
         jmp.setName("01");
         jmp.setFriction(0);
+        xPos = 65;
+        yPos = 65;
         if(texture!=-1){
-          xPos = 65;
-          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1304,8 +1291,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i-1;
-        yPos = 128*j-1;
         break;
       case 8:
         gnd = new FBox(128,128);
@@ -1313,9 +1298,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("00");
         gnd.setFillColor(0xFFAFAFFF);
         gnd.setFriction(-1);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1323,8 +1308,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 9:
         slo = new FPoly();
@@ -1339,9 +1322,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(0,128,127,1);
         jmp.setName("01");
         jmp.setFriction(0);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           slo.setNoFill();
           slo.setNoStroke();
           jmp.setNoStroke();
@@ -1351,8 +1334,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 0xA:
         slo = new FPoly();
@@ -1367,9 +1348,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(1,1,128,128);
         jmp.setName("01");
         jmp.setFriction(0);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           slo.setNoFill();
           slo.setNoStroke();
           jmp.setNoStroke();
@@ -1379,8 +1360,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 0xB:
         gnd = new FBox(128,63);
@@ -1391,9 +1370,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(1,65,129,65);
         jmp.setName("01");
         jmp.setFriction(0);
+        xPos = 65;
+        yPos = 65;
         if(texture!=-1){
-          xPos = 65;
-          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1403,8 +1382,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i-1;
-        yPos = 128*j-1;
         break;
       case 0xC:
         gnd = new FBox(128,64);
@@ -1412,9 +1389,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("00");
         gnd.setFillColor(0xFFAFAFFF);
         gnd.setFriction(0);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1422,8 +1399,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 0xD:
         gnd = new FBox(128,127);
@@ -1434,9 +1409,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(1,1,129,1);
         jmp.setName("01");
         jmp.setRestitution(3);
+        xPos = 65;
+        yPos = 65;
         if(texture!=-1){
-          xPos = 65;
-          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1446,8 +1421,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i-1;
-        yPos = 128*j-1;
         break;
       case 0xE:
         gnd = new FBox(128,127);
@@ -1458,9 +1431,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jmp = new FLine(1,1,129,1);
         jmp.setName("01");
         jmp.setRestitution(50);
+        xPos = 65;
+        yPos = 65;
         if(texture!=-1){
-          xPos = 65;
-          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1470,8 +1443,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i-1;
-        yPos = 128*j-1;
         break;
       case 0xF:
         chunks[chunk] = new FCompound();
@@ -1480,9 +1451,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("100");
         gnd.setSensor(true);
         gnd.setFillColor(0x7F3FFF3F);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1490,8 +1461,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 0x10:
         gnd = new FBox(128,128);
@@ -1499,9 +1468,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("10");
         gnd.setFillColor(0xFFAFAFFF);
         gnd.setFriction(0);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1509,8 +1478,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 0x11:
         gnd = new FBox(128,128);
@@ -1518,9 +1485,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("11");
         gnd.setFillColor(0xDF9F9FFF);
         gnd.setFriction(0);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1536,9 +1503,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setFillColor(0xFF7F7FFF);
         gnd.setFriction(0);
         gnd.setSensor(true);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1547,8 +1514,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
         ret = (PVector[])append(ret,new PVector(1,128*i+64,128*j+66));
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 0x13:
         gnd = new FBox(128,126);
@@ -1557,9 +1522,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setFillColor(0xFFFF3F3F);
         gnd.setFriction(0);
         gnd.setSensor(true);
+        xPos = 64;
+        yPos = 64;
         if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
           gnd.setNoFill();
           gnd.setNoStroke();
         }
@@ -1568,8 +1533,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
         ret = (PVector[])append(ret,new PVector(2,128*i+64,128*j+66));
-        xPos = 128*i;
-        yPos = 128*j;
         break;
       case 0x14:
         gnd = new FBox(126,128);
@@ -1585,9 +1548,9 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         jm3.setName("01");
         FLine jm4 = new FLine(1,95,129,95);
         jm4.setName("01");
+        xPos = 65;
+        yPos = 65;
         if(texture!=-1){
-          xPos = 65;
-          yPos = 65;
           gnd.setNoFill();
           gnd.setNoStroke();
           jmp.setNoStroke();
@@ -1600,21 +1563,15 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].addBody(jm2);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
-        xPos = 128*i-1;
-        yPos = 128*j-1;
         break;
       default: //air for unimplemented chunks
-        if(texture!=-1){
-          xPos = 64;
-          yPos = 64;
-        }
+        xPos = 64;
+        yPos = 64;
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
-        xPos = 128*i;
-        yPos = 128*j;
       }
-      Sensor img = new Sensor(128,128,xPos+64,yPos+64);
+      Sensor img = new Sensor(128,128,xPos,yPos);
       if(texture!=-1) {
         img.attachImage(tex[texture]);
       } else {
@@ -1649,6 +1606,10 @@ void dispDialog(Dialog what) {
 }
 
 void dispDialog() {//to start the dialog make subdialnum -1
+  if(dialNum>-1&&subDialNum<talks[dialNum].length-1&&talkTimer<=0) {
+    subDialNum++;
+    talkTimer = talks[dialNum][subDialNum].whatSay.length()*4;
+  }
   if(talkTimer>0) {
     push();
     fill(127,127);
@@ -1665,9 +1626,6 @@ void dispDialog() {//to start the dialog make subdialnum -1
     }
     pop();
     talkTimer--;
-  } else if(dialNum>-1&&subDialNum<talks[dialNum].length-1) {
-    subDialNum++;
-    talkTimer = talks[dialNum][subDialNum].whatSay.length()*2;
   }
 }
 

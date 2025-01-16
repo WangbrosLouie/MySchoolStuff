@@ -42,7 +42,11 @@ void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mou
   cube(-10,10,-10,10);//good ol white cube
   cube(20,20,-20,10,img);//testbot my beloved
   ball(30,30,30,10);//baller
-  //grid(0,50000,10);
+  //grid(0,5000,10);
+    line(0,0,-5300,0,0,5300);
+  //for(int i=0;i<1;i++){
+  //  line(0,0,-53,0,0,53);
+  //}
   this.setMatrix(mytricks);//grab that unmodified matrix
   perspective();//reset FOV
   PVector oriPos = PVector.sub(camOri,camPos).mult(150);//orientation cube stuff
@@ -82,7 +86,7 @@ void process() {
   /* Calculates player movement for now.*/
   float s = Speed;
   if(Keys[kSHIFT]) { //SPEED SHIFT
-    s*=.2;
+    s*=200;
   }
   if(Keys[kJ]) { //CAM LEFT
     camDir.x -= 2*s;
