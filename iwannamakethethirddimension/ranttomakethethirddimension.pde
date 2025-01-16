@@ -54,4 +54,7 @@ gotta export the new revision again cause it sounds much better now. and i
 just remembered that roblox is increasing the friends limit now. i was
 quite surprised to see 201 friends on my list for the first time. not that
 im gonna start accepting any request again but its cool.
+
+i really feel like doing nothing right now. i dont know what to do even
+with Kitta explicitly telling me what to do.
 */
