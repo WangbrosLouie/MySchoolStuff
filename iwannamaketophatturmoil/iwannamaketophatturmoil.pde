@@ -216,7 +216,9 @@ class player extends FBox {
         for(int j=1;j<names.length;j++) {
           switch(names[j].getBytes()[0]) {
           case 'S'://peech
-            touchings.get(i).talkTimer = frameCount;
+            dialNum = 0;
+            subDialNum = -1;
+            talkTimer = 0;
             dispDialog(new Dialog(-1,"Nya!"));//this displays under everything GRRR
             //i just gotta make some variables and timers methinks to be able to delay the display
             //until everything else is drawn
@@ -907,6 +909,7 @@ void draw() {
         //line(128,2048-128,256,2048-128);
         //for(int i=0;i<15;i++)line(0,i*16,640,i*16);for(int i=0;i<15;i++)line(i*16,0,i*16,640);
         pop();
+        dispDialog();
       }
       //scl*=6;
       //dispDialog(new Dialog(0,"Nya!"));
@@ -1170,13 +1173,12 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
+        xPos = 128*i-1;
+        yPos = 128*j-1;
         break;
       case 2:
         gnd = new FBox(128,128);
@@ -1188,13 +1190,12 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 3:
         FPoly slo = new FPoly();
@@ -1212,14 +1213,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
-        //}p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 4:
         slo = new FPoly();
@@ -1237,14 +1237,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
-        //}p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 5:
         gnd = new FBox(128,63);
@@ -1259,14 +1258,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i-1;
+        yPos = 128*j-1;
         break;
       case 6:
         gnd = new FBox(128,64);
@@ -1278,13 +1276,12 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 7:
         gnd = new FBox(128,127);
@@ -1302,14 +1299,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i-1;
+        yPos = 128*j-1;
         break;
       case 8:
         gnd = new FBox(128,128);
@@ -1323,13 +1319,12 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 9:
         slo = new FPoly();
@@ -1351,14 +1346,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
-        //}p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 0xA:
         slo = new FPoly();
@@ -1380,14 +1374,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           slo.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{slo,jmp});
-        //}p++;
         chunks[chunk].addBody(slo);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 0xB:
         gnd = new FBox(128,63);
@@ -1405,14 +1398,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i-1;
+        yPos = 128*j-1;
         break;
       case 0xC:
         gnd = new FBox(128,64);
@@ -1426,13 +1418,12 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 0xD:
         gnd = new FBox(128,127);
@@ -1450,14 +1441,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i-1;
+        yPos = 128*j-1;
         break;
       case 0xE:
         gnd = new FBox(128,127);
@@ -1475,14 +1465,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoStroke();
           jmp.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i-1;
+        yPos = 128*j-1;
         break;
       case 0xF:
         chunks[chunk] = new FCompound();
@@ -1497,13 +1486,12 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 0x10:
         gnd = new FBox(128,128);
@@ -1517,13 +1505,12 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 0x11:
         gnd = new FBox(128,128);
@@ -1537,9 +1524,6 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
@@ -1558,14 +1542,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
         ret = (PVector[])append(ret,new PVector(1,128*i+64,128*j+66));
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 0x13:
         gnd = new FBox(128,126);
@@ -1580,14 +1563,13 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           gnd.setNoFill();
           gnd.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
         ret = (PVector[])append(ret,new PVector(2,128*i+64,128*j+66));
+        xPos = 128*i;
+        yPos = 128*j;
         break;
       case 0x14:
         gnd = new FBox(126,128);
@@ -1613,28 +1595,26 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
           jm3.setNoStroke();
           jm4.setNoStroke();
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{gnd,jmp});
-        //}p++;
         chunks[chunk].addBody(gnd);
         chunks[chunk].addBody(jmp);
         chunks[chunk].addBody(jm2);
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
+        xPos = 128*i-1;
+        yPos = 128*j-1;
         break;
       default: //air for unimplemented chunks
         if(texture!=-1){
           xPos = 64;
           yPos = 64;
         }
-        //if(fileType==3)while(bi(map[p])!=0xFF) {
-        //  p += extendChunk(subset(map,p),new FBody[]{});
-        //}p++;
         chunks[chunk].setPosition(128*i,128*j);
         chunks[chunk].setStatic(true);
         world.add(chunks[chunk]);
+        xPos = 128*i;
+        yPos = 128*j;
       }
-      Sensor img = new Sensor(128,128,xPos,yPos);
+      Sensor img = new Sensor(128,128,xPos+64,yPos+64);
       if(texture!=-1) {
         img.attachImage(tex[texture]);
       } else {
@@ -1735,6 +1715,7 @@ int[] flipImagePix(PImage pic) {
 
 //input events and controller support here
 void blueDead(Exception e) { //funny
+  try{while(true)pop();}catch(Exception f){}//remove all transforms
   noLoop();
   background(#000080);
   fill(255);
@@ -1855,4 +1836,11 @@ when the checkpoint is touched it changes picture
 the checkpoint is an entity
 the checkpoint changes itself in the level file to reflect its toggledness
 note changes to the level file are only in ram the actual file is untouched
+
+dialogs
+when kitta touches a dialog chunk the id gets stored in the player variable
+if she touches the same chunk while dialog is still happening
+then it doesnt restart the dialog
+if she touches another dialog chunk the id gets overwritten
+and she will be able to get the dialog from the first one again
 */
