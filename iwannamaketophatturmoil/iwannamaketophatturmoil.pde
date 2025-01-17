@@ -161,11 +161,13 @@ class player extends FBox {
   int health = 5;
   Gif[] anim = new Gif[]{new Gif(2.0/60,new String[]{"spr/ka0.png","spr/ka1.png","spr/ka2.png","spr/ka1.png"}),new Gif(2.0/60,new String[]{"spr/ka0.png","spr/kb0.png","spr/kb1.png","spr/kb0.png"}),new Gif(5.0/60,new String[]{"spr/kc.png"})};
   SoundFile[] snd = new SoundFile[]{new SoundFile(dis,"snd/kwlk.wav"),new SoundFile(dis,"snd/kjmp.wav"),new SoundFile(dis,"snd/khrt.wav")};
-  int animNum = 0;
+  int animNum = 0; //which animation to play
   int invince = 0; //invincible until this frame
   int stunned = 0; //stunned until this frame
   int[] animLookup = {0,1,2,0,0};
   int[] sndLookup = {0,1,2,0,0};
+  int talkIndex = 0;
+  
   player(int HEALTH, float x, float y) {//placeholder for now
     super(32,64);
     health = HEALTH;
@@ -198,7 +200,6 @@ class player extends FBox {
   }
   
   byte[] process(byte[] keys) { //change this stuff so the pointers work
-    animNum = 0;
     ArrayList<FBody> touchings = super.getTouching();//super.getContacts();
     keys[3] = 1;
     float oldSpeed = super.getVelocityX();
@@ -219,9 +220,13 @@ class player extends FBox {
         for(int j=1;j<names.length;j++) {
           switch(names[j].getBytes()[0]) {
           case 'S'://peech
-            dialNum = int(names[j].substring(1,names[j].length()-1));
-            subDialNum = -1;
-            talkTimer = 0;
+            int index = int(names[j].substring(names[j].indexOf(':')+1));
+            if(talkIndex!=index||talkTimer<0){
+              index = talkIndex;
+              dialNum = int(names[j].substring(1));
+              subDialNum = -1;
+              talkTimer = 0;
+            }
             break;
           case 'T'://eleport
             break;
@@ -1625,8 +1630,8 @@ void dispDialog() {//to start the dialog make subdialnum -1
       dial[what.pic].update();
     }
     pop();
-    talkTimer--;
   }
+  talkTimer--;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1781,6 +1786,9 @@ MS Paint - simple graphics
 GIMP - advanced graphics
 Processing - y'know, the thing that runs this code
 foobar2000 - converting audio
+Windows 10 & 11 - IMO one good and one bad
+macOS 10.13 - would be nice if my mac could do processing 4
+Ubuntu 22.04.6 LTS - the ancient fossil on my hard drive 
 
 temporary planning part
 
