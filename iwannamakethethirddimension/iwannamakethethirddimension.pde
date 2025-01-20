@@ -5,6 +5,7 @@
 \*_Date:_Jan.6,_2025___________________*/
 
 import java.awt.*;
+import fisica.*;
 
 PVector camPos = new PVector();
 PVector camOri = new PVector();
@@ -17,9 +18,18 @@ PGraphics oriCube;
 PMatrix3D mytricks;
 Robot kitta;
 int winX, winY, oX, oY;
+FWorld seikai;
+FBody[] objList;
+
+class Wall extends FBox {
+  Wall(float w, float h) {
+    super(w,h);
+  }
+}
 
 void settings() {
   size(640,480,P3D);//its 3d blast baby
+  Fisica.init(this);
 }
 
 void setup() {
@@ -31,6 +41,7 @@ void setup() {
   windowMove(winX,winY);
   img = loadImage("testbot my beloved.png");
   oriCube = createGraphics(150,150,P3D);
+  loadObjects(objList);
   noCursor();
 }
 

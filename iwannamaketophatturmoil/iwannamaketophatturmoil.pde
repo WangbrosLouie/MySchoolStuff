@@ -17,7 +17,7 @@ import processing.sound.*;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Variables
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Game Control and Parameters
+//  Game Control and Parameters
 int mode = 0;
 boolean loading = true;
 boolean drawing = false;
@@ -29,7 +29,7 @@ byte mapNum = 2;
 float scl = 1; //render scale
 PVector playerVec, camVec;
 boolean camDir = true;
-//Map Variables and Assets
+//  Map Variables and Assets
 String[] maps = new String[]{"map02ext.lvl","map05.lvl","kit/01.lvl"};
 byte[] mapData;
 String mapName;
@@ -44,13 +44,15 @@ int subDialNum = 0;
 int talkTimer = 0;
 PFont lucid;
 byte[] keys = new byte[13];
-//Physics Variables
+//  Physics Variables
 FWorld world;
 FCompound[] chunks;
 player you;
 ArrayList<Entity> entities = new ArrayList<Entity>();
 ArrayList<Projectile> projs = new ArrayList<Projectile>();//projectiles
 PApplet dis = this;//for referencing inside of classes
+//  Miscellaneous Variables
+int Btn = 0;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Classes
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -807,9 +809,11 @@ void draw() {
     drawing = true;
     switch(mode) {
     case 0:
+      background(0);
+      
       //do the buttons the menus the yaddas not the nyaddas
-      mode = 4;
-      frameCount = 0;
+      //mode = 4;
+      //frameCount = 0;
     case 1://maybe do the loading while the intro is introing with a thread or something like that
       if(!camDir){
         push();
@@ -1775,6 +1779,116 @@ void keyReleased() {
   }
 }
 
+void mousePressed() {
+  if(buttonsEnabled){
+    int Action = Hitbox.get(mouseX,mouseY);
+    Btn = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+  }
+}
+
+void mouseReleased() {
+  if(frameCount>1&&!loading){
+    int Action = Hitbox.get(mouseX,mouseY);
+    Action = round(red(Action))*0x100+round(green(Action))*0x100+ceil(blue(Action));
+    if(Action==Btn&&Action!=0) {
+      //Action = title[Action-1].doWhat;
+      switch(Action) {
+      case 1:
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        frameCount = 0;
+        halfFPS = true;
+        frameRate(30);
+        ttl.stop();
+        bgm.loop();
+        gameInit();
+        //from the
+        screen = 1;
+        //to the
+        break;
+      //to the
+      case 2:
+        //to the
+        frameCount = 0;
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        halfFPS = false;
+        frameRate(60);
+        ttl.stop();
+        bgm.loop();
+        gameInit();
+        screen = 1;
+        break;
+      case 3://turn that frown upside down :3
+        dispBG = !dispBG;
+        butns[title[Action-1]].text = "Dynamic Background "+(dispBG?"ON":"OFF");
+        butns[title[Action-1]].In = dispBG?color(50,184,83):color(184,83,50);
+        butns[title[Action-1]].HIn = dispBG?color(30,150,60):color(150,60,30);
+        butns[title[Action-1]].PIn = dispBG?color(10,100,23):color(100,23,10);
+        if(dispBG)bg.resizeGif(round(bgX),round(bgY));else bg.resizeGif(width,height);
+        break;
+      case 4:
+        frameCount = 0;
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        halfFPS = false;
+        frameRate(42069);//ehehe
+        ttl.stop();
+        bgm.loop();
+        gameInit();
+        screen = 1;
+        break;
+      case 5:
+        frameCount = 0;
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        frameRate(60);
+        reset();
+        bgm.stop();
+        ttl.loop();
+        screen = 0;
+        scor1 = 0;
+        scor2 = 0;
+        break;
+      case 6:
+        frameCount = 16200;
+        Hitbox.beginDraw();
+        Hitbox.background(0);
+        Hitbox.endDraw();
+        halfFPS = false;
+        frameRate(60);
+        ttl.stop();
+        bgm.loop();
+        gameInit();
+        screen = 1;
+        break;
+      default:
+        blueDead("Button Action "+Action,"404 Not Found","Action = "+Action);
+      }
+    }
+    Btn = 0;
+  }
+}
+
+void process(int[] B, PGraphics H) {
+  H.beginDraw();
+  H.background(0);
+  for(int i=0;i<B.length;i++)butns[B[i]].drawHit(B[i],H);
+  for(int i=0;i<B.length;i++) {//draw buttons
+    byte Status = 0;
+    int Hover = Hitbox.get(mouseX,mouseY);
+    Hover = round(red(Hover))*0x100+round(green(Hover))*0x100+ceil(blue(Hover));
+    if(Hover-1==B[i])Status = 1;
+    if(Btn-1==B[i])Status = 2;
+    butns[B[i]].draw(Status);
+  }
+  H.endDraw();
+}
+
 /*
 Credits! (because i thought it would be nice.)
 
@@ -1808,11 +1922,4 @@ when the checkpoint is touched it changes picture
 the checkpoint is an entity
 the checkpoint changes itself in the level file to reflect its toggledness
 note changes to the level file are only in ram the actual file is untouched
-
-dialogs
-when kitta touches a dialog chunk the id gets stored in the player variable
-if she touches the same chunk while dialog is still happening
-then it doesnt restart the dialog
-if she touches another dialog chunk the id gets overwritten
-and she will be able to get the dialog from the first one again
 */

@@ -171,6 +171,7 @@ F = win zone
 12 = water
 13 = lava
 14 = ladder
+15 = checkpoint
 
 Chunk Flag Bits (from right to left)
 0 = replenishes jump
@@ -238,6 +239,7 @@ Events (for animations and sound)
     /-workarounds-/
 Here are the various tricks that I found that are useful.
 Byte[](file) to String: Make a new String with the array as the parameter.
+FWorld.clear(): Just make a new FWorld.
 
     /-changelog-/
 Wowza, I'm finally tracking my progress after months of abusing Git's
@@ -270,7 +272,8 @@ commit messages. I'm not gonna stop though. I never will.
 |-Lava
 |-Entity Rework
 |-Particles
-|-Dialogs (in progress)
+|-Dialogs
+|-Checkpoints (in progress)
 '-Toggleable Level Music (in progress)
 
 --Future Versions

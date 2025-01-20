@@ -1,0 +1,11 @@
+{
+	"packName": "The Test Levels",
+	"packDesc": "This is a description",
+	"mapNames": [
+		"map01.lvl",
+		"map02ext.lvl",
+		"map03ext.lvl",
+		"map04.lvl",
+		"map05.lvl"
+	]
+}
