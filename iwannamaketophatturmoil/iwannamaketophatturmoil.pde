@@ -39,7 +39,7 @@ color backcolour = color(0);
 SoundFile[] mus = new SoundFile[4];
 Gif[] dial = new Gif[254];
 Dialog[][] talks;
-int dialNum = 0;
+int dialNum = -1;
 int subDialNum = 0;
 int talkTimer = 0;
 PFont lucid;
@@ -166,7 +166,7 @@ class player extends FBox {
   int stunned = 0; //stunned until this frame
   int[] animLookup = {0,1,2,0,0};
   int[] sndLookup = {0,1,2,0,0};
-  int talkIndex = 0;
+  int talkIndex = -1;
   
   player(int HEALTH, float x, float y) {//placeholder for now
     super(32,64);
@@ -221,7 +221,7 @@ class player extends FBox {
           switch(names[j].getBytes()[0]) {
           case 'S'://peech
             int index = int(names[j].substring(names[j].indexOf(':')+1));
-            if(talkIndex!=index||talkTimer<0){
+            if(talkIndex!=index){//||talkTimer<0){
               index = talkIndex;
               dialNum = int(names[j].substring(1));
               subDialNum = -1;
@@ -1030,6 +1030,10 @@ void makeLevel() {
     playerVec = new PVector(you.getX(),you.getY());
     camVec = new PVector(playerVec.x+sqrt2(you.getVelocityX()*30)+(camDir?50:-50),playerVec.y+sqrt2(you.getVelocityY()*30));
     mode = 1;
+    dialNum = -1;
+    subDialNum = 0;
+    talkTimer = 0;
+    for(int i=0;i<keys.length;i++)keys[i]=0;
     loading = false;
   } catch (Exception e) {
     blueDead(e);
@@ -1143,6 +1147,7 @@ int loadScripts(byte[] stuff) {
       temp = (Dialog[])append(temp,new Dialog(animNum,text));
     }
     talks = (Dialog[][])append(talks,temp);
+    p++;
   }
   return p;
 }
@@ -1594,7 +1599,7 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
   return ret;
 }
 
-void dispDialog(Dialog what) {
+void dispDialog(Dialog what) {//this ones for a specific dialog (maybe menu screens?)
   push();
   fill(127,127);
   noStroke();
@@ -1620,6 +1625,7 @@ void dispDialog() {//to start the dialog make subdialnum -1
     fill(127,127);
     noStroke();
     rect(width/10,height/16*12,width/10*8,height/16*3);
+    textSize(16);
     textAlign(LEFT,TOP);
     Dialog what = talks[dialNum][subDialNum];
     if(what.pic<0) {
