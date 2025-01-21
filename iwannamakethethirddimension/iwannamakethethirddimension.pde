@@ -19,12 +19,16 @@ PMatrix3D mytricks;
 Robot kitta;
 int winX, winY, oX, oY;
 FWorld seikai;
-FBody[] objList;
+FBox[] objList;
 
 class Wall extends FBox {
-  Wall(float w, float h) {
+  
+  Wall(float x, float y, float w, float h) {
     super(w,h);
+    setPosition(x,y);
+    setStatic(true);
   }
+  
 }
 
 void settings() {
@@ -41,7 +45,9 @@ void setup() {
   windowMove(winX,winY);
   img = loadImage("testbot my beloved.png");
   oriCube = createGraphics(150,150,P3D);
-  loadObjects(objList);
+  objList = new FBox[]{new Wall(40,40,10,10)};
+  seikai = new FWorld();
+  loadObjects(objList,seikai);
   noCursor();
 }
 
@@ -50,8 +56,9 @@ void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mou
   process();
   camera(camPos.x,camPos.y,camPos.z,camOri.x,camOri.y,camOri.z,0,1,0);
   background(200);
+  drawObjects(objList);
   cube(-10,10,-10,10);//good ol white cube
-  cube(20,20,-20,10,img);//testbot my beloved
+  cube(20,20,-20,10,15,20,img);//testbot my beloved
   ball(30,30,30,10);//baller
   //grid(0,5000,10);
     line(0,0,-5300,0,0,5300);
@@ -152,6 +159,13 @@ void cube(float x, float y, float z, float size) {
   pop();
 }
 
+void cube(float x, float y, float z, float w, float h, float d) {
+  push();
+  translate(x,y,z);
+  box(w,h,d);
+  pop();
+}
+
 void cube(float x, float y, float z, float size, PGraphics screen) {
   screen.push();
   screen.translate(x,y,z);
@@ -159,10 +173,55 @@ void cube(float x, float y, float z, float size, PGraphics screen) {
   screen.pop();
 }
 
+void cube(float x, float y, float z, float w, float h, float d, PGraphics screen) {
+  screen.push();
+  screen.translate(x,y,z);
+  screen.box(w,h,d);
+  screen.pop();
+}
+
 void ball(float x, float y, float z, float size) {
   push();
   translate(x,y,z);
   sphere(size);
+  pop();
+}
+
+void cube(float x, float y, float z, float w, float h, float d, PImage tex) {
+  float hw = w/2;
+  float hh = h/2;
+  float hd = d/2;
+  push();
+  translate(x,y,z);
+  textureMode(NORMAL);
+  beginShape();
+  texture(tex);
+  vertex(-hw,-hh,hd,0,0);
+  vertex(hw,-hh,hd,1,0);
+  vertex(hw,hh,hd,1,1);
+  vertex(-hw,hh,hd,0,1);
+  endShape(CLOSE);
+  beginShape();
+  texture(tex);
+  vertex(hw,-hh,hd,0,0);
+  vertex(hw,-hh,-hd,1,0);
+  vertex(hw,hh,-hd,1,1);
+  vertex(hw,hh,hd,0,1);
+  endShape(CLOSE);
+  beginShape();
+  texture(tex);
+  vertex(hw,-hh,-hd,0,0);
+  vertex(-hw,-hh,-hd,1,0);
+  vertex(-hw,hh,-hd,1,1);
+  vertex(hw,hh,-hd,0,1);
+  endShape(CLOSE);
+  beginShape();
+  texture(tex);
+  vertex(-hw,-hh,-hd,0,0);
+  vertex(-hw,-hh,hd,1,0);
+  vertex(-hw,hh,hd,1,1);
+  vertex(-hw,hh,-hd,0,1);
+  endShape(CLOSE);
   pop();
 }
 
@@ -209,6 +268,28 @@ void grid(float y, float d, float s) {//y coord, draw distance, size of grid blo
   for(int i=floor(camPos.z/s)-floor(d/s/2)+1;i<ceil(camPos.z/s)+floor(d/s/2);i++) {
     line((-d/2)+camPos.x,y,i*s,(d/2)+camPos.x,y,i*s);
   }
+}
+
+void loadObjects(FBody[] stuff, FWorld world) {
+  for(FBody thing:stuff) {
+    world.add(thing);
+  }
+}
+
+void drawObjects(FBox[] stuff) {
+  for(FBody thing:stuff) {
+    switch(typeof(thing)) {
+    case "Wall":
+      push();
+      translate(thing.getX(),thing.getY(),50);
+      cube(thing.getWidth());//just make a stupid subclass already
+      pop();
+    }
+  }
+}
+
+String typeof(Object o) {// good ol roblox ahh function
+  return o.getClass().getSimpleName();
 }
 
 PVector XnYZ(PVector v) {
@@ -285,3 +366,27 @@ final int kW = 87;
 final int kX = 88;
 final int kY = 89;
 final int kZ = 90;
+
+/*temporary rant segment
+jan21 i have forgotten to push my changes from another computer again. wee.
+i have finally figured out why long lines distort in p3d. the renderer uses
+a very thin tri to draw the line, but when the length is long enough, the
+length to thickness ratio causes the line to be thick. in an extreme case,
+it can fill the entire screen. so i guess the way to do it now is to avoid
+using extremely long lines. i am gonna work on tophat turmoil a lot more
+starting february so im probably gonna abandon processing or something. but
+i will work on that genesis game until march. so at least thats something.
+
+at this point i should just make a blog on my github pages. if i formatted
+all of my rants to be 75 characters wide like this one id probably have
+like 1000 lines or something like that. thats 75000 characters for an
+estimated 12500 words with 1 word = 5 letters + a space. but thats only my
+guess. i hate the new outlook. it replaces my favourite mail app windows
+mail just because microsoft wasnt making enough money having an ad free and
+extremely quick simple mail app as an alternative to the ad ridden slow web
+browser of an app. good thing the only thing i have to do is to uninstall
+outlook every time it reinstalls to use the old mail. even better, i can
+just disable the windows store because it is rather useless and cut outlook
+from being downloaded in the first place. i even prefer outlook classic to
+the new outlook. theres a reason why i nicknamed the new outlook $#!+look.
+*/

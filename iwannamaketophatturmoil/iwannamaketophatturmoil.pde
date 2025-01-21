@@ -25,6 +25,7 @@ boolean debug = false;
 boolean textures = true;
 boolean backgnd = true;
 boolean halfFPS = false;
+boolean buttonsEnabled = false;
 byte mapNum = 2;
 float scl = 1; //render scale
 PVector playerVec, camVec;
@@ -52,7 +53,10 @@ ArrayList<Entity> entities = new ArrayList<Entity>();
 ArrayList<Projectile> projs = new ArrayList<Projectile>();//projectiles
 PApplet dis = this;//for referencing inside of classes
 //  Miscellaneous Variables
+PGraphics Hitbox;
 int Btn = 0;
+Button[] buttonList = new Button[]{};
+int[] buttonDraw = new int[]{};
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Classes
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -793,6 +797,7 @@ class Dialog {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void settings() {
   size(640,480,P2D);//holy nya why havent i used p2d before
+  Hitbox = createGraphics(640,480,P2D);
 }
 
 void setup() {
@@ -1793,81 +1798,8 @@ void mouseReleased() {
     if(Action==Btn&&Action!=0) {
       //Action = title[Action-1].doWhat;
       switch(Action) {
-      case 1:
-        Hitbox.beginDraw();
-        Hitbox.background(0);
-        Hitbox.endDraw();
-        frameCount = 0;
-        halfFPS = true;
-        frameRate(30);
-        ttl.stop();
-        bgm.loop();
-        gameInit();
-        //from the
-        screen = 1;
-        //to the
-        break;
-      //to the
-      case 2:
-        //to the
-        frameCount = 0;
-        Hitbox.beginDraw();
-        Hitbox.background(0);
-        Hitbox.endDraw();
-        halfFPS = false;
-        frameRate(60);
-        ttl.stop();
-        bgm.loop();
-        gameInit();
-        screen = 1;
-        break;
-      case 3://turn that frown upside down :3
-        dispBG = !dispBG;
-        butns[title[Action-1]].text = "Dynamic Background "+(dispBG?"ON":"OFF");
-        butns[title[Action-1]].In = dispBG?color(50,184,83):color(184,83,50);
-        butns[title[Action-1]].HIn = dispBG?color(30,150,60):color(150,60,30);
-        butns[title[Action-1]].PIn = dispBG?color(10,100,23):color(100,23,10);
-        if(dispBG)bg.resizeGif(round(bgX),round(bgY));else bg.resizeGif(width,height);
-        break;
-      case 4:
-        frameCount = 0;
-        Hitbox.beginDraw();
-        Hitbox.background(0);
-        Hitbox.endDraw();
-        halfFPS = false;
-        frameRate(42069);//ehehe
-        ttl.stop();
-        bgm.loop();
-        gameInit();
-        screen = 1;
-        break;
-      case 5:
-        frameCount = 0;
-        Hitbox.beginDraw();
-        Hitbox.background(0);
-        Hitbox.endDraw();
-        frameRate(60);
-        reset();
-        bgm.stop();
-        ttl.loop();
-        screen = 0;
-        scor1 = 0;
-        scor2 = 0;
-        break;
-      case 6:
-        frameCount = 16200;
-        Hitbox.beginDraw();
-        Hitbox.background(0);
-        Hitbox.endDraw();
-        halfFPS = false;
-        frameRate(60);
-        ttl.stop();
-        bgm.loop();
-        gameInit();
-        screen = 1;
-        break;
       default:
-        blueDead("Button Action "+Action,"404 Not Found","Action = "+Action);
+        //blueDead("Button Action "+Action,"404 Not Found","Action = "+Action);
       }
     }
     Btn = 0;
@@ -1877,14 +1809,14 @@ void mouseReleased() {
 void process(int[] B, PGraphics H) {
   H.beginDraw();
   H.background(0);
-  for(int i=0;i<B.length;i++)butns[B[i]].drawHit(B[i],H);
+  for(int i=0;i<B.length;i++)buttonList[buttonDraw[i]].drawHit(buttonDraw[i],H);
   for(int i=0;i<B.length;i++) {//draw buttons
     byte Status = 0;
     int Hover = Hitbox.get(mouseX,mouseY);
     Hover = round(red(Hover))*0x100+round(green(Hover))*0x100+ceil(blue(Hover));
     if(Hover-1==B[i])Status = 1;
     if(Btn-1==B[i])Status = 2;
-    butns[B[i]].draw(Status);
+    buttonList[buttonDraw[i]].draw(Status);
   }
   H.endDraw();
 }

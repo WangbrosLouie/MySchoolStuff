@@ -49,8 +49,8 @@ using Type 2. The chunk codes can be found in reference, and the texture
 number is indexed at 1, as 00 is used for no texture.
 --Type 3 (READ THIS ONE!!!)
   This file type is the extended file type. It will support all of the
-features of the engine. However, all of the features are specified in the
-same file segment so it will be harder to edit, until I make a level editor
+features of the engine. However, all of the extensions are specified in the
+layout segment so it will be harder to edit, until I make a level editor
 which probably won't happen. (gotta rewrite this one)
   The segments must be specified with a header, followed by data. White
 space between segments will be ignored. Possible segments are:
