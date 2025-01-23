@@ -5,35 +5,21 @@
 \*_Date:_Jan.6,_2025___________________*/
 
 import java.awt.*;
-import fisica.*;
 
 PVector camPos = new PVector();
 PVector camOri = new PVector();
 PVector camDir = new PVector();
 boolean[] Keys = new boolean[256];
 float Speed = 1.0;
-PImage img;
+PImage img, level;
 PGraphics ThreeD;
 PGraphics oriCube;
 PMatrix3D mytricks;
 Robot kitta;
 int winX, winY, oX, oY;
-FWorld seikai;
-FBox[] objList;
-
-class Wall extends FBox {
-  
-  Wall(float x, float y, float w, float h) {
-    super(w,h);
-    setPosition(x,y);
-    setStatic(true);
-  }
-  
-}
 
 void settings() {
   size(640,480,P3D);//its 3d blast baby
-  Fisica.init(this);
 }
 
 void setup() {
@@ -45,9 +31,7 @@ void setup() {
   windowMove(winX,winY);
   img = loadImage("testbot my beloved.png");
   oriCube = createGraphics(150,150,P3D);
-  objList = new FBox[]{new Wall(40,40,10,10)};
-  seikai = new FWorld();
-  loadObjects(objList,seikai);
+  level = loadImage("level.png");
   noCursor();
 }
 
@@ -56,15 +40,46 @@ void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mou
   process();
   camera(camPos.x,camPos.y,camPos.z,camOri.x,camOri.y,camOri.z,0,1,0);
   background(200);
-  drawObjects(objList);
-  cube(-10,10,-10,10);//good ol white cube
-  cube(20,20,-20,10,15,20,img);//testbot my beloved
-  ball(30,30,30,10);//baller
-  //grid(0,5000,10);
-    line(0,0,-5300,0,0,5300);
-  //for(int i=0;i<1;i++){
-  //  line(0,0,-53,0,0,53);
-  //}
+  //cube(-10,10,-10,10);//good ol white cube
+  //cube(20,20,-20,10,15,20,img);//testbot my beloved
+  //ball(30,30,30,10);//baller
+  //grid(0,50,25);
+  level.loadPixels();
+  for(int i=0;i<level.height;i++) {
+    for(int j=0;j<level.width;j++) {
+      switch(level.pixels[i*level.width+j]) {
+      case -1237980:
+        cube(j*16+8-(level.height*8),-64,i*16+8-(level.width*8),16,128,16);
+        break;
+      case -32985:
+        cube(j*16+8-(level.height*8),-56,i*16+8-(level.width*8),16,112,16);
+        break;
+      case -14066:
+        cube(j*16+8-(level.height*8),-48,i*16+8-(level.width*8),16,96,16);
+        break;
+      case -3584:
+        cube(j*16+8-(level.height*8),-40,i*16+8-(level.width*8),16,80,16);
+        break;
+      case -4856291:
+        cube(j*16+8-(level.height*8),-32,i*16+8-(level.width*8),16,64,16);
+        break;
+      case -14503604:
+        cube(j*16+8-(level.height*8),-24,i*16+8-(level.width*8),16,48,16);
+        break;
+      case -16735512:
+        cube(j*16+8-(level.height*8),-16,i*16+8-(level.width*8),16,32,16);
+        break;
+      case -12629812:
+        cube(j*16+8-(level.height*8),-8,i*16+8-(level.width*8),16,16,16);
+        break;
+      case -6075996:
+        cube(j*16+8-(level.height*8),0,i*16+8-(level.width*8),16,0,16);
+        break;
+      default:
+        println("meow");
+      }
+    }
+  }
   this.setMatrix(mytricks);//grab that unmodified matrix
   perspective();//reset FOV
   PVector oriPos = PVector.sub(camOri,camPos).mult(150);//orientation cube stuff
@@ -97,7 +112,6 @@ void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mou
   /*old fashioned ahh*/text("If the camera is moving automatically, restart program and make sure mouse does not move while booting program.\nTo close program:\nPush the Esc key or,\nUnfocus program and close with taskbar, task manager, stop button (if applicable), etc. or,\nuse OS dependent keyboard combination if present.\nCONTROLS:\nPositional Movement on the: Z Axis = WS. X Axis = AD. Y Axis = EQ\nCamera Movement on the: X Axis = JL. Y Axis = IK.\nShift to go slower. Use mouse if present for camera.",width/2,height-100);
   image(oriCube,width-75,0,75,75);
   pop();
-  //println(camPos,camOri,camDir);
 }
 
 void process() {
@@ -267,24 +281,6 @@ void grid(float y, float d, float s) {//y coord, draw distance, size of grid blo
   }
   for(int i=floor(camPos.z/s)-floor(d/s/2)+1;i<ceil(camPos.z/s)+floor(d/s/2);i++) {
     line((-d/2)+camPos.x,y,i*s,(d/2)+camPos.x,y,i*s);
-  }
-}
-
-void loadObjects(FBody[] stuff, FWorld world) {
-  for(FBody thing:stuff) {
-    world.add(thing);
-  }
-}
-
-void drawObjects(FBox[] stuff) {
-  for(FBody thing:stuff) {
-    switch(typeof(thing)) {
-    case "Wall":
-      push();
-      translate(thing.getX(),thing.getY(),50);
-      cube(thing.getWidth());//just make a stupid subclass already
-      pop();
-    }
   }
 }
 
