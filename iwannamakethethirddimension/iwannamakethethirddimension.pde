@@ -47,6 +47,7 @@ void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mou
   //ball(30,30,30,10);//baller
   //grid(0,50,25);
   drawLevel(heightMap);
+  
   this.setMatrix(mytricks);//grab that unmodified matrix
   perspective();//reset FOV
   PVector oriPos = PVector.sub(camOri,camPos).mult(150);//orientation cube stuff
