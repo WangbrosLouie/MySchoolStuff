@@ -17,6 +17,7 @@ PGraphics oriCube;
 PMatrix3D mytricks;
 Robot kitta;
 int winX, winY, oX, oY;
+float[] heightMap;
 
 void settings() {
   size(640,480,P3D);//its 3d blast baby
@@ -31,7 +32,7 @@ void setup() {
   windowMove(winX,winY);
   img = loadImage("testbot my beloved.png");
   oriCube = createGraphics(150,150,P3D);
-  level = loadImage("level.png");
+  loadLevel(loadImage("level.png"));
   noCursor();
 }
 
@@ -44,6 +45,41 @@ void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mou
   //cube(20,20,-20,10,15,20,img);//testbot my beloved
   //ball(30,30,30,10);//baller
   //grid(0,50,25);
+  this.setMatrix(mytricks);//grab that unmodified matrix
+  perspective();//reset FOV
+  PVector oriPos = PVector.sub(camOri,camPos).mult(150);//orientation cube stuff
+  oriCube.beginDraw();
+  oriCube.clear();
+  oriCube.perspective(PI/2.0,1,5.0,1000.0);
+  oriCube.fill(255);
+  cube(0,0,0,100,oriCube);
+  oriCube.textAlign(CENTER,CENTER);
+  oriCube.fill(0);
+  oriCube.textSize(32);
+  oriCube.text("Back",0,0,50.1);
+  oriCube.rotateY(radians(90));
+  oriCube.text("Right",0,0,50.1);
+  oriCube.rotateY(radians(90));
+  oriCube.text("Front",0,0,50.1);
+  oriCube.rotateY(radians(90));
+  oriCube.text("Left",0,0,50.1);
+  oriCube.rotateY(radians(90));
+  oriCube.rotateX(radians(90));
+  oriCube.text("Top",0,0,50.1);
+  oriCube.rotateX(radians(-180));
+  oriCube.text("Bottom",0,0,50.1);
+  oriCube.camera(-oriPos.x,-oriPos.y,-oriPos.z,0,0,0,0,1,0);
+  oriCube.endDraw();
+  push();
+  imageMode(CORNER);
+  textAlign(CENTER,CENTER);
+  fill(127);
+  /*old fashioned ahh*/text("If the camera is moving automatically, restart program and make sure mouse does not move while booting program.\nTo close program:\nPush the Esc key or,\nUnfocus program and close with taskbar, task manager, stop button (if applicable), etc. or,\nuse OS dependent keyboard combination if present.\nCONTROLS:\nPositional Movement on the: Z Axis = WS. X Axis = AD. Y Axis = EQ\nCamera Movement on the: X Axis = JL. Y Axis = IK.\nShift to go slower. Use mouse if present for camera.",width/2,height-100);
+  image(oriCube,width-75,0,75,75);
+  pop();
+}
+
+void loadLevel(PImage img) {
   level.loadPixels();
   for(int i=0;i<level.height;i++) {
     for(int j=0;j<level.width;j++) {
@@ -80,38 +116,6 @@ void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mou
       }
     }
   }
-  this.setMatrix(mytricks);//grab that unmodified matrix
-  perspective();//reset FOV
-  PVector oriPos = PVector.sub(camOri,camPos).mult(150);//orientation cube stuff
-  oriCube.beginDraw();
-  oriCube.clear();
-  oriCube.perspective(PI/2.0,1,5.0,1000.0);
-  oriCube.fill(255);
-  cube(0,0,0,100,oriCube);
-  oriCube.textAlign(CENTER,CENTER);
-  oriCube.fill(0);
-  oriCube.textSize(32);
-  oriCube.text("Back",0,0,50.1);
-  oriCube.rotateY(radians(90));
-  oriCube.text("Right",0,0,50.1);
-  oriCube.rotateY(radians(90));
-  oriCube.text("Front",0,0,50.1);
-  oriCube.rotateY(radians(90));
-  oriCube.text("Left",0,0,50.1);
-  oriCube.rotateY(radians(90));
-  oriCube.rotateX(radians(90));
-  oriCube.text("Top",0,0,50.1);
-  oriCube.rotateX(radians(-180));
-  oriCube.text("Bottom",0,0,50.1);
-  oriCube.camera(-oriPos.x,-oriPos.y,-oriPos.z,0,0,0,0,1,0);
-  oriCube.endDraw();
-  push();
-  imageMode(CORNER);
-  textAlign(CENTER,CENTER);
-  fill(127);
-  /*old fashioned ahh*/text("If the camera is moving automatically, restart program and make sure mouse does not move while booting program.\nTo close program:\nPush the Esc key or,\nUnfocus program and close with taskbar, task manager, stop button (if applicable), etc. or,\nuse OS dependent keyboard combination if present.\nCONTROLS:\nPositional Movement on the: Z Axis = WS. X Axis = AD. Y Axis = EQ\nCamera Movement on the: X Axis = JL. Y Axis = IK.\nShift to go slower. Use mouse if present for camera.",width/2,height-100);
-  image(oriCube,width-75,0,75,75);
-  pop();
 }
 
 void process() {
