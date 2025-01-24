@@ -11,13 +11,13 @@ PVector camOri = new PVector();
 PVector camDir = new PVector();
 boolean[] Keys = new boolean[256];
 float Speed = 1.0;
-PImage img, level;
+PImage img;
 PGraphics ThreeD;
 PGraphics oriCube;
 PMatrix3D mytricks;
 Robot kitta;
 int winX, winY, oX, oY;
-float[] heightMap;
+int[] heightMap;
 
 void settings() {
   size(640,480,P3D);//its 3d blast baby
@@ -32,19 +32,21 @@ void setup() {
   windowMove(winX,winY);
   img = loadImage("testbot my beloved.png");
   oriCube = createGraphics(150,150,P3D);
-  loadLevel(loadImage("level.png"));
+  heightMap = loadLevel(loadImage("level.png"));
   noCursor();
 }
 
 void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mouseY;camDir=new PVector();}//gotta find a workaround to this one fast
   perspective(PI/2.0,(float)width/height,5.0,10000.0); //FOV=???
   process();
+  println(camPos);
   camera(camPos.x,camPos.y,camPos.z,camOri.x,camOri.y,camOri.z,0,1,0);
   background(200);
   //cube(-10,10,-10,10);//good ol white cube
   //cube(20,20,-20,10,15,20,img);//testbot my beloved
   //ball(30,30,30,10);//baller
   //grid(0,50,25);
+  drawLevel(heightMap);
   this.setMatrix(mytricks);//grab that unmodified matrix
   perspective();//reset FOV
   PVector oriPos = PVector.sub(camOri,camPos).mult(150);//orientation cube stuff
@@ -79,40 +81,58 @@ void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mou
   pop();
 }
 
-void loadLevel(PImage img) {
-  level.loadPixels();
-  for(int i=0;i<level.height;i++) {
-    for(int j=0;j<level.width;j++) {
-      switch(level.pixels[i*level.width+j]) {
+int[] loadLevel(PImage img) {
+  int[] map = new int[img.width*img.height+2];
+  map[0] = img.width;
+  map[1] = img.height;
+  img.loadPixels();
+  for(int i=0;i<img.height;i++) {
+    for(int j=0;j<img.width;j++) {
+      switch(img.pixels[i*img.width+j]) {
       case -1237980:
-        cube(j*16+8-(level.height*8),-64,i*16+8-(level.width*8),16,128,16);
+        map[i*img.width+j+2] = -1;
         break;
       case -32985:
-        cube(j*16+8-(level.height*8),-56,i*16+8-(level.width*8),16,112,16);
+        map[i*img.width+j+2] = 112;
         break;
       case -14066:
-        cube(j*16+8-(level.height*8),-48,i*16+8-(level.width*8),16,96,16);
+        map[i*img.width+j+2] = 96;
         break;
       case -3584:
-        cube(j*16+8-(level.height*8),-40,i*16+8-(level.width*8),16,80,16);
+        map[i*img.width+j+2] = 80;
         break;
       case -4856291:
-        cube(j*16+8-(level.height*8),-32,i*16+8-(level.width*8),16,64,16);
+        map[i*img.width+j+2] = 64;
         break;
       case -14503604:
-        cube(j*16+8-(level.height*8),-24,i*16+8-(level.width*8),16,48,16);
+        map[i*img.width+j+2] = 48;
         break;
       case -16735512:
-        cube(j*16+8-(level.height*8),-16,i*16+8-(level.width*8),16,32,16);
+        map[i*img.width+j+2] = 32;
         break;
       case -12629812:
-        cube(j*16+8-(level.height*8),-8,i*16+8-(level.width*8),16,16,16);
+        map[i*img.width+j+2] = 16;
         break;
       case -6075996:
-        cube(j*16+8-(level.height*8),0,i*16+8-(level.width*8),16,0,16);
+        map[i*img.width+j+2] = 0;
         break;
       default:
         println("meow");
+      }
+    }
+  }
+  return map;
+}
+
+void drawLevel(int[] map) {
+  for(int i=0;i<map[1];i++) {
+    for(int j=0;j<map[0];j++) {
+      switch(map[i*map[1]+j+2]) {
+      case -1:
+        cube(j*16+8-(map[1]*8),-4500.5,i*16+8-(map[0]*8),16,9001,16);
+        break;
+      default:
+        cube(j*16+8-(map[1]*8),-map[i*map[0]+j+2]/2,i*16+8-(map[0]*8),16,map[i*map[0]+j+2],16);
       }
     }
   }
