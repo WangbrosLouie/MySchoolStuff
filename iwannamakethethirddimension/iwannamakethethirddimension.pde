@@ -39,7 +39,6 @@ void setup() {
 void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mouseY;camDir=new PVector();}//gotta find a workaround to this one fast
   perspective(PI/2.0,(float)width/height,5.0,10000.0); //FOV=???
   process();
-  println(camPos);
   camera(camPos.x,camPos.y,camPos.z,camOri.x,camOri.y,camOri.z,0,1,0);
   background(200);
   //cube(-10,10,-10,10);//good ol white cube
@@ -162,18 +161,24 @@ void process() {
     camDir.x += (mouseX-ceil(width/2))*s;
     camDir.y += (mouseY-ceil(height/2))*s;
   }
-  camDir.y = constrain(camDir.y,-89.99,89.99); //Restrict Camera's Y Direction
+  camDir.y = constrain(camDir.y,-89.9,89.9); //Restrict Camera's Y Direction
   PVector Pos = new PVector(); //ORIENTATION VECTOR
   Pos = XZY(PVector.fromAngle(radians(camDir.x)).normalize());
-  PVector Y = PVector.fromAngle(radians(camDir.y)).normalize();
-  Pos.setMag(Y.x);
-  Pos.y = Y.y;
   Pos.normalize();
   if(Keys[kW]) { //MOVE FORWARD
-    camPos.add(mousePressed?Pos.copy().mult(s):XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+    //camPos.add(mousePressed?Pos.copy().mult(s):XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+    for(float i=s;i>0;i--) {
+      PVector newPos = PVector.add(camPos,Pos.copy().mult(3));
+      //println(heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2],heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]);
+      println(floor(heightMap[1]/2+(camPos.z/16)),floor(heightMap[0]/2+(camPos.x/16)),floor(heightMap[1]/2+(newPos.z/16)),floor(heightMap[0]/2+(newPos.x/16)),heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2],heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]);
+      if(heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2]>=heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]-16) {
+        camPos.add(XZY(PVector.fromAngle(radians(camDir.x))));
+      } else i = 0;
+    }
   }
   if(Keys[kS]) { //MOVE BACK
-    camPos.sub(mousePressed?Pos.copy().mult(s):XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+    //camPos.sub(mousePressed?Pos.copy().mult(s):XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
+    camPos.sub(XZY(PVector.fromAngle(radians(camDir.x))));
   }
   if(Keys[kA]) { //MOVE LEFT
     camPos.add(XZY(PVector.fromAngle(radians(camDir.x-90))).mult(s));
@@ -187,6 +192,9 @@ void process() {
   if(Keys[kQ]) { //MOVE DOWN
     camPos.sub(mousePressed?XZY(PVector.fromAngle(radians(camDir.x)).normalize()).setMag(PVector.fromAngle(radians(camDir.y-90)).normalize().x).add(new PVector(0,PVector.fromAngle(radians(camDir.y-90)).normalize().y,0)).mult(s):new PVector(0,-1,0).mult(s));
   }
+  PVector Y = PVector.fromAngle(radians(camDir.y)).normalize();
+  Pos.setMag(Y.x);
+  Pos.y = Y.y;
   camOri = PVector.add(camPos,Pos); //CAMERA ORIENTATION
   //this took me so meowin long ToT
 }
@@ -410,4 +418,8 @@ outlook every time it reinstalls to use the old mail. even better, i can
 just disable the windows store because it is rather useless and cut outlook
 from being downloaded in the first place. i even prefer outlook classic to
 the new outlook. theres a reason why i nicknamed the new outlook $#!+look.
+
+jan25 i have finally rid myself of that stupid new outlook. i just gotta
+downgrade mail and disable autoupdates of store apps and voila i get the
+better mail client.
 */
