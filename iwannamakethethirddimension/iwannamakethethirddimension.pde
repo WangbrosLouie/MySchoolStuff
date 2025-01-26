@@ -395,31 +395,3 @@ final int kW = 87;
 final int kX = 88;
 final int kY = 89;
 final int kZ = 90;
-
-/*temporary rant segment
-jan21 i have forgotten to push my changes from another computer again. wee.
-i have finally figured out why long lines distort in p3d. the renderer uses
-a very thin tri to draw the line, but when the length is long enough, the
-length to thickness ratio causes the line to be thick. in an extreme case,
-it can fill the entire screen. so i guess the way to do it now is to avoid
-using extremely long lines. i am gonna work on tophat turmoil a lot more
-starting february so im probably gonna abandon processing or something. but
-i will work on that genesis game until march. so at least thats something.
-
-at this point i should just make a blog on my github pages. if i formatted
-all of my rants to be 75 characters wide like this one id probably have
-like 1000 lines or something like that. thats 75000 characters for an
-estimated 12500 words with 1 word = 5 letters + a space. but thats only my
-guess. i hate the new outlook. it replaces my favourite mail app windows
-mail just because microsoft wasnt making enough money having an ad free and
-extremely quick simple mail app as an alternative to the ad ridden slow web
-browser of an app. good thing the only thing i have to do is to uninstall
-outlook every time it reinstalls to use the old mail. even better, i can
-just disable the windows store because it is rather useless and cut outlook
-from being downloaded in the first place. i even prefer outlook classic to
-the new outlook. theres a reason why i nicknamed the new outlook $#!+look.
-
-jan25 i have finally rid myself of that stupid new outlook. i just gotta
-downgrade mail and disable autoupdates of store apps and voila i get the
-better mail client.
-*/
