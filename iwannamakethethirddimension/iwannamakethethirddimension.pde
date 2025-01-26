@@ -90,7 +90,7 @@ int[] loadLevel(PImage img) {
     for(int j=0;j<img.width;j++) {
       switch(img.pixels[i*img.width+j]) {
       case -1237980:
-        map[i*img.width+j+2] = -1;
+        map[i*img.width+j+2] = 9001;
         break;
       case -32985:
         map[i*img.width+j+2] = 112;
@@ -164,34 +164,51 @@ void process() {
   camDir.y = constrain(camDir.y,-89.9,89.9); //Restrict Camera's Y Direction
   PVector Pos = new PVector(); //ORIENTATION VECTOR
   Pos = XZY(PVector.fromAngle(radians(camDir.x)).normalize());
-  Pos.normalize();
+  //Pos.normalize();
   if(Keys[kW]) { //MOVE FORWARD
     //camPos.add(mousePressed?Pos.copy().mult(s):XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
     for(float i=s;i>0;i--) {
       PVector newPos = PVector.add(camPos,Pos.copy().mult(3));
-      //println(heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2],heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]);
-      println(floor(heightMap[1]/2+(camPos.z/16)),floor(heightMap[0]/2+(camPos.x/16)),floor(heightMap[1]/2+(newPos.z/16)),floor(heightMap[0]/2+(newPos.x/16)),heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2],heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]);
-      if(heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2]>=heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]-16) {
+      //println(floor(heightMap[1]/2+(camPos.z/16)),floor(heightMap[0]/2+(camPos.x/16)),floor(heightMap[1]/2+(newPos.z/16)),floor(heightMap[0]/2+(newPos.x/16)),heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2],heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]);
+      if(mousePressed|heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2]>=heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]-16) {
         camPos.add(XZY(PVector.fromAngle(radians(camDir.x))));
       } else i = 0;
     }
   }
   if(Keys[kS]) { //MOVE BACK
     //camPos.sub(mousePressed?Pos.copy().mult(s):XZY(PVector.fromAngle(radians(camDir.x))).mult(s));
-    camPos.sub(XZY(PVector.fromAngle(radians(camDir.x))));
+    for(float i=s;i>0;i--) {
+      PVector newPos = PVector.sub(camPos,Pos.copy().mult(3));
+      if(mousePressed|heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2]>=heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]-16) {
+        camPos.sub(XZY(PVector.fromAngle(radians(camDir.x))));
+      } else i = 0;
+    }
   }
   if(Keys[kA]) { //MOVE LEFT
-    camPos.add(XZY(PVector.fromAngle(radians(camDir.x-90))).mult(s));
+    //camPos.add(XZY(PVector.fromAngle(radians(camDir.x-90))).mult(s));
+    for(float i=s;i>0;i--) {
+      PVector newPos = PVector.sub(camPos,nZYX(Pos).mult(3));
+      if(mousePressed|heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2]>=heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]-16) {
+        camPos.add(XZY(PVector.fromAngle(radians(camDir.x-90))).mult(s));
+      } else i = 0;
+    }
   }
   if(Keys[kD]) { //MOVE RIGHT
-    camPos.add(XZY(PVector.fromAngle(radians(camDir.x+90))).mult(s));
+    //camPos.add(XZY(PVector.fromAngle(radians(camDir.x+90))).mult(s));
+    for(float i=s;i>0;i--) {
+      PVector newPos = PVector.add(camPos,nZYX(Pos).mult(3));
+      if(mousePressed|heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2]>=heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]-16) {
+        camPos.add(XZY(PVector.fromAngle(radians(camDir.x+90))).mult(s));
+      } else i = 0;
+    }
   }
-  if(Keys[kE]) { //MOVE UP
-    camPos.add(mousePressed?XZY(PVector.fromAngle(radians(camDir.x)).normalize()).setMag(PVector.fromAngle(radians(camDir.y-90)).normalize().x).add(new PVector(0,PVector.fromAngle(radians(camDir.y-90)).normalize().y,0)).mult(s):new PVector(0,-1,0).mult(s));
-  }
-  if(Keys[kQ]) { //MOVE DOWN
-    camPos.sub(mousePressed?XZY(PVector.fromAngle(radians(camDir.x)).normalize()).setMag(PVector.fromAngle(radians(camDir.y-90)).normalize().x).add(new PVector(0,PVector.fromAngle(radians(camDir.y-90)).normalize().y,0)).mult(s):new PVector(0,-1,0).mult(s));
-  }
+  //if(Keys[kE]) { //MOVE UP
+  //  camPos.add(mousePressed?XZY(PVector.fromAngle(radians(camDir.x)).normalize()).setMag(PVector.fromAngle(radians(camDir.y-90)).normalize().x).add(new PVector(0,PVector.fromAngle(radians(camDir.y-90)).normalize().y,0)).mult(s):new PVector(0,-1,0).mult(s));
+  //}
+  //if(Keys[kQ]) { //MOVE DOWN
+  //  camPos.sub(mousePressed?XZY(PVector.fromAngle(radians(camDir.x)).normalize()).setMag(PVector.fromAngle(radians(camDir.y-90)).normalize().x).add(new PVector(0,PVector.fromAngle(radians(camDir.y-90)).normalize().y,0)).mult(s):new PVector(0,-1,0).mult(s));
+  //}
+  camPos.y = -heightMap[floor(heightMap[1]/2+(camPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(camPos.x/16))+2]-32;
   PVector Y = PVector.fromAngle(radians(camDir.y)).normalize();
   Pos.setMag(Y.x);
   Pos.y = Y.y;
@@ -343,6 +360,10 @@ PVector ZXY(PVector v) {
 
 PVector ZYX(PVector v) {
   return new PVector(v.z,v.y,v.x);
+}
+
+PVector nZYX(PVector v) {
+  return new PVector(-v.z,v.y,v.x);
 }
 
 void keyPressed() {
