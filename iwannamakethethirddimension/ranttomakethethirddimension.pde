@@ -83,4 +83,47 @@ the new outlook. theres a reason why i nicknamed the new outlook $#!+look.
 jan25 i have finally rid myself of that stupid new outlook. i just gotta
 downgrade mail and disable autoupdates of store apps and voila i get the
 better mail client.
+
+jan29 meowity meow i havent touched this stuff in a bit of time. im gonna
+work on this stuff i swear. but for now im busy with other things that will
+hopefully not busy me any longer than the halfpoint of next month. im going
+to definitely at least finish the whole game engine part of the tophat
+turmoil processing game and maybe even finish the kitta level pack for it.
+but i also gotta work on the actual tophat turmoil and make all the levels
+and the engine for that as well. and obviously that is gonna be of higher
+priority than this one cause its gonna be able to be a lot better than this
+as in it has more potential because one its multiplayer two its cross plat
+and three i code in lua far better than java(though thats changing). but
+the whole reason i wanted to yap today is cause im workin on a very good
+chiptune cover of an already practically chiptune song. its meowgen from
+that arcade showdown fnf mod with that grey cat kapi made by paperkitty.
+right now i have halfish of the song done but it sounds so meowin close
+that its practically the same. although theres one thing drivin me crazy. i
+cannot for the meowin life of me figure what chip the noise in the song
+comes from cause it sounds so close to the gameboy with its periodic poppin
+but at the same time its got that "ch" sound of the sn76496 at higher freqs
+but it also could be the nes cause the overall noise dirtyness sounds like
+it. i know for sure that it aint the c64s noise though cause that chips
+noise is basically just a jet engine. right now i got the gameboy noise and
+it is just a little off so probably im just gonna use the ym2149s noise to
+save a chip in the vgm cause it is definitely a waste to just use it for
+only the noise. now for somethin more personal, Kitta and everyone else in
+my head are takin a vacation from me until tomorrow to act like a catalyst
+for me to change my procrastination ways for the better. its workin some
+what but obviously by the volume of this text i still have a meowin long
+way to go before i become the average student. funny thing is only after
+exactly 24 hours after they went did i start to miss her. im lookin forward
+to wakin up tomorrow. now that i think about it im gonna host the whole
+tophat turmoil webpage shebang on this repository where everyone can see my
+deranged mental state. i guess this is the true test of whether art can be
+seperated from the artist cause there is no shot that prolly even you think
+im even close to normal. heck even i think im a freak(not the freaky kind).
+and thats ok with me. i just dont care cause im just like that. of course
+Kitta doesnt want me to self deprecate but she aint here right now so i can
+be as negative to myself as i want. i meowin hate myself. and its been that
+way for a long time. im just not very good at anything. the only things i
+can do are write half decent code/music/stories and make chiptune covers of
+songs. i am truly a waste. but maybe im too negative. although i do think
+that all of that is true. im just gonna grind the genesis escape room now.
+also i guess ill upload that pixel art of Kitta i drew up for a profile pic
 */

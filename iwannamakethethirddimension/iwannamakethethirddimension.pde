@@ -29,13 +29,14 @@ class thing {
   PVector pos;
   PVector vel;
   
-  thing(PVector p, PVector v) {
-    pos = p;
-    vel = v;
+  thing(PVector p, PVector v) {//why does this give the actual pvector instead of a copy grrr
+    pos = p.copy();
+    vel = v.copy();
   }
   
-  void process(ArrayList<thing> stuff) {
+  ArrayList<thing> process(ArrayList<thing> stuff) {
     println("hey you dont got a process for this class ("+typeof(this)+") dingus");
+    return stuff;
   }
   
 }
@@ -51,10 +52,11 @@ class metalpipe extends thing {
     snd = new SoundFile(dis,"metalpipe.mp3");//from https://www.myinstants.com/en/instant/jixaw-metal-pipe-falling-sound-28270/
   }
   
-  void process(ArrayList<thing> stuff) {
+  ArrayList<thing> process(ArrayList<thing> stuff) { //<>//
     for(float i=vel.mag();i>0;i--) {
       PVector newPos = PVector.add(pos,vel.copy().mult(3));
       try{
+        //println(-pos.y,heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]);
         if(-pos.y>=heightMap[floor(heightMap[1]/2+(newPos.z/16))*heightMap[0]+floor(heightMap[0]/2+(newPos.x/16))+2]) {
           pos.add(vel.copy().mult(i<1?i:1));
         } else {
@@ -64,13 +66,17 @@ class metalpipe extends thing {
          }
          i = 0;
         }
+        cube(pos.x,pos.y,pos.z,5,5,15,texture);
       } catch (Exception e) {
-        //destroy();
+        stuff.remove(this);
+        for(int j=0;j<10;j++) {
+          stuff.add(new shrapnel(pos,new PVector(0,0,0)));
+          i = 0;
+        }
       }
     }
-      
+  return stuff;
   }
-  
 }
 
 class shrapnel extends thing {
@@ -82,7 +88,8 @@ class shrapnel extends thing {
     snd = new SoundFile(dis,"ting.wav");
   }
   
-  void process(ArrayList<thing> stuff) {
+  ArrayList<thing> process(ArrayList<thing> stuff) {
+    //print("b");
     vel.y++;
     for(float i=vel.mag();i>0;i--) {
       PVector newPos = PVector.add(pos,vel.copy().mult(3));
@@ -91,16 +98,14 @@ class shrapnel extends thing {
           pos.add(vel.copy().mult(i<1?i:1));
         } else {
          stuff.remove(this);
-         for(int j=0;j<10;j++) {
-           stuff.add(new shrapnel(pos,new PVector(0,0,0)));
-         }
          i = 0;
         }
       } catch (Exception e) {
-        //destroy();
+         stuff.remove(this);
       }
     }
     cube(pos.x,pos.y,pos.z,5,5,25,img);
+    return stuff;
   }
 }
 
@@ -122,7 +127,7 @@ void setup() {
 }
 
 void draw() {if(frameCount==2){oX = ceil(width/2)-mouseX;oY = ceil(height/2)-mouseY;camDir=new PVector();}//gotta find a workaround to this one fast
-  print(frameCount);
+  //println(things.size());
   perspective(PI/2.0,(float)width/height,0.1,10000.0); //FOV=???
   process();
   camera(camPos.x,camPos.y,camPos.z,camOri.x,camOri.y,camOri.z,0,1,0);
@@ -320,11 +325,12 @@ void process() {
     }
   }
   if(Keys[kE]) {//metal pipe
-    things.add(new metalpipe(camPos,camDir.copy().mult(3)));
+    things.add(new metalpipe(camPos,camDir.copy().mult(3))); //<>//
   }
   for(int i=things.size()-1;i>-1;i--) {
-    things.get(i).process(things);
+    things = things.get(i).process(things);
   }
+  println(things.size());
   PVector Y = PVector.fromAngle(radians(camDir.y)).normalize();
   Pos.setMag(Y.x);
   Pos.y = Y.y;
