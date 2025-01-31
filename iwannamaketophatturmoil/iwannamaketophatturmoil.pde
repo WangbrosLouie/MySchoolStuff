@@ -797,11 +797,12 @@ class Dialog {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void settings() {
   size(640,480,P2D);//holy nya why havent i used p2d before
-  Hitbox = createGraphics(640,480,P2D);
 }
 
 void setup() {
   //surface.setResizable(true);
+  Hitbox = createGraphics(640,480,P2D);
+  Hitbox.noStroke();
   lucid = createFont("Lucida Console",14,false);
   camDir = false;
   thread("loadLevelFile");
@@ -1583,6 +1584,17 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         chunks[chunk].setPosition(128*i-1,128*j-1);
         chunks[chunk].setStatic(true);
         break;
+      case 0x15:
+        xPos = 64;
+        yPos = 64;
+        Sensor img = new Sensor(128,128,xPos,yPos);
+        chunks[chunk].addBody(img);
+        chunks[chunk].setPosition(128*i,128*j);
+        chunks[chunk].setStatic(true);
+        world.add(chunks[chunk]);
+        //do more checkpoint garbage
+        ret = (PVector[])append(ret,new PVector(2,128*i+64,128*j+66));
+        break;
       default: //air for unimplemented chunks
         xPos = 64;
         yPos = 64;
@@ -1806,7 +1818,7 @@ void mouseReleased() {
   }
 }
 
-void process(int[] B, PGraphics H) {
+void processButtons(int[] B, PGraphics H) {
   H.beginDraw();
   H.background(0);
   for(int i=0;i<B.length;i++)buttonList[buttonDraw[i]].drawHit(buttonDraw[i],H);
