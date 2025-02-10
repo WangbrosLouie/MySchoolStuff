@@ -805,6 +805,7 @@ void setup() {
   Hitbox.noStroke();
   lucid = createFont("Lucida Console",14,false);
   camDir = false;
+  noLoop();
   thread("loadLevelFile");
   //convert(loadBytes("map02.lvl"),3,"map02ext.lvl");
   //draw thy loading screen
@@ -962,6 +963,7 @@ void makeLevel() {
     //while(drawing) {
     //  print("");
     //}
+    loop();
     loading = true;
     mapName = "man your storage device is slow";
     //mapData = loadBytes(maps[mapNum%maps.length]);
