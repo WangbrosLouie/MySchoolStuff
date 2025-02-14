@@ -6,6 +6,7 @@
 ## What is it?
 This repository contains all of the [stuff](#the-stuff) that I make for my programming course.  
 It also has [music](#the-music), some made by me and some made by other people.
+Sometime in the future it will also host the Tophat Turmoil website if that ever exists.
 ## When is it?
 This repository was created on the 5th of September of 2024 AD. Creation dates for individual applications can be found in their source file (prefixed by `iwanna`) in the header block.
 ## Why is it?
@@ -48,14 +49,14 @@ Note that many of these are vgm's so get a vgm player if you don't have one alre
 | Azure Temple.mid | Shane Strife, Arrow, Monster Iestyn | Azure Temple Zone from Sonic Robo Blast's MIDI version |
 | BPSOCCER.VGM/VGZ | Yoplar | Blast Processing Soccer's Title Theme |
 | Captain Tsubasa III Half-Time.vgm | Shake Keijin cv. Yoplar | Game Boy cover of Captain Tsubasa III The Kaiser's Challenge's Halftime music |
-| Dragon Ball Z Super Butouden 3 Character Select.vgm | Kenji Yamamoto cv. Yoplar | Character Select theme from Super Butouden 3 |
-| Dragon Ball Z Super Butouden Story Summary.vgm | Kenji Yamamoto cv. Yoplar | Story Summary/Character Select theme from Super Butouden |
-| grent_looped.vgm/vgz | Unknown cv. Yoplar | The soccer theme from Drive Ahead! Sports |
-| gs1kaitei.vgm/gbs | Masakazu Sugimori cv. Yoplar | The original Gyakuten Saiban's trial theme |
-| gs1tsuikyuu.vgm | Masakazu Sugimori cv. Yoplar | The original Gyakuten Saiban's pursuit theme |
-| gs2tsuikyuu.vgm/gbs | Akemi Kimura cv. Yoplar | The original Gyakuten Saiban II's pursuit theme |
-| gsk2ichiryuuketsubetsu.vgm | Noriyuki Iwadare cv. Yoplar | A portion of Sebastian Debeste/Eustice Victor's second theme from AAI2 |
-| IDAINARU.VGM/VGZ | Kenji Yamamoto cv. Yoplar | The backing track to the narrator in Dragon Ball The Legend |
+| Dragon Ball Z Super Butouden 3 Character Select.vgm | Kenji Yamamoto cv. Yoplar | NES cover of the Character Select theme from Super Butouden 3 |
+| Dragon Ball Z Super Butouden Story Summary.vgm | Kenji Yamamoto cv. Yoplar | Game Boy cover of the Story Summary/Character Select theme from Super Butouden |
+| grent_looped.vgm/vgz | Unknown cv. Yoplar | Genesis cover of the soccer theme from Drive Ahead! Sports |
+| gs1kaitei.vgm/gbs | Masakazu Sugimori cv. Yoplar | Game Boy cover of the original Gyakuten Saiban's trial theme |
+| gs1tsuikyuu.vgm | Masakazu Sugimori cv. Yoplar | Game Boy cover of the original Gyakuten Saiban's pursuit theme |
+| gs2tsuikyuu.vgm/gbs | Akemi Kimura cv. Yoplar | Game Boy cover of the original Gyakuten Saiban II's pursuit theme |
+| gsk2ichiryuuketsubetsu.vgm | Noriyuki Iwadare cv. Yoplar | Game Boy cover of a portion of Sebastian Debeste/Eustice Victor's second theme from AAI2 |
+| IDAINARU.VGM/VGZ | Kenji Yamamoto cv. Yoplar | PC Engine cover of the backing track to the narrator in Dragon Ball The Legend |
 | KANEKO1.VGM/VGZ | Yoplar | A Kitta Theme |
 | KANEKO2.VGM/VGZ | Yoplar | A Kitta Theme |
 | kittacatmeow.vgm/vgz/mid | Yoplar | Kitta's Theme OPLL+SN76496 Version |
@@ -64,15 +65,15 @@ Note that many of these are vgm's so get a vgm player if you don't have one alre
 | muahaha.vgm/mid | Yoplar | Evyle's Theme - Muahahaha! |
 | Pocket Adventure Metal Sonic Boss Accurate Edition.vgm | Masanori Hikichi cv. Yoplar | NeoGeo Pocket Cover of The Doomsday Zone from Sonic and Knuckles |
 | ponger.wav | Yoplar | A song made with the pong chip in furnace |
-| ravedancetune(_optimised).vgm | Tommy Tallarico cv. Yoplar | Rave Dancetune from Cool Spot on the SNES |
-| smashing_windshields.vgm/vgz | Leon Riskin cv. Yoplar | Smashing Windshields from FNAF Pizzeria Simulator |
-| SPINBALL.VGM/VGZ | Barry Blum cv. Yoplar | Toxic Caves from Sonic Spinball on the Sega Genesis |
-| STDFIGHT.VGM/VGZ | Noboru Yamane cv. Yoplar | Stand Fighter from JoJo no Kimyou na Bouken on the SNES |
-| TAKE YOUR TIME - KEY AFTER KEY.vgm/vgz | Key After Key cv. Yoplar | Take Your Time from Phighting! |
+| ravedancetune(_optimised).vgm | Tommy Tallarico cv. Yoplar | Game Boy cover of Rave Dancetune from Cool Spot on the SNES |
+| smashing_windshields.vgm/vgz | Leon Riskin cv. Yoplar | Atari Lynx cover of Smashing Windshields from FNAF Pizzeria Simulator |
+| SPINBALL.VGM/VGZ | Barry Blum cv. Yoplar | SN76496 cover of Toxic Caves from Sonic Spinball on the Sega Genesis |
+| STDFIGHT.VGM/VGZ | Noboru Yamane cv. Yoplar | Genesis cover of Stand Fighter from JoJo no Kimyou na Bouken on the SNES |
+| TAKE YOUR TIME - KEY AFTER KEY.vgm/vgz | Key After Key cv. Yoplar | Genesis cover of Take Your Time from Phighting! |
 | Too Much Stuff 'n' Stuff early version.vgm/vgz | Yoplar | Store Theme for Tophat Turmoil |
 | untitled.opus | Jun Senoue & Tee Lopes | Early version of Bridge Island Zone Act 1's music from Sonic Superstars |
+| wakuwaku.vgm/vgz | Masato Araikawa cv. Yoplar | NES cover of Arina's Theme from Waku Waku 7 |
 | wheezing(_optimised).vgm/vgz | Weezer cv. Yoplar | Buddy Holly but Flipside from Phighting sings it |
-| XBLOX.VGM | Unknown cv. Yoplar | Title theme from Roblox on the Xbox One |
-| Yuu Yuu Hakusho Makai Saikyou Retsuden Cutscene Theme.vgz | Tose Sound Team cv. Yoplar | Cutscene Theme/Character Select theme from Yu Yu Hakusho FINAL Makyou Saikyou Retsuden |
+| XBLOX.VGM | Unknown cv. Yoplar | SN76496 cover of the title theme from Roblox on the Xbox One |
+| Yuu Yuu Hakusho Makai Saikyou Retsuden Cutscene Theme.vgz | Tose Sound Team cv. Yoplar | NES cover of the Cutscene Theme/Character Select theme from Yu Yu Hakusho FINAL Makyou Saikyou Retsuden |
 | يا طارشي.mid | Eidha Al Menhali | Ya Tareshy by Eidha Al Menhali |
-im too lazy to find the rest of the authors right now
