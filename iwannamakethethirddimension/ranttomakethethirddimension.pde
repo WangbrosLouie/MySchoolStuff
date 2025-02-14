@@ -126,4 +126,31 @@ can do are write half decent code/music/stories and make chiptune covers of
 songs. i am truly a waste. but maybe im too negative. although i do think
 that all of that is true. im just gonna grind the genesis escape room now.
 also i guess ill upload that pixel art of Kitta i drew up for a profile pic
+
+feb2 as i said on that genesis escape room commit message ima yap about the
+stupid chromeos today. first off why only have 5 gb for user files. i get
+that its supposed to be a netbook with everything online but at that point
+why bother havin storage at all. i guess im just not the target audience
+for my specific chromebook but whatever. i guess the cool thing about
+chromeos is that you can run android apps and linux apps all with a mouse
+and keyboard. i used to play progressbar95 all the time on my chromebook
+which i dont do nowadays cause its extremely hard. now i got q4os on it and
+i get 8 whole gigs of storage space which i quickly filled up with a bunch
+of stuff like wine foobar2000 firefox furnace and freedoom. i am actually
+surprised at how well it can run freedoom on the latest gzdoom since my mac
+struggles to play doom sometimes. its probably an os issue though cause
+q4os is probably faster than mac osx. just a hunch. of course since the ram
+is only 2gb large i cant run things like firefox and gimp at the same time
+or the entire system halts and i cant do anything except force it off since
+the chromebook does not have the sysrq key needed to do the reisub thing
+but if i use kconqueror or links2 i can probably have a different image
+editor open at the same time. another quite cool thing is that it can run
+blastem at 50fps in ntsc mode. thats only 87% of full speed but with the
+accuracy of blastem thats impressive to me. sadly i wont be able to develop
+the roblox tophat turmoil on it due to no roblox studio and studio takin up
+around 1.2gb of ram anyways but i am able to work on the processing one
+since it can run processing 4. i cant even imagine trying to do anything in
+chromeos on that thing anymore. it cant even boot the desktop in under 5
+minutes and i cant use any of the apps either cause the system is too slow
+or something. i just hate that i cant upgrade it.
 */
