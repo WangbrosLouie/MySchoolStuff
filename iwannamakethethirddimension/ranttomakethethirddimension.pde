@@ -153,4 +153,37 @@ since it can run processing 4. i cant even imagine trying to do anything in
 chromeos on that thing anymore. it cant even boot the desktop in under 5
 minutes and i cant use any of the apps either cause the system is too slow
 or something. i just hate that i cant upgrade it.
+
+feb 16 meowf its been a while since the last little ranty bit hasnt it.
+there is so much school stuff(repo name mentioned)happening happenin right
+now that i have been actually studying for once. ive done so little yapping
+that ive started puttin the g back in ing again. right now im putting an
+unprecedented effort to learn which musical notes are which sounds so i
+dont have to blindly guess which key to press when im makin music in
+furnace. perhaps this is spurred by my several day listening streak of
+arinas theme from waku waku 7(waku waku ha tomaranai)or maybe i just want
+to learn how to actually make music. by the way my love for the song has
+nothin to do with what arina looks like. im just obsessed with the anime
+opening styleness of it for some reason. i will get back to programmin
+stuff this week hopefully cause ill have finished a bunch of stuff and can
+relax by clackin some keys. and now for the stuff in my head section, kitta
+has been really startin to be more seperate from me, as in more and more
+independent. thats really nice cause i dont want to think of her for her to
+be there i just want her to be there. methinks im gonna open the tophat
+turmoil playtest in its extremely barren state sometime this week if i
+polish it up enough but its only gonna be(functional)for pc cause i am NOT
+codin in a whole bunch of cross plat code in this stage of development. as
+in im too lazy to read how to make buttons for phone and buttons for
+controller. mewonders if me should make this into a blog or somethin cause
+this pretty much is just a blog. if i do im gonna make zero change to the
+layout and stuff cause im super lazy and i dont wanna code in a whole blog
+thing to my webpage im just gonna spit the rawtext with a bit of headers.
+i usually write more stuff when im bored so heres more stuff. dios dervish
+from the jojoba p3 ova is really goofy for what its used in. the whole
+intro feels more dark than the quite goofy soundin song. but i dont care.
+its funnier with the goofy song contrastin the whole guy beheading a naked
+woman to become a vampire thing. i wonder why im even writin all this stuff
+and git pushin it to the internet for the two people that have knowledge of
+my git repo to see. maybe i wanna leave a mark or perhaps make it known
+that im not really mentally all there or somethin. i dont meowin know.
 */
