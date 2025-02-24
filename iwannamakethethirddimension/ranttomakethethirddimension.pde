@@ -186,4 +186,13 @@ woman to become a vampire thing. i wonder why im even writin all this stuff
 and git pushin it to the internet for the two people that have knowledge of
 my git repo to see. maybe i wanna leave a mark or perhaps make it known
 that im not really mentally all there or somethin. i dont meowin know.
+
+feb23 yay it time for dat weekly progress update. i have not gotten a lick
+of anything done yet due to my procrastination and lots of school work so i
+am not gonna be workin on this stuff until the school stuff(not this school
+stuff)gets done and over finished 100% completion true ending. i am gonna
+work on the stupid roblox game now though cause i really gotta get a move
+on on that i have done nothing for that too also im not gonna work on my
+website even though i kinda wanna make a funny web page right meowin now
+alright thats about it seeya
 */
