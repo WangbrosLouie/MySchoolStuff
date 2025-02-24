@@ -195,4 +195,16 @@ work on the stupid roblox game now though cause i really gotta get a move
 on on that i have done nothing for that too also im not gonna work on my
 website even though i kinda wanna make a funny web page right meowin now
 alright thats about it seeya
+
+and heyo im back. i dont even know why im back just that i wanna write
+anything. i forgot to mention earlier that im gonna be finally opening the
+game for testing although testing is used broader than the sun here. i have
+started makin a little testing area instead of tryna make the whole snow
+days 2024 thing cause there is no way in heck im gonna finish it before the
+springtimes come.
+
+feb24(technically) my code is currently super super messy but then again it
+is quite servicable if you can think like a code parser which i can. there
+are so many conventions broken that i think i just made an example of how
+not to code well. anyways i dont care bye.
 */
