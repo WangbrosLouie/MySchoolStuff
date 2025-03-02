@@ -240,6 +240,7 @@ Events (for animations and sound)
 Here are the various tricks that I found that are useful.
 Byte[](file) to String: Make a new String with the array as the parameter.
 FWorld.clear(): Just make a new FWorld.
+Find the will to make this game: Work on something much bigger.
 
     /-changelog-/
 Wowza, I'm finally tracking my progress after months of abusing Git's

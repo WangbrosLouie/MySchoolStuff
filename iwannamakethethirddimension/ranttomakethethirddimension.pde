@@ -207,4 +207,67 @@ feb24(technically) my code is currently super super messy but then again it
 is quite servicable if you can think like a code parser which i can. there
 are so many conventions broken that i think i just made an example of how
 not to code well. anyways i dont care bye.
+
+feb28 im gonna start workin on the tophat turmoil processing when im bored
+now. the roblox version is actually comin quite nicely. i have rewrote
+almost all of the code and startin to actually get somewhere. hooray for me
+anyways i dont know how much im gonna yap as usual but ill still do it.
+anythin to kill time or whatever. its real nice bein smart cause i done
+need an mp3 player for music. i can just hear the track a couple of times
+and bam i can simply play it back in my head. my wma player is lookin at
+this and is now very confused as to why im still usin it. i have been
+hearin "WANPAKU" from "Kono Yo no Hate de Koi wo Utau Shoujo YU-NO" on the
+pc 9801 and i cannot stop cause i love the track so much. its like when i
+was obsessed with arinas theme from waku waku 7 a few weeks ago. as in like
+exactly the same cause im also makin a nes cover of this one now. obviously
+its not gonna have any vocals cause from what i can tell this one does not
+have vocals unless its like an arranged song from the anime or somethin
+like that so no stupid crushed vocals that are barely audible. i was likin
+the gameplay theme from janou touryuumon on the genesis 2 days ago cause
+that track is so relaxing but wanpaku is just on another meowin level its
+crazy. and now i dont have to use my wireless headphones to listen to music
+anymore cause i resuscitated my old pair of apple earbuds with a very janky
+combination of a samsung headphone extender/handsfree thingamabob from the
+2000s and a headphone/microphone splitter cause my motherboard's line in is
+just too good that it has support for a center channel which somehow makes
+the audio from the samsung blob downmixed to mono unless i hold down the
+button on it since it has 4 bars instead of the general stereo out 3 bars.
+the audio quality is impeccable and is leagues better than my older apple
+buds that i think came with my iphone 4s that doesnt fit properly into my
+ear. the resuscitated one is from an iphone 6s i think. the reason why i
+say resuscitated is cause i used to have the headphones plugged directly
+in the front of my pc which is stored on the floor and in a very easily
+movable place so when i moved my pc to open the side panel i snapped the
+top bar off. now that i think about it i can just use the headphones
+without the top bar maybe cause i dont use the mic on it but i dont know if
+it will actually work. and also i used a tremendous amount of force shovin
+the plug into the samsung yabbadabbadoo and i dont wanna risk not bein able
+to do it again. but the nice thing is that i get a mono feedback input from
+the headphones cause somethins probably shortin in the plug cause its
+damaged. that means i can just capture the output as an input without doin
+anythin extra. reminds me of the time that i used to record songs onto my
+wma player with an aux cable instead of transfering the songs onto it with
+the usb plug that i didnt know existed. i love the ws-100. it is nice and
+small and has nice side buttons and probably inspired rhythmgunner's tape
+player. and that leads me right back to tophat turmoil. also my drawin tabs
+finally workin right cause of a firmware flash. i can draw as small of a
+dot as i want instead of bein locked to a minumum of like 5 pixels per
+stroke. im also startin to learn korean now cause why not. i might as well
+learn all the east asian languages. maybe even historical languages. but
+windows is really infuriating when it comes to languages right now cause i
+literally had to leave my pc downloading the handwriting and basic typing
+overnight instead of leaving it on idle like i usually do. and i could
+already type korean without the basic typing somehow so what does the typin
+even do??? i dont even know more than 7 words in korean so im just gonna
+type somethin in english but with korean characters. again sorry non korean
+fonters you cant read this stuff without copyin it out to googtrans or smth
+아이 라잌 한굴(코리안)
+which means i like hangul(korean). i am gonna go insane with how multi
+lingual im gonna get. i know there are many people who can speak more than
+6 languages but i dont care its too much for me. and i dont care that its
+too much for me. if i had friends i probably would not learn so many
+languages cause it would probably get annoying for them if i started talkin
+in japanese then french or somethin like that. or maybe it would be funny.
+i dont know cause i dont have them. i wonder when im gonna start programmin
+again. i guess i dont have to wonder anymore cause im gon start again now.
 */
