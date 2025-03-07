@@ -270,4 +270,16 @@ languages cause it would probably get annoying for them if i started talkin
 in japanese then french or somethin like that. or maybe it would be funny.
 i dont know cause i dont have them. i wonder when im gonna start programmin
 again. i guess i dont have to wonder anymore cause im gon start again now.
+
+mar 6 oh my meow i havent yapped in a long time. its been a whole week. i
+have started gettin obsessed with another piece of music again (this time
+the pokestar studios battle theme) and i was gonna completely arrange the
+mess exactly how its played in the 2sf BUT i have made the smart (for once)
+decision to stop myself from dedicating myself to arranging a single piece
+of music thats not even 40 seconds for an entire month just to make a bad
+genesis cover of it. id rather just eyeball it with my ears. eardrum it. i
+dont know. also im makin a low poly model of kitta in blender for no reason
+cause i wanna learn blender and i want a 3d kitta since its kinda hard to
+visualize her talkin to me when i dont got much reference. like i havent
+even really designed her much yet so ye.
 */
