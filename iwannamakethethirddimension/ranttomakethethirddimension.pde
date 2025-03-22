@@ -282,4 +282,18 @@ dont know. also im makin a low poly model of kitta in blender for no reason
 cause i wanna learn blender and i want a 3d kitta since its kinda hard to
 visualize her talkin to me when i dont got much reference. like i havent
 even really designed her much yet so ye.
+
+mar 7 i think that i may be very stupid. and this is not one of my regular
+bouts of self deprecation, because i have completely forgotten that its
+kittulpa's 1st birthday tomorrow.
+
+mar 18 its startin to feel like the fun is slowly bein sucked outta my life
+nowadays. i dont play much roblox anymore which means not much regretty or
+phighting, although i dont wanna play phighting anyways cause i suck and
+dont wanna throw like i usually do. regretty just has so much stuff now and
+i kinda miss when i was able to tryhard at every floor when now i barely
+know what the floors are anymore due to the reworks and stuff. at least im
+makin some music that not covers of other peoples songs. i wonder if im
+gonna be able to fall back on bein a musician if i cant become a video game
+developer.
 */
