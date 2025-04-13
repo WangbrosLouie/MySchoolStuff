@@ -2,6 +2,8 @@
 # *myschoolstuff*
 ###### -the github repository-
 ---
+note: this readme is never gonna get updated again probs cause i got github pages so click that link on the repository about section and be amazed by primitive html.
+---
 > # ***`The 5 W's (+H)`***
 ## What is it?
 This repository contains all of the [stuff](#the-stuff) that I make for my programming course.  
