@@ -2,7 +2,7 @@
 # *myschoolstuff*
 ###### -the github repository-
 ---
-note: this readme is never gonna get updated again probs cause i got github pages so click that link on the repository about section and be amazed by primitive html.
+note: this readme is probably never gonna get updated again cause i got github pages so click that link on the repository about section and be amazed by primitive html.
 ---
 > # ***`The 5 W's (+H)`***
 ## What is it?
