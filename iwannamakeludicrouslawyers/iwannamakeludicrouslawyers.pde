@@ -8,6 +8,7 @@ class Sprite {
   int y;
   PImage pic;
   int link;//just like the sega genesis's vdp
+  int count = 0; //frame counter
   
   Sprite(int X, int Y, PImage PIC, int LINK) {
     x = X;
@@ -53,4 +54,6 @@ every draw cycle the background will be drawn.
 linked sprite in the sprites list are also drawn.
 here the original i made
 https://scratch.mit.edu/projects/811317148/
+im gonna either use
+1. a thread for the main function so that
 */
