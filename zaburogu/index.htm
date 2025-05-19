@@ -1,11 +1,12 @@
-﻿ <!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html lang="en-CA">
 <head>
 <title>deh blogg</title>
 <link rel="icon" href="zaburogu.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 p {font-size:1em;}
-div {margin:2em 5%;padding:1em 2em;background-color:rgba(63,223,239,0.975);border:1px grey solid;border-radius:1em;}
+div {margin:2em 5%;padding:1em 2em;background-color:rgba(63,223,239,0.9);border:1px grey solid;border-radius:1em;}
 img {width:480px;display:flex;font-weight:bold;}
 nav {background-color:#7FDFFF;border-top:2px grey solid;border-bottom:2px grey solid;text-align:center;font-size:1.5em;padding:5px;}
 top {text-align:center;background-image:url("backing.png");height:4em;width:100%;display:block;}
@@ -14,14 +15,43 @@ body {background: url("pics/equals3.png") left top round fixed;background-size: 
 inline css because temporary
 </style>
 <script type="text/javascript">
-function dark() {
-let posts = document.getElementsByClassName("skin1");
-for (let i = 0;i < posts.length;i++) {
-posts[i].style.color = "red";
-posts[i].style.backgroundColor = "rgba(0,0,0,0.95)";
+function skin(skin) {
+let textcol1, backcol1, backimgbody, backimgbodyrepeat, backimgbodysize, textcolnav, backcolnav;
+switch(skin) {
+case 'kitta':
+textcol1 = "black";
+backcol1 = "rgba(63,223,239,0.9)";
+backimgbody = "url('pics/equals3.png')";
+backimgbodyrepeat = "round";
+backimgbodysize = "contain";
+backcolnav = "#7FDFFF";
+break;
+case 'darkitta':
+textcol1 = "red";
+backcol1 = "rgba(0,0,0,0.95)";
+backimgbody = "url('pics/equals-3.png')";
+backimgbodyrepeat = "round";
+backimgbodysize = "contain";
+backcolnav = "#3F777F";
+break;
+case 'kittasroom':
+textcol1 = "orange";
+backcol1 = "rgba(119,43,23,0.65)";
+backimgbody = "url('pics/kittasroom.png')";
+backimgbodyrepeat = "no-repeat";
+backimgbodysize = "100% 100%";
+backcolnav = "orange";
+break;
 }
-document.getElementsByTagName("body")[0].style.backgroundImage = "url(\"pics/equals-3.png\")";
-document.getElementsByTagName("nav")[0].style.backgroundColor = "#3F777F";
+let skin1 = document.getElementsByClassName("skin1");
+for (let i = 0;i < skin1.length;i++) {
+skin1[i].style.color = textcol1;
+skin1[i].style.backgroundColor = backcol1;
+}
+document.getElementsByTagName("body")[0].style.backgroundImage = backimgbody;
+document.getElementsByTagName("body")[0].style.backgroundRepeat = backimgbodyrepeat;
+document.getElementsByTagName("body")[0].style.backgroundSize = backimgbodysize;
+document.getElementsByTagName("nav")[0].style.backgroundColor = backcolnav;
 }
 </script>
 </head>
@@ -33,7 +63,12 @@ document.getElementsByTagName("nav")[0].style.backgroundColor = "#3F777F";
 <a href="../listeningmusics/index.htm">Music</a> |
 <a href="https://github.com/WangbrosLouie/MySchoolStuff">Repository</a>
 </nav>
-<button class="test" onclick="dark()">darkitta mode</button>
+<div class="skin1">
+<h1>Skins!</h1><hr>
+<button class="test" onclick="skin('kitta')">kitta mode</button>
+<button class="test" onclick="skin('darkitta')">darkitta mode</button>
+<button class="test" onclick="skin('kittasroom')">lounge mode</button>
+</div>
 <div class="skin1"><h4>21(AAAHHHH)st of March, 2025</h4>
 So, this is the blog that i was gonna make eventually. Cool, i was gettin bored of writin in that .pde file anyways cause it opens in processing by default and im too lazy to open it in notepad. who knows, maybe one day im gonna make some aspen or php or whatever those autogenerating html files are so that i can keep this home page nice and tidy. that would be cool and i would have to learn another programmin language to complement the ones that i know already (of which only java is the useful one) and i wont have to copy paste the formatting from an html file to make a new one in that style. anyways back to the yapping. i am not even close to finishing tophat turmoil (the roblox one, henceforth called bloxhat turmoil) because im lazy and i code slowly when im bored (which is always). im too busy tryna get my "beloved" c202s to run windows to go anyways. its already strugglin to run linux with its measly 16 gb of storage that rivals my iphone 4s and its lovely 2 gb of ram that is a whole 2x the size of my d260. at least the d260 is able to boot into windows xp and has 10 times the storage while i have to use an sd card that pops out with a slight bump on the chromebook to store more than just my repository on it. maybe i should just use freedos and remove all networking and mouse capabilities of it but be able to have a whoppin 14 gb of free space for dos things like windows 95 or doom or microsoft word version 6. but i would probably have to reflash the bios of the chromebook to enable legacy boot so bleh. im probably gonna make some better css eventually to make it look on par with the phighting page. speakin of which i havent even set this up correctly to let the phighting page coexist with this one yet.<br>
 i was just goin through my roblox photos and oh boy the memories in there. though i just wanna show some ones i think are cool.
