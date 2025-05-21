@@ -8,4 +8,7 @@ dont harass me for my rant documents cause im allowed my yaps on my own reposito
 (optional) only type in lowercase with no punctuation other than sentence enders  
 no advertisements me no likey  
 no killjoying. like if youre gonna be the one to ruin fun cause not serious enough this place aint for you buddy buster buckaroo bingus bongus blud  
-more comin soon...
+part 2
+dont harass me for my blog cause im allowed to express myself
+feel free to meow here
+
