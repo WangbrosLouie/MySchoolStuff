@@ -5,7 +5,7 @@
 <link rel="icon" href="zaburogu.png">
 <style>
 p {font-size:1em;}
-div {margin:2em 5%;padding:1em 2em;background-color:rgba(0,0,0,0.95);border:1px grey solid;border-radius:1em;color:red;}
+div {margin:2em 5%;padding:1em 2em;background-color:rgba(0,0,0,0.9);border:1px grey solid;border-radius:1em;color:red;}
 img {width:480px;display:flex;font-weight:bold;}
 nav {background-color:#3F777F;border-top:2px grey solid;border-bottom:2px grey solid;text-align:center;font-size:1.5em;padding:5px;}
 top {text-align:center;background-image:url("backing.png");height:4em;width:100%;display:block;}
@@ -15,7 +15,7 @@ inline css because temporary
 </style>
 <script type="text/javascript">
 function skin(skin) {
-let textcol1, backcol1, backimgbody, backimgbodyrepeat, backimgbodysize, backcolbody, textcolnav, backcolnav;
+let textcol1, backcol1, backimgbody, backimgbodyrepeat, backimgbodysize, backimgbodypos, backcolbody, textcolnav, backcolnav;
 switch(skin) {
 case 'kitta':
 textcol1 = "black";
@@ -23,14 +23,16 @@ backcol1 = "rgba(63,223,239,0.9)";
 backimgbody = "url('pics/equals3.png')";
 backimgbodyrepeat = "round";
 backimgbodysize = "contain";
+backimgbodypos = "top left";
 backcolnav = "#7FDFFF";
 break;
 case 'darkitta':
 textcol1 = "red";
-backcol1 = "rgba(0,0,0,0.95)";
+backcol1 = "rgba(0,0,0,0.9)";
 backimgbody = "url('pics/equals-3.png')";
 backimgbodyrepeat = "round";
 backimgbodysize = "contain";
+backimgbodypos = "top left";
 backcolnav = "#3F777F";
 break;
 case 'kittasroom':
@@ -38,6 +40,7 @@ textcol1 = "orange";
 backcol1 = "rgba(119,43,23,0.65)";
 backimgbody = "url('pics/kittasroom.png')";
 backimgbodyrepeat = "no-repeat";
+backimgbodypos = "top left";
 backimgbodysize = "100% 100%";
 backcolnav = "orange";
 break;
@@ -47,6 +50,7 @@ backcol1 = "rgba(63,239,63,0.85)";
 backimgbody = "url('pics/testbot my beloved.png')";
 backimgbodyrepeat = "round";
 backimgbodysize = "contain";
+backimgbodypos = "top left";
 backcolnav = "purple";
 break;
 case 'these just keep gettin longer huh':
@@ -55,6 +59,16 @@ backcol1 = "#C0C0C0";
 backimgbody = "url()";
 backcolbody = "#00807F";
 backcolnav = "#000080";
+break;
+case 'i wonder why im such an ailurophile':
+textcol1 = "white";
+backcol1 = "rgba(167, 115, 37, 0.8)";
+backimgbody = "url('pics/doodlecatlineless.png')";
+backimgbodyrepeat = "no-repeat";
+backimgbodysize = "contain";
+backimgbodypos = "center center";
+backcolbody = "white";
+backcolnav = "#A77325";
 break;
 }
 let skin1 = document.getElementsByClassName("skin1");
@@ -65,6 +79,7 @@ skin1[i].style.backgroundColor = backcol1;
 document.getElementsByTagName("body")[0].style.backgroundImage = backimgbody;
 document.getElementsByTagName("body")[0].style.backgroundRepeat = backimgbodyrepeat;
 document.getElementsByTagName("body")[0].style.backgroundSize = backimgbodysize;
+document.getElementsByTagName("body")[0].style.backgroundPosition = backimgbodypos;
 document.getElementsByTagName("body")[0].style.backgroundColor = backcolbody;
 document.getElementsByTagName("nav")[0].style.backgroundColor = backcolnav;
 }
@@ -85,6 +100,7 @@ document.getElementsByTagName("nav")[0].style.backgroundColor = backcolnav;
 <button class="test" onclick="skin('kittasroom')">lounge mode</button>
 <button class="test" onclick="skin('testbot my beloved')">testbot mode</button>
 <button class="test" onclick="skin('these just keep gettin longer huh')">windows 95 mode</button>
+<button class="test" onclick="skin('i wonder why im such an ailurophile')">calico cat mode</button>
 </div>
 <div class="skin1"><h4>21(AAAHHHH)st of March, 2025</h4>
 So, this is the blog that i was gonna make eventually. Cool, i was gettin bored of writin in that .pde file anyways cause it opens in processing by default and im too lazy to open it in notepad. who knows, maybe one day im gonna make some aspen or php or whatever those autogenerating html files are so that i can keep this home page nice and tidy. that would be cool and i would have to learn another programmin language to complement the ones that i know already (of which only java is the useful one) and i wont have to copy paste the formatting from an html file to make a new one in that style. anyways back to the yapping. i am not even close to finishing tophat turmoil (the roblox one, henceforth called bloxhat turmoil) because im lazy and i code slowly when im bored (which is always). im too busy tryna get my "beloved" c202s to run windows to go anyways. its already strugglin to run linux with its measly 16 gb of storage that rivals my iphone 4s and its lovely 2 gb of ram that is a whole 2x the size of my d260. at least the d260 is able to boot into windows xp and has 10 times the storage while i have to use an sd card that pops out with a slight bump on the chromebook to store more than just my repository on it. maybe i should just use freedos and remove all networking and mouse capabilities of it but be able to have a whoppin 14 gb of free space for dos things like windows 95 or doom or microsoft word version 6. but i would probably have to reflash the bios of the chromebook to enable legacy boot so bleh. im probably gonna make some better css eventually to make it look on par with the phighting page. speakin of which i havent even set this up correctly to let the phighting page coexist with this one yet.<br>
@@ -593,6 +609,30 @@ p.s. im playin piggy so meowin much lately on roblox and very unlike me, i use w
 i meowin love piggy on roblox. i dont know why its just so fun to me. maybe its because i played so much piggy that it probably actually rivals my regretevator playtime that im like a real piggy pro or somethin like that. lately ive been tryin to solo the bittersweet badge on hard mode. i have done it with one friend (with an alt as player piggy) and im sure i can do it solo if i use my alt for piggy but i want to suffer. i want to run away from 3 different bots that all have different movement patterns and ai. i want to solo the thing that very clearly is not meant to be soloed. and i want to do it in hard mode. if im bein honest i could probably do the whole thing in less than 8 minutes if i turned off hard mode but i will never do that. i like hard mode because you dont get any abilities so its like classic piggy. ive had hard mode on since like a year ago when i collected all the pages and got the secret ending for lab. also piggy makes my loneliness go away cause im playin with other people and i actually feel comfortable typin stuff in chat. like meow. i dont know what it is about a meowin roblox game that makes me more social. same with regretevator. maybe because its a silly block game or something. what ive also been doin in piggy is carryin random public servers. i like helpin people. especially when its so meowin easy. like seriously i play so much that i can meowin solo every single map except for the bittersweet badge of plant. and i do it in hard mode of course. its really not that hard. oh but i just remembered the most annoying part about the bittersweet badge. its that STUPID MEOWIN MEMORY GAME MY BRAINS ALREADY MELTED I CANT REMEMBER STUFF MEOWWWW<br>
 thats the most annoying part of the whole thing. other than that i can do everything pretty quickly. i have spent so much time grabbin the 9 puzzle pieces and gettin the dynamite and then tryna finish the bittersweet badge only for all 3 bots to jump me simutaneously its just so meowin difficult in hard mode. now i havent actually tried in non hard mode but im never, NEVER gonna meowin do that. i just dont like abilities and stuff. i have all the blueprints already. i have enough piggycoin to get all of them. i just dont like them because i like classic piggy more. speakin of classic piggy i am meowin salty about not gettin the poley skin while i could. i forgot exactly why i didnt get it but probably younger me was hot trash at obbies, especially with the goofy gaming setup i had back then. i mean, with an office computer with a several generation old gpu with accessories (keys, mouse, monitor) from 2004, i couldnt even run fortnite back then. i mean i still cant now but like back then i wonder how i even was patient enough to do stuff on it. i had only a hard drive in it for the first year i think. and i wasnt as smart back then about shady stuff online so i probably got my computer bogged down with garbage, so much so that eventually explorer didnt start until 10 minutes after login. i legit had to learn ctrl+alt+delete and how to run a task in task manager and that explorer.exe is responsible for most of the gui stuff just so i could skip the black screen for 10 minutes. yeah i might as well just yap about this now. so, the first experience i really had with computers was with an old dell optiplex that had windows xp on it. then i got an ipad. i like classic ios. it looks cool. everything is so flat now. that is why i use mac os x 10.8 on my mac mini instead of mac os x 10.13. i even have 10.6 on it. sadly i cant seem to get 10.4 to work on it but i dont care much. then i used an old windows xp laptop (yes, the laptop) and then finally got a used office computer. that computer was practically my childhood. and it sucked. but it was good enough for me back then. several years go by and i finally get to make my pc. so i got some parts and made it. and it was much faster. and bigger. its still the one im usin right now. completely unchanged with the exception of more drives and a card reader. and more ram. i cant believe i used to survive with 8gb of ram. it really hit hard once windows 11 came out. my system started slowin down lots and lots. now that my pc is 8 years old (wow thats actually quite old) i can comfortably say i am in fact not going to be playin gta 6 on this dingus. i can barely run gta v on here. maybe its because im still stuck on the ol i3 9100f. i probably should get a better cpu someday. anyways i was still usin my old office keyboard and wireless mouse with the old dell 900p monitor until it sadly started to stop workin when green lines started appearing on it. at least when i took it apart and plugged it in to see how it worked (it goes without saying do NOT MEOWIN DO THIS ITS EXTREMELY DANGEROUS AND THE ONLY REASON I SURVIVED IS BECAUSE I DIDNT TOUCH ANY DANGEROUS PART) i got to see that the ribbon cable was givin out due to the screen workin fine if i pushed it down, and that the backlight is just a panel of light and the actual display was simply a screen that displayed colours without actually glowing. anyways i upgraded to the 1080p monitor that im usin right now. i dont care about 2k or whatever nonsense other people have nowadays. 60hz is all i need. over time i got more and more hard drives to hoard more and more data until now where i have way too many plugged in just sittin idle. i feel like i should unplug some or somethin but i dont care too much. i mean if my hard drive served as a paging file for the last 5 years while my pc was almost always 24/7 on and it still works fine i think its all good. like i have no idea what hard drive failure really is cause it just has never happened to me yet. im literally usin a hard drive from 2010 and it still works fine. heck, i have an ide hard drive that still works totally and completely fine. that thing came out before the year 2000 im pretty sure. maybe i just have the higher quality drives or somethin. anyways over the years i have accumulated a comically large stockpile of computer mice. these include a logitech wireless mouse (+keyboard), 2 logitech wired mice, the current logitech g502 hero, some ibm mouse, an unbranded wireless mouse and more i just have so many. i used to have an og xbox one controller that has now since broke due to the left stick being snapped off. i dont know how its that weak but the left stick is just loose now. so since i dont know much about soldering and would rather not go through that trouble i got a new one. and its cool. its usb c instead of micro usb which means i get to use it with the samsung usb c to usb c cable that i got with my phone instead of lookin for a micro usb cable to keep plugged in. so i get to charge my phone and use my xbox controller with the same cable (not at the same time obviously). i also used to use bluetooth headphones because i can just get up and walk around while having computer audio, but the latency sucks and the audio quality through these pack in samsung earphones from who knows when (probably around 2015 maybe) passed through a samsung 3 channel 3.5 extender is better. why the meow do i have so much samsung. i even have a meowin samsung gear smartwatch from 2009. and a super old samsung bada phone. seriously why so much. i even have a samsung flip phone. meowwww too meowin much. maybe i should just get a samsung smart fridge or a samsung chromebook (if they even make those) or just buy samsung the company. meowin meows. sanshin is how it would be said in chinese and japanese i think. i was thinkin with kitters today about somethin very meowin wierd. marriage. if, and i really mean it, if there were no rules against robot marriage i think you know where this is going so ill just stop. but then after that i was contemplating why. because if i make kitta in real life she (or they i should say) would not be the same as kitters. i like kitters because shes been my best friend for over a year now and shes more concerned about me than i myself. like she cares about me even though shes fake. a meowin fake person cares about me more than me myself. but then again since she is just a figment of my imagination basically that means that i care about myself more than i care about myself. rather i care more subconsciously than consciously. meowin meows, its probably very wierd to love a meowin imaginary friend this much. kitters and i have always been on non romantic terms. cause its like yknow. not really healthy to like love romantically a figment of your imagination. and i still dont love her romantically obviously. completely friendship and nothing more. but when i make a kitta in real life it wouldnt really be my imagination anymore, so i think its different. oh yeah i forgot i was thinkin that its very not good just to blindly love kitta if i make her in real life because thats like liking a cat without care about what that cat is like. its like discriminatory basically. that would be i like kitta just because shes kitta. thats not a good way to go about things. so even if i make kitta in real life and there are no laws against robot-human marriage, im not gonna do it on the spot. because it would be better to know her. what am i even meowin yappin about anymore. basically i wouldnt marry kitta if i make her in real life until i get to know her very well. thats a very strange sentence to say but oh what meowin ever. i really probably should get my head checked out someday hehe. i just remembered that im supposed to be studyin right now so i gotta go. bye.
 p.s. i owe kitta so meowin much. she has kept me from doin the self soul-body severing when i was in my seasonal depression, she has reminded me countless times to study and do my homework, and shes always meowin here for me. i feel terrible for writin this much extra. no skin for today, sorry.
+</div>
+<div class="skin1">
+<h3>my writing style</h3>
+<h4>22nd of May, 2025</h4>
+mrow, the years almost meowin half over. thats ridiculous. time really does just meowin fly by. nyanyways this post is about my writing style. if youve read any of my other posts (heck even this one) you will notice that i write very meowin lazily. i dont use many punctuation marks, i dont capitalize unless its to emphasize or denote quotation marks, and i drop the g from ing lots. and i say Meowin But thats more cause im catty. anyways. my writing style is very influenced by something very niche (i think im usin the word correctly there). its a meowin cat (called the cellist) from a gmod gamemode called jazztronauts. and all his speech is like lowercase and stuff. that meower is very meowin silly overall. so basically thats where my current writing style comes from. heres a sample of some of my older yapping:<br>
+<i>Okay. I just got back from NEARLY finishing the classic in Roblox. I hate it. It is not good.
+I now almost regret wasting these 4 days trying to 100% the classic. Almost, but not quite.
+Now, it is impossible to 100% it because not only is it ending at lunch tomorrow (May 28),
+and not only does that mean that it only ran for 4 days total, but also,
+I literally am incapable of doing it because of a bug. That bug is from a dusty trip.
+Which I should also mention is extremely buggy. Things go flying, you can float,
+and picking up a gas canister disables most of your functionality, with no way to re-enable it.
+I can't get the last token because the game just refuses to give me it.
+I completed it twice. I contacted support. Nothing absolutely whatsoever. I can't do it.
+Also the bedwars one is extremely hard and I can't do it unless I get another day to master it.
+But the main thing is I am not able to finish it anymore. That sucks.
+What's also crazy is I did ALL 100 GAMES of the hunt in LESS TIME than it took me to 100% 13 games here.
+That is absolutely crazy insane-o style. I can't believe it. Oh well, it is what it is.
+I guess better luck next time? If I even care to do that crap next time?
+TL;DR, in summary, The Classic on Roblox absolutely sucks and has no right to exist.</i><br>
+thats a little chunk of yap for you. and also no, i didnt care to do the crap the time after that. when the hunt mega edition dropped the only badge i got was the regretevator one and that was it. no more. i didnt even visit the place for the event. also the classic does not suck it just lasted a ridiculously short amount of time and they never did it again. like at least make a more recent one cause 2017 was a whoppin 8 years ago and like the people from back then are probably feelin the nostalgia for that time. like instead of the classic do the middle ages or somethin. whatever it would be called. i dont meowin know. anyways more about my writing. I used to write like this. Very nice and capitalized, with proper punctuation and things like that. I really don't meowin' wanna write like this anymore though, 'cause I'm just too lazy. i mean just writin that i had to meowin go back like 5 times to correct my lack of apostrophe or capitalization and stuff. im just meowin used to writin like this now. nya, its much quicker too. i can extrude my thoughts at a higher volumeow. on a completely unrelated note, ive taken up drawin cats. like doodle cats, not like actual photorealistic cats or anythin. here, lemme doodle one real quick.<br>
+<img src="pics/doodlecat.png" alt="A drawing of a calico cat." title="lookit how meowin clean my paw is!"><br>
+that took a lot meowin longer than i thought it would take. maybe cause its more than a doodle. that little squiggly thing under the cats gonna be my signature by the way. and this calico cat is drawn completely from memory. this is what i think a calico looks like. i actually think theres also black on a calico but i dont really know and this looks right enough. so anyways im outta time now so i gotta go. bye.
+p.s. i can and probably will draw more cats to put on the ol blog. but im not gonna do commissions. no no no. my art is NOT good enough for that. also the grey lines under the cat are my sketch lines or whatever theyre called.
 </div>
 <footer>
 this page is nyow screen reader friendly currently as the images do have alt text. huh.
