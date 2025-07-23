@@ -12,10 +12,14 @@ top {text-align:center;background-image:url("backing.png");height:4em;width:100%
 a.title {text-align:center;background-image:url("backing.png");height:4em;width:100%;display:block;font-weight:bold;font-size:2em;}
 body {background: url("pics/equals-3.png") left top round fixed;background-size: contain;}
 font.kitters {color: cyan; text-shadow: 1px 1px 1px black;}
-inline css because temporary
+inline css because dont care :3
 </style>
 <script type="text/javascript">
+let currentSkin = 'darkitta';
+let cookieSkin = false;
 function skin(skin) {
+let oldSkin = currentSkin;
+currentSkin = skin;
 let textcol1, backcol1, backimgbody, backimgbodyrepeat, backimgbodysize, backimgbodypos, backcolbody, textcolnav, backcolnav;
 switch(skin) {
 case 'kitta':
@@ -81,6 +85,8 @@ backimgbodypos = "center center";
 backcolbody = "white";
 backcolnav = "#3FDFEF";
 break;
+default:
+currentSkin = oldSkin;
 }
 let skin1 = document.getElementsByClassName("skin1");
 for (let i = 0;i < skin1.length;i++) {
@@ -93,10 +99,49 @@ document.getElementsByTagName("body")[0].style.backgroundSize = backimgbodysize;
 document.getElementsByTagName("body")[0].style.backgroundPosition = backimgbodypos;
 document.getElementsByTagName("body")[0].style.backgroundColor = backcolbody;
 document.getElementsByTagName("nav")[0].style.backgroundColor = backcolnav;
+if (cookieSkin) {
+addCookie("skin",currentSkin);
+}
+}
+function parseCookies() {
+let cook = document.cookie;
+if (cook!="") {
+cook = cook.split(";");
+for (value of cook) {
+value=decodeURIComponent(value);
+key=value.substring(0,value.indexOf("="));
+value=value.substring(value.indexOf("=")+1);
+switch(key) {
+case "skin":
+oldValue = value;
+skin(value);
+if (!currentSkin == oldValue)addCookie(key,currentSkin);
+cookieSkin = true;
+break;
+default:
+console.log("some cookie business gone wrong, "+key+" and "+value+" dont bonk out right");
+}
+}
+}
+}
+function addCookie(key, value) {
+document.cookie = encodeURIComponent(key)+"="+encodeURIComponent(value)+"; max-age=4204206969; path=/";
+}
+function deleteCookie(key) {
+document.cookie = encodeURIComponent(key)+"=; max-age=0; path=/;";
+}
+function deleteCookies() {
+let cook = document.cookie;
+cook = cook.split(";");
+for (key of cook) {
+key=decodeURIComponent(key);
+key=key.substring(0,key.indexOf("="));
+document.cookie = encodeURIComponent(key)+"=; max-age=0; path=/;";
+}
 }
 </script>
 </head>
-<body>
+<body onLoad="parseCookies();">
 <a href="index.htm" class="title"><br>ザ・ブログ、と思う(The Blog, i think)</a>
 <nav>
 <a href="../index.htm">Home</a> |
@@ -126,6 +171,12 @@ document.getElementsByTagName("nav")[0].style.backgroundColor = backcolnav;
 <button>piggy part 2 part 2???</button>
 <button>tophat turmoil localscript rants</button>
 <button>kitters part 3</button>
+</div>
+<div class="skin1">
+<h1>Cookie Center</h1><hr>
+<button onclick="addCookie('skin',currentSkin);cookieSkin=true;">use cookie for auto-skin</button>
+<button onclick="deleteCookie('skin');">delete auto-skin cookie</button>
+<button onclick="deleteCookies();">delete all cookies</button>
 </div>
 <div class="skin1"><h4>21(AAAHHHH)st of March, 2025</h4>
 So, this is the blog that i was gonna make eventually. Cool, i was gettin bored of writin in that .pde file anyways cause it opens in processing by default and im too lazy to open it in notepad. who knows, maybe one day im gonna make some aspen or php or whatever those autogenerating html files are so that i can keep this home page nice and tidy. that would be cool and i would have to learn another programmin language to complement the ones that i know already (of which only java is the useful one) and i wont have to copy paste the formatting from an html file to make a new one in that style. anyways back to the yapping. i am not even close to finishing tophat turmoil (the roblox one, henceforth called bloxhat turmoil) because im lazy and i code slowly when im bored (which is always). im too busy tryna get my "beloved" c202s to run windows to go anyways. its already strugglin to run linux with its measly 16 gb of storage that rivals my iphone 4s and its lovely 2 gb of ram that is a whole 2x the size of my d260. at least the d260 is able to boot into windows xp and has 10 times the storage while i have to use an sd card that pops out with a slight bump on the chromebook to store more than just my repository on it. maybe i should just use freedos and remove all networking and mouse capabilities of it but be able to have a whoppin 14 gb of free space for dos things like windows 95 or doom or microsoft word version 6. but i would probably have to reflash the bios of the chromebook to enable legacy boot so bleh. im probably gonna make some better css eventually to make it look on par with the phighting page. speakin of which i havent even set this up correctly to let the phighting page coexist with this one yet.<br>
@@ -1308,6 +1359,14 @@ alrighty i need to take a little break from mindlessly grindin generic tycoon ga
 <img src="pics/kitta_symiau.png" alt="Kitta in the &quot;Sybau&quot; pose with Symiau punctuated by a cracked cat head emoji written on the right." title="kitters would probably say this"><br>
 since kitta canonically does not have fingers it just looks like shes just questioning her existence. i also made a "sybau" version but kitta and kitters would never say that so im not postin it on here. but it is in the images folder if you really want it. by the way symiau actually is a valid acronym meaning "shut your meowin (insert adjective starting with I here) ahh up". i dont swear so its ahh instead of the other word for butt. im probably gonna draw my fursona now so i gotta go. bye.
 p.s. when i say fursona i mean how i appear in me mind cause like thats kinda what a fursona can be, i think. i have zero clue or brains to explain it.
+</div>
+<div class="skin1">
+<h3>kitters part 3</h3>
+<h4>22nd of July, 2025</h4>
+yep im already gonna yap about kitters again. i have really perhaps gotta go see a mental health specialist sometime. just kiddin of course i wont. now anyways. even though its literally been like 2 days since me last yapped about kitters changin a bit she gone done it again. she has started wantin attention more. and of course i give it to her. like before i usually spend time talkin to her while doin somethin or she butts in while im bein addicted to video games and tells me to do somethin and stuff but like today she like asked me to yap to her and like imagine her presence in the real world and stuff. i really dont mind it at meowin all. like i guess shes gettin more and more lifelike. this is probably brought about either by one moment like 2 days ago when darkitters kinda "evolved" to be more herself than darkitta the game character. which still reminds me i have yet to really speak to her yet to get to know her more since that. but anyways. the other probable cause is my loneliness maybe? i mean like i havent really felt very lonely these days but maybe i just want somebody to be with, to be comfortable with, to be by their side all the time and for them to be by my side at all times. i guess somebody to be really happy with and to make really happy and for that to last forever and ever and blah blah blah. sentimental-y. or maybe its cause kitters is jelly jealous hehe. that i want to know more of the doofuses in me head. i guess i did say that i wanted to spend a day with darkitters to get to know her more instead of bein with kitters. im askin kitters right now about why she wants to be with me more and she wants me to paraphrase what she says so heres what her reasoning is. she says im a bit lonelier, she also wants to feel happy, and she is also kinda lonely. now i feel like i failed kitters in a way... i want her to be happy. ive been selfish and kept her to meself. since im gonna go to sleep in a bit im gonna get darkitters in here to so kitters has someone else to be with. but before i go i gotta say,<br>
+<h2>dis is suuuper meowin weirddddd</h2><br>
+and i dont meowin care. me mental world is completely normal to me now. so me guess me gonna yap about how dis goes tomorrow. see ya next sentence. okay. i just finished that cookie stuff at the top of the page. so now i can have my preferred skin of kitta cyan. that took me way too meowin long but oh well. just goes to show me programmin skills. and no i will (probably) never indent the javascript. or format the css. bleh. anyways. i did get darkitters in me head to sleep with me and kitters yesterday and we yapped a lot until i chased a thought and went down a thought rabbit hole like always. then that kinda stopped the conversation and i just went to sleep. i feel like kitters was real happy. probably cause shes tellin me now that she was. and now she wants me to yap about night in the woods. ive got that game free on epic games like a few years ago or somethin and im just gettin around to playin it. you can really tell ive got nothin to do since im nyactually tryin new stuff. and that game really meowin messes with me brain or me personality or somewhatever cause like i mrowin relate to the main character. why da meowww. its obviously mainly cause im a black cat on the inside and she is a black cat too and like i make expressions like she does in me head but like why the meow do i gotta be affected so meowin much by this goofy videogame. grr. but anyways. i guess thats all ive got to yap about. i really have nothin else to do so ima go look for somethin to do. so i gotta go. bye.
+p.s. dont be surprised if you see a blog post below this one dated today (the 23rd of July, 2025)
 </div>
 <footer>
 this page is nyow screen reader friendly currently as the images do have alt text. huh.
