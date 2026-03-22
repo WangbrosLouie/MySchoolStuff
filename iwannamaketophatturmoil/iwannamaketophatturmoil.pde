@@ -210,32 +210,35 @@ class player extends FBox {
     keys[3] = 1;
     float oldSpeed = super.getVelocityX();
     float massy = 1.0;
-    
     for(int i=touchings.size()-1;i>-1;i--) {
-      String name = touchings.get(i).getName();
-      String[] names = name!=null?splitTokens(name,","):new String[]{"0"};
-      int flags = unbinary(names[0]);
-      //if(flags%0x2/1>0) bittest template
-      if(flags%0x2/1>0)keys[3] = 0;
-      if(flags%0x4/2>0)hurt(1);
-      if(flags%0x8/4>0&&frameCount!=0)mode=3;
-      //make dat unstatic thingy
-      if(flags%0x20/0x10>0)touchings.remove(i);
-      if(flags%0x40/0x20>0)massy = 2;
-      if(names.length>1) {
-        for(int j=1;j<names.length;j++) {
-          switch(names[j].getBytes()[0]) {
-          case 'S'://peech
-            int index = int(names[j].substring(names[j].indexOf(':')+1));
-            if(talkIndex!=index){//||talkTimer<0){
-              index = talkIndex;
-              dialNum = int(names[j].substring(1));
-              subDialNum = -1;
-              talkTimer = 0;
+      ArrayList<FBody> bodies=touchings.get(i).getBodies();
+      for(int k=bodies.size()-1;k>-1;k--) {
+        String name = bodies.get(k).getName();
+        println(name);
+        String[] names = name!=null?splitTokens(name,","):new String[]{"0"};
+        int flags = unbinary(names[0]);
+        //if(flags%0x2/1>0) bittest template
+        if(flags%0x2/1>0)keys[3] = 0;
+        if(flags%0x4/2>0)hurt(1);
+        if(flags%0x8/4>0&&frameCount!=0)mode=3;
+        //make dat unstatic thingy
+        if(flags%0x20/0x10>0)touchings.remove(i);
+        if(flags%0x40/0x20>0)massy = 2;
+        if(names.length>1) {
+          for(int j=1;j<names.length;j++) {
+            switch(names[j].getBytes()[0]) {
+            case 'S'://peech
+              int index = int(names[j].substring(names[j].indexOf(':')+1));
+              if(talkIndex!=index){//||talkTimer<0){
+                index = talkIndex;
+                dialNum = int(names[j].substring(1));
+                subDialNum = -1;
+                talkTimer = 0;
+              }
+              break;
+            case 'T'://eleport
+              break;
             }
-            break;
-          case 'T'://eleport
-            break;
           }
         }
       }
@@ -267,8 +270,8 @@ class player extends FBox {
           else animNum=0;
         }
       }
-      if(keys[2]>1&&keys[3]==0) {
-          keys[3] = 1;
+      if(keys[2]>0&&keys[3]==0) {
+          keys[3] = 2;
           super.setVelocity(super.getVelocityX(),-200);
           animNum = animLookup[2];
           snd[0].stop();
@@ -1187,6 +1190,7 @@ PVector[] makeChunks(byte[] map, int lWidth, int lHeight, int fileType) {
         gnd.setName("00");
         FLine jmp = new FLine(1,1,129,1);
         jmp.setName("01");
+        println(jmp.getName());
         xPos = 65;
         yPos = 65;
         if(texture!=-1){
