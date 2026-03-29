@@ -1,0 +1,92 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+header {
+    margin: 1em 0em;
+
+}
+
+a.pagebanner {
+    display: block;
+    width: 90%;
+    margin: auto;
+    padding: 1em 0em;
+    border: 1px solid white;
+    border-bottom: none;
+    border-radius: 3px 3px 0px 0px;
+
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+}
+
+nav {
+    display: block;
+    width: 90%;
+    margin: auto;
+    border: 1px solid white;
+    border-radius: 0px 0px 3px 3px;
+    background-color: navy;
+
+    text-align: center;
+    color: grey;
+}
+
+a.nav {
+    color: white;
+    text-decoration: none;
+}
+
+div.titlebar {
+    width: 90%;
+    display: block;
+    margin: auto;
+    border: 1px solid white;
+    border-bottom: none;
+    border-radius: 3px 3px 0px 0px;
+    background-color: blue;
+
+    text-align: center;
+}
+
+div.main {
+    width: 90%;
+    display: block;
+    margin: auto;
+    padding: 1em 0em;
+    border: 1px solid white;
+    border-radius: 0px 0px 3px 3px;
+    background-color: grey;
+}
+
+td.sidenav {
+    width: 15%;
+    vertical-align: top;
+}
+
+td.main {
+    width: 75%
+    vertical-align: top;
+}
+
+div.cringewarning {
+    color: yellow;
+}
+
+footer {
+    width: 90%;
+    display: block;
+    margin: auto;
+    margin-top: 1em;
+    border: 1px solid white;
+    border-radius: 3px;
+    background-color: gray;
+
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+}
